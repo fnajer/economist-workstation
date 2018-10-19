@@ -10,8 +10,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
+import javafx.geometry.Pos;
+import javafx.geometry.Orientation;
 
 /**
  *
@@ -21,22 +25,24 @@ public class EconomistWorkstation extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
+        Label lbl = new Label("Арендатор");
+        TextField textField = new TextField("Имя");
+        Button btn = new Button("Создать");
         btn.setOnAction(new EventHandler<ActionEvent>() {
             
             @Override
             public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
+                String name = textField.getText();
+                System.out.println(name);
             }
         });
         
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
-        
+        FlowPane root = new FlowPane(Orientation.VERTICAL, 10, 10, lbl, textField, btn);
+        root.setAlignment(Pos.CENTER);
+         
         Scene scene = new Scene(root, 300, 250);
         
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("Economist Workstation");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
