@@ -17,12 +17,6 @@ import javafx.stage.Stage;
 import javafx.geometry.Pos;
 import javafx.geometry.Orientation;
 
-import java.sql.*;
-import java.nio.file.*;
-import java.io.*;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 /**
  *
  * @author fnajer
@@ -46,6 +40,7 @@ public class EconomistWorkstation extends Application {
             @Override
             public void handle(ActionEvent event) {
                 String name = textField.getText();
+                RenterModel.addRenter(db.stmt, name);
             }
         });
         

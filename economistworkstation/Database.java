@@ -37,9 +37,6 @@ public class Database {
             conn = DriverManager.getConnection(url, username, password);
             stmt = conn.createStatement();
 
-//            stmt.executeUpdate("INSERT INTO RENTER VALUES(NULL, '" + name + "')");
-//            System.out.println("Добавлено: " + name);
-
         } catch (IOException | ClassNotFoundException | SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
         } 
