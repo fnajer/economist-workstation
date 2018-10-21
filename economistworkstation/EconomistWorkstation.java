@@ -17,6 +17,12 @@ import javafx.stage.Stage;
 import javafx.geometry.Pos;
 import javafx.geometry.Orientation;
 
+import java.sql.*;
+import java.nio.file.*;
+import java.io.*;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 /**
  *
  * @author fnajer
@@ -25,19 +31,34 @@ public class EconomistWorkstation extends Application {
     
     @Override
     public void start(Stage primaryStage) {
+        
+        Database db = new Database();
+        
+        db.connect();
+        
         Label lbl = new Label("Арендатор");
         TextField textField = new TextField("Имя");
         Button btn = new Button("Создать");
+        Button showBtn = new Button("Показать");
+        
         btn.setOnAction(new EventHandler<ActionEvent>() {
             
             @Override
             public void handle(ActionEvent event) {
                 String name = textField.getText();
-                System.out.println(name);
             }
         });
         
-        FlowPane root = new FlowPane(Orientation.VERTICAL, 10, 10, lbl, textField, btn);
+        showBtn.setOnAction(new EventHandler<ActionEvent>() {
+            
+            @Override
+            public void handle(ActionEvent event) {
+ 
+
+            }
+        });
+        
+        FlowPane root = new FlowPane(Orientation.VERTICAL, 10, 10, lbl, textField, btn, showBtn);
         root.setAlignment(Pos.CENTER);
          
         Scene scene = new Scene(root, 300, 250);
