@@ -5,6 +5,7 @@
  */
 package economistworkstation;
 
+import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -48,8 +49,12 @@ public class EconomistWorkstation extends Application {
             
             @Override
             public void handle(ActionEvent event) {
- 
+                ArrayList renters = new ArrayList<String>();
+                renters = RenterModel.getRenters(db.stmt);
 
+                for(Object renterName : renters){
+                    System.out.println(renterName);
+                }
             }
         });
         
