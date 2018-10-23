@@ -26,6 +26,15 @@ public class RenterModel {
         }
     }
     
+    public static void deleteRenter(Statement stmt, String name) {
+        try {
+            stmt.executeUpdate("DELETE FROM RENTER WHERE name='" + name + "'");
+            System.out.println("Удалено: " + name);
+        } catch (SQLException ex) {
+            Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public static ArrayList<String> getRenters(Statement stmt) {
         ArrayList renters = new ArrayList<String>();
         try {
