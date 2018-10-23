@@ -5,7 +5,6 @@
  */
 package economistworkstation;
 
-import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -17,13 +16,13 @@ import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 import javafx.geometry.Orientation;
-
+import javafx.scene.layout.VBox;
 /**
  *
  * @author fnajer
  */
 public class EconomistWorkstation extends Application {
-    
+     
     @Override
     public void start(Stage primaryStage) {
         
@@ -36,15 +35,19 @@ public class EconomistWorkstation extends Application {
         Button btn = new Button("Создать");
         Button delBtn = new Button("Удалить");
         Button showBtn = new Button("Показать");
-        
+        VBox containerRenters = new VBox(10);
+                
         btn.setOnAction(new EventHandler<ActionEvent>() {
             
             @Override
             public void handle(ActionEvent event) {
                 String name = textField.getText();
                 RenterModel.addRenter(db.stmt, name);
+                RenterController.updateListRenters(db.stmt, containerRenters);
             }
         });
+        
+        
         
         delBtn.setOnAction(new EventHandler<ActionEvent>() {
             
@@ -52,6 +55,7 @@ public class EconomistWorkstation extends Application {
             public void handle(ActionEvent event) {
                 String name = textField.getText();
                 RenterModel.deleteRenter(db.stmt, name);
+                RenterController.updateListRenters(db.stmt, containerRenters);
             }
         });
         
@@ -59,16 +63,11 @@ public class EconomistWorkstation extends Application {
             
             @Override
             public void handle(ActionEvent event) {
-                ArrayList renters = new ArrayList<String>();
-                renters = RenterModel.getRenters(db.stmt);
-
-                for(Object renterName : renters){
-                    System.out.println(renterName);
-                }
+                RenterController.updateListRenters(db.stmt, containerRenters);
             }
         });
         
-        FlowPane root = new FlowPane(Orientation.VERTICAL, 10, 10, lbl, textField, btn, delBtn, showBtn);
+        FlowPane root = new FlowPane(Orientation.VERTICAL, 10, 10, lbl, textField, btn, delBtn, showBtn, containerRenters);
         root.setAlignment(Pos.CENTER);
          
         Scene scene = new Scene(root, 300, 250);

@@ -21,6 +21,7 @@ public class RenterController {
         renters = RenterModel.getRenters(stmt);
 
         ObservableList listRenters = containerRenters.getChildren();
+        listRenters.clear();
         for(Object renterName : renters){
             //System.out.println(renterName);
             Label lblRent = new Label(renterName.toString());
