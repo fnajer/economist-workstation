@@ -34,6 +34,7 @@ public class EconomistWorkstation extends Application {
         Label lbl = new Label("Арендатор");
         TextField textField = new TextField("Имя");
         Button btn = new Button("Создать");
+        Button delBtn = new Button("Удалить");
         Button showBtn = new Button("Показать");
         
         btn.setOnAction(new EventHandler<ActionEvent>() {
@@ -42,6 +43,15 @@ public class EconomistWorkstation extends Application {
             public void handle(ActionEvent event) {
                 String name = textField.getText();
                 RenterModel.addRenter(db.stmt, name);
+            }
+        });
+        
+        delBtn.setOnAction(new EventHandler<ActionEvent>() {
+            
+            @Override
+            public void handle(ActionEvent event) {
+                String name = textField.getText();
+                RenterModel.deleteRenter(db.stmt, name);
             }
         });
         
@@ -58,7 +68,7 @@ public class EconomistWorkstation extends Application {
             }
         });
         
-        FlowPane root = new FlowPane(Orientation.VERTICAL, 10, 10, lbl, textField, btn, showBtn);
+        FlowPane root = new FlowPane(Orientation.VERTICAL, 10, 10, lbl, textField, btn, delBtn, showBtn);
         root.setAlignment(Pos.CENTER);
          
         Scene scene = new Scene(root, 300, 250);
