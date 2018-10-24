@@ -32,11 +32,11 @@ public class SidebarController {
             }
         });
         
-        renters.setOnAction(new EventHandler<ActionEvent>() {
+        contracts.setOnAction(new EventHandler<ActionEvent>() {
             
             @Override
             public void handle(ActionEvent event) {
-                RenterController.displayPage(root, db);
+                ContractController.displayPage(root, db);
             }
         });
    
