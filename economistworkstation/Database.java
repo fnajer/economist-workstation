@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 public class Database {
     Properties props = null;
     Connection conn = null;
-    Statement stmt = null;
+    public Statement stmt = null;
     
     public void connect () {
         try {

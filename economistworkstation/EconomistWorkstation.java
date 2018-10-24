@@ -5,6 +5,10 @@
  */
 package economistworkstation;
 
+import economistworkstation.Controller.RenterController;
+import economistworkstation.Controller.MenuController;
+import economistworkstation.Controller.SidebarController;
+
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -16,7 +20,10 @@ import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 import javafx.geometry.Pos;
 import javafx.geometry.Orientation;
+import javafx.scene.control.MenuBar;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.BorderPane;
+
 /**
  *
  * @author fnajer
@@ -29,47 +36,17 @@ public class EconomistWorkstation extends Application {
         Database db = new Database();
         
         db.connect();
+
+        BorderPane root = new BorderPane();
         
-        Label lbl = new Label("Арендатор");
-        TextField textField = new TextField("Имя");
-        Button btn = new Button("Создать");
-        Button delBtn = new Button("Удалить");
-        Button showBtn = new Button("Показать");
-        VBox containerRenters = new VBox(10);
-                
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                String name = textField.getText();
-                RenterModel.addRenter(db.stmt, name);
-                RenterController.updateListRenters(db.stmt, containerRenters);
-            }
-        });
+        MenuBar menu = MenuController.createMenu();
+        VBox sidebar = SidebarController.createSidebar(root, db);
         
+        root.setTop(menu);
+        root.setLeft(sidebar);
+        RenterController.displayPage(root, db);
+        //root.setCenter(container);
         
-        
-        delBtn.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                String name = textField.getText();
-                RenterModel.deleteRenter(db.stmt, name);
-                RenterController.updateListRenters(db.stmt, containerRenters);
-            }
-        });
-        
-        showBtn.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                RenterController.updateListRenters(db.stmt, containerRenters);
-            }
-        });
-        
-        FlowPane root = new FlowPane(Orientation.VERTICAL, 10, 10, lbl, textField, btn, delBtn, showBtn, containerRenters);
-        root.setAlignment(Pos.CENTER);
-         
         Scene scene = new Scene(root, 300, 250);
         
         primaryStage.setTitle("Economist Workstation");

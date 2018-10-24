@@ -31,6 +31,14 @@ public class SidebarController {
                 RenterController.displayPage(root, db);
             }
         });
+        
+        renters.setOnAction(new EventHandler<ActionEvent>() {
+            
+            @Override
+            public void handle(ActionEvent event) {
+                RenterController.displayPage(root, db);
+            }
+        });
    
         return leftSidebar;
     }
