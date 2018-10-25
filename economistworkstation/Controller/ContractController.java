@@ -38,45 +38,31 @@ import javafx.event.ActionEvent;
 public class ContractController implements Initializable {
     
     public static Database db;
-    //public static ArrayList renters;
+    
     @FXML
     private ComboBox langsListView;
-    @FXML
-    private Button btn;
+
+    public void setDatabase(Database database) {
+        db = database;
+    }
+    
     /**
      * Initializes the controller class.
      */
-    
-//    ContractController(Database dbase) {
-//        db = dbase;
-//        renters = RenterModel.getRenters(db.stmt);
-//    }
-//    public void setDatabase(Database database) {
-//        db = database;
-//    }
-    
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        
+    public void initialize(URL url, ResourceBundle rb) {  
         ArrayList renters = RenterModel.getRenters(db.stmt);
         ObservableList<String> langs = FXCollections.observableArrayList(renters);
         langsListView.setItems(langs);
     }   
     
-    @FXML
-    private void click(ActionEvent event) {
-        btn.setText("You've clicked!");
-    }
     /**
      *
      * @param root
-     * @param db
      * @throws java.lang.Exception
      */
    
-    public void displayPage(BorderPane root, Database db) throws Exception {
-        
-        //Parent container = init();
+    public void displayPage(BorderPane root) throws Exception {
         Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Contract/Contract.fxml"));
  
         root.setCenter(container);

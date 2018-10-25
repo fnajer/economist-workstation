@@ -6,6 +6,8 @@
 package economistworkstation.Controller;
 
 import economistworkstation.Database;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.VBox;
@@ -36,7 +38,13 @@ public class SidebarController {
             
             @Override
             public void handle(ActionEvent event) {
-                ContractController.displayPage(root, db);
+                ContractController contractController = new ContractController();
+                contractController.setDatabase(db);
+                try {
+                    contractController.displayPage(root);
+                } catch (Exception ex) {
+                    Logger.getLogger(SidebarController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
    
