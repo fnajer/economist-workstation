@@ -25,6 +25,17 @@ import economistworkstation.Model.RenterModel;
  *
  * @author fnajer
  */
+
+class Renter {
+    int id;
+    String name;
+    String surname;
+    String patronymic;
+    String address;
+    String birthday;
+    String person;
+}
+
 public class RenterController {
     public static void updateListRenters(Statement stmt, VBox containerRenters) {
         ArrayList renters = new ArrayList<String>();
