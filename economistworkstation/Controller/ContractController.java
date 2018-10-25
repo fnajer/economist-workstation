@@ -5,6 +5,10 @@
  */
 package economistworkstation.Controller;
 
+import java.net.URL;
+import java.util.ResourceBundle;
+import javafx.fxml.Initializable;
+
 import economistworkstation.Database;
 import economistworkstation.Model.RenterModel;
 import java.util.ArrayList;
@@ -20,25 +24,61 @@ import javafx.scene.layout.VBox;
 import javafx.collections.ObservableList;
 import javafx.collections.FXCollections;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ComboBox;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+
+import javafx.fxml.FXML;
+import javafx.event.ActionEvent;
 /**
  *
  * @author fnajer
  */
-public class ContractController {
-    public static void displayPage(BorderPane root, Database db) {
-        Label lbl = new Label("Выберите арендатора");
-   
-        ArrayList renters = new ArrayList<String>();
-        renters = RenterModel.getRenters(db.stmt);
-
-        // создаем список объектов
+public class ContractController implements Initializable {
+    
+    public static Database db;
+    //public static ArrayList renters;
+    @FXML
+    private ComboBox langsListView;
+    @FXML
+    private Button btn;
+    /**
+     * Initializes the controller class.
+     */
+    
+//    ContractController(Database dbase) {
+//        db = dbase;
+//        renters = RenterModel.getRenters(db.stmt);
+//    }
+//    public void setDatabase(Database database) {
+//        db = database;
+//    }
+    
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        
+        ArrayList renters = RenterModel.getRenters(db.stmt);
         ObservableList<String> langs = FXCollections.observableArrayList(renters);
-        ListView<String> langsListView = new ListView<String>(langs);
-        langsListView.setPrefSize(250, 150);
+        langsListView.setItems(langs);
+    }   
+    
+    @FXML
+    private void click(ActionEvent event) {
+        btn.setText("You've clicked!");
+    }
+    /**
+     *
+     * @param root
+     * @param db
+     * @throws java.lang.Exception
+     */
+   
+    public void displayPage(BorderPane root, Database db) throws Exception {
         
-        FlowPane container = new FlowPane(Orientation.VERTICAL, 10, 10, lbl, langsListView);
-        container.setAlignment(Pos.CENTER);
-        
+        //Parent container = init();
+        Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Contract/Contract.fxml"));
+ 
         root.setCenter(container);
     }
 }
