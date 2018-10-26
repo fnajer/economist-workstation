@@ -8,6 +8,8 @@ package economistworkstation;
 import economistworkstation.Controller.RenterController;
 import economistworkstation.Controller.MenuController;
 import economistworkstation.Controller.SidebarController;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -44,8 +46,6 @@ public class EconomistWorkstation extends Application {
         
         root.setTop(menu);
         root.setLeft(sidebar);
-        RenterController.displayPage(root, db);
-        //root.setCenter(container);
         
         Scene scene = new Scene(root, 300, 250);
         
