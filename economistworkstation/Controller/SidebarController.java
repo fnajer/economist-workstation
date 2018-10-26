@@ -15,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 
+
 /**
  *
  * @author fnajer
@@ -30,7 +31,13 @@ public class SidebarController {
             
             @Override
             public void handle(ActionEvent event) {
-                RenterController.displayPage(root, db);
+                RenterController renterController = new RenterController();
+                renterController.setDatabase(db);
+                try {
+                    renterController.displayPage(root);
+                } catch (Exception ex) {
+                    Logger.getLogger(SidebarController.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
         
