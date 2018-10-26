@@ -21,6 +21,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import economistworkstation.Model.RenterModel;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import java.net.URL;
+import java.util.ResourceBundle;
+import javafx.collections.FXCollections;
+import javafx.scene.Parent;
 /**
  *
  * @author fnajer
@@ -36,62 +43,64 @@ class Renter {
     String person;
 }
 
-public class RenterController {
-    public static void updateListRenters(Statement stmt, VBox containerRenters) {
-        ArrayList renters = new ArrayList<String>();
-        renters = RenterModel.getRenters(stmt);
+public class RenterController implements Initializable {
+    public static Database db;
+    
+    public void setDatabase(Database database) {
+        db = database;
+    }
+    
+    @FXML
+    private VBox containerRenters;
+    @FXML
+    private TextField renterName;
+        
+    @FXML
+    public void updateListRenters(Statement stmt, VBox containerRenters) {
+        ArrayList renters = RenterModel.getRenters(stmt);
 
         ObservableList listRenters = containerRenters.getChildren();
         listRenters.clear();
+                
         for(Object renterName : renters){
-            //System.out.println(renterName);
             Label lblRent = new Label(renterName.toString());
             listRenters.add(lblRent);
         }
     }
     
-    public static void displayPage(BorderPane root, Database db) {
-        Label lbl = new Label("Арендатор");
-        TextField textField = new TextField("Имя");
-        Button addBtn = new Button("Создать");
-        Button delBtn = new Button("Удалить");
-        Button showBtn = new Button("Показать");
-        VBox containerRenters = new VBox(10);
+    @FXML
+    public void addRenter(ActionEvent event) {
+        String name = renterName.getText();
+        RenterModel.addRenter(db.stmt, name);
+        updateListRenters(db.stmt, containerRenters);
+    }
+    
+    @FXML
+    public void delRenter(ActionEvent event) {
+        String name = renterName.getText();
+        RenterModel.deleteRenter(db.stmt, name);
+        updateListRenters(db.stmt, containerRenters);
+    }
+    
+    @FXML
+    public void showRenters(ActionEvent event) {
+        updateListRenters(db.stmt, containerRenters);
+    }
+    
+    /**
+     * Initializes the controller class.
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {  
         
-        addBtn.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                String name = textField.getText();
-                RenterModel.addRenter(db.stmt, name);
-                RenterController.updateListRenters(db.stmt, containerRenters);
-            }
-        });
-        
-        
-        
-        delBtn.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                String name = textField.getText();
-                RenterModel.deleteRenter(db.stmt, name);
-                updateListRenters(db.stmt, containerRenters);
-            }
-        });
-        
-        showBtn.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                updateListRenters(db.stmt, containerRenters);
-            }
-        });
-        
-        FlowPane container = new FlowPane(Orientation.VERTICAL, 10, 10, lbl, textField, addBtn, delBtn, showBtn, containerRenters);
-        container.setAlignment(Pos.CENTER);
+//        ArrayList renters = RenterModel.getRenters(db.stmt);
+//        ObservableList<String> langs = FXCollections.observableArrayList(renters);
+//        langsListView.setItems(langs);
+    }
+    
+    public void displayPage(BorderPane root) throws Exception {
+        Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Renter/Renter.fxml"));
         
         root.setCenter(container);
-        //return container;
     }
 }
