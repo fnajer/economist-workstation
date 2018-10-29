@@ -56,8 +56,8 @@ public class RenterController implements Initializable {
     private TextField renterName;
         
     @FXML
-    public void updateListRenters(Statement stmt, VBox containerRenters) {
-        ArrayList renters = RenterModel.getRenters(stmt);
+    public void showListRenters() {
+        ArrayList renters = RenterModel.getRenters(db.stmt);
 
         ObservableList listRenters = containerRenters.getChildren();
         listRenters.clear();
@@ -72,19 +72,19 @@ public class RenterController implements Initializable {
     public void addRenter(ActionEvent event) {
         String name = renterName.getText();
         RenterModel.addRenter(db.stmt, name);
-        updateListRenters(db.stmt, containerRenters);
+        showListRenters();
     }
     
     @FXML
     public void delRenter(ActionEvent event) {
         String name = renterName.getText();
         RenterModel.deleteRenter(db.stmt, name);
-        updateListRenters(db.stmt, containerRenters);
+        showListRenters();
     }
     
     @FXML
     public void showRenters(ActionEvent event) {
-        updateListRenters(db.stmt, containerRenters);
+        showListRenters();
     }
     
     /**
@@ -92,10 +92,7 @@ public class RenterController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {  
-        
-//        ArrayList renters = RenterModel.getRenters(db.stmt);
-//        ObservableList<String> langs = FXCollections.observableArrayList(renters);
-//        langsListView.setItems(langs);
+        showListRenters();
     }
     
     public void displayPage(BorderPane root) throws Exception {
