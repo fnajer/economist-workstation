@@ -9,7 +9,6 @@
 
 <FlowPane hgap="10" vgap="10" id="FlowPane" orientation="vertical" alignment="center" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="economistworkstation.Controller.RenterController">
     <Label text="Арендатор" />
-    <Button text="Удалить" onAction="#delRenter" fx:id="delBtn" />
     <Button text="Создать" onAction="#showRenterForm" fx:id="showBtn" />
     <VBox spacing="10" fx:id="containerRenters" />
     <stylesheets>

@@ -68,15 +68,25 @@ public class RenterController implements Initializable {
         
         for(Object renterName : renters){
             Label lblRent = new Label(renterName.toString());
+            Button delBtn = new Button("X");
             
-            listRenters.add(lblRent);
+            delBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent event) {
+                    delRenter(renterName.toString());
+                }
+            });
+            
+            FlowPane root = new FlowPane(10, 10, lblRent, delBtn);
+            listRenters.add(root);
         }
     }
     
     public void delRenter(String renterName) {
         //String name = renterName.getText();
-//        RenterModel.deleteRenter(db.stmt, renterName);
-//        showListRenters();
+        RenterModel.deleteRenter(db.stmt, renterName);
+        showListRenters();
     }
     
     @FXML
