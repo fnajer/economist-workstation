@@ -17,6 +17,8 @@ import java.util.logging.Logger;
  * @author fnajer
  */
 public class Database {
+    private static Database db;
+    
     Properties props = null;
     Connection conn = null;
     public Statement stmt = null;
@@ -40,5 +42,13 @@ public class Database {
         } catch (IOException | ClassNotFoundException | SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
         } 
+    }
+    
+    public static Database getInstance() {
+        if (db == null) {
+            db = new Database();
+            db.connect();
+        }
+        return db;
     }
 }

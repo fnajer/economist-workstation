@@ -22,7 +22,9 @@ import javafx.scene.layout.FlowPane;
  */
 public class SidebarController {
 
-    public static VBox createSidebar(BorderPane root, Database db) {
+    public static VBox createSidebar(BorderPane root) {
+        Database db = Database.getInstance();
+        
         Button renters = new Button("Арендаторы");
         Button contracts = new Button("Договоры");
         VBox leftSidebar = new VBox(10, renters, contracts);
@@ -32,7 +34,6 @@ public class SidebarController {
             @Override
             public void handle(ActionEvent event) {
                 RenterController renterController = new RenterController();
-                renterController.setDatabase(db);
                 try {
                     renterController.displayPage(root);
                 } catch (Exception ex) {
@@ -46,7 +47,6 @@ public class SidebarController {
             @Override
             public void handle(ActionEvent event) {
                 ContractController contractController = new ContractController();
-                contractController.setDatabase(db);
                 try {
                     contractController.displayPage(root);
                 } catch (Exception ex) {

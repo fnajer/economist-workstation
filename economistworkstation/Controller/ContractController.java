@@ -42,15 +42,14 @@ public class ContractController implements Initializable {
     @FXML
     private ComboBox langsListView;
 
-    public void setDatabase(Database database) {
-        db = database;
-    }
     
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {  
+        db = Database.getInstance();
+        
         ArrayList renters = RenterModel.getRenters(db.stmt);
         ObservableList<String> langs = FXCollections.observableArrayList(renters);
         langsListView.setItems(langs);

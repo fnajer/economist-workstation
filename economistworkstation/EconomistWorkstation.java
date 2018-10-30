@@ -34,15 +34,12 @@ public class EconomistWorkstation extends Application {
      
     @Override
     public void start(Stage primaryStage) {
-        
-        Database db = new Database();
-        
-        db.connect();
+        //Database db = Database.getInstance();
 
         BorderPane root = new BorderPane();
         
         MenuBar menu = MenuController.createMenu();
-        VBox sidebar = SidebarController.createSidebar(root, db);
+        VBox sidebar = SidebarController.createSidebar(root);
         
         root.setTop(menu);
         root.setLeft(sidebar);

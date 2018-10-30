@@ -49,12 +49,9 @@ class Renter {
 }
 
 public class RenterController implements Initializable {
-    public static Database db;
-    public Stage stage;
+    public Database db;
     
-    public void setDatabase(Database database) {
-        db = database;
-    }
+    // any creational constructor destroy executing program
     
     @FXML
     private VBox containerRenters;
@@ -92,7 +89,7 @@ public class RenterController implements Initializable {
     @FXML
     public void showRenterForm(ActionEvent event) throws IOException {
         RenterFormController renterFormController = new RenterFormController();
-        renterFormController.setParams(db, this);
+        renterFormController.setWindow(this);
         try {
             renterFormController.displayPage();
         } catch (Exception ex) {
@@ -104,9 +101,9 @@ public class RenterController implements Initializable {
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {  
+    public void initialize(URL url, ResourceBundle rb) { 
+        db = Database.getInstance();
         showListRenters();
-        System.out.println(this);
     }
     
     @FXML

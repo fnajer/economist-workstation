@@ -25,18 +25,17 @@ import javafx.stage.Stage;
  * @author fnajer
  */
 public class RenterFormController implements Initializable {
-    public static Database db;
+    public Database db;
     public static RenterController parentWindow; 
 // non-static dont work, becouse bind action-handlers happen with first values. And constructor - causes error
-    
-    public void setParams(Database database, RenterController parent) {
-        db = database;
+// in case with db - its not a static fault , its - any creational constructor destroy executing program    
+    public void setWindow(RenterController parent) {
         parentWindow = parent;
     }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {  
-        
+        db = Database.getInstance();
     }
     
     @FXML
