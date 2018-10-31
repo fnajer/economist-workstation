@@ -8,6 +8,16 @@
 
 <FlowPane hgap="10" vgap="10" id="FlowPane" orientation="vertical" alignment="center" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="economistworkstation.Controller.RenterFormController">
     <Label text="Имя" />
-    <TextField text="Имя" fx:id="renterName"/>
+    <TextField text="Имя" fx:id="name"/>
+    <Label text="Фамилия" />
+    <TextField text="Фамилия" fx:id="surname"/>
+    <Label text="Отчество" />
+    <TextField text="Отчество" fx:id="patronymic"/>
+    <Label text="Адрес" />
+    <TextField text="Адрес" fx:id="address"/>
+    <Label text="Дата рождения" />
+    <TextField text="Дата рождения" fx:id="birthday"/>
+    <Label text="Физ.лицо" />
+    <TextField text="Физ.лицо" fx:id="person"/>
     <Button text="Добавить" onAction="#addRenter" fx:id="addBtn" />
 </FlowPane>
