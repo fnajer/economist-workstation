@@ -20,7 +20,7 @@ public class Database {
     private static Database db;
     
     Properties props = null;
-    Connection conn = null;
+    public Connection conn = null;
     public Statement stmt = null;
     
     public void connect () {

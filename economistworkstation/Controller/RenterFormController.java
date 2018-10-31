@@ -6,6 +6,7 @@
 package economistworkstation.Controller;
 
 import economistworkstation.Database;
+import economistworkstation.Entity.Renter;
 import economistworkstation.Model.RenterModel;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -51,16 +52,31 @@ public class RenterFormController implements Initializable {
     @FXML
     private Button addBtn;
     @FXML
-    private TextField renterName;
-
+    private TextField name;
+    @FXML
+    private TextField surname;
+    @FXML
+    private TextField patronymic;
+    @FXML
+    private TextField address;
+    @FXML
+    private TextField birthday;
+    @FXML
+    private TextField person;
+    
     @FXML
     public void addRenter(ActionEvent event) {
         
-        String name = renterName.getText();
-        RenterModel.addRenter(db.stmt, name);
+        Renter renter = createRenter();
+        RenterModel.addRenter(db.stmt, renter);
         Stage stage = (Stage) addBtn.getScene().getWindow();
         
         stage.close();
         parentWindow.showListRenters();
+    }
+    
+    public Renter createRenter() {
+        Renter renter = new Renter(name.getText(), surname.getText(), patronymic.getText(), address.getText(), birthday.getText(), person.getText());
+        return renter;
     }
 }

@@ -6,6 +6,7 @@
 package economistworkstation.Controller;
 
 import economistworkstation.Database;
+import economistworkstation.Entity.Renter;
 import economistworkstation.Model.RenterModel;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -38,16 +39,6 @@ import javafx.stage.Stage;
  * @author fnajer
  */
 
-class Renter {
-    int id;
-    String name;
-    String surname;
-    String patronymic;
-    String address;
-    String birthday;
-    String person;
-}
-
 public class RenterController implements Initializable {
     public Database db;
     
@@ -58,20 +49,20 @@ public class RenterController implements Initializable {
 
     @FXML
     public void showListRenters() {
-        ArrayList renters = RenterModel.getRenters(db.stmt);
+        ArrayList<Renter> renters = RenterModel.getRenters(db.stmt);
 
         ObservableList listRenters = containerRenters.getChildren();  
         listRenters.clear();
         
-        for(Object renterName : renters){
-            Label lblRent = new Label(renterName.toString());
+        for(Renter renter : renters){
+            Label lblRent = new Label(renter.name);
             Button delBtn = new Button("X");
             
             delBtn.setOnAction(new EventHandler<ActionEvent>() {
 
                 @Override
                 public void handle(ActionEvent event) {
-                    delRenter(renterName.toString());
+                    delRenter(renter.id);
                 }
             });
             
@@ -80,9 +71,9 @@ public class RenterController implements Initializable {
         }
     }
     
-    public void delRenter(String renterName) {
+    public void delRenter(int id) {
         //String name = renterName.getText();
-        RenterModel.deleteRenter(db.stmt, renterName);
+        RenterModel.deleteRenter(db.stmt, id);
         showListRenters();
     }
     
