@@ -7,17 +7,12 @@ package economistworkstation.Controller;
 
 import economistworkstation.Database;
 import economistworkstation.Entity.Renter;
-import economistworkstation.Model.RenterModel;
-import java.sql.Statement;
 import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.geometry.Orientation;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
@@ -30,10 +25,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.collections.FXCollections;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
+
 /**
  *
  * @author fnajer
