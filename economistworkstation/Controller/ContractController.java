@@ -36,9 +36,7 @@ import javafx.event.ActionEvent;
  * @author fnajer
  */
 public class ContractController implements Initializable {
-    
-    public static Database db;
-    
+        
     @FXML
     private ComboBox langsListView;
 
@@ -47,10 +45,8 @@ public class ContractController implements Initializable {
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {  
-        db = Database.getInstance();
-        
-        ArrayList renters = RenterModel.getRenters(db.stmt);
+    public void initialize(URL url, ResourceBundle rb) {    
+        ArrayList renters = RenterModel.getRenters();
         ObservableList<String> langs = FXCollections.observableArrayList(renters);
         langsListView.setItems(langs);
     }   

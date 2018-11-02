@@ -22,9 +22,7 @@ import javafx.scene.layout.FlowPane;
  */
 public class SidebarController {
 
-    public static VBox createSidebar(BorderPane root) {
-        Database db = Database.getInstance();
-        
+    public static VBox createSidebar(BorderPane root) {     
         Button renters = new Button("Арендаторы");
         Button contracts = new Button("Договоры");
         VBox leftSidebar = new VBox(10, renters, contracts);

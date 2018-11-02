@@ -33,8 +33,7 @@ import javafx.scene.Parent;
  */
 
 public class RenterController implements Initializable {
-    public Database db;
-    
+   
     // any creational constructor destroy executing program
     
     @FXML
@@ -42,7 +41,7 @@ public class RenterController implements Initializable {
 
     @FXML
     public void showListRenters() {
-        ArrayList<Renter> renters = RenterModel.getRenters(db.stmt);
+        ArrayList<Renter> renters = RenterModel.getRenters();
 
         ObservableList listRenters = containerRenters.getChildren();  
         listRenters.clear();
@@ -66,7 +65,7 @@ public class RenterController implements Initializable {
     
     public void delRenter(int id) {
         //String name = renterName.getText();
-        RenterModel.deleteRenter(db.stmt, id);
+        RenterModel.deleteRenter(id);
         showListRenters();
     }
     
@@ -85,8 +84,7 @@ public class RenterController implements Initializable {
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) { 
-        db = Database.getInstance();
+    public void initialize(URL url, ResourceBundle rb) {
         showListRenters();
     }
     

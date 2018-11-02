@@ -34,7 +34,6 @@ public class EconomistWorkstation extends Application {
      
     @Override
     public void start(Stage primaryStage) {
-        //Database db = Database.getInstance();
 
         BorderPane root = new BorderPane();
         

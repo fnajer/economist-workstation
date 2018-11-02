@@ -23,7 +23,7 @@ public class Database {
     public Connection conn = null;
     public Statement stmt = null;
     
-    public void connect () {
+    private void connect () {
         try {
             Class.forName("org.h2.Driver");
 
