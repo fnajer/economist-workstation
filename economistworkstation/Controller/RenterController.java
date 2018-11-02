@@ -47,7 +47,7 @@ public class RenterController implements Initializable {
         listRenters.clear();
         
         for(Renter renter : renters){
-            Label lblRent = new Label(renter.name);
+            Label lblName = new Label(renter.name);
             Button delBtn = new Button("X");
             
             delBtn.setOnAction(new EventHandler<ActionEvent>() {
@@ -58,7 +58,7 @@ public class RenterController implements Initializable {
                 }
             });
             
-            FlowPane root = new FlowPane(10, 10, lblRent, delBtn);
+            FlowPane root = new FlowPane(10, 10, lblName, delBtn);
             listRenters.add(root);
         }
     }
