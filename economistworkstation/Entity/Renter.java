@@ -24,6 +24,11 @@ public class Renter {
        this.patronymic = patronymic; 
        this.address = address; 
        this.birthday = birthday; 
-       this.person = person;
+       this.person = person;  
+    }
+    
+    @Override
+    public String toString() {
+        return this.name;
     }
 }
