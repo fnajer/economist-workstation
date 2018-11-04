@@ -24,8 +24,10 @@ public class SidebarController {
 
     public static VBox createSidebar(BorderPane root) {     
         Button renters = new Button("Арендаторы");
+        Button buildings = new Button("Здания");
         Button contracts = new Button("Договоры");
-        VBox leftSidebar = new VBox(10, renters, contracts);
+        
+        VBox leftSidebar = new VBox(10, renters, buildings, contracts);
         
         renters.setOnAction(new EventHandler<ActionEvent>() {
             
@@ -34,6 +36,19 @@ public class SidebarController {
                 RenterController renterController = new RenterController();
                 try {
                     renterController.displayPage(root);
+                } catch (Exception ex) {
+                    Logger.getLogger(SidebarController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
+        buildings.setOnAction(new EventHandler<ActionEvent>() {
+            
+            @Override
+            public void handle(ActionEvent event) {
+                BuildingController buildingController = new BuildingController();
+                try {
+                    buildingController.displayPage(root);
                 } catch (Exception ex) {
                     Logger.getLogger(SidebarController.class.getName()).log(Level.SEVERE, null, ex);
                 }

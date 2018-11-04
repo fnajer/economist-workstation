@@ -5,8 +5,8 @@
  */
 package economistworkstation.Controller;
 
-import economistworkstation.Entity.Renter;
-import economistworkstation.Model.RenterModel;
+import economistworkstation.Entity.Building;
+import economistworkstation.Model.BuildingModel;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -43,15 +43,15 @@ public class BuildingController implements Initializable {
         ObservableList listBuildings = containerBuildings.getChildren();  
         listBuildings.clear();
         
-        for(Renter building : buildings){
-            Label lblName = new Label(building.name);
+        for(Building building : buildings){
+            Label lblName = new Label(building.type);
             Button delBtn = new Button("X");
             
             delBtn.setOnAction(new EventHandler<ActionEvent>() {
 
                 @Override
                 public void handle(ActionEvent event) {
-                    delRenter(building.id);
+                    delBuilding(building.id);
                 }
             });
             
