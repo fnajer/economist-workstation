@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<FlowPane hgap="10" vgap="10" id="FlowPane" orientation="vertical" alignment="center" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="economistworkstation.Controller.BuildingFormController">
+    <Label text="Тип" />
+    <TextField text="Тип" fx:id="type"/>
+    <Label text="Площадь" />
+    <TextField text="Площадь" fx:id="square"/>
+    <Label text="Балансовая стоимость" />
+    <TextField text="Балансовая стоимость" fx:id="cost_balance"/>
+    <Label text="Остаточная стоимость" />
+    <TextField text="Остаточная стоимость" fx:id="cost_residue"/>
+   
+    <Button text="Добавить" onAction="#addBuilding" fx:id="addBtn" />
+</FlowPane>
