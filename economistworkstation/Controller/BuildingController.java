@@ -64,6 +64,17 @@ public class BuildingController implements Initializable {
         BuildingModel.deleteBuilding(id);
         showListBuildings();
     }
+      
+    @FXML
+    public void showBuildingForm(ActionEvent event) throws IOException {
+        BuildingFormController buildingFormController = new BuildingFormController();
+        buildingFormController.setWindow(this);
+        try {
+            buildingFormController.displayPage();
+        } catch (Exception ex) {
+            Logger.getLogger(RenterController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     /**
      * Initializes the controller class.

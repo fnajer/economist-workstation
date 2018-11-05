@@ -57,7 +57,7 @@ public class BuildingModel {
                 buildings.add(createObjectBuilding(rs));
             }
             
-            System.out.println("Извлечение арендаторов завершено.");
+            System.out.println("Извлечение зданий завершено.");
             
         } catch (SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);

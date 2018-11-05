@@ -10,11 +10,11 @@
     <Label text="Тип" />
     <TextField text="Тип" fx:id="type"/>
     <Label text="Площадь" />
-    <TextField text="Площадь" fx:id="square"/>
+    <TextField text="5.0" fx:id="square"/>
     <Label text="Балансовая стоимость" />
-    <TextField text="Балансовая стоимость" fx:id="cost_balance"/>
+    <TextField text="3.0" fx:id="cost_balance"/>
     <Label text="Остаточная стоимость" />
-    <TextField text="Остаточная стоимость" fx:id="cost_residue"/>
+    <TextField text="4.0" fx:id="cost_residue"/>
    
     <Button text="Добавить" onAction="#addBuilding" fx:id="addBtn" />
 </FlowPane>
