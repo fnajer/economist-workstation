@@ -73,6 +73,23 @@ public class RenterModel {
         return renters;
     }
     
+    public static Renter getRenter(int id) {
+        Renter renter = null;
+        try {
+            ResultSet rs = db.stmt.executeQuery("SELECT * FROM RENTER WHERE id='" + id + "'");
+    
+            if (rs.next()) {
+                renter = createObjectRenter(rs);
+            }
+            
+            System.out.println("Извлечение арендатора завершено.");
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return renter;
+    }
+    
     private static Renter createObjectRenter(ResultSet rs) throws SQLException {
         Renter renter = new Renter(rs.getString("name"), rs.getString("surname"), rs.getString("patronymic"), 
         rs.getString("address"), rs.getString("birthday"), rs.getString("person"));
