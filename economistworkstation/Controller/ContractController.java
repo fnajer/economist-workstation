@@ -11,6 +11,7 @@ import javafx.fxml.Initializable;
 
 import economistworkstation.Database;
 import economistworkstation.Model.RenterModel;
+import economistworkstation.Model.BuildingModel;
 import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
@@ -39,7 +40,8 @@ public class ContractController implements Initializable {
         
     @FXML
     private ComboBox langsListView;
-
+    @FXML
+    private ComboBox buildingsListView;
     
     /**
      * Initializes the controller class.
@@ -49,6 +51,10 @@ public class ContractController implements Initializable {
         ArrayList renters = RenterModel.getRenters();
         ObservableList<String> langs = FXCollections.observableArrayList(renters);
         langsListView.setItems(langs);
+        
+        ArrayList buildings = BuildingModel.getBuildings();
+        ObservableList<String> langsBuildings = FXCollections.observableArrayList(buildings);
+        buildingsListView.setItems(langsBuildings);
     }   
     
     /**
