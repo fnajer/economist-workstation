@@ -36,6 +36,8 @@ public class RenterController implements Initializable {
    
     // any creational constructor destroy executing program
     
+    public static BorderPane root; // static need, not private
+    
     @FXML
     private VBox containerRenters;
 
@@ -49,6 +51,7 @@ public class RenterController implements Initializable {
         for(Renter renter : renters){
             Label lblName = new Label(renter.name);
             Button delBtn = new Button("X");
+            Button infoBtn = new Button("Подробно");
             
             delBtn.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -58,7 +61,15 @@ public class RenterController implements Initializable {
                 }
             });
             
-            FlowPane root = new FlowPane(10, 10, lblName, delBtn);
+            infoBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent event) {
+                    openProfile(renter.id);
+                }
+            });
+            
+            FlowPane root = new FlowPane(10, 10, lblName, delBtn, infoBtn);
             listRenters.add(root);
         }
     }
@@ -67,6 +78,18 @@ public class RenterController implements Initializable {
         //String name = renterName.getText();
         RenterModel.deleteRenter(id);
         showListRenters();
+    }
+    
+    public void openProfile(int id) {
+        RenterProfileController renterController = new RenterProfileController();
+
+        try {
+            renterController.displayPage(root, id);
+        } catch (Exception ex) {
+            Logger.getLogger(SidebarController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //System.out.println(renter.name);
+        //showRenterProfile();
     }
     
     @FXML
@@ -93,5 +116,6 @@ public class RenterController implements Initializable {
         Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Renter/Renter.fxml"));
         
         root.setCenter(container);
+        this.root = root;
     }
 }
