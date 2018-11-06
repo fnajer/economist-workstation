@@ -46,6 +46,26 @@ public class RenterModel {
         }
     }
     
+     public static void updateRenter(Renter renter) {
+        try {
+            PreparedStatement ps = db.conn.prepareStatement("UPDATE RENTER\n" +
+                            "SET name=?, surname=?, patronymic=?, address=?, birthday=?, person=?\n" +
+                            "WHERE id=?;");
+            ps.setString(1, renter.name);
+            ps.setString(2, renter.surname);
+            ps.setString(3, renter.patronymic);
+            ps.setString(4, renter.address);
+            ps.setString(5, renter.birthday);
+            ps.setString(6, renter.person);
+            ps.setInt(7, renter.id);
+            
+            ps.executeUpdate();
+            System.out.println("Изменено: " + renter.name);
+        } catch (SQLException ex) {
+            Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public static void deleteRenter(int id) {
         try {
             db.stmt.executeUpdate("DELETE FROM RENTER WHERE id='" + id + "'");
