@@ -14,5 +14,5 @@
     <Label text="" fx:id="address"/>
     <Label text="" fx:id="birthday"/>
     <Label text="" fx:id="person"/>
-    <!--<Button text="Редактировать" onAction="#showRenterForm" fx:id="updateBtn" />-->
+    <Button text="Редактировать" onAction="#showRenterForm" fx:id="updateBtn" />
 </FlowPane>

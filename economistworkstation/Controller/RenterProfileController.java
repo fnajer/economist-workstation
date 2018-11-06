@@ -22,6 +22,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 
+
 /**
  * FXML Controller class
  *
@@ -42,7 +43,12 @@ public class RenterProfileController implements Initializable {
         address.setText(renter.address);
         birthday.setText(renter.birthday);
         person.setText(renter.person);
-    }    
+    }   
+    
+    @FXML
+    public void showListRenters() {
+        
+    }
     
     @FXML
     private Button updateBtn;
@@ -58,6 +64,17 @@ public class RenterProfileController implements Initializable {
     private Label birthday;
     @FXML
     private Label person;
+    
+    @FXML
+    public void showRenterForm(ActionEvent event) throws IOException {
+        RenterFormController renterFormController = new RenterFormController();
+        renterFormController.setId(id);
+        try {
+            renterFormController.displayPage("Обновить");
+        } catch (Exception ex) {
+            Logger.getLogger(RenterController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     @FXML
     public void displayPage(BorderPane root, int id) throws Exception {

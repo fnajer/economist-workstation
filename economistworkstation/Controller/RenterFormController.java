@@ -21,24 +21,33 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
+
 /**
  *
  * @author fnajer
  */
 public class RenterFormController implements Initializable {
-    public static RenterController parentWindow; 
+    public static Object parentWindow; 
+    public static String typeForm;
+    public static int id;
 // non-static dont work, becouse bind action-handlers happen with first values. And constructor - causes error
 // in case with db - its not a static fault , its - any creational constructor destroy executing program    
-    public void setWindow(RenterController parent) {
+    public void setWindow(Object parent) {
         parentWindow = parent;
+    }
+    
+    public void setId(int id) {
+        this.id = id;
     }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        addBtn.setText(typeForm);
     }
     
     @FXML
-    public void displayPage() throws Exception { 
+    public void displayPage(String typeForm) throws Exception { 
+        this.typeForm = typeForm;
         Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Renter/RenterForm.fxml"));
         
         Stage stage = new Stage();
@@ -65,12 +74,21 @@ public class RenterFormController implements Initializable {
     @FXML
     public void addRenter(ActionEvent event) {
         
-        Renter renter = createRenter();
-        RenterModel.addRenter(renter);
-        Stage stage = (Stage) addBtn.getScene().getWindow();
+        if (typeForm == "Обновить") {
+            Renter renter = createRenter();
+            RenterModel.updateRenter(id, renter);
+            Stage stage = (Stage) addBtn.getScene().getWindow();
+
+            stage.close();
+        } else if (typeForm == "Добавить") {
+            Renter renter = createRenter();
+            RenterModel.addRenter(renter);
+            Stage stage = (Stage) addBtn.getScene().getWindow();
+
+            stage.close();
+            //parentWindow.showListRenters();
+        }
         
-        stage.close();
-        parentWindow.showListRenters();
     }
     
     public Renter createRenter() {

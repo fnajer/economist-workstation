@@ -46,7 +46,7 @@ public class RenterModel {
         }
     }
     
-     public static void updateRenter(Renter renter) {
+     public static void updateRenter(int id, Renter renter) {
         try {
             PreparedStatement ps = db.conn.prepareStatement("UPDATE RENTER\n" +
                             "SET name=?, surname=?, patronymic=?, address=?, birthday=?, person=?\n" +
@@ -57,7 +57,7 @@ public class RenterModel {
             ps.setString(4, renter.address);
             ps.setString(5, renter.birthday);
             ps.setString(6, renter.person);
-            ps.setInt(7, renter.id);
+            ps.setInt(7, id);
             
             ps.executeUpdate();
             System.out.println("Изменено: " + renter.name);

@@ -82,7 +82,6 @@ public class RenterController implements Initializable {
     
     public void openProfile(int id) {
         RenterProfileController renterController = new RenterProfileController();
-
         try {
             renterController.displayPage(root, id);
         } catch (Exception ex) {
@@ -97,7 +96,7 @@ public class RenterController implements Initializable {
         RenterFormController renterFormController = new RenterFormController();
         renterFormController.setWindow(this);
         try {
-            renterFormController.displayPage();
+            renterFormController.displayPage("Добавить");
         } catch (Exception ex) {
             Logger.getLogger(RenterController.class.getName()).log(Level.SEVERE, null, ex);
         }
