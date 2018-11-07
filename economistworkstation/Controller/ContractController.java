@@ -10,9 +10,13 @@ import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 
 import economistworkstation.Database;
+import economistworkstation.Entity.Renter;
 import economistworkstation.Model.RenterModel;
 import economistworkstation.Model.BuildingModel;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -32,31 +36,65 @@ import javafx.scene.Parent;
 
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 /**
  *
  * @author fnajer
  */
 public class ContractController implements Initializable {
-        
     @FXML
-    private ComboBox langsListView;
-    @FXML
-    private ComboBox buildingsListView;
+    private VBox containerContracts;
     
+    @FXML
+    public void showListContracts() {
+        ArrayList<Renter> contracts = RenterModel.getRenters();
+
+        ObservableList listContracts = containerContracts.getChildren();  
+        listContracts.clear();
+        
+        for(Renter contract : contracts){
+            Label lblName = new Label(contract.name);
+            Button delBtn = new Button("X");
+            Button infoBtn = new Button("Подробно");
+            
+            delBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent event) {
+//                    delRenter(contract.id);
+                }
+            });
+            
+            infoBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent event) {
+//                    openProfile(contract.id);
+                }
+            });
+            
+            FlowPane root = new FlowPane(10, 10, lblName, delBtn, infoBtn);
+            listContracts.add(root);
+        }
+    }
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {    
-        ArrayList renters = RenterModel.getRenters();
-        ObservableList<String> langs = FXCollections.observableArrayList(renters);
-        langsListView.setItems(langs);
-        
-        ArrayList buildings = BuildingModel.getBuildings();
-        ObservableList<String> langsBuildings = FXCollections.observableArrayList(buildings);
-        buildingsListView.setItems(langsBuildings);
+        showListContracts();
     }   
     
+    @FXML
+    public void showContractForm(ActionEvent event) throws IOException {
+        ContractFormController contractFormController = new ContractFormController();
+        contractFormController.setWindow(this);
+        try {
+            contractFormController.displayPage("Добавить");
+        } catch (Exception ex) {
+            Logger.getLogger(RenterController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     /**
      *
      * @param root
