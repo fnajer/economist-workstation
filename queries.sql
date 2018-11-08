@@ -13,3 +13,14 @@ CREATE TABLE RENTER(ID INT PRIMARY KEY AUTO_INCREMENT,
    NAME VARCHAR(30) NOT NULL
 );
 
+CREATE TABLE BUILDING(ID INT PRIMARY KEY AUTO_INCREMENT,
+   "TYPE" VARCHAR(30) NOT NULL,
+  SQUARE FLOAT NOT NULL,
+  cost_balance FLOAT NOT NULL,
+cost_residue  FLOAT NOT NULL
+);
+
+UPDATE RENTER
+SET name=?, surname=?,name=?, patronymic=?, address=?, birthday=?, person=?
+WHERE id=?;
+
