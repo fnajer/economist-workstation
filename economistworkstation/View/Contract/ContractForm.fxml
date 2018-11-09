@@ -11,5 +11,9 @@
     <ComboBox fx:id="langsListView" promptText="choose" />
     <Label text="Выберите здание" />
     <ComboBox fx:id="buildingsListView" promptText="choose" />
-    <!--<Button text="Добавить" onAction="#addRenter" fx:id="addBtn" />-->
+    <Label text="Дата начала аренды" />
+    <TextField text="2018-10-05" fx:id="date_start"/>
+    <Label text="Дата окончания аренды" />
+    <TextField text="2019-11-25" fx:id="date_end"/>
+    <Button text="Добавить" onAction="#addContract" fx:id="addBtn" />
 </FlowPane>
