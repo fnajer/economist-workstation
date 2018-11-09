@@ -5,14 +5,16 @@
  */
 package economistworkstation.Controller;
 
+import static economistworkstation.Controller.RenterController.root;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 
 import economistworkstation.Database;
+import economistworkstation.Entity.Contract;
 import economistworkstation.Entity.Renter;
 import economistworkstation.Model.RenterModel;
-import economistworkstation.Model.BuildingModel;
+import economistworkstation.Model.ContractModel;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -44,16 +46,22 @@ import javafx.event.EventHandler;
 public class ContractController implements Initializable {
     @FXML
     private VBox containerContracts;
+     
+    public void delContract(int id) {
+        //String name = renterName.getText();
+        ContractModel.deleteContract(id);
+        showListContracts();
+    }
     
     @FXML
     public void showListContracts() {
-        ArrayList<Renter> contracts = RenterModel.getRenters();
+        ArrayList<Contract> contracts = ContractModel.getContracts();
 
         ObservableList listContracts = containerContracts.getChildren();  
         listContracts.clear();
         
-        for(Renter contract : contracts){
-            Label lblName = new Label(contract.name);
+        for(Contract contract : contracts){
+            Label lblName = new Label(Integer.toString(contract.id));
             Button delBtn = new Button("X");
             Button infoBtn = new Button("Подробно");
             
@@ -61,7 +69,7 @@ public class ContractController implements Initializable {
 
                 @Override
                 public void handle(ActionEvent event) {
-//                    delRenter(contract.id);
+                    delContract(contract.id);
                 }
             });
             
@@ -69,7 +77,7 @@ public class ContractController implements Initializable {
 
                 @Override
                 public void handle(ActionEvent event) {
-//                    openProfile(contract.id);
+                    //openProfile(contract.id);
                 }
             });
             
@@ -77,6 +85,7 @@ public class ContractController implements Initializable {
             listContracts.add(root);
         }
     }
+    
     /**
      * Initializes the controller class.
      */

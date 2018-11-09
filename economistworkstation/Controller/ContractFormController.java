@@ -5,8 +5,9 @@
  */
 package economistworkstation.Controller;
 
-import static economistworkstation.Controller.RenterFormController.parentWindow;
+import economistworkstation.Entity.Building;
 import economistworkstation.Model.BuildingModel;
+import economistworkstation.Model.ContractModel;
 import economistworkstation.Model.RenterModel;
 import java.net.URL;
 import java.util.ArrayList;
@@ -20,6 +21,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
+import javafx.scene.control.TextField;
+import economistworkstation.Entity.Contract;
+import economistworkstation.Entity.Renter;
+import economistworkstation.Model.ContractModel;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
+import javafx.scene.control.MultipleSelectionModel;
+import javafx.scene.control.SingleSelectionModel;
 
 /**
  * FXML Controller class
@@ -32,9 +43,9 @@ public class ContractFormController implements Initializable {
     @FXML
     private ComboBox buildingsListView;
     
-    public static Object parentWindow;
+    public static ContractController parentWindow;
     
-    public void setWindow(Object parent) {
+    public void setWindow(ContractController parent) {
         parentWindow = parent;
     }
     /**
@@ -43,12 +54,27 @@ public class ContractFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         ArrayList renters = RenterModel.getRenters();
-        ObservableList<String> langs = FXCollections.observableArrayList(renters);
+        ObservableList<Renter> langs = FXCollections.observableArrayList(renters);
         langsListView.setItems(langs);
         
         ArrayList buildings = BuildingModel.getBuildings();
-        ObservableList<String> langsBuildings = FXCollections.observableArrayList(buildings);
+        ObservableList<Building> langsBuildings = FXCollections.observableArrayList(buildings);
         buildingsListView.setItems(langsBuildings);
+        
+        SingleSelectionModel<Renter> langsSelectionModel = langsListView.getSelectionModel();
+        // устанавливаем слушатель для отслеживания изменений
+        langsSelectionModel.selectedItemProperty().addListener(new ChangeListener<Renter>(){  
+            public void changed(ObservableValue<? extends Renter> changed, Renter oldValue, Renter newValue){  
+                id_renter = newValue.id;
+            }
+        });
+        
+        SingleSelectionModel<Building> buildingsSelectionModel = buildingsListView.getSelectionModel();
+        buildingsSelectionModel.selectedItemProperty().addListener(new ChangeListener<Building>(){
+            public void changed(ObservableValue<? extends Building> changed, Building oldValue, Building newValue){
+                id_building = newValue.id;
+            }
+        });
     }    
     
     @FXML
@@ -59,5 +85,33 @@ public class ContractFormController implements Initializable {
         stage.setTitle("Создание договора");
         stage.setScene(new Scene(container));
         stage.show();
+    }
+
+    @FXML
+    private Button addBtn;
+    @FXML
+    private TextField date_start;
+    @FXML
+    private TextField date_end;
+    
+    
+    private int id_renter;
+    
+    private int id_building;
+    
+    @FXML
+    public void addContract(ActionEvent event) {
+        
+        Contract contract = createContract();
+        ContractModel.addContract(contract);
+        Stage stage = (Stage) addBtn.getScene().getWindow();
+
+        stage.close();
+        parentWindow.showListContracts();
+    }
+    
+    public Contract createContract() {
+        Contract contract = new Contract(date_start.getText(), date_end.getText(), id_renter, id_building);
+        return contract;
     }
 }

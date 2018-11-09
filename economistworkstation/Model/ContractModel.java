@@ -24,7 +24,10 @@ public class ContractModel {
  
     public static void addContract(Contract contract) {
         try {
-           
+           System.out.println("1: " + contract.date_start);
+           System.out.println("1: " + contract.date_end);
+           System.out.println("1: " + contract.id_renter);
+           System.out.println("1: " + contract.id_building);
             PreparedStatement ps = db.conn.prepareStatement("insert into CONTRACT values(NULL,?, ?, ?, ?)");
             ps.setString(1, contract.date_start);
             ps.setString(2, contract.date_end);
@@ -32,7 +35,7 @@ public class ContractModel {
             ps.setInt(4, contract.id_building);
             
             ps.executeUpdate();
-            System.out.println("Добавлено: " + contract.id);
+            System.out.println("Добавлено: " + contract.date_start);
         } catch (SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
         }

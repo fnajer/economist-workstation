@@ -24,3 +24,15 @@ UPDATE RENTER
 SET name=?, surname=?,name=?, patronymic=?, address=?, birthday=?, person=?
 WHERE id=?;
 
+CREATE TABLE CONTRACT(ID INT PRIMARY KEY AUTO_INCREMENT,
+  date_start date NOT NULL,
+  date_end date NOT NULL,
+  id_renter int NOT NULL,
+  id_building int NOT NULL,
+  FOREIGN KEY (id_renter) REFERENCES RENTER(ID),
+  FOREIGN KEY (id_building) REFERENCES BUILDING(ID)
+);
+
+INSERT INTO CONTRACT VALUES(null, '2018-11-01', '2019-11-01', 2, 2);
+
+DROP TABLE IF EXISTS CONTRACT;
