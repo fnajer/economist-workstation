@@ -7,7 +7,7 @@ package economistworkstation.Model;
 
 import economistworkstation.Database;
 import economistworkstation.EconomistWorkstation;
-import economistworkstation.Entity.Renter;
+import economistworkstation.Entity.Contract;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,24 +21,18 @@ import java.util.logging.Logger;
  */
 public class ContractModel {
     private static Database db = Database.getInstance();
-    
-    //static {
-        //db = Database.getInstance();
-    //}
-    
+ 
     public static void addContract(Contract contract) {
         try {
            
-            PreparedStatement ps = db.conn.prepareStatement("insert into CONTRACT values(NULL,?, ?, ?, ?, ?, ?)");
-            ps.setString(1, contract.name);
-            ps.setString(2, contract.surname);
-            ps.setString(3, contract.patronymic);
-            ps.setString(4, contract.address);
-            ps.setString(5, contract.birthday);
-            ps.setString(6, contract.person);
+            PreparedStatement ps = db.conn.prepareStatement("insert into CONTRACT values(NULL,?, ?, ?, ?)");
+            ps.setString(1, contract.date_start);
+            ps.setString(2, contract.date_end);
+            ps.setInt(3, contract.id_renter);
+            ps.setInt(4, contract.id_building);
             
             ps.executeUpdate();
-            System.out.println("Добавлено: " + contract.name);
+            System.out.println("Добавлено: " + contract.id);
         } catch (SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -47,18 +41,16 @@ public class ContractModel {
      public static void updateContract(int id, Contract contract) {
         try {
             PreparedStatement ps = db.conn.prepareStatement("UPDATE CONTRACT\n" +
-                            "SET name=?, surname=?, patronymic=?, address=?, birthday=?, person=?\n" +
+                            "SET date_start=?, date_end=?, id_renter=?, id_building=?\n" +
                             "WHERE id=?;");
-            ps.setString(1, contract.name);
-            ps.setString(2, contract.surname);
-            ps.setString(3, contract.patronymic);
-            ps.setString(4, contract.address);
-            ps.setString(5, contract.birthday);
-            ps.setString(6, contract.person);
-            ps.setInt(7, id);
+            ps.setString(1, contract.date_start);
+            ps.setString(2, contract.date_end);
+            ps.setInt(3, contract.id_renter);
+            ps.setInt(4, contract.id_building);
+            ps.setInt(5, id);
             
             ps.executeUpdate();
-            System.out.println("Изменено: " + contract.name);
+            System.out.println("Изменено: " + contract.id);
         } catch (SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -76,14 +68,14 @@ public class ContractModel {
     public static ArrayList<Contract> getContracts() {
         ArrayList contracts = new ArrayList<Contract>();
         try {
-            ResultSet rs = db.stmt.executeQuery("SELECT * FROM RENTER");
+            ResultSet rs = db.stmt.executeQuery("SELECT * FROM CONTRACT");
             
             
             while (rs.next()) {
                 contracts.add(createObjectContract(rs));
             }
             
-            System.out.println("Извлечение арендаторов завершено.");
+            System.out.println("Извлечение договоров завершено.");
             
         } catch (SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
@@ -91,16 +83,16 @@ public class ContractModel {
         return contracts;
     }
     
-    public static Renter getContract(int id) {
+    public static Contract getContract(int id) {
         Contract contract = null;
         try {
-            ResultSet rs = db.stmt.executeQuery("SELECT * FROM RENTER WHERE id='" + id + "'");
+            ResultSet rs = db.stmt.executeQuery("SELECT * FROM CONTRACT WHERE id='" + id + "'");
     
             if (rs.next()) {
                 contract = createObjectContract(rs);
             }
             
-            System.out.println("Извлечение арендатора завершено.");
+            System.out.println("Извлечение договора завершено.");
             
         } catch (SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
@@ -108,9 +100,9 @@ public class ContractModel {
         return contract;
     }
     
-    private static Renter createObjectContract(ResultSet rs) throws SQLException {
-        Contract contract = new Contract(rs.getString("name"), rs.getString("surname"), rs.getString("patronymic"), 
-        rs.getString("address"), rs.getString("birthday"), rs.getString("person"));
+    private static Contract createObjectContract(ResultSet rs) throws SQLException {
+        Contract contract = new Contract(rs.getString("date_start"), rs.getString("date_end"), rs.getInt("id_renter"), 
+        rs.getInt("id_building"));
         contract.id = rs.getInt("id");
         
         return contract;
