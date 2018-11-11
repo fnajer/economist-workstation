@@ -77,12 +77,21 @@ public class ContractController implements Initializable {
 
                 @Override
                 public void handle(ActionEvent event) {
-                    //openProfile(contract.id);
+                    openProfile(contract.id);
                 }
             });
             
             FlowPane root = new FlowPane(10, 10, lblName, delBtn, infoBtn);
             listContracts.add(root);
+        }
+    }
+    
+    public void openProfile(int id) {
+        ContractProfileController contractController = new ContractProfileController();
+        try {
+            contractController.displayPage(root, id);
+        } catch (Exception ex) {
+            Logger.getLogger(SidebarController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
