@@ -8,6 +8,7 @@ package economistworkstation.Model;
 import economistworkstation.Database;
 import economistworkstation.EconomistWorkstation;
 import economistworkstation.Entity.Building;
+import economistworkstation.Entity.Renter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -70,6 +71,23 @@ public class BuildingModel {
         rs.getDouble("cost_residue"));
         building.id = rs.getInt("id");
         
+        return building;
+    }
+    
+     public static Building getBuilding(int id) {
+        Building building = null;
+        try {
+            ResultSet rs = db.stmt.executeQuery("SELECT * FROM BUILDING WHERE id='" + id + "'");
+    
+            if (rs.next()) {
+                building = createObjectBuilding(rs);
+            }
+            
+            System.out.println("Извлечение здания завершено.");
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return building;
     }
 }
