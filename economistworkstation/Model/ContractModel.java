@@ -89,7 +89,8 @@ public class ContractModel {
     public static Contract getContract(int id) {
         Contract contract = null;
         try {
-            ResultSet rs = db.stmt.executeQuery("SELECT * FROM CONTRACT WHERE id='" + id + "'");
+            //ResultSet rs = db.stmt.executeQuery("SELECT * FROM CONTRACT WHERE id='" + id + "'");
+            ResultSet rs = db.stmt.executeQuery("SELECT * FROM CONTRACT,RENTER, BUILDING WHERE CONTRACT.id=" + id + " AND CONTRACT.id_renter=RENTER.id AND CONTRACT.id_building=BUILDING.id;");
     
             if (rs.next()) {
                 contract = createObjectContract(rs);

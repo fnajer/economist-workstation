@@ -47,6 +47,8 @@ public class ContractController implements Initializable {
     @FXML
     private VBox containerContracts;
      
+    public static BorderPane root;
+    
     public void delContract(int id) {
         //String name = renterName.getText();
         ContractModel.deleteContract(id);
@@ -123,5 +125,6 @@ public class ContractController implements Initializable {
         Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Contract/Contract.fxml"));
  
         root.setCenter(container);
+        this.root = root;
     }
 }
