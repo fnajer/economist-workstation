@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<FlowPane hgap="10" vgap="10" id="FlowPane" orientation="vertical" alignment="center" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="economistworkstation.Controller.MonthController">
+    <Label text="Месяц" />
+    
+    <Label text="Дата:" />
+    <Label text="" fx:id="date"/>
+    
+    <Label text="Арендная плата:" />
+    <TextField text="" fx:id="cost"/>
+    <TextField text="" fx:id="fine"/>
+    <TextField text="" fx:id="paid"/>
+    
+    <Label text="Коммунальные платежи:" />
+    <TextField text="" fx:id="cost_water"/>
+    <TextField text="" fx:id="cost_electricity"/>
+    <TextField text="" fx:id="cost_heading"/>
+    
+    <Button text="Добавить" onAction="#addMonth" fx:id="addBtn" />
+</FlowPane>
