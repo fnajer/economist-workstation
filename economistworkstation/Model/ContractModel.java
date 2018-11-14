@@ -8,6 +8,7 @@ package economistworkstation.Model;
 import economistworkstation.Database;
 import economistworkstation.EconomistWorkstation;
 import economistworkstation.Entity.Contract;
+import economistworkstation.Entity.Month;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -35,6 +36,20 @@ public class ContractModel {
             ps.setInt(4, contract.id_building);
             
             ps.executeUpdate();
+            
+            ResultSet rs = ps.getResultSet();
+            int id = 0;
+            
+            while (rs.next()) {
+                id = rs.getInt("id");
+            }
+
+            for(int i = 1; i <= 12; i++) {
+                MonthModel.addMonth(i, new Month(i, "1997-10-10", 0.00, 0.00, 0.00,
+                    0.00, 0.00, 0.00, false, false, id));
+            }
+
+            
             System.out.println("Добавлено: " + contract.date_start);
         } catch (SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);

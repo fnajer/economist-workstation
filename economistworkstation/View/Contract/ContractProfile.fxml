@@ -19,4 +19,5 @@
     <Label text="" fx:id="square"/>
     
     <Label text="Данные об оплате:" />
+    <VBox spacing="10" fx:id="containerMonths" />
 </FlowPane>
