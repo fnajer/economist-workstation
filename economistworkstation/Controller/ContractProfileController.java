@@ -47,12 +47,11 @@ public class ContractProfileController implements Initializable {
     @FXML
     public void showListMonths() {
         ArrayList<Month> months = MonthModel.getMonths(id);
-System.out.println(2);
+        
         ObservableList listMonths = containerMonths.getChildren();  
         listMonths.clear();
         
         for(Month month : months){
-            System.out.println(month.number);
             Label lblName = new Label(month.date + ' ' + month.number);
             Button infoBtn = new Button("Подробно");
            
@@ -61,12 +60,24 @@ System.out.println(2);
 
                 @Override
                 public void handle(ActionEvent event) {
-                    //openProfile(month.id);
+                    showMonthForm(month.id);
                 }
             });
             
             FlowPane root = new FlowPane(10, 10, lblName, infoBtn);
             listMonths.add(root);
+        }
+    }
+    
+    @FXML
+    public void showMonthForm(int id_month) {
+        MonthFormController monthFormController = new MonthFormController();
+        monthFormController.setWindow(this);
+        monthFormController.setId(id_month);
+        try {
+            monthFormController.displayPage();
+        } catch (Exception ex) {
+            Logger.getLogger(RenterController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     /**

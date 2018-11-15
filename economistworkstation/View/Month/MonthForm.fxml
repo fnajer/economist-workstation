@@ -6,21 +6,24 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<FlowPane hgap="10" vgap="10" id="FlowPane" orientation="vertical" alignment="center" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="economistworkstation.Controller.MonthController">
+<FlowPane hgap="10" vgap="10" id="FlowPane" orientation="vertical" alignment="center" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="economistworkstation.Controller.MonthFormController">
     <Label text="Месяц" />
     
-    <Label text="Дата:" />
+    <Label text="Дата:" /> 
     <Label text="" fx:id="date"/>
+    <Label text="" fx:id="number"/>
+    <Label text="" fx:id="id_contract"/>
     
     <Label text="Арендная плата:" />
     <TextField text="" fx:id="cost"/>
     <TextField text="" fx:id="fine"/>
-    <TextField text="" fx:id="paid"/>
+    <Label text="" fx:id="paid_rent"/>
     
     <Label text="Коммунальные платежи:" />
     <TextField text="" fx:id="cost_water"/>
     <TextField text="" fx:id="cost_electricity"/>
     <TextField text="" fx:id="cost_heading"/>
+    <Label text="" fx:id="paid_communal"/>
     
-    <!--<Button text="Добавить" onAction="#addMonth" fx:id="addBtn" />-->
+    <Button text="Сохранить" onAction="#updateMonth" fx:id="saveBtn" />
 </FlowPane>
