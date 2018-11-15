@@ -25,10 +25,12 @@ import javafx.scene.control.TextField;
 import economistworkstation.Entity.Contract;
 import economistworkstation.Entity.Renter;
 import economistworkstation.Model.ContractModel;
+import java.time.LocalDate;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.SingleSelectionModel;
 
@@ -75,6 +77,9 @@ public class ContractFormController implements Initializable {
                 id_building = newValue.id;
             }
         });
+        
+        date_start.setValue(LocalDate.now());
+        date_end.setValue(LocalDate.now().plusMonths(6));
     }    
     
     @FXML
@@ -90,9 +95,9 @@ public class ContractFormController implements Initializable {
     @FXML
     private Button addBtn;
     @FXML
-    private TextField date_start;
+    private DatePicker date_start;
     @FXML
-    private TextField date_end;
+    private DatePicker date_end;
     
     
     private int id_renter;
@@ -111,7 +116,8 @@ public class ContractFormController implements Initializable {
     }
     
     public Contract createContract() {
-        Contract contract = new Contract(date_start.getText(), date_end.getText(), id_renter, id_building);
+        Contract contract = new Contract(date_start.getValue().toString(), 
+                date_end.getValue().toString(), id_renter, id_building);
         return contract;
     }
 }

@@ -26,6 +26,7 @@ public class ContractModel {
  
     public static void addContract(Contract contract) {
         try {
+            System.out.println("Добавлено: " + contract.date_start);
             PreparedStatement ps = db.conn.prepareStatement("insert into CONTRACT values(NULL,?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, contract.date_start);
