@@ -66,6 +66,15 @@ public class MonthModel {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+     
+    public static void deleteMonths(int id) {
+        try {
+            db.stmt.executeUpdate("DELETE FROM MONTH WHERE id_contract='" + id + "'");
+            System.out.println("Удалены месяцы для договора: " + id);
+        } catch (SQLException ex) {
+            Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     public static ArrayList<Month> getMonths(int id) {
         ArrayList months = new ArrayList<Month>();

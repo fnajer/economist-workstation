@@ -82,6 +82,7 @@ public class ContractModel {
     
     public static void deleteContract(int id) {
         try {
+            MonthModel.deleteMonths(id);
             db.stmt.executeUpdate("DELETE FROM CONTRACT WHERE id='" + id + "'");
             System.out.println("Удалено: " + id);
         } catch (SQLException ex) {
