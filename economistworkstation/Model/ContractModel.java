@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,7 +25,7 @@ import java.util.logging.Logger;
 public class ContractModel {
     private static Database db = Database.getInstance();
  
-    public static void addContract(Contract contract) {
+    public static void addContract(Contract contract, long diffOfDates, LocalDate date_start) {
         try {
             System.out.println("Добавлено: " + contract.date_start);
             PreparedStatement ps = db.conn.prepareStatement("insert into CONTRACT values(NULL,?, ?, ?, ?)",
@@ -37,13 +38,18 @@ public class ContractModel {
             ps.executeUpdate();
             
             int id = 0;
-            
+
             ResultSet generatedKeys = ps.getGeneratedKeys();
             if (generatedKeys.next()) {
                 id = generatedKeys.getInt(1);
-                for(int i = 1; i <= 12; i++) {
-                    MonthModel.addMonth(i, new Month(i, "1997-10-10", 0.00, 0.00,
+                for(int i = 1; i <= diffOfDates; i++) {
+                    MonthModel.addMonth(i, new Month(i, date_start.toString(), 0.00, 0.00,
                         0.00, 0.00, 0.00, false, false, id));
+                    
+                    if(date_start.getDayOfMonth() > 1) {
+                        date_start = date_start.minusDays(date_start.getDayOfMonth() - 1);
+                    }
+                    date_start = date_start.plusMonths(1);
                 }
                 
                 System.out.println("Добавлено: " + contract.date_start);

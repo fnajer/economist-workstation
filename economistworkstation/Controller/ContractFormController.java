@@ -26,6 +26,7 @@ import economistworkstation.Entity.Contract;
 import economistworkstation.Entity.Renter;
 import economistworkstation.Model.ContractModel;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -106,9 +107,11 @@ public class ContractFormController implements Initializable {
     
     @FXML
     public void addContract(ActionEvent event) {
+        //int diffOfDates = date_end.getValue() - date_start.getValue();
+        long diffOfDates = ChronoUnit.MONTHS.between(date_start.getValue(), date_end.getValue());
         
         Contract contract = createContract();
-        ContractModel.addContract(contract);
+        ContractModel.addContract(contract, diffOfDates, date_start.getValue());
         Stage stage = (Stage) addBtn.getScene().getWindow();
 
         stage.close();
