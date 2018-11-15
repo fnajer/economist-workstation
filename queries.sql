@@ -36,3 +36,19 @@ CREATE TABLE CONTRACT(ID INT PRIMARY KEY AUTO_INCREMENT,
 INSERT INTO CONTRACT VALUES(null, '2018-11-01', '2019-11-01', 2, 2);
 
 DROP TABLE IF EXISTS CONTRACT;
+
+SELECT * FROM CONTRACT,RENTER, BUILDING WHERE CONTRACT.id=1 AND CONTRACT.id_renter=RENTER.id AND CONTRACT.id_building=BUILDING.id;
+
+CREATE TABLE MONTH(ID INT PRIMARY KEY AUTO_INCREMENT,
+  number int NOT NULL,
+  "date" date NOT NULL,
+  cost int NOT NULL,
+  fine int NOT NULL,
+  cost_water int NOT NULL,
+  cost_electricity int NOT NULL,
+  cost_heading int NOT NULL,
+  paid_rent int NOT NULL,
+  paid_communal int NOT NULL,
+  id_contract int NOT NULL,
+  FOREIGN KEY (id_contract) REFERENCES CONTRACT(ID)
+);

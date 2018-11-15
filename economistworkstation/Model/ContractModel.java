@@ -12,6 +12,7 @@ import economistworkstation.Entity.Month;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +30,8 @@ public class ContractModel {
            System.out.println("1: " + contract.date_end);
            System.out.println("1: " + contract.id_renter);
            System.out.println("1: " + contract.id_building);
-            PreparedStatement ps = db.conn.prepareStatement("insert into CONTRACT values(NULL,?, ?, ?, ?)");
+            PreparedStatement ps = db.conn.prepareStatement("insert into CONTRACT values(NULL,?, ?, ?, ?)",
+                    Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, contract.date_start);
             ps.setString(2, contract.date_end);
             ps.setInt(3, contract.id_renter);
@@ -37,20 +39,32 @@ public class ContractModel {
             
             ps.executeUpdate();
             
-            ResultSet rs = ps.getResultSet();
             int id = 0;
             
-            while (rs.next()) {
-                id = rs.getInt("id");
+            ResultSet generatedKeys = ps.getGeneratedKeys();
+            if (generatedKeys.next()) {
+                id = generatedKeys.getInt(1);
+                System.out.println("1: " + id);
+                for(int i = 1; i <= 12; i++) {
+                    MonthModel.addMonth(i, new Month(i, "1997-10-10", 0.00, 0.00,
+                        0.00, 0.00, 0.00, false, false, id));
+                }
+                
+                System.out.println("Добавлено: " + contract.date_start);
+            } else {
+                System.out.println("id didnt got");
             }
-
-            for(int i = 1; i <= 12; i++) {
-                MonthModel.addMonth(i, new Month(i, "1997-10-10", 0.00, 0.00, 0.00,
-                    0.00, 0.00, 0.00, false, false, id));
-            }
-
             
-            System.out.println("Добавлено: " + contract.date_start);
+            //ResultSet rs = ps.getResultSet();
+            
+//            System.out.println("1: " + ps.getResultSet());
+//System.out.println("1: " + id);
+//            while (rs.next()) {
+//                id = rs.getInt("id");
+//            }
+//            System.out.println("1: " + rs.next());
+//System.out.println("1: " + id);
+            
         } catch (SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -22,7 +22,7 @@ public class Month {
     public boolean paid_communal;
     public int id_contract;
     
-    public Month(int number, String date, double cost, double fine, double paid,
+    public Month(int number, String date, double cost, double fine,
             double cost_water, double cost_electricity, double cost_heading, 
             boolean paid_rent, boolean paid_communal, int id_contract) {
        this.number = number;

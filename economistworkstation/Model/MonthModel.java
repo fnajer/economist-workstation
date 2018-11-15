@@ -71,7 +71,7 @@ public class MonthModel {
     public static ArrayList<Month> getMonths(int id) {
         ArrayList months = new ArrayList<Month>();
         try {
-            ResultSet rs = db.stmt.executeQuery("SELECT * FROM MONTH WHERE id='" + id + "'");
+            ResultSet rs = db.stmt.executeQuery("SELECT * FROM MONTH WHERE id_contract='" + id + "'");
             
             
             while (rs.next()) {
@@ -105,7 +105,7 @@ public class MonthModel {
     
     private static Month createObjectMonth(ResultSet rs) throws SQLException {
         Month month = new Month(rs.getInt("number"), rs.getString("date"),
-                rs.getDouble("cost"), rs.getDouble("fine"), rs.getDouble("paid"), rs.getDouble("cost_water"),
+                rs.getDouble("cost"), rs.getDouble("fine"), rs.getDouble("cost_water"),
                 rs.getDouble("cost_electricity"), rs.getDouble("cost_heading"), rs.getBoolean("paid_rent"),
                 rs.getBoolean("paid_communal"), rs.getInt("id_contract"));
         month.id = rs.getInt("id");

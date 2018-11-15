@@ -47,11 +47,12 @@ public class ContractProfileController implements Initializable {
     @FXML
     public void showListMonths() {
         ArrayList<Month> months = MonthModel.getMonths(id);
-
+System.out.println(2);
         ObservableList listMonths = containerMonths.getChildren();  
         listMonths.clear();
         
         for(Month month : months){
+            System.out.println(month.number);
             Label lblName = new Label(month.date + ' ' + month.number);
             Button infoBtn = new Button("Подробно");
            
@@ -84,8 +85,9 @@ public class ContractProfileController implements Initializable {
         
         type.setText(building.type);
         square.setText(Double.toString(building.square));
-        
+        System.out.println(1);
         showListMonths();
+        System.out.println(1);
     }   
 
     

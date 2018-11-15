@@ -22,5 +22,5 @@
     <TextField text="" fx:id="cost_electricity"/>
     <TextField text="" fx:id="cost_heading"/>
     
-    <Button text="Добавить" onAction="#addMonth" fx:id="addBtn" />
+    <!--<Button text="Добавить" onAction="#addMonth" fx:id="addBtn" />-->
 </FlowPane>
