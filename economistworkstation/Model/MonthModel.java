@@ -47,9 +47,8 @@ public class MonthModel {
      public static void updateMonth(int id, Month month) {
         try {
             PreparedStatement ps = db.conn.prepareStatement("UPDATE MONTH\n" +
-                            "SET date=?, cost=?, fine=?, cost_water=?\n" +
-                            "SET cost_electricity=?, cost_heading=?, fine=?, paid_rent=?\n" +
-                            "SET paid_communal=?\n" +
+                            "SET date=?, cost=?, fine=?, cost_water=?,\n" +
+                            "cost_electricity=?, cost_heading=?, paid_rent=?, paid_communal=?\n" +
                             "WHERE id=?;");
             ps.setString(1, month.date);
             ps.setDouble(2, month.cost);

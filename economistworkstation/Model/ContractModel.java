@@ -26,10 +26,6 @@ public class ContractModel {
  
     public static void addContract(Contract contract) {
         try {
-           System.out.println("1: " + contract.date_start);
-           System.out.println("1: " + contract.date_end);
-           System.out.println("1: " + contract.id_renter);
-           System.out.println("1: " + contract.id_building);
             PreparedStatement ps = db.conn.prepareStatement("insert into CONTRACT values(NULL,?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, contract.date_start);
@@ -44,7 +40,6 @@ public class ContractModel {
             ResultSet generatedKeys = ps.getGeneratedKeys();
             if (generatedKeys.next()) {
                 id = generatedKeys.getInt(1);
-                System.out.println("1: " + id);
                 for(int i = 1; i <= 12; i++) {
                     MonthModel.addMonth(i, new Month(i, "1997-10-10", 0.00, 0.00,
                         0.00, 0.00, 0.00, false, false, id));
@@ -54,16 +49,6 @@ public class ContractModel {
             } else {
                 System.out.println("id didnt got");
             }
-            
-            //ResultSet rs = ps.getResultSet();
-            
-//            System.out.println("1: " + ps.getResultSet());
-//System.out.println("1: " + id);
-//            while (rs.next()) {
-//                id = rs.getInt("id");
-//            }
-//            System.out.println("1: " + rs.next());
-//System.out.println("1: " + id);
             
         } catch (SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
