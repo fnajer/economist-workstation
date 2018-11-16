@@ -41,14 +41,14 @@ SELECT * FROM CONTRACT,RENTER, BUILDING WHERE CONTRACT.id=1 AND CONTRACT.id_rent
 
 CREATE TABLE MONTH(ID INT PRIMARY KEY AUTO_INCREMENT,
   number int NOT NULL,
-  "date" date NOT NULL,
-  cost int NOT NULL,
-  fine int NOT NULL,
-  cost_water int NOT NULL,
-  cost_electricity int NOT NULL,
-  cost_heading int NOT NULL,
-  paid_rent int NOT NULL,
-  paid_communal int NOT NULL,
+  date date NOT NULL,
+  cost double NOT NULL,
+  fine double NOT NULL,
+  cost_water double NOT NULL,
+  cost_electricity double NOT NULL,
+  cost_heading double NOT NULL,
+  paid_rent boolean NOT NULL,
+  paid_communal boolean NOT NULL,
   id_contract int NOT NULL,
   FOREIGN KEY (id_contract) REFERENCES CONTRACT(ID)
 );
