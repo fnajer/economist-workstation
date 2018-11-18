@@ -42,14 +42,23 @@ public class ContractModel {
             ResultSet generatedKeys = ps.getGeneratedKeys();
             if (generatedKeys.next()) {
                 id = generatedKeys.getInt(1);
+                
+                int dayOfMonth = date_start.getDayOfMonth();
+                if (dayOfMonth == 1) {
+                    dayOfMonth = 0;
+                } else {
+                    dayOfMonth--;
+                }
+                date_start = date_start.minusDays(dayOfMonth).plusMonths(1);
                 for(int i = 1; i <= diffOfDates; i++) {
                     MonthModel.addMonth(i, new Month(i, date_start.toString(), 0.00, 0.00,
                         0.00, 0.00, 0.00, false, false, id));
                     
-                    if(date_start.getDayOfMonth() > 1) {
-                        date_start = date_start.minusDays(date_start.getDayOfMonth() - 1);
-                    }
                     date_start = date_start.plusMonths(1);
+                    
+                    if(i == diffOfDates - 1) {
+                        date_start = date_start.plusDays(dayOfMonth);
+                    }
                 }
                 
                 System.out.println("Добавлено: " + contract.date_start);
@@ -62,7 +71,7 @@ public class ContractModel {
         }
     }
     
-     public static void updateContract(int id, Contract contract) {
+    public static void updateContract(int id, Contract contract) {
         try {
             PreparedStatement ps = db.conn.prepareStatement("UPDATE CONTRACT\n" +
                             "SET date_start=?, date_end=?, id_renter=?, id_building=?\n" +
