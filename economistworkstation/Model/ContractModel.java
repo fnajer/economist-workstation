@@ -48,17 +48,20 @@ public class ContractModel {
                     dayOfMonth = 0;
                 } else {
                     dayOfMonth--;
+                    diffOfDates++; //т.к. периодов оплаты больше, чем месяцев
                 }
+                
                 date_start = date_start.minusDays(dayOfMonth).plusMonths(1);
                 for(int i = 1; i <= diffOfDates; i++) {
                     MonthModel.addMonth(i, new Month(i, date_start.toString(), 0.00, 0.00,
                         0.00, 0.00, 0.00, false, false, id));
                     
-                    date_start = date_start.plusMonths(1);
-                    
-                    if(i == diffOfDates - 1) {
+                    if(i == diffOfDates - 1 && dayOfMonth > 1) {
                         date_start = date_start.plusDays(dayOfMonth);
+                        continue;
                     }
+                    
+                    date_start = date_start.plusMonths(1);
                 }
                 
                 System.out.println("Добавлено: " + contract.date_start);

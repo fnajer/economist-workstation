@@ -12,6 +12,7 @@ import economistworkstation.Entity.Month;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,7 +24,7 @@ import java.util.logging.Logger;
 public class MonthModel {
     private static Database db = Database.getInstance();
  
-    public static void addMonth(int id_contract, Month month) {
+    public static void addMonth(int id_contract, Month month) { //id contract not use
         try {
             PreparedStatement ps = db.conn.prepareStatement("insert into MONTH values(NULL,?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             ps.setInt(1, month.number);
@@ -44,7 +45,47 @@ public class MonthModel {
         }
     }
     
-     public static void updateMonth(int id, Month month) {
+    public static void addMonths(int id, int count, Month lastMonth) {
+        LocalDate date = LocalDate.parse(lastMonth.date);
+        int daysOfMonth = date.getDayOfMonth();
+        if (daysOfMonth > 1) {
+            daysOfMonth--;
+            date = date.minusDays(daysOfMonth);  
+            date = date.plusMonths(1);
+        } else {
+            daysOfMonth = 0;
+        }
+        
+        System.out.println(date.toString());
+        lastMonth.date = date.toString();
+        System.out.println(date.toString());
+        updateMonth(lastMonth.id, lastMonth);
+          
+       
+        
+        if(count == 1 && daysOfMonth > 1) {
+            date = date.plusDays(daysOfMonth);
+        } else {
+            date = date.plusMonths(1);
+        }
+        
+        for(int i = 1; i <= count; i++) {
+            MonthModel.addMonth(i, new Month(lastMonth.number + i, date.toString(), 0.00, 0.00,
+                0.00, 0.00, 0.00, false, false, id));
+
+            if(i == count - 1 && daysOfMonth > 1) {
+                date = date.plusDays(daysOfMonth);
+                continue;
+            }
+            
+            date = date.plusMonths(1);
+        }
+
+        System.out.println("Осуществлено продление аренды.");
+    }
+    
+    public static void updateMonth(int id, Month month) {
+        System.out.println(month.date);
         try {
             PreparedStatement ps = db.conn.prepareStatement("UPDATE MONTH\n" +
                             "SET date=?, cost=?, fine=?, cost_water=?,\n" +
