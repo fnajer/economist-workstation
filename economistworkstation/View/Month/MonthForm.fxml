@@ -16,13 +16,20 @@
     
     <Label text="Арендная плата:" />
     <TextField text="" fx:id="cost"/>
+    <TextField text="" fx:id="index_cost"/>
     <TextField text="" fx:id="fine"/>
     <Label text="" fx:id="paid_rent"/>
     
     <Label text="Коммунальные платежи:" />
     <TextField text="" fx:id="cost_water"/>
+    <TextField text="" fx:id="index_water"/>
+    <Label text="" fx:id="label_water" />
     <TextField text="" fx:id="cost_electricity"/>
+    <TextField text="" fx:id="index_electricity"/>
+    <Label text="" fx:id="label_electricity" />
     <TextField text="" fx:id="cost_heading"/>
+    <TextField text="" fx:id="index_heading"/>
+    <Label text="" fx:id="label_heading" />
     <Label text="" fx:id="paid_communal"/>
     
     <Button text="Сохранить" onAction="#updateMonth" fx:id="saveBtn" />
