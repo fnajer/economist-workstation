@@ -18,6 +18,8 @@
     <Label text="" fx:id="type"/>
     <Label text="" fx:id="square"/>
     
+    <Button text="Продлить договор" onAction="#extendContract" />
+    <TextField text="0" fx:id="extendCount" />
     <Label text="Данные об оплате:" />
     <VBox spacing="10" fx:id="containerMonths" />
 </FlowPane>

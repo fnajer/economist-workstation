@@ -28,6 +28,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
@@ -40,7 +42,7 @@ import javafx.scene.layout.VBox;
 public class ContractProfileController implements Initializable {
 
     public static int id;
-    
+    private Month lastMonth;
     @FXML
     private VBox containerMonths;
 
@@ -55,6 +57,7 @@ public class ContractProfileController implements Initializable {
             Label lblName = new Label(month.date + ' ' + month.number);
             Button infoBtn = new Button("Подробно");
            
+            lastMonth = month;
             
             infoBtn.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -66,6 +69,17 @@ public class ContractProfileController implements Initializable {
             
             FlowPane root = new FlowPane(10, 10, lblName, infoBtn);
             listMonths.add(root);
+        }
+    }
+
+    @FXML
+    public void extendContract() {
+        int countMonths = Integer.parseInt(extendCount.getText());
+        
+        if (countMonths > 0) {
+            MonthModel.addMonths(id, countMonths, lastMonth);
+        
+            showListMonths();
         }
     }
     
@@ -96,14 +110,14 @@ public class ContractProfileController implements Initializable {
         
         type.setText(building.type);
         square.setText(Double.toString(building.square));
-        System.out.println(1);
         showListMonths();
-        System.out.println(1);
     }   
 
     
     @FXML
     private Button updateBtn;
+    @FXML
+    private TextField extendCount;
     @FXML
     private Label name;
     @FXML
