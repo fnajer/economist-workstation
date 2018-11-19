@@ -56,6 +56,8 @@ public class ContractProfileController implements Initializable {
         for(Month month : months){
             Label lblName = new Label(month.date + ' ' + month.number);
             Button infoBtn = new Button("Подробно");
+            Button paymentBtn = new Button("Вывод расчетов");
+            Button accountBtn = new Button("Выписать счет");
            
             lastMonth = month;
             
@@ -64,6 +66,22 @@ public class ContractProfileController implements Initializable {
                 @Override
                 public void handle(ActionEvent event) {
                     showMonthForm(month.id);
+                }
+            });
+            
+            paymentBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent event) {
+                    
+                }
+            });
+            
+            accountBtn.setOnAction(new EventHandler<ActionEvent>() {
+
+                @Override
+                public void handle(ActionEvent event) {
+                    
                 }
             });
             
