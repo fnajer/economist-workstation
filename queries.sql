@@ -50,5 +50,8 @@ CREATE TABLE MONTH(ID INT PRIMARY KEY AUTO_INCREMENT,
   paid_rent boolean NOT NULL,
   paid_communal boolean NOT NULL,
   id_contract int NOT NULL,
+  index_water double NOT NULL,
+  index_electricity double NOT NULL,
+  index_heading double NOT NULL,
   FOREIGN KEY (id_contract) REFERENCES CONTRACT(ID)
 );
