@@ -21,10 +21,14 @@ public class Month {
     public boolean paid_rent;
     public boolean paid_communal;
     public int id_contract;
+    public double index_water;
+    public double index_electricity;
+    public double index_heading;
     
     public Month(int number, String date, double cost, double fine,
             double cost_water, double cost_electricity, double cost_heading, 
-            boolean paid_rent, boolean paid_communal, int id_contract) {
+            boolean paid_rent, boolean paid_communal, int id_contract,
+            double index_water, double index_electricity, double index_heading) {
        this.number = number;
        this.date = date; 
        this.cost = cost; 
@@ -35,6 +39,9 @@ public class Month {
        this.paid_rent = paid_rent;  
        this.paid_communal = paid_communal;
        this.id_contract = id_contract;
+       this.index_water = index_water;
+       this.index_electricity = index_electricity;
+       this.index_heading = index_heading;
     }
     
     @Override

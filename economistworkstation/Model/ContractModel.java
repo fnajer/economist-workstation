@@ -54,7 +54,7 @@ public class ContractModel {
                 date_start = date_start.minusDays(dayOfMonth).plusMonths(1);
                 for(int i = 1; i <= diffOfDates; i++) {
                     MonthModel.addMonth(i, new Month(i, date_start.toString(), 0.00, 0.00,
-                        0.00, 0.00, 0.00, false, false, id));
+                        0.00, 0.00, 0.00, false, false, id, 0.00, 0.00, 0.00));
                     
                     if(i == diffOfDates - 1 && dayOfMonth > 1) {
                         date_start = date_start.plusDays(dayOfMonth);

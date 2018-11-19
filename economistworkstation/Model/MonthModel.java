@@ -26,7 +26,7 @@ public class MonthModel {
  
     public static void addMonth(int id_contract, Month month) { //id contract not use
         try {
-            PreparedStatement ps = db.conn.prepareStatement("insert into MONTH values(NULL,?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement ps = db.conn.prepareStatement("insert into MONTH values(NULL,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             ps.setInt(1, month.number);
             ps.setString(2, month.date);
             ps.setDouble(3, month.cost);
@@ -37,6 +37,9 @@ public class MonthModel {
             ps.setBoolean(8, month.paid_rent);
             ps.setBoolean(9, month.paid_communal);
             ps.setInt(10, month.id_contract);
+            ps.setDouble(11, month.index_water);
+            ps.setDouble(12, month.index_electricity);
+            ps.setDouble(13, month.index_heading);
             
             ps.executeUpdate();
             System.out.println("Добавлено: " + month.number);
@@ -71,7 +74,7 @@ public class MonthModel {
         
         for(int i = 1; i <= count; i++) {
             MonthModel.addMonth(i, new Month(lastMonth.number + i, date.toString(), 0.00, 0.00,
-                0.00, 0.00, 0.00, false, false, id));
+                0.00, 0.00, 0.00, false, false, id, 0.00, 0.00, 0.00));
 
             if(i == count - 1 && daysOfMonth > 1) {
                 date = date.plusDays(daysOfMonth);
@@ -89,7 +92,8 @@ public class MonthModel {
         try {
             PreparedStatement ps = db.conn.prepareStatement("UPDATE MONTH\n" +
                             "SET date=?, cost=?, fine=?, cost_water=?,\n" +
-                            "cost_electricity=?, cost_heading=?, paid_rent=?, paid_communal=?\n" +
+                            "cost_electricity=?, cost_heading=?, paid_rent=?, paid_communal=?,\n" +
+                            "index_water=?, index_electricity=?, index_heading=?\n" +
                             "WHERE id=?;");
             ps.setString(1, month.date);
             ps.setDouble(2, month.cost);
@@ -99,7 +103,10 @@ public class MonthModel {
             ps.setDouble(6, month.cost_heading);
             ps.setBoolean(7, month.paid_rent);
             ps.setBoolean(8, month.paid_communal);
-            ps.setInt(9, id);
+            ps.setDouble(9, month.index_water);
+            ps.setDouble(10, month.index_electricity);
+            ps.setDouble(11, month.index_heading);
+            ps.setInt(12, id);
             
             ps.executeUpdate();
             System.out.println("Изменено: " + month.number);
@@ -156,7 +163,8 @@ public class MonthModel {
         Month month = new Month(rs.getInt("number"), rs.getString("date"),
                 rs.getDouble("cost"), rs.getDouble("fine"), rs.getDouble("cost_water"),
                 rs.getDouble("cost_electricity"), rs.getDouble("cost_heading"), rs.getBoolean("paid_rent"),
-                rs.getBoolean("paid_communal"), rs.getInt("id_contract"));
+                rs.getBoolean("paid_communal"), rs.getInt("id_contract"), rs.getDouble("index_water"),
+                rs.getDouble("index_electricity"), rs.getDouble("index_heading"));
         month.id = rs.getInt("id");
         
         return month;
