@@ -56,6 +56,36 @@ public class MonthFormController implements Initializable {
         paid_rent.setText(Boolean.toString(month.paid_rent));
         paid_communal.setText(Boolean.toString(month.paid_communal));
         id_contract.setText(Integer.toString(month.id_contract));
+        index_water.setText(Double.toString(month.index_water));
+        index_electricity.setText(Double.toString(month.index_electricity));
+        index_heading.setText(Double.toString(month.index_heading));
+        
+        cost_water.textProperty().addListener((observable, oldValue, newValue) -> {
+            double total = Double.parseDouble(cost_water.getText()) * Double.parseDouble(index_water.getText());
+            label_water.setText(Double.toString(total));
+        });
+        index_water.textProperty().addListener((observable, oldValue, newValue) -> {
+            double total = Double.parseDouble(cost_water.getText()) * Double.parseDouble(index_water.getText());
+            label_water.setText(Double.toString(total));
+        });
+        
+        cost_electricity.textProperty().addListener((observable, oldValue, newValue) -> {
+            double total = Double.parseDouble(cost_electricity.getText()) * Double.parseDouble(index_electricity.getText());
+            label_electricity.setText(Double.toString(total));
+        });
+        index_electricity.textProperty().addListener((observable, oldValue, newValue) -> {
+            double total = Double.parseDouble(cost_electricity.getText()) * Double.parseDouble(index_electricity.getText());
+            label_electricity.setText(Double.toString(total));
+        });
+        
+        cost_heading.textProperty().addListener((observable, oldValue, newValue) -> {
+            double total = Double.parseDouble(cost_heading.getText()) * Double.parseDouble(index_heading.getText());
+            label_heading.setText(Double.toString(total));
+        });
+        index_heading.textProperty().addListener((observable, oldValue, newValue) -> {
+            double total = Double.parseDouble(cost_heading.getText()) * Double.parseDouble(index_heading.getText());
+            label_heading.setText(Double.toString(total));
+        });
     }
     
     @FXML
@@ -92,6 +122,19 @@ public class MonthFormController implements Initializable {
     private Label id_contract;
     
     @FXML
+    private Label label_water;
+    @FXML
+    private Label label_electricity;
+    @FXML
+    private Label label_heading;
+    @FXML
+    private TextField index_water;
+    @FXML
+    private TextField index_electricity;
+    @FXML
+    private TextField index_heading;
+   
+    @FXML
     public void updateMonth(ActionEvent event) {
         
         Month month = createMonth();
@@ -107,7 +150,9 @@ public class MonthFormController implements Initializable {
                 Double.parseDouble(cost.getText()), Double.parseDouble(fine.getText()),
                 Double.parseDouble(cost_water.getText()), Double.parseDouble(cost_electricity.getText()),
                 Double.parseDouble(cost_heading.getText()), Boolean.parseBoolean(paid_rent.getText()),
-                Boolean.parseBoolean(paid_communal.getText()), Integer.parseInt(id_contract.getText()));
+                Boolean.parseBoolean(paid_communal.getText()), Integer.parseInt(id_contract.getText()),
+                Double.parseDouble(index_water.getText()), Double.parseDouble(index_electricity.getText()),
+                Double.parseDouble(index_heading.getText()));
         return month;
     } 
 }
