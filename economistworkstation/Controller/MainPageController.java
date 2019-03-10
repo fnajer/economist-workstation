@@ -24,7 +24,10 @@ import javafx.scene.layout.BorderPane;
  */
 public class MainPageController implements Initializable {
     
-    
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        renters.fire();
+    }
     
     @FXML
     private BorderPane root;
