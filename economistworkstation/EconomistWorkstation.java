@@ -5,23 +5,24 @@
  */
 package economistworkstation;
 
-import economistworkstation.Controller.RenterController;
 import economistworkstation.Controller.MenuController;
-import economistworkstation.Controller.SidebarController;
+import economistworkstation.Controller.RenterController;
+import economistworkstation.Controller.MainPageController;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
-import javafx.geometry.Pos;
-import javafx.geometry.Orientation;
 import javafx.scene.control.MenuBar;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
@@ -31,25 +32,26 @@ import javafx.scene.layout.BorderPane;
  * @author fnajer
  */
 public class EconomistWorkstation extends Application {
-     
+    private static BorderPane root;
+    
+    public static BorderPane getRootContainer() {
+        return root;
+    }
+    
     @Override
-    public void start(Stage primaryStage) {
+    public void start(Stage primaryStage) throws Exception {
 
-        BorderPane root = new BorderPane();
-        
-        MenuBar menu = MenuController.createMenu();
-        VBox sidebar = SidebarController.createSidebar(root);
+        MenuBar menu = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Menu.fxml"));
+        root = FXMLLoader.load(getClass().getResource("/economistworkstation/View/MainPage.fxml"));
         
         root.setTop(menu);
-        root.setLeft(sidebar);
-        
-        Scene scene = new Scene(root, 300, 250);
+        Scene scene = new Scene(root);
         
         primaryStage.setTitle("Economist Workstation");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
+    
     /**
      * @param args the command line arguments
      */
