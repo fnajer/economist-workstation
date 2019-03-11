@@ -34,6 +34,16 @@ public class RenterFormController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         btn.setText(typeForm);
+        
+        if (typeForm == "Обновить") {
+            Renter renter = RenterModel.getRenter(id);
+            name.setText(renter.name);
+            surname.setText(renter.surname);
+            patronymic.setText(renter.patronymic);
+            address.setText(renter.address);
+            birthday.setText(renter.birthday);
+            person.setText(renter.person);
+        }
     }
     
     @FXML
