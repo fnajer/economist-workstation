@@ -36,7 +36,7 @@ public class RenterController implements Initializable {
    
     public RenterController() {
         root = MainPageController.getRootContainer();
-       
+        renterController = this;
     }
     
     @Override
@@ -44,7 +44,19 @@ public class RenterController implements Initializable {
         showListRenters();
     }
     
-  
+    private static int currentId;
+    private static String typeForm;
+    private static RenterController renterController;
+    
+    public static int getIdCurrentRenter() {
+        return currentId;
+    }
+    public static String getTypeForm() {
+        return typeForm;
+    }
+    public static RenterController getRenterController() {
+        return renterController;
+    }
     
     @FXML
     private BorderPane root;
