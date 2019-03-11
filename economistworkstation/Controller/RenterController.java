@@ -120,5 +120,10 @@ public class RenterController implements Initializable {
         stage.show();
     }
     
-   
+    public void closeForm(Stage stage) {
+        stage.close();
+        root.setRight(null);
+        
+        showListRenters();
+    }
 }
