@@ -5,17 +5,13 @@
  */
 package economistworkstation.Controller;
 
-import economistworkstation.Database;
 import economistworkstation.Entity.Renter;
 import economistworkstation.Model.RenterModel;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
@@ -27,37 +23,21 @@ import javafx.stage.Stage;
  * @author fnajer
  */
 public class RenterFormController implements Initializable {
-    public static Object parentWindow; 
-    public static String typeForm;
-    public static int id;
-// non-static dont work, becouse bind action-handlers happen with first values. And constructor - causes error
-// in case with db - its not a static fault , its - any creational constructor destroy executing program    
-    public void setWindow(Object parent) {
-        parentWindow = parent;
+    public RenterFormController() {
+        id = RenterController.getIdCurrentRenter();
+        typeForm = RenterController.getTypeForm();
     }
     
-    public void setId(int id) {
-        this.id = id;
-    }
+    private String typeForm;
+    private int id;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        addBtn.setText(typeForm);
+        btn.setText(typeForm);
     }
     
     @FXML
-    public void displayPage(String typeForm) throws Exception { 
-        this.typeForm = typeForm;
-        Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Renter/RenterForm.fxml"));
-        
-        Stage stage = new Stage();
-        stage.setTitle("Создание арендатора");
-        stage.setScene(new Scene(container));
-        stage.show();
-    }
-    
-    @FXML
-    private Button addBtn;
+    private Button btn;
     @FXML
     private TextField name;
     @FXML
@@ -72,23 +52,18 @@ public class RenterFormController implements Initializable {
     private TextField person;
     
     @FXML
-    public void addRenter(ActionEvent event) {
+    public void handleBtn(ActionEvent event) {
+        
+        Renter renter = createRenter();
         
         if (typeForm == "Обновить") {
-            Renter renter = createRenter();
             RenterModel.updateRenter(id, renter);
-            Stage stage = (Stage) addBtn.getScene().getWindow();
-
-            stage.close();
         } else if (typeForm == "Добавить") {
-            Renter renter = createRenter();
             RenterModel.addRenter(renter);
-            Stage stage = (Stage) addBtn.getScene().getWindow();
-
-            stage.close();
-            //parentWindow.showListRenters();
         }
-        
+
+        Stage stage = (Stage) btn.getScene().getWindow();
+        RenterController.getRenterController().closeForm(stage);
     }
     
     public Renter createRenter() {

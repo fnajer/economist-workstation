@@ -32,17 +32,12 @@ import javafx.scene.layout.BorderPane;
  * @author fnajer
  */
 public class EconomistWorkstation extends Application {
-    private static BorderPane root;
-    
-    public static BorderPane getRootContainer() {
-        return root;
-    }
     
     @Override
     public void start(Stage primaryStage) throws Exception {
 
         MenuBar menu = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Menu.fxml"));
-        root = FXMLLoader.load(getClass().getResource("/economistworkstation/View/MainPage.fxml"));
+        BorderPane root = FXMLLoader.load(getClass().getResource("/economistworkstation/View/MainPage.fxml"));
         
         root.setTop(menu);
         Scene scene = new Scene(root);
