@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.FlowPane?>
 
-<FlowPane hgap="10" vgap="10" id="FlowPane" orientation="vertical" alignment="center" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="economistworkstation.Controller.RenterProfileController">
+<FlowPane id="FlowPane" alignment="center" hgap="10" orientation="vertical" prefHeight="400.0" prefWidth="215.0" styleClass="mainFxmlClass" vgap="10" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="economistworkstation.Controller.RenterProfileController">
     <Label text="Арендатор" />
-    <Label text="" fx:id="name"/>
-    <Label text="" fx:id="surname"/>
-    <Label text="" fx:id="patronymic"/>
-    <Label text="" fx:id="address"/>
-    <Label text="" fx:id="birthday"/>
-    <Label text="" fx:id="person"/>
-    <Button text="Редактировать" onAction="#showRenterForm" fx:id="updateBtn" />
+    <Label fx:id="name" text="" />
+    <Label fx:id="surname" text="" />
+    <Label fx:id="patronymic" text="" />
+    <Label fx:id="address" text="" />
+    <Label fx:id="birthday" text="" />
+    <Label fx:id="person" text="" />
+    <Button fx:id="updateBtn" onAction="#runEditForm" text="Редактировать" />
 </FlowPane>

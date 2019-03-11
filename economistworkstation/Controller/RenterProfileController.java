@@ -10,17 +10,11 @@ import economistworkstation.Model.RenterModel;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
 
 
 /**
@@ -30,7 +24,12 @@ import javafx.scene.layout.BorderPane;
  */
 public class RenterProfileController implements Initializable {
 
-    public static int id;
+    public RenterProfileController() {
+        id = RenterController.getIdCurrentRenter();
+    }
+    
+    private int id;
+    
     /**
      * Initializes the controller class.
      */
@@ -44,11 +43,6 @@ public class RenterProfileController implements Initializable {
         birthday.setText(renter.birthday);
         person.setText(renter.person);
     }   
-    
-    @FXML
-    public void showListRenters() {
-        
-    }
     
     @FXML
     private Button updateBtn;
@@ -66,22 +60,8 @@ public class RenterProfileController implements Initializable {
     private Label person;
     
     @FXML
-    public void showRenterForm(ActionEvent event) throws IOException {
-        RenterFormController renterFormController = new RenterFormController();
-        renterFormController.setId(id);
-        try {
-            renterFormController.displayPage("Обновить");
-        } catch (Exception ex) {
-            Logger.getLogger(RenterController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    @FXML
-    public void displayPage(BorderPane root, int id) throws Exception {
-        this.id = id;
-        Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Renter/RenterProfile.fxml"));
-        
-        root.setCenter(container);
-    }
-    
+    public void runEditForm(ActionEvent event) throws IOException {
+        RenterController.getRenterController()
+                .showRenterForm("Обновить", "Редактирование");
+    } 
 }
