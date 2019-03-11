@@ -26,7 +26,14 @@ public class MainPageController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        staticRoot = root;
+        
         renters.fire();
+    }
+    private static BorderPane staticRoot;
+    
+    public static BorderPane getRootContainer() {
+        return staticRoot;
     }
     
     @FXML

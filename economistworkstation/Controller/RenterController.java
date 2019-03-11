@@ -5,12 +5,10 @@
  */
 package economistworkstation.Controller;
 
-import economistworkstation.Database;
 import economistworkstation.Entity.Renter;
 import java.util.ArrayList;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
@@ -26,6 +24,8 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 /**
  *
@@ -34,10 +34,20 @@ import javafx.scene.Parent;
 
 public class RenterController implements Initializable {
    
-    // any creational constructor destroy executing program
+    public RenterController() {
+        root = MainPageController.getRootContainer();
+       
+    }
     
-    public static BorderPane root; // static need, not private
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        showListRenters();
+    }
     
+  
+    
+    @FXML
+    private BorderPane root;
     @FXML
     private VBox containerRenters;
 
@@ -53,68 +63,50 @@ public class RenterController implements Initializable {
             Button delBtn = new Button("X");
             Button infoBtn = new Button("Подробно");
             
-            delBtn.setOnAction(new EventHandler<ActionEvent>() {
-
-                @Override
-                public void handle(ActionEvent event) {
-                    delRenter(renter.id);
+            delBtn.setOnAction((ActionEvent event) -> {
+                delRenter(renter.id);
+            });
+            
+            infoBtn.setOnAction((ActionEvent event) -> {
+                try {
+                    currentId = renter.id;
+                    openProfile();
+                } catch (IOException ex) {
+                    Logger.getLogger(RenterController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
             
-            infoBtn.setOnAction(new EventHandler<ActionEvent>() {
-
-                @Override
-                public void handle(ActionEvent event) {
-                    openProfile(renter.id);
-                }
-            });
-            
-            FlowPane root = new FlowPane(10, 10, lblName, delBtn, infoBtn);
-            listRenters.add(root);
+            FlowPane renterContainer = new FlowPane(10, 10, lblName, delBtn, infoBtn);
+            listRenters.add(renterContainer);
         }
     }
     
     public void delRenter(int id) {
-        //String name = renterName.getText();
         RenterModel.deleteRenter(id);
         showListRenters();
     }
     
-    public void openProfile(int id) {
-        RenterProfileController renterController = new RenterProfileController();
-        try {
-            renterController.displayPage(root, id);
-        } catch (Exception ex) {
-            Logger.getLogger(SidebarController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        //System.out.println(renter.name);
-        //showRenterProfile();
+    public void openProfile() throws IOException {
+        Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Renter/RenterProfile.fxml"));
+
+        root.setRight(container);
     }
     
     @FXML
-    public void showRenterForm(ActionEvent event) throws IOException {
-        RenterFormController renterFormController = new RenterFormController();
-        renterFormController.setWindow(this);
-        try {
-            renterFormController.displayPage("Добавить");
-        } catch (Exception ex) {
-            Logger.getLogger(RenterController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        showListRenters();
+    public void runAddForm(ActionEvent event) throws IOException {
+        showRenterForm("Добавить", "Создание");
     }
     
     @FXML
-    public void displayPage(BorderPane root) throws Exception {
-        Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Renter/Renter.fxml"));
+    public void showRenterForm(String type, String title) throws IOException {
+        typeForm = type;
+        Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Renter/RenterForm.fxml"));
         
-        root.setCenter(container);
-        this.root = root;
+        Stage stage = new Stage();
+        stage.setTitle(String.format("%s арендатора", title));
+        stage.setScene(new Scene(container));
+        stage.show();
     }
+    
+   
 }
