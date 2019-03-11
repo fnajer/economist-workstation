@@ -59,6 +59,8 @@ public class RenterController implements Initializable {
     }
     
     @FXML
+    private Button showBtn;
+    @FXML
     private BorderPane root;
     @FXML
     private VBox containerRenters;
@@ -69,7 +71,7 @@ public class RenterController implements Initializable {
 
         ObservableList listRenters = containerRenters.getChildren();  
         listRenters.clear();
-        
+
         for(Renter renter : renters){
             Label lblName = new Label(renter.name);
             Button delBtn = new Button("X");

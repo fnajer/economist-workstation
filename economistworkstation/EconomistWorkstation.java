@@ -5,26 +5,11 @@
  */
 package economistworkstation;
 
-import economistworkstation.Controller.MenuController;
-import economistworkstation.Controller.RenterController;
-import economistworkstation.Controller.MainPageController;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.scene.control.MenuBar;
-import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
 
 /**
