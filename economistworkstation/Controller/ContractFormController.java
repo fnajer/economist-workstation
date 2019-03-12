@@ -7,7 +7,6 @@ package economistworkstation.Controller;
 
 import economistworkstation.Entity.Building;
 import economistworkstation.Model.BuildingModel;
-import economistworkstation.Model.ContractModel;
 import economistworkstation.Model.RenterModel;
 import java.net.URL;
 import java.util.ArrayList;
@@ -15,13 +14,9 @@ import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
-import javafx.scene.control.TextField;
 import economistworkstation.Entity.Contract;
 import economistworkstation.Entity.Renter;
 import economistworkstation.Model.ContractModel;
@@ -32,7 +27,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
-import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.SingleSelectionModel;
 
 /**
@@ -41,21 +35,47 @@ import javafx.scene.control.SingleSelectionModel;
  * @author fnajer
  */
 public class ContractFormController implements Initializable {
+    public ContractFormController() {
+        id = ContractController.getIdCurrentContract();
+        typeForm = ContractController.getTypeForm();
+    }
+    
+    private String typeForm;
+    private int id;
+    
+    private int id_renter;
+    private int id_building;
+    
+//    @Override
+//    public void initialize(URL url, ResourceBundle rb) {
+//        btn.setText(typeForm);
+//        
+//        if (typeForm == "Обновить") {
+//            Contract renter = ContractModel.getContract(id);
+//            name.setText(renter.name);
+//            surname.setText(renter.surname);
+//            patronymic.setText(renter.patronymic);
+//            address.setText(renter.address);
+//            birthday.setText(renter.birthday);
+//            person.setText(renter.person);
+//        }
+//    }
+    
+    @FXML
+    private Button btn;
     @FXML
     private ComboBox langsListView;
     @FXML
     private ComboBox buildingsListView;
+    @FXML
+    private DatePicker date_start;
+    @FXML
+    private DatePicker date_end;
     
-    public static ContractController parentWindow;
-    
-    public void setWindow(ContractController parent) {
-        parentWindow = parent;
-    }
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        btn.setText(typeForm);
+        
         ArrayList renters = RenterModel.getRenters();
         ObservableList<Renter> langs = FXCollections.observableArrayList(renters);
         langsListView.setItems(langs);
@@ -84,38 +104,21 @@ public class ContractFormController implements Initializable {
     }    
     
     @FXML
-    public void displayPage(String typeForm) throws Exception {
-        Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Contract/ContractForm.fxml"));
-        
-        Stage stage = new Stage();
-        stage.setTitle("Создание договора");
-        stage.setScene(new Scene(container));
-        stage.show();
-    }
-
-    @FXML
-    private Button addBtn;
-    @FXML
-    private DatePicker date_start;
-    @FXML
-    private DatePicker date_end;
-    
-    
-    private int id_renter;
-    
-    private int id_building;
-    
-    @FXML
-    public void addContract(ActionEvent event) {
-        //int diffOfDates = date_end.getValue() - date_start.getValue();
-        long diffOfDates = ChronoUnit.MONTHS.between(date_start.getValue(), date_end.getValue());
+    public void handleBtn(ActionEvent event) {
         
         Contract contract = createContract();
-        ContractModel.addContract(contract, diffOfDates, date_start.getValue());
-        Stage stage = (Stage) addBtn.getScene().getWindow();
+        
+        //int diffOfDates = date_end.getValue() - date_start.getValue();
+        long diffOfDates = ChronoUnit.MONTHS.between(date_start.getValue(), date_end.getValue());
+          
+        if (typeForm == "Обновить") {
+            ContractModel.updateContract(id, contract);
+        } else if (typeForm == "Добавить") {
+            ContractModel.addContract(contract, diffOfDates, date_start.getValue());
+        }
 
-        stage.close();
-        parentWindow.showListContracts();
+        Stage stage = (Stage) btn.getScene().getWindow();
+        ContractController.getContractController().closeForm(stage);
     }
     
     public Contract createContract() {
