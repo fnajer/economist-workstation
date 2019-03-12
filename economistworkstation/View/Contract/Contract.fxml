@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.net.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 
-<FlowPane hgap="10" vgap="10" id="FlowPane" orientation="vertical" alignment="center" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="economistworkstation.Controller.ContractController">
-    <Label text="Договоры" />
-    <Button text="Создать" onAction="#showContractForm" fx:id="showBtn" />
-    <VBox spacing="10" fx:id="containerContracts" />
-    <stylesheets>
-        <URL value="@contract.css"/>
-    </stylesheets>
-</FlowPane>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="332.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="economistworkstation.Controller.ContractController">
+   <children>
+      <Button fx:id="showBtn" layoutX="14.0" layoutY="14.0" onAction="#runAddForm" prefHeight="30.0" prefWidth="113.0" text="Новый договор" textFill="#141313" />
+      <Label layoutX="81.0" layoutY="54.0" text="Договора:" />
+      <VBox fx:id="containerContracts" layoutX="27.0" layoutY="82.0" prefHeight="13.0" prefWidth="245.0" spacing="10" />
+   </children>
+</Pane>

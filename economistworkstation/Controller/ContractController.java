@@ -5,56 +5,62 @@
  */
 package economistworkstation.Controller;
 
-import static economistworkstation.Controller.RenterController.root;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 
-import economistworkstation.Database;
 import economistworkstation.Entity.Contract;
-import economistworkstation.Entity.Renter;
-import economistworkstation.Model.RenterModel;
 import economistworkstation.Model.ContractModel;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.collections.ObservableList;
-import javafx.geometry.Orientation;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.collections.ObservableList;
-import javafx.collections.FXCollections;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ComboBox;
-
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 /**
  *
  * @author fnajer
  */
 public class ContractController implements Initializable {
-    @FXML
-    private VBox containerContracts;
-     
-    public static BorderPane root;
     
-    public void delContract(int id) {
-        //String name = renterName.getText();
-        ContractModel.deleteContract(id);
+    public ContractController() {
+        root = MainPageController.getRootContainer();
+        contractController = this;
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {    
         showListContracts();
     }
+
+    private static int currentId;
+    private static String typeForm;
+    private static ContractController contractController;
+    private BorderPane root;
     
+    public static int getIdCurrentContract() {
+        return currentId;
+    }
+    public static String getTypeForm() {
+        return typeForm;
+    }
+    public static ContractController getContractController() {
+        return contractController;
+    }
+    
+    @FXML
+    private VBox containerContracts;
+       
     @FXML
     public void showListContracts() {
         ArrayList<Contract> contracts = ContractModel.getContracts();
@@ -67,64 +73,55 @@ public class ContractController implements Initializable {
             Button delBtn = new Button("X");
             Button infoBtn = new Button("Подробно");
             
-            delBtn.setOnAction(new EventHandler<ActionEvent>() {
-
-                @Override
-                public void handle(ActionEvent event) {
-                    delContract(contract.id);
+            delBtn.setOnAction((ActionEvent event) -> {
+                delContract(contract.id);
+            });
+            
+            infoBtn.setOnAction((ActionEvent event) -> {
+                try {
+                    currentId = contract.id;
+                    openProfile();
+                } catch (IOException ex) {
+                    Logger.getLogger(ContractController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
             
-            infoBtn.setOnAction(new EventHandler<ActionEvent>() {
-
-                @Override
-                public void handle(ActionEvent event) {
-                    openProfile(contract.id);
-                }
-            });
-            
-            FlowPane root = new FlowPane(10, 10, lblName, delBtn, infoBtn);
-            listContracts.add(root);
+            FlowPane contractContainer = new FlowPane(10, 10, lblName, delBtn, infoBtn);
+            listContracts.add(contractContainer);
         }
     }
     
-    public void openProfile(int id) {
-        ContractProfileController contractController = new ContractProfileController();
-        try {
-            contractController.displayPage(root, id);
-        } catch (Exception ex) {
-            Logger.getLogger(SidebarController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {    
+    public void delContract(int id) {
+        ContractModel.deleteContract(id);
         showListContracts();
-    }   
+    }
+    
+    public void openProfile() throws IOException {
+        Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Contract/ContractProfile.fxml"));
+
+        root.setRight(container);
+    }
     
     @FXML
-    public void showContractForm(ActionEvent event) throws IOException {
-        ContractFormController contractFormController = new ContractFormController();
-        contractFormController.setWindow(this);
-        try {
-            contractFormController.displayPage("Добавить");
-        } catch (Exception ex) {
-            Logger.getLogger(RenterController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void runAddForm(ActionEvent event) throws IOException {
+        showContractForm("Добавить", "Создание");
     }
-    /**
-     *
-     * @param root
-     * @throws java.lang.Exception
-     */
-   
-    public void displayPage(BorderPane root) throws Exception {
-        Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Contract/Contract.fxml"));
- 
-        root.setCenter(container);
-        this.root = root;
+    
+    @FXML
+    public void showContractForm(String type, String title) throws IOException {
+        typeForm = type;
+        Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Contract/ContractForm.fxml"));
+        
+        Stage stage = new Stage();
+        stage.setTitle(String.format("%s договора", title));
+        stage.setScene(new Scene(container));
+        stage.show();
+    }
+    
+    public void closeForm(Stage stage) {
+        stage.close();
+        root.setRight(null);
+        
+        showListContracts();
     }
 }
