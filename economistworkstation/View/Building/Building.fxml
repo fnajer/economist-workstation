@@ -5,11 +5,10 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-
-<Pane prefHeight="400.0" prefWidth="417.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane prefHeight="400.0" prefWidth="417.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="economistworkstation.Controller.BuildingController">
    <children>
       <Label layoutX="49.0" layoutY="24.0" text="Здание" />
-      <Button fx:id="showBtn" layoutX="39.0" layoutY="48.0" onAction="#showBuildingForm" text="Создать" />
+      <Button fx:id="showBtn" layoutX="39.0" layoutY="48.0" onAction="#runAddForm" text="Создать" />
       <VBox fx:id="containerBuildings" layoutX="160.0" layoutY="52.0" prefHeight="17.0" prefWidth="148.0" spacing="10" />
    </children>
 </Pane>

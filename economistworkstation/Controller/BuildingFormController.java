@@ -11,10 +11,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -26,28 +23,29 @@ import javafx.stage.Stage;
  */
 public class BuildingFormController implements Initializable {  
     
-    public static BuildingController parentWindow; 
-    
-    public void setWindow(BuildingController parent) {
-        parentWindow = parent;
+    public BuildingFormController() {
+        id = BuildingController.getIdCurrentBuilding();
+        typeForm = BuildingController.getTypeForm();
     }
+    
+    private String typeForm;
+    private int id;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-    }
-    
-    @FXML
-    public void displayPage() throws Exception { 
-        Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Building/BuildingForm.fxml"));
+        btn.setText(typeForm);
         
-        Stage stage = new Stage();
-        stage.setTitle("Внесение здания в реестр");
-        stage.setScene(new Scene(container));
-        stage.show();
+        if (typeForm == "Обновить") {
+            Building building = BuildingModel.getBuilding(id);
+            type.setText(building.type);
+            square.setText(Double.toString(building.square));
+            cost_balance.setText(Double.toString(building.cost_balance));
+            cost_residue.setText(Double.toString(building.cost_residue));
+        }
     }
     
     @FXML
-    private Button addBtn;
+    private Button btn;
     @FXML
     private TextField type;
     @FXML
@@ -58,14 +56,18 @@ public class BuildingFormController implements Initializable {
     private TextField cost_residue;
     
     @FXML
-    public void addBuilding(ActionEvent event) {
+    public void handleBtn(ActionEvent event) {
         
         Building building = createBuilding();
-        BuildingModel.addBuilding(building);
-        Stage stage = (Stage) addBtn.getScene().getWindow();
         
-        stage.close();
-        parentWindow.showListBuildings();
+        if (typeForm == "Обновить") {
+            BuildingModel.updateBuilding(id, building);
+        } else if (typeForm == "Добавить") {
+            BuildingModel.addBuilding(building);
+        }
+
+        Stage stage = (Stage) btn.getScene().getWindow();
+        BuildingController.getBuildingController().closeForm(stage);
     }
     
     public Building createBuilding() {

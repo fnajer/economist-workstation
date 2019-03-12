@@ -15,7 +15,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -88,7 +87,7 @@ public class BuildingController implements Initializable {
                 }
             });
             
-            FlowPane buildingContainer = new FlowPane(10, 10, lblName, delBtn);
+            FlowPane buildingContainer = new FlowPane(10, 10, lblName, delBtn, infoBtn);
             listBuildings.add(buildingContainer);
         }
     }
@@ -106,10 +105,10 @@ public class BuildingController implements Initializable {
     
     @FXML
     public void runAddForm(ActionEvent event) throws IOException {
-        showRenterForm("Добавить", "Добавить новое здание");
+        showBuildingForm("Добавить", "Добавить новое здание");
     }
     
-    public void showRenterForm(String type, String title) throws IOException {
+    public void showBuildingForm(String type, String title) throws IOException {
         typeForm = type;
         Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Building/BuildingForm.fxml"));
         
