@@ -21,16 +21,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 
@@ -40,11 +35,52 @@ import javafx.scene.layout.VBox;
  * @author fnajer
  */
 public class ContractProfileController implements Initializable {
-
-    public static int id;
+    
+    public ContractProfileController() {
+        id = ContractController.getIdCurrentContract();
+    }
+    
+    private int id;
     private Month lastMonth;
+    
+    @Override
+    public void initialize(URL url, ResourceBundle rb) { 
+        Contract contract = ContractModel.getContract(id);
+        
+        Renter renter = RenterModel.getRenter(contract.id_renter);
+        Building building = BuildingModel.getBuilding(contract.id_building);
+        
+        name.setText(renter.name);
+        surname.setText(renter.surname);
+        patronymic.setText(renter.patronymic);
+        
+        type.setText(building.type);
+        square.setText(Double.toString(building.square));
+        showListMonths();
+    }   
+    
+    @FXML
+    private Button updateBtn;
+    @FXML
+    private TextField extendCount;
+    @FXML
+    private Label name;
+    @FXML
+    private Label surname;
+    @FXML
+    private Label patronymic;
+    @FXML
+    private Label type;
+    @FXML
+    private Label square;
     @FXML
     private VBox containerMonths;
+    
+    @FXML
+    public void runEditForm(ActionEvent event) throws IOException {
+        ContractController.getContractController()
+                .showContractForm("Обновить", "Редактирование");
+    } 
 
     @FXML
     public void showListMonths() {
@@ -61,32 +97,18 @@ public class ContractProfileController implements Initializable {
            
             lastMonth = month;
             
-            infoBtn.setOnAction(new EventHandler<ActionEvent>() {
-
-                @Override
-                public void handle(ActionEvent event) {
-                    showMonthForm(month.id);
-                }
+            infoBtn.setOnAction((ActionEvent event) -> {
+                showMonthForm(month.id);
             });
             
-            paymentBtn.setOnAction(new EventHandler<ActionEvent>() {
-
-                @Override
-                public void handle(ActionEvent event) {
-                    
-                }
+            paymentBtn.setOnAction((ActionEvent event) -> {
             });
             
-            accountBtn.setOnAction(new EventHandler<ActionEvent>() {
-
-                @Override
-                public void handle(ActionEvent event) {
-                    
-                }
+            accountBtn.setOnAction((ActionEvent event) -> {
             });
             
-            FlowPane root = new FlowPane(10, 10, lblName, infoBtn);
-            listMonths.add(root);
+            FlowPane contractContainer = new FlowPane(10, 10, lblName, infoBtn, paymentBtn, accountBtn);
+            listMonths.add(contractContainer);
         }
     }
 
@@ -109,62 +131,7 @@ public class ContractProfileController implements Initializable {
         try {
             monthFormController.displayPage();
         } catch (Exception ex) {
-            Logger.getLogger(RenterController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(ContractProfileController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        Contract contract = ContractModel.getContract(id);
-        
-        Renter renter = RenterModel.getRenter(contract.id_renter);
-        Building building = BuildingModel.getBuilding(contract.id_building);
-        
-        name.setText(renter.name);
-        surname.setText(renter.surname);
-        patronymic.setText(renter.patronymic);
-        
-        type.setText(building.type);
-        square.setText(Double.toString(building.square));
-        showListMonths();
-    }   
-
-    
-    @FXML
-    private Button updateBtn;
-    @FXML
-    private TextField extendCount;
-    @FXML
-    private Label name;
-    @FXML
-    private Label surname;
-    @FXML
-    private Label patronymic;
-    @FXML
-    private Label type;
-    @FXML
-    private Label square;
-    
-    @FXML
-    public void showRenterForm(ActionEvent event) throws IOException {
-        RenterFormController renterFormController = new RenterFormController();
-        renterFormController.setId(id);
-        try {
-            renterFormController.displayPage("Обновить");
-        } catch (Exception ex) {
-            Logger.getLogger(RenterController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
-    @FXML
-    public void displayPage(BorderPane root, int id) throws Exception {
-        this.id = id;
-        Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Contract/ContractProfile.fxml"));
-
-        root.setCenter(container);
-    }
-       
-    
 }

@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.VBox?>
 
-<FlowPane hgap="10" vgap="10" id="FlowPane" orientation="vertical" alignment="center" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" fx:controller="economistworkstation.Controller.ContractProfileController">
+<FlowPane id="FlowPane" alignment="center" hgap="10" orientation="vertical" prefHeight="343.0" prefWidth="188.0" styleClass="mainFxmlClass" vgap="10" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1" fx:controller="economistworkstation.Controller.ContractProfileController">
     <Label text="Договор" />
     
     <Label text="Данные об арендаторе:" />
-    <Label text="" fx:id="name"/>
-    <Label text="" fx:id="surname"/>
-    <Label text="" fx:id="patronymic"/>
+    <Label fx:id="name" text="" />
+    <Label fx:id="surname" text="" />
+    <Label fx:id="patronymic" text="" />
     
     <Label text="Данные о здании:" />
-    <Label text="" fx:id="type"/>
-    <Label text="" fx:id="square"/>
+    <Label fx:id="type" text="" />
+    <Label fx:id="square" text="" />
     
-    <Button text="Продлить договор" onAction="#extendContract" />
-    <TextField text="0" fx:id="extendCount" />
+    <Button onAction="#extendContract" text="Продлить договор" />
+    <TextField fx:id="extendCount" text="0" />
     <Label text="Данные об оплате:" />
-    <VBox spacing="10" fx:id="containerMonths" />
+    <VBox fx:id="containerMonths" spacing="10" />
 </FlowPane>
