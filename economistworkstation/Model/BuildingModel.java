@@ -8,7 +8,6 @@ package economistworkstation.Model;
 import economistworkstation.Database;
 import economistworkstation.EconomistWorkstation;
 import economistworkstation.Entity.Building;
-import economistworkstation.Entity.Renter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,6 +33,24 @@ public class BuildingModel {
             
             ps.executeUpdate();
             System.out.println("Добавлено: " + building.type);
+        } catch (SQLException ex) {
+            Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static void updateBuilding(int id, Building building) {
+        try {
+            PreparedStatement ps = db.conn.prepareStatement("UPDATE BUILDING\n" +
+                            "SET type=?, square=?, cost_balance=?, cost_residue=?\n" +
+                            "WHERE id=?;");
+            ps.setString(1, building.type);
+            ps.setString(2, Double.toString(building.square));
+            ps.setString(3, Double.toString(building.cost_balance));
+            ps.setString(4, Double.toString(building.cost_residue));
+            ps.setInt(5, id);
+            
+            ps.executeUpdate();
+            System.out.println("Изменено: " + building.id);
         } catch (SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
         }
