@@ -20,11 +20,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -32,7 +34,32 @@ import javafx.scene.layout.VBox;
  * @author fnajer
  */
 public class BuildingController implements Initializable {
-
+    
+    public BuildingController() {
+        root = MainPageController.getRootContainer();
+        buildingController = this;
+    }
+    
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        showListBuildings();
+    }
+    
+    private static int currentId;
+    private static String typeForm;
+    private static BuildingController buildingController;
+    private BorderPane root;
+    
+    public static int getIdCurrentBuilding() {
+        return currentId;
+    }
+    public static String getTypeForm() {
+        return typeForm;
+    }
+    public static BuildingController getBuildingController() {
+        return buildingController;
+    }
+    
     @FXML
     private VBox containerBuildings;
 
@@ -46,17 +73,23 @@ public class BuildingController implements Initializable {
         for(Building building : buildings){
             Label lblName = new Label(building.type);
             Button delBtn = new Button("X");
+            Button infoBtn = new Button("Подробно");
             
-            delBtn.setOnAction(new EventHandler<ActionEvent>() {
-
-                @Override
-                public void handle(ActionEvent event) {
-                    delBuilding(building.id);
+            delBtn.setOnAction((ActionEvent event) -> {
+                delBuilding(building.id);
+            });
+            
+            infoBtn.setOnAction((ActionEvent event) -> {
+                try {
+                    currentId = building.id;
+                    openProfile();
+                } catch (IOException ex) {
+                    Logger.getLogger(RenterController.class.getName()).log(Level.SEVERE, null, ex);
                 }
             });
             
-            FlowPane root = new FlowPane(10, 10, lblName, delBtn);
-            listBuildings.add(root);
+            FlowPane buildingContainer = new FlowPane(10, 10, lblName, delBtn);
+            listBuildings.add(buildingContainer);
         }
     }
     
@@ -64,31 +97,32 @@ public class BuildingController implements Initializable {
         BuildingModel.deleteBuilding(id);
         showListBuildings();
     }
-      
-    @FXML
-    public void showBuildingForm(ActionEvent event) throws IOException {
-        BuildingFormController buildingFormController = new BuildingFormController();
-        buildingFormController.setWindow(this);
-        try {
-            buildingFormController.displayPage();
-        } catch (Exception ex) {
-            Logger.getLogger(RenterController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    
+    public void openProfile() throws IOException {
+        Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Building/BuildingProfile.fxml"));
+
+        root.setRight(container);
     }
     
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
+    @FXML
+    public void runAddForm(ActionEvent event) throws IOException {
+        showRenterForm("Добавить", "Добавить новое здание");
+    }
+    
+    public void showRenterForm(String type, String title) throws IOException {
+        typeForm = type;
+        Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Building/BuildingForm.fxml"));
+        
+        Stage stage = new Stage();
+        stage.setTitle(title);
+        stage.setScene(new Scene(container));
+        stage.show();
+    }
+    
+    public void closeForm(Stage stage) {
+        stage.close();
+        root.setRight(null);
+        
         showListBuildings();
     }
-    
-    @FXML
-    public void displayPage(BorderPane root) throws Exception {
-        Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Building/Building.fxml"));
-        
-        root.setCenter(container);
-    }  
-    
 }

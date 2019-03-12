@@ -47,6 +47,7 @@ public class RenterController implements Initializable {
     private static int currentId;
     private static String typeForm;
     private static RenterController renterController;
+    private BorderPane root;
     
     public static int getIdCurrentRenter() {
         return currentId;
@@ -58,10 +59,9 @@ public class RenterController implements Initializable {
         return renterController;
     }
     
+    
     @FXML
     private Button showBtn;
-    @FXML
-    private BorderPane root;
     @FXML
     private VBox containerRenters;
 
@@ -111,7 +111,7 @@ public class RenterController implements Initializable {
         showRenterForm("Добавить", "Создание");
     }
     
-    @FXML
+
     public void showRenterForm(String type, String title) throws IOException {
         typeForm = type;
         Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Renter/RenterForm.fxml"));

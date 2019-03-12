@@ -54,6 +54,7 @@ public class MainPageController implements Initializable {
         Parent container = loader.load();
             
         root.setCenter(container);
+        root.setRight(null);
     }
     
     private String getPathName(Node src) {
