@@ -4,24 +4,24 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.FlowPane?>
-<?import javafx.scene.layout.Pane?>
 
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="401.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="economistworkstation.Controller.ContractFormController">
+<AnchorPane xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="economistworkstation.Controller.ContractFormController">
    <children>
-      <FlowPane id="FlowPane" alignment="center" hgap="10" layoutX="10.0" layoutY="10.0" orientation="vertical" prefHeight="400.0" prefWidth="401.0" styleClass="mainFxmlClass" vgap="10">
+      <FlowPane id="FlowPane" alignment="center" hgap="10" orientation="vertical" prefHeight="400.0" prefWidth="401.0" styleClass="mainFxmlClass" vgap="10">
          <children>
             <Label text="Выберите арендатора" />
-            <ComboBox fx:id="langsListView" promptText="choose" />
+            <ComboBox fx:id="rentersListField" promptText="choose" />
             <Label text="Выберите здание" />
-            <ComboBox fx:id="buildingsListView" promptText="choose" />
+            <ComboBox fx:id="buildingsListField" promptText="choose" />
             <Label text="Дата начала аренды" />
-            <DatePicker fx:id="date_start" />
+            <DatePicker fx:id="dateStartField" />
             <Label text="Дата окончания аренды" />
-            <DatePicker fx:id="date_end" />
-            <Button fx:id="btn" onAction="#handleBtn" text="Добавить" />
+            <DatePicker fx:id="dateEndField" />
+            <Button fx:id="btn" onAction="#handleOk" text="Добавить" />
          </children>
       </FlowPane>
    </children>
-</Pane>
+</AnchorPane>
