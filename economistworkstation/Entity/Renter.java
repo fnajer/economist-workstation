@@ -5,30 +5,105 @@
  */
 package economistworkstation.Entity;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 /**
  *
  * @author fnajer
  */
 public class Renter {
-    public int id;
-    public String name;
-    public String surname;
-    public String patronymic;
-    public String address;
-    public String birthday;
-    public String person;
+    private final IntegerProperty id;
+    private final StringProperty firstName;
+    private final StringProperty lastName;
+    private final StringProperty patronymic;
+    private final StringProperty address;
+    private final StringProperty birthday;
+    private final StringProperty person;
     
-    public Renter(String name, String surname, String patronymic, String address, String birthday, String person) {
-       this.name = name; 
-       this.surname = surname; 
-       this.patronymic = patronymic; 
-       this.address = address; 
-       this.birthday = birthday; 
-       this.person = person;  
+    public Renter() {
+        this("egeg", "egeg", "egeg", "egeg", "egeg", "egeg");
+    }
+    
+    public Renter(String firstName, String lastName, String patronymic, String address, String birthday, String person) {
+       this.id = new SimpleIntegerProperty(0);
+       this.firstName = new SimpleStringProperty(firstName);
+       this.lastName = new SimpleStringProperty(lastName);
+       this.patronymic = new SimpleStringProperty(patronymic); 
+       this.address = new SimpleStringProperty(address); 
+       this.birthday = new SimpleStringProperty(birthday); 
+       this.person = new SimpleStringProperty(person);  
+    }
+    
+    public int getId() {
+        return id.get();
+    }
+
+    public void setId(int id) {
+        this.id.set(id);
+    }
+    
+    public String getFirstName() {
+        return firstName.get();
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName.set(firstName);
+    }
+    
+    public StringProperty firstNameProperty() {
+        return firstName;
+    }
+    
+    public String getLastName() {
+        return lastName.get();
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName.set(lastName);
+    }
+    
+    public StringProperty lastNameProperty() {
+        return lastName;
+    }
+    
+    public String getPatronymic() {
+        return patronymic.get();
+    }
+
+    public void setPatronymic(String patronymic) {
+        this.patronymic.set(patronymic);
+    }
+    
+    public String getAddress() {
+        return address.get();
+    }
+
+    public void setAddress(String address) {
+        this.address.set(address);
+    }
+    
+    public String getBirthday() {
+        return birthday.get();
+    }
+
+    public void setBirthday(String birthday) {
+        this.birthday.set(birthday);
+    }
+    
+    public String getPerson() {
+        return person.get();
+    }
+
+    public void setPerson(String person) {
+        this.person.set(person);
     }
     
     @Override
     public String toString() {
-        return this.name;
+        return String.format("%s %s %s - %sг.", 
+                getLastName(), getFirstName(), getPatronymic(), getBirthday());
     }
 }
