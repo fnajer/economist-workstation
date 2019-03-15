@@ -5,15 +5,10 @@
  */
 package economistworkstation.Controller;
 
+import economistworkstation.EconomistWorkstation;
 import economistworkstation.Entity.Renter;
-import java.util.ArrayList;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.VBox;
 import economistworkstation.Model.RenterModel;
 import java.io.IOException;
 import javafx.fxml.FXML;
@@ -23,8 +18,13 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -32,100 +32,159 @@ import javafx.stage.Stage;
  * @author fnajer
  */
 
-public class RenterController implements Initializable {
+public class RenterController implements Initializable, BaseController {
+    @FXML
+    private TableView<Renter> renterTable;
+    @FXML
+    private TableColumn<Renter, String> firstNameColumn;
+    @FXML
+    private TableColumn<Renter, String> lastNameColumn;
+    
+    @FXML
+    private Label firstNameLabel;
+    @FXML
+    private Label lastNameLabel;
+    @FXML
+    private Label patronymicLabel;
+    @FXML
+    private Label addressLabel;
+    @FXML
+    private Label birthdayLabel;
+    @FXML
+    private Label personLabel;
    
-    public RenterController() {
-        root = MainPageController.getRootContainer();
-        renterController = this;
-    }
+    private ObservableList<Renter> renters;
+    private EconomistWorkstation mainApp;
     
     @Override
+    public void setMainApp(EconomistWorkstation mainApp) {
+        this.mainApp = mainApp;
+    }
+
+    @Override
     public void initialize(URL url, ResourceBundle rb) {
-        showListRenters();
+       
+        renters = RenterModel.getRenters();
+        renterTable.setItems(renters);
+
+        firstNameColumn.setCellValueFactory(
+            cellData -> cellData.getValue().firstNameProperty());
+        lastNameColumn.setCellValueFactory(
+            cellData -> cellData.getValue().lastNameProperty());
+        
+        // Очистка дополнительной информации об адресате.
+        showDetails(null);
+
+        // Слушаем изменения выбора, и при изменении отображаем
+        // дополнительную информацию об адресате.
+        renterTable.getSelectionModel().selectedItemProperty().addListener(
+            (observable, oldValue, newValue) -> showDetails(newValue));
     }
     
-    private static int currentId;
-    private static String typeForm;
-    private static RenterController renterController;
-    private BorderPane root;
     
-    public static int getIdCurrentRenter() {
-        return currentId;
-    }
-    public static String getTypeForm() {
-        return typeForm;
-    }
-    public static RenterController getRenterController() {
-        return renterController;
-    }
-    
+    public void showDetails(Renter renter) {
+        if (renter != null) {
+            firstNameLabel.setText(renter.getFirstName());
+            lastNameLabel.setText(renter.getLastName());
+            patronymicLabel.setText(renter.getPatronymic());
+            addressLabel.setText(renter.getAddress());
+            birthdayLabel.setText(renter.getBirthday());
+            personLabel.setText(renter.getPerson());
+        } else {
+            firstNameLabel.setText("");
+            lastNameLabel.setText("");
+            patronymicLabel.setText("");
+            addressLabel.setText("");
+            birthdayLabel.setText("");
+            personLabel.setText("");
+        }
+    } 
     
     @FXML
-    private Button showBtn;
-    @FXML
-    private VBox containerRenters;
+    private void handleDelete() {
+        int selectedIndex = renterTable.getSelectionModel().getSelectedIndex();
 
-    @FXML
-    public void showListRenters() {
-        ArrayList<Renter> renters = RenterModel.getRenters();
+        if (selectedIndex >= 0) {
+            Renter renter = renterTable.getSelectionModel().getSelectedItem();
+            int id = renter.getId();
 
-        ObservableList listRenters = containerRenters.getChildren();  
-        listRenters.clear();
-
-        for(Renter renter : renters){
-            Label lblName = new Label(renter.name);
-            Button delBtn = new Button("X");
-            Button infoBtn = new Button("Подробно");
-            
-            delBtn.setOnAction((ActionEvent event) -> {
-                delRenter(renter.id);
-            });
-            
-            infoBtn.setOnAction((ActionEvent event) -> {
-                try {
-                    currentId = renter.id;
-                    openProfile();
-                } catch (IOException ex) {
-                    Logger.getLogger(RenterController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            });
-            
-            FlowPane renterContainer = new FlowPane(10, 10, lblName, delBtn, infoBtn);
-            listRenters.add(renterContainer);
+            renterTable.getItems().remove(renter);
+            RenterModel.deleteRenter(id);
+        } else {
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.initOwner(mainApp.getPrimaryStage());
+            alert.setTitle("No Selection");
+            alert.setHeaderText("No Renter Selected");
+            alert.setContentText("Please select a renter in the table.");
+    
+            alert.showAndWait();
         }
     }
     
-    public void delRenter(int id) {
-        RenterModel.deleteRenter(id);
-        showListRenters();
-    }
-    
-    public void openProfile() throws IOException {
-        Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Renter/RenterProfile.fxml"));
-
-        root.setRight(container);
-    }
-    
     @FXML
-    public void runAddForm(ActionEvent event) throws IOException {
-        showRenterForm("Добавить", "Создание");
+    private void handleNewRenter() {
+        Renter tempRenter = new Renter();
+        boolean okClicked = showRenterForm(tempRenter);
+        if (okClicked) {
+            RenterModel.addRenter(tempRenter);
+            renters.add(tempRenter);
+        }
     }
-    
 
-    public void showRenterForm(String type, String title) throws IOException {
-        typeForm = type;
-        Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Renter/RenterForm.fxml"));
-        
-        Stage stage = new Stage();
-        stage.setTitle(String.format("%s арендатора", title));
-        stage.setScene(new Scene(container));
-        stage.show();
+    /**
+     * Вызывается, когда пользователь кликает по кнопка Edit...
+     * Открывает диалоговое окно для изменения выбранного адресата.
+     */
+    @FXML
+    private void handleEditRenter() {
+        Renter selectedRenter = renterTable.getSelectionModel().getSelectedItem();
+        if (selectedRenter != null) {
+            boolean okClicked = showRenterForm(selectedRenter);
+            if (okClicked) {
+                RenterModel.updateRenter(selectedRenter.getId(), selectedRenter);
+                showDetails(selectedRenter);
+            }
+
+        } else {
+            // Ничего не выбрано.
+            Alert alert = new Alert(AlertType.WARNING);
+            alert.initOwner(mainApp.getPrimaryStage());
+            alert.setTitle("No Selection");
+            alert.setHeaderText("No Person Selected");
+            alert.setContentText("Please select a person in the table.");
+
+            alert.showAndWait();
+        }
     }
     
-    public void closeForm(Stage stage) {
-        stage.close();
-        root.setRight(null);
-        
-        showListRenters();
+    public boolean showRenterForm(Renter renter) {
+        try {
+            // Загружаем fxml-файл и создаём новую сцену
+            // для всплывающего диалогового окна.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(EconomistWorkstation.class.getResource("View/Renter/RenterForm.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            
+            // Создаём диалоговое окно Stage.
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Edit Person");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(mainApp.getPrimaryStage());
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+            
+            // Передаём адресата в контроллер.
+            RenterFormController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setRenter(renter);
+            
+            // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
+            dialogStage.showAndWait();
+            
+            return controller.isOkClicked();
+        } catch (IOException ex) {
+            Logger.getLogger(RenterController.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
 }
