@@ -9,7 +9,7 @@
       <Menu mnemonicParsing="false" text="Файл">
          <items>
             <MenuItem mnemonicParsing="false" text="Создать" />
-            <MenuItem mnemonicParsing="false" text="Close" />
+            <MenuItem mnemonicParsing="false" onAction="#handleExit" text="Close" />
          </items>
       </Menu>
       <Menu mnemonicParsing="false" text="Редактирование">
@@ -17,9 +17,24 @@
             <MenuItem mnemonicParsing="false" text="Delete" />
          </items>
       </Menu>
+      <Menu mnemonicParsing="false" text="Договор">
+        <items>
+          <MenuItem fx:id="contracts" mnemonicParsing="false" onAction="#showList" text="Показать список" />
+        </items>
+      </Menu>
+      <Menu mnemonicParsing="false" text="Арендатор">
+         <items>
+            <MenuItem fx:id="renters" mnemonicParsing="false" onAction="#showList" text="Показать список" />
+         </items>
+      </Menu>
+      <Menu mnemonicParsing="false" text="Здание">
+         <items>
+            <MenuItem fx:id="buildings" mnemonicParsing="false" onAction="#showList" text="Показать список" />
+         </items>
+      </Menu>
       <Menu mnemonicParsing="false" text="Помощь">
          <items>
-            <MenuItem mnemonicParsing="false" text="About" />
+            <MenuItem mnemonicParsing="false" onAction="#handleAbout" text="About" />
          </items>
       </Menu>
    </menus>
