@@ -7,12 +7,8 @@ package economistworkstation.Controller;
 
 import economistworkstation.Entity.Building;
 import economistworkstation.Model.BuildingModel;
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
@@ -21,58 +17,84 @@ import javafx.stage.Stage;
  *
  * @author fnajer
  */
-public class BuildingFormController implements Initializable {  
+public class BuildingFormController {  
     
-    public BuildingFormController() {
-        id = BuildingController.getIdCurrentBuilding();
-        typeForm = BuildingController.getTypeForm();
+    @FXML
+    private TextField typeField;
+    @FXML
+    private TextField squareField;
+    @FXML
+    private TextField costBalanceField;
+    @FXML
+    private TextField costResidueField;
+    
+    private Stage dialogStage;
+    private Building building;
+    private boolean okClicked = false;
+    
+    public void setDialogStage(Stage dialogStage) {
+        this.dialogStage = dialogStage;
     }
     
-    private String typeForm;
-    private int id;
+    public void setBuilding(Building building) {
+        this.building = building;
+
+        typeField.setText(building.getType());
+        squareField.setText(Double.toString(building.getSquare()));
+        costBalanceField.setText(Double.toString(building.getCostBalance()));
+        costResidueField.setText(Double.toString(building.getCostResidue()));
+    }
     
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        btn.setText(typeForm);
-        
-        if (typeForm == "Обновить") {
-            Building building = BuildingModel.getBuilding(id);
-            type.setText(building.type);
-            square.setText(Double.toString(building.square));
-            cost_balance.setText(Double.toString(building.cost_balance));
-            cost_residue.setText(Double.toString(building.cost_residue));
+    public boolean isOkClicked() {
+        return okClicked;
+    }
+    
+    @FXML
+    private void handleOk() {
+        if (isInputValid()) {
+            building.setType(typeField.getText());
+            building.setSquare(Double.parseDouble(squareField.getText()));
+            building.setCostBalance(Double.parseDouble(costBalanceField.getText()));
+            building.setCostResidue(Double.parseDouble(costResidueField.getText()));
+
+            okClicked = true;
+            dialogStage.close();
         }
     }
     
     @FXML
-    private Button btn;
-    @FXML
-    private TextField type;
-    @FXML
-    private TextField square;
-    @FXML
-    private TextField cost_balance;
-    @FXML
-    private TextField cost_residue;
+    private void handleCancel() {
+        dialogStage.close();
+    }
     
-    @FXML
-    public void handleBtn(ActionEvent event) {
-        
-        Building building = createBuilding();
-        
-        if (typeForm == "Обновить") {
-            BuildingModel.updateBuilding(id, building);
-        } else if (typeForm == "Добавить") {
-            BuildingModel.addBuilding(building);
+    private boolean isInputValid() {
+        String errorMessage = "";
+
+        if (typeField.getText() == null || typeField.getText().length() == 0) {
+            errorMessage += "Введите тип!\n"; 
+        }
+        if (squareField.getText() == null || squareField.getText().length() == 0) {
+            errorMessage += "Введите площадь!\n"; 
+        }
+        if (costBalanceField.getText() == null || costBalanceField.getText().length() == 0) {
+            errorMessage += "Введите балансовую стоимость!\n"; 
+        }
+        if (costResidueField.getText() == null || costResidueField.getText().length() == 0) {
+            errorMessage += "Введите остаточную стоимость!\n"; 
         }
 
-        Stage stage = (Stage) btn.getScene().getWindow();
-        BuildingController.getBuildingController().closeForm(stage);
-    }
-    
-    public Building createBuilding() {
-        Building building = new Building(type.getText(), Double.parseDouble(square.getText()), Double.parseDouble(cost_balance.getText()), Double.parseDouble(cost_residue.getText()));
-        return building;
-    }
-    
+        if (errorMessage.length() == 0) {
+            return true;
+        } else {
+            // Показываем сообщение об ошибке.
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.initOwner(dialogStage);
+            alert.setTitle("Некорректные данные");
+            alert.setHeaderText("Заполните поля корректно");
+            alert.setContentText(errorMessage);
+            
+            alert.showAndWait();
+            
+            return false;
+    }}
 }

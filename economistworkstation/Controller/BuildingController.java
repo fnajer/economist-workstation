@@ -5,123 +5,184 @@
  */
 package economistworkstation.Controller;
 
+import economistworkstation.EconomistWorkstation;
 import economistworkstation.Entity.Building;
 import economistworkstation.Model.BuildingModel;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+
+interface BaseController {
+    void setMainApp(EconomistWorkstation mainApp);
+}
 
 /**
  * FXML Controller class
  *
  * @author fnajer
  */
-public class BuildingController implements Initializable {
+public class BuildingController implements Initializable, BaseController  { //extends BaseController
     
-    public BuildingController() {
-        root = MainPageController.getRootContainer();
-        buildingController = this;
+    @FXML
+    private TableView<Building> buildingTable;
+    @FXML
+    private TableColumn<Building, String> typeColumn;
+    @FXML
+    private TableColumn<Building, String> squareColumn;
+    
+    @FXML
+    private Label typeLabel;
+    @FXML
+    private Label squareLabel;
+    @FXML
+    private Label costBalanceLabel;
+    @FXML
+    private Label costResidueLabel;
+   
+    private ObservableList<Building> buildings;
+    private EconomistWorkstation mainApp;
+    
+    @Override
+    public void setMainApp(EconomistWorkstation mainApp) {
+        this.mainApp = mainApp;
     }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        showListBuildings();
-    }
-    
-    private static int currentId;
-    private static String typeForm;
-    private static BuildingController buildingController;
-    private BorderPane root;
-    
-    public static int getIdCurrentBuilding() {
-        return currentId;
-    }
-    public static String getTypeForm() {
-        return typeForm;
-    }
-    public static BuildingController getBuildingController() {
-        return buildingController;
-    }
-    
-    @FXML
-    private VBox containerBuildings;
+        buildings = BuildingModel.getBuildings();
+        buildingTable.setItems(buildings);
 
-    @FXML
-    public void showListBuildings() {
-        ArrayList<Building> buildings = BuildingModel.getBuildings();
-
-        ObservableList listBuildings = containerBuildings.getChildren();  
-        listBuildings.clear();
+        typeColumn.setCellValueFactory(
+            cellData -> cellData.getValue().typeProperty());
+//        squareColumn.setCellValueFactory(
+//            cellData -> cellData.getValue().squareProperty().asString());
+        squareColumn.setCellValueFactory(new PropertyValueFactory<>("square"));
         
-        for(Building building : buildings){
-            Label lblName = new Label(building.type);
-            Button delBtn = new Button("X");
-            Button infoBtn = new Button("Подробно");
-            
-            delBtn.setOnAction((ActionEvent event) -> {
-                delBuilding(building.id);
-            });
-            
-            infoBtn.setOnAction((ActionEvent event) -> {
-                try {
-                    currentId = building.id;
-                    openProfile();
-                } catch (IOException ex) {
-                    Logger.getLogger(RenterController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            });
-            
-            FlowPane buildingContainer = new FlowPane(10, 10, lblName, delBtn, infoBtn);
-            listBuildings.add(buildingContainer);
+        // Очистка дополнительной информации об адресате.
+        showDetails(null);
+
+        // Слушаем изменения выбора, и при изменении отображаем
+        // дополнительную информацию об адресате.
+        buildingTable.getSelectionModel().selectedItemProperty().addListener(
+            (observable, oldValue, newValue) -> showDetails(newValue));
+    }
+    
+    
+    public void showDetails(Building building) {
+        if (building != null) {
+            typeLabel.setText(building.getType());
+            squareLabel.setText(Double.toString(building.getSquare()));
+            costBalanceLabel.setText(Double.toString(building.getCostBalance()));
+            costResidueLabel.setText(Double.toString(building.getCostResidue()));
+        } else {
+            typeLabel.setText("");
+            squareLabel.setText("");
+            costBalanceLabel.setText("");
+            costResidueLabel.setText("");
+        }
+    } 
+    
+    @FXML
+    private void handleDelete() {
+        int selectedIndex = buildingTable.getSelectionModel().getSelectedIndex();
+
+        if (selectedIndex >= 0) {
+            Building building = buildingTable.getSelectionModel().getSelectedItem();
+            int id = building.getId();
+
+            buildingTable.getItems().remove(building);
+            BuildingModel.deleteBuilding(id);
+        } else {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.initOwner(mainApp.getPrimaryStage());
+            alert.setTitle("No Selection");
+            alert.setHeaderText("No Building Selected");
+            alert.setContentText("Please select a building in the table.");
+    
+            alert.showAndWait();
         }
     }
     
-    public void delBuilding(int id) {
-        BuildingModel.deleteBuilding(id);
-        showListBuildings();
-    }
-    
-    public void openProfile() throws IOException {
-        Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Building/BuildingProfile.fxml"));
-
-        root.setRight(container);
-    }
-    
     @FXML
-    public void runAddForm(ActionEvent event) throws IOException {
-        showBuildingForm("Добавить", "Добавить новое здание");
+    private void handleNewBuilding() {
+        Building tempBuilding = new Building();
+        boolean okClicked = showBuildingForm(tempBuilding);
+        if (okClicked) {
+            BuildingModel.addBuilding(tempBuilding);
+            buildings.add(tempBuilding);
+        }
+    }
+
+    /**
+     * Вызывается, когда пользователь кликает по кнопка Edit...
+     * Открывает диалоговое окно для изменения выбранного адресата.
+     */
+    @FXML
+    private void handleEditBuilding() {
+        Building selectedBuilding = buildingTable.getSelectionModel().getSelectedItem();
+        if (selectedBuilding != null) {
+            boolean okClicked = showBuildingForm(selectedBuilding);
+            if (okClicked) {
+                BuildingModel.updateBuilding(selectedBuilding.getId(), selectedBuilding);
+                showDetails(selectedBuilding);
+            }
+
+        } else {
+            // Ничего не выбрано.
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.initOwner(mainApp.getPrimaryStage());
+            alert.setTitle("No Selection");
+            alert.setHeaderText("No Person Selected");
+            alert.setContentText("Please select a person in the table.");
+
+            alert.showAndWait();
+        }
     }
     
-    public void showBuildingForm(String type, String title) throws IOException {
-        typeForm = type;
-        Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Building/BuildingForm.fxml"));
-        
-        Stage stage = new Stage();
-        stage.setTitle(title);
-        stage.setScene(new Scene(container));
-        stage.show();
-    }
-    
-    public void closeForm(Stage stage) {
-        stage.close();
-        root.setRight(null);
-        
-        showListBuildings();
+    public boolean showBuildingForm(Building building) {
+        try {
+            // Загружаем fxml-файл и создаём новую сцену
+            // для всплывающего диалогового окна.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(EconomistWorkstation.class.getResource("View/Building/BuildingForm.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            
+            // Создаём диалоговое окно Stage.
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Edit Person");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(mainApp.getPrimaryStage());
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+            
+            // Передаём адресата в контроллер.
+            BuildingFormController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setBuilding(building);
+            
+            // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
+            dialogStage.showAndWait();
+            
+            return controller.isOkClicked();
+        } catch (IOException ex) {
+            Logger.getLogger(BuildingController.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
 }
