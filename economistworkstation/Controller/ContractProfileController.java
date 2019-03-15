@@ -37,7 +37,7 @@ import javafx.scene.layout.VBox;
 public class ContractProfileController implements Initializable {
     
     public ContractProfileController() {
-        id = ContractController.getIdCurrentContract();
+       // id = ContractController.getIdCurrentContract();
     }
     
     private int id;
@@ -47,15 +47,15 @@ public class ContractProfileController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) { 
         Contract contract = ContractModel.getContract(id);
         
-        Renter renter = RenterModel.getRenter(contract.id_renter);
-        Building building = BuildingModel.getBuilding(contract.id_building);
-        
-        name.setText(renter.name);
-        surname.setText(renter.surname);
-        patronymic.setText(renter.patronymic);
-        
-        type.setText(building.type);
-        square.setText(Double.toString(building.square));
+//        Renter renter = RenterModel.getRenter(contract.id_renter);
+//        Building building = BuildingModel.getBuilding(contract.id_building);
+//        
+//        name.setText(renter.name.get());
+//        surname.setText(renter.surname);
+//        patronymic.setText(renter.patronymic);
+//        
+//        type.setText(building.type);
+//        square.setText(Double.toString(building.square));
         showListMonths();
     }   
     
@@ -78,38 +78,38 @@ public class ContractProfileController implements Initializable {
     
     @FXML
     public void runEditForm(ActionEvent event) throws IOException {
-        ContractController.getContractController()
-                .showContractForm("Обновить", "Редактирование");
+        //ContractController.getContractController()
+         //       .showContractForm("Обновить", "Редактирование");
     } 
 
     @FXML
     public void showListMonths() {
-        ArrayList<Month> months = MonthModel.getMonths(id);
+       // ArrayList<Month> months = MonthModel.getMonths(id);
         
         ObservableList listMonths = containerMonths.getChildren();  
         listMonths.clear();
         
-        for(Month month : months){
-            Label lblName = new Label(month.date + ' ' + month.number);
-            Button infoBtn = new Button("Подробно");
-            Button paymentBtn = new Button("Вывод расчетов");
-            Button accountBtn = new Button("Выписать счет");
-           
-            lastMonth = month;
-            
-            infoBtn.setOnAction((ActionEvent event) -> {
-                showMonthForm(month.id);
-            });
-            
-            paymentBtn.setOnAction((ActionEvent event) -> {
-            });
-            
-            accountBtn.setOnAction((ActionEvent event) -> {
-            });
-            
-            FlowPane contractContainer = new FlowPane(10, 10, lblName, infoBtn, paymentBtn, accountBtn);
-            listMonths.add(contractContainer);
-        }
+//        for(Month month : months){
+//            //Label lblName = new Label(month.date + ' ' + month.number);
+//            Button infoBtn = new Button("Подробно");
+//            Button paymentBtn = new Button("Вывод расчетов");
+//            Button accountBtn = new Button("Выписать счет");
+//           
+//            lastMonth = month;
+//            
+//            infoBtn.setOnAction((ActionEvent event) -> {
+//                //showMonthForm(month.id);
+//            });
+//            
+//            paymentBtn.setOnAction((ActionEvent event) -> {
+//            });
+//            
+//            accountBtn.setOnAction((ActionEvent event) -> {
+//            });
+//            
+//            //FlowPane contractContainer = new FlowPane(10, 10, lblName, infoBtn, paymentBtn, accountBtn);
+//            //listMonths.add(contractContainer);
+        //}
     }
 
     @FXML
