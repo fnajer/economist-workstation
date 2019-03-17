@@ -14,9 +14,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.time.temporal.ChronoUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -25,23 +27,28 @@ import java.util.logging.Logger;
 public class ContractModel {
     private static Database db = Database.getInstance();
  
-    public static void addContract(Contract contract, long diffOfDates, LocalDate date_start) {
+    public static int addContract(Contract contract) {
+        int idContract = -1;
+        
         try {
-            System.out.println("Добавлено: " + contract.date_start);
+            System.out.println("Добавлено: " + contract.getDateStart());
             PreparedStatement ps = db.conn.prepareStatement("insert into CONTRACT values(NULL,?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, contract.date_start);
-            ps.setString(2, contract.date_end);
-            ps.setInt(3, contract.id_renter);
-            ps.setInt(4, contract.id_building);
+            ps.setString(1, contract.getDateStart());
+            ps.setString(2, contract.getDateEnd());
+            ps.setInt(3, contract.getIdRenter());
+            ps.setInt(4, contract.getIdBuilding());
             
             ps.executeUpdate();
-            
-            int id = 0;
+  
+            LocalDate date_start = LocalDate.parse(contract.getDateStart());
+            LocalDate date_end = LocalDate.parse(contract.getDateEnd());
+            long diffOfDates = ChronoUnit.MONTHS.between(date_start, date_end);
+            //LocalDate.parse(text)
 
-            ResultSet generatedKeys = ps.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                id = generatedKeys.getInt(1);
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                idContract = rs.getInt(1);
                 
                 int dayOfMonth = date_start.getDayOfMonth();
                 if (dayOfMonth == 1) {
@@ -53,8 +60,11 @@ public class ContractModel {
                 
                 date_start = date_start.minusDays(dayOfMonth).plusMonths(1);
                 for(int i = 1; i <= diffOfDates; i++) {
-                    MonthModel.addMonth(i, new Month(i, date_start.toString(), 0.00, 0.00,
-                        0.00, 0.00, 0.00, false, false, id, 0.00, 0.00, 0.00));
+                    Month newMonth = new Month();
+                    newMonth.setNumber(i);
+                    newMonth.setDate(date_start.toString());
+                    newMonth.setIdContract(idContract);
+                    MonthModel.addMonth(newMonth);
                     
                     if(i == diffOfDates - 1 && dayOfMonth > 1) {
                         date_start = date_start.plusDays(dayOfMonth);
@@ -64,14 +74,16 @@ public class ContractModel {
                     date_start = date_start.plusMonths(1);
                 }
                 
-                System.out.println("Добавлено: " + contract.date_start);
+                System.out.println("Добавлено: " + contract.getDateStart());
             } else {
                 System.out.println("id didnt got");
             }
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        return idContract;
     }
     
     public static void updateContract(int id, Contract contract) {
@@ -79,14 +91,14 @@ public class ContractModel {
             PreparedStatement ps = db.conn.prepareStatement("UPDATE CONTRACT\n" +
                             "SET date_start=?, date_end=?, id_renter=?, id_building=?\n" +
                             "WHERE id=?;");
-            ps.setString(1, contract.date_start);
-            ps.setString(2, contract.date_end);
-            ps.setInt(3, contract.id_renter);
-            ps.setInt(4, contract.id_building);
+            ps.setString(1, contract.getDateStart());
+            ps.setString(2, contract.getDateEnd());
+            ps.setInt(3, contract.getIdRenter());
+            ps.setInt(4, contract.getIdBuilding());
             ps.setInt(5, id);
             
             ps.executeUpdate();
-            System.out.println("Изменено: " + contract.id);
+            System.out.println("Изменено: " + contract.getId());
         } catch (SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -102,8 +114,8 @@ public class ContractModel {
         }
     }
     
-    public static ArrayList<Contract> getContracts() {
-        ArrayList contracts = new ArrayList<Contract>();
+    public static ObservableList<Contract> getContracts() {
+        ObservableList contracts = FXCollections.observableArrayList();
         try {
             ResultSet rs = db.stmt.executeQuery("SELECT * FROM CONTRACT");
             
@@ -141,7 +153,7 @@ public class ContractModel {
     private static Contract createObjectContract(ResultSet rs) throws SQLException {
         Contract contract = new Contract(rs.getString("date_start"), rs.getString("date_end"), rs.getInt("id_renter"), 
         rs.getInt("id_building"));
-        contract.id = rs.getInt("id");
+        contract.setId(rs.getInt("id"));
         
         return contract;
     }

@@ -11,9 +11,10 @@ import economistworkstation.Entity.Building;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -26,13 +27,13 @@ public class BuildingModel {
     public static void addBuilding(Building building) {
         try {
             PreparedStatement ps = db.conn.prepareStatement("insert into BUILDING values(NULL,?, ?, ?, ?)");
-            ps.setString(1, building.type);
-            ps.setDouble(2, building.square);
-            ps.setDouble(3, building.cost_balance);
-            ps.setDouble(4, building.cost_residue);
+            ps.setString(1, building.getType());
+            ps.setDouble(2, building.getSquare());
+            ps.setDouble(3, building.getCostBalance());
+            ps.setDouble(4, building.getCostResidue());
             
             ps.executeUpdate();
-            System.out.println("Добавлено: " + building.type);
+            System.out.println("Добавлено: " + building.getType());
         } catch (SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -43,14 +44,14 @@ public class BuildingModel {
             PreparedStatement ps = db.conn.prepareStatement("UPDATE BUILDING\n" +
                             "SET type=?, square=?, cost_balance=?, cost_residue=?\n" +
                             "WHERE id=?;");
-            ps.setString(1, building.type);
-            ps.setString(2, Double.toString(building.square));
-            ps.setString(3, Double.toString(building.cost_balance));
-            ps.setString(4, Double.toString(building.cost_residue));
+            ps.setString(1, building.getType());
+            ps.setString(2, Double.toString(building.getSquare()));
+            ps.setString(3, Double.toString(building.getCostBalance()));
+            ps.setString(4, Double.toString(building.getCostResidue()));
             ps.setInt(5, id);
             
             ps.executeUpdate();
-            System.out.println("Изменено: " + building.id);
+            System.out.println("Изменено: " + building.getType());
         } catch (SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -65,8 +66,8 @@ public class BuildingModel {
         }
     }
     
-    public static ArrayList<Building> getBuildings() {
-        ArrayList buildings = new ArrayList<Building>();
+    public static ObservableList<Building> getBuildings() {
+        ObservableList buildings = FXCollections.observableArrayList();
         try {
             ResultSet rs = db.stmt.executeQuery("SELECT * FROM BUILDING");
             
@@ -86,7 +87,7 @@ public class BuildingModel {
     private static Building createObjectBuilding(ResultSet rs) throws SQLException {
         Building building = new Building(rs.getString("type"), rs.getDouble("square"), rs.getDouble("cost_balance"), 
         rs.getDouble("cost_residue"));
-        building.id = rs.getInt("id");
+        building.setId(rs.getInt("id"));
         
         return building;
     }
