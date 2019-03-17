@@ -50,13 +50,13 @@
                         <Label text="Отчество" GridPane.rowIndex="2" />
                         <Label text="Адрес" GridPane.rowIndex="3" />
                         <Label text="Дата рождения" GridPane.rowIndex="4" />
-                        <Label text="Физ. лицо" GridPane.rowIndex="5" />
+                        <Label text="Субъект аренды" GridPane.rowIndex="5" />
                         <Label fx:id="firstNameLabel" text="Label" GridPane.columnIndex="1" />
                         <Label fx:id="lastNameLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label fx:id="patronymicLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                         <Label fx:id="addressLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                         <Label fx:id="birthdayLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                        <Label fx:id="personLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <Label fx:id="subjectLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                      </children>
                   </GridPane>
                   <ButtonBar buttonMinWidth="55.0" layoutX="26.0" layoutY="281.0" prefHeight="40.0" prefWidth="178.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">

@@ -21,20 +21,20 @@ public class Renter {
     private final StringProperty patronymic;
     private final StringProperty address;
     private final StringProperty birthday;
-    private final StringProperty person;
+    private final StringProperty subject;
     
     public Renter() {
         this("egeg", "egeg", "egeg", "egeg", "egeg", "egeg");
     }
     
-    public Renter(String firstName, String lastName, String patronymic, String address, String birthday, String person) {
+    public Renter(String firstName, String lastName, String patronymic, String address, String birthday, String subject) {
        this.id = new SimpleIntegerProperty(0);
        this.firstName = new SimpleStringProperty(firstName);
        this.lastName = new SimpleStringProperty(lastName);
        this.patronymic = new SimpleStringProperty(patronymic); 
        this.address = new SimpleStringProperty(address); 
        this.birthday = new SimpleStringProperty(birthday); 
-       this.person = new SimpleStringProperty(person);  
+       this.subject = new SimpleStringProperty(subject);  
     }
     
     public int getId() {
@@ -93,12 +93,12 @@ public class Renter {
         this.birthday.set(birthday);
     }
     
-    public String getPerson() {
-        return person.get();
+    public String getSubject() {
+        return subject.get();
     }
 
-    public void setPerson(String person) {
-        this.person.set(person);
+    public void setSubject(String subject) {
+        this.subject.set(subject);
     }
     
     @Override

@@ -30,7 +30,7 @@ public class RenterFormController {
     @FXML
     private TextField birthdayField;
     @FXML
-    private TextField personField;
+    private TextField subjectField;
     
     private Stage dialogStage;
     private Renter renter;
@@ -48,7 +48,7 @@ public class RenterFormController {
         patronymicField.setText(renter.getPatronymic());
         addressField.setText(renter.getAddress());
         birthdayField.setText(renter.getBirthday());
-        personField.setText(renter.getPerson());
+        subjectField.setText(renter.getSubject());
     }
     
     public boolean isOkClicked() {
@@ -63,7 +63,7 @@ public class RenterFormController {
             renter.setPatronymic(patronymicField.getText());
             renter.setAddress(addressField.getText());
             renter.setBirthday(birthdayField.getText());
-            renter.setPerson(personField.getText());
+            renter.setSubject(subjectField.getText());
 
             okClicked = true;
             dialogStage.close();
@@ -93,8 +93,8 @@ public class RenterFormController {
         if (birthdayField.getText() == null || birthdayField.getText().length() == 0) {
             errorMessage += "Неверная дата рождения!\n"; 
         }
-        if (personField.getText() == null || personField.getText().length() == 0) {
-            errorMessage += "Введите физ. лицо!\n";
+        if (subjectField.getText() == null || subjectField.getText().length() == 0) {
+            errorMessage += "Введите субьъекта аренды! Например, физ. лицо или ЧП.\n";
         }
 
         if (errorMessage.length() == 0) {

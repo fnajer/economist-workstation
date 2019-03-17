@@ -51,7 +51,7 @@ public class RenterController implements Initializable, BaseController {
     @FXML
     private Label birthdayLabel;
     @FXML
-    private Label personLabel;
+    private Label subjectLabel;
    
     private ObservableList<Renter> renters;
     private EconomistWorkstation mainApp;
@@ -83,20 +83,21 @@ public class RenterController implements Initializable, BaseController {
     
     
     public void showDetails(Renter renter) {
+        
         if (renter != null) {
             firstNameLabel.setText(renter.getFirstName());
             lastNameLabel.setText(renter.getLastName());
             patronymicLabel.setText(renter.getPatronymic());
             addressLabel.setText(renter.getAddress());
             birthdayLabel.setText(renter.getBirthday());
-            personLabel.setText(renter.getPerson());
+            subjectLabel.setText(renter.getSubject());
         } else {
             firstNameLabel.setText("");
             lastNameLabel.setText("");
             patronymicLabel.setText("");
             addressLabel.setText("");
             birthdayLabel.setText("");
-            personLabel.setText("");
+            subjectLabel.setText("");
         }
     } 
     
@@ -126,8 +127,10 @@ public class RenterController implements Initializable, BaseController {
         Renter tempRenter = new Renter();
         boolean okClicked = showRenterForm(tempRenter);
         if (okClicked) {
-            RenterModel.addRenter(tempRenter);
+            int id = RenterModel.addRenter(tempRenter);
+            tempRenter.setId(id);
             renters.add(tempRenter);
+            renterTable.getSelectionModel().select(tempRenter);
         }
     }
 
@@ -138,20 +141,20 @@ public class RenterController implements Initializable, BaseController {
     @FXML
     private void handleEditRenter() {
         Renter selectedRenter = renterTable.getSelectionModel().getSelectedItem();
+        
         if (selectedRenter != null) {
             boolean okClicked = showRenterForm(selectedRenter);
             if (okClicked) {
                 RenterModel.updateRenter(selectedRenter.getId(), selectedRenter);
                 showDetails(selectedRenter);
             }
-
         } else {
             // Ничего не выбрано.
             Alert alert = new Alert(AlertType.WARNING);
             alert.initOwner(mainApp.getPrimaryStage());
             alert.setTitle("No Selection");
-            alert.setHeaderText("No Person Selected");
-            alert.setContentText("Please select a person in the table.");
+            alert.setHeaderText("No Renter Selected");
+            alert.setContentText("Please select a renter in the table.");
 
             alert.showAndWait();
         }
@@ -167,7 +170,7 @@ public class RenterController implements Initializable, BaseController {
             
             // Создаём диалоговое окно Stage.
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("Edit Person");
+            dialogStage.setTitle("Edit Renter");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(mainApp.getPrimaryStage());
             Scene scene = new Scene(page);
