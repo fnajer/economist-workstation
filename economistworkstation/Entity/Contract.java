@@ -5,26 +5,88 @@
  */
 package economistworkstation.Entity;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+
 /**
  *
  * @author fnajer
  */
 public class Contract {
-    public int id;
-    public String date_start;
-    public String date_end;
-    public int id_renter;
-    public int id_building;
+    private final IntegerProperty id;
+    private final StringProperty dateStart;
+    private final StringProperty dateEnd;
+    private final IntegerProperty idRenter;
+    private final IntegerProperty idBuilding;
     
-    public Contract(String date_start, String date_end, int id_renter, int id_building) {
-       this.date_start = date_start; 
-       this.date_end = date_end; 
-       this.id_renter = id_renter; 
-       this.id_building = id_building;
+    public Contract() {
+        this(null, null, 0, 0);
+    }
+    
+    public Contract(String dateStart, String dateEnd, int idRenter, int idBuilding) {
+       this.id = new SimpleIntegerProperty(0);
+       this.dateStart = new SimpleStringProperty(dateStart);
+       this.dateEnd = new SimpleStringProperty(dateEnd);
+       this.idRenter = new SimpleIntegerProperty(idRenter); 
+       this.idBuilding = new SimpleIntegerProperty(idBuilding); 
+    }
+    
+    public int getId() {
+        return id.get();
+    }
+
+    public void setId(int id) {
+        this.id.set(id);
+    }
+    
+    public IntegerProperty idProperty() {
+        return id;
+    }
+    
+    public String getDateStart() {
+        return dateStart.get();
+    }
+
+    public void setDateStart(String dateStart) {
+        this.dateStart.set(dateStart);
+    }
+    
+    public StringProperty dateStartProperty() {
+        return dateStart;
+    }
+    
+    public String getDateEnd() {
+        return dateEnd.get();
+    }
+
+    public void setDateEnd(String dateEnd) {
+        this.dateEnd.set(dateEnd);
+    }
+     
+    public int getIdRenter() {
+        return idRenter.get();
+    }
+
+    public void setIdRenter(int idRenter) {
+        this.idRenter.set(idRenter);
+    }
+    
+    public IntegerProperty idRenterProperty() {
+        return idRenter;
+    }
+    
+    public int getIdBuilding() {
+        return idBuilding.get();
+    }
+
+    public void setIdBuilding(int idBuilding) {
+        this.idBuilding.set(idBuilding);
     }
     
     @Override
     public String toString() {
-        return Integer.toString(this.id);
+        return String.format("Договор №%d - %s", getId(), getDateStart());
     }
 }
