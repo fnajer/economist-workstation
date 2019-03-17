@@ -8,12 +8,11 @@ package economistworkstation.Model;
 import economistworkstation.Database;
 import economistworkstation.EconomistWorkstation;
 import economistworkstation.Entity.Renter;
-import java.sql.Statement;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import java.util.ArrayList;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 /**
  *
  * @author fnajer
@@ -26,41 +25,47 @@ public class RenterModel {
         //db = Database.getInstance();
     //}
     
-    public static void addRenter(Renter renter) {
+    public static int addRenter(Renter renter) {
+        int idContract = -1;
         try {
-            //String query = "INSERT INTO RENTER VALUES(NULL, '" + renter.name + ", " + renter.surname + "')";
-            //stmt.executeUpdate(query);
-            
-            PreparedStatement ps = db.conn.prepareStatement("insert into RENTER values(NULL,?, ?, ?, ?, ?, ?)");
-            ps.setString(1, renter.name);
-            ps.setString(2, renter.surname);
-            ps.setString(3, renter.patronymic);
-            ps.setString(4, renter.address);
-            ps.setString(5, renter.birthday);
-            ps.setString(6, renter.person);
+            PreparedStatement ps = db.conn.prepareStatement("insert into RENTER values(NULL,?, ?, ?, ?, ?, ?)",
+                    Statement.RETURN_GENERATED_KEYS);
+            ps.setString(1, renter.getFirstName());
+            ps.setString(2, renter.getLastName());
+            ps.setString(3, renter.getPatronymic());
+            ps.setString(4, renter.getAddress());
+            ps.setString(5, renter.getBirthday());
+            ps.setString(6, renter.getSubject());
             
             ps.executeUpdate();
-            System.out.println("Добавлено: " + renter.name);
+            
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                idContract = rs.getInt(1);
+            }
+            
+            System.out.println("Добавлено: " + renter.getFirstName());
         } catch (SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return idContract;
     }
     
      public static void updateRenter(int id, Renter renter) {
         try {
             PreparedStatement ps = db.conn.prepareStatement("UPDATE RENTER\n" +
-                            "SET name=?, surname=?, patronymic=?, address=?, birthday=?, person=?\n" +
+                            "SET first_name=?, last_name=?, patronymic=?, address=?, birthday=?, subject=?\n" +
                             "WHERE id=?;");
-            ps.setString(1, renter.name);
-            ps.setString(2, renter.surname);
-            ps.setString(3, renter.patronymic);
-            ps.setString(4, renter.address);
-            ps.setString(5, renter.birthday);
-            ps.setString(6, renter.person);
+            ps.setString(1, renter.getFirstName());
+            ps.setString(2, renter.getLastName());
+            ps.setString(3, renter.getPatronymic());
+            ps.setString(4, renter.getAddress());
+            ps.setString(5, renter.getBirthday());
+            ps.setString(6, renter.getSubject());
             ps.setInt(7, id);
             
             ps.executeUpdate();
-            System.out.println("Изменено: " + renter.name);
+            System.out.println("Изменено: " + renter.getFirstName());
         } catch (SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -75,8 +80,8 @@ public class RenterModel {
         }
     }
     
-    public static ArrayList<Renter> getRenters() {
-        ArrayList renters = new ArrayList<Renter>();
+    public static ObservableList<Renter> getRenters() {
+        ObservableList renters = FXCollections.observableArrayList();
         try {
             ResultSet rs = db.stmt.executeQuery("SELECT * FROM RENTER");
             
@@ -111,10 +116,12 @@ public class RenterModel {
     }
     
     private static Renter createObjectRenter(ResultSet rs) throws SQLException {
-        Renter renter = new Renter(rs.getString("name"), rs.getString("surname"), rs.getString("patronymic"), 
-        rs.getString("address"), rs.getString("birthday"), rs.getString("person"));
-        renter.id = rs.getInt("id");
+        Renter renter = new Renter(rs.getString("first_name"), rs.getString("last_name"),
+            rs.getString("patronymic"), rs.getString("address"), rs.getString("birthday"),
+            rs.getString("subject"));
+        renter.setId(rs.getInt("id"));
         
         return renter;
     }
 }
+

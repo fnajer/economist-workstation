@@ -7,15 +7,15 @@ package economistworkstation.Model;
 
 import economistworkstation.Database;
 import economistworkstation.EconomistWorkstation;
-import economistworkstation.Entity.Contract;
 import economistworkstation.Entity.Month;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -24,32 +24,45 @@ import java.util.logging.Logger;
 public class MonthModel {
     private static Database db = Database.getInstance();
  
-    public static void addMonth(int id_contract, Month month) { //id contract not use
+    public static void addMonth(Month month) {
         try {
-            PreparedStatement ps = db.conn.prepareStatement("insert into MONTH values(NULL,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-            ps.setInt(1, month.number);
-            ps.setString(2, month.date);
-            ps.setDouble(3, month.cost);
-            ps.setDouble(4, month.fine);
-            ps.setDouble(5, month.cost_water);
-            ps.setDouble(6, month.cost_electricity);
-            ps.setDouble(7, month.cost_heading);
-            ps.setBoolean(8, month.paid_rent);
-            ps.setBoolean(9, month.paid_communal);
-            ps.setInt(10, month.id_contract);
-            ps.setDouble(11, month.index_water);
-            ps.setDouble(12, month.index_electricity);
-            ps.setDouble(13, month.index_heading);
+//            PreparedStatement ps = db.conn.prepareStatement("insert into MONTH "
+//                    + "values(NULL,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+
+            PreparedStatement ps = db.conn.prepareStatement("insert into MONTH "
+                    + "(id, number, date, cost, index_cost, fine, count_water,"
+                    + "count_electricity, count_heading, paid_rent, paid_communal,"
+                    + "id_contract, tariff_water, tariff_electricity, tariff_heading,"
+                    + "count_garbage, tariff_garbage, tax_land, paid_tax_land) "
+                    + "values(NULL,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            ps.setInt(1, month.getNumber());
+            ps.setString(2, month.getDate());
+            ps.setDouble(3, month.getCost());
+            ps.setDouble(4, month.getIndexCost());
+            ps.setDouble(5, month.getFine());
+            ps.setDouble(6, month.getCountWater());
+            ps.setDouble(7, month.getCountElectricity());
+            ps.setDouble(8, month.getCountHeading());
+            ps.setBoolean(9, month.getPaidRent());
+            ps.setBoolean(10, month.getPaidCommunal());
+            ps.setInt(11, month.getIdContract());
+            ps.setDouble(12, month.getTariffWater());
+            ps.setDouble(13, month.getTariffElectricity());
+            ps.setDouble(14, month.getTariffHeading());
+            ps.setDouble(15, month.getCountGarbage());
+            ps.setDouble(16, month.getTariffGarbage());
+            ps.setDouble(17, month.getTaxLand());
+            ps.setBoolean(18, month.getPaidTaxLand());
             
             ps.executeUpdate();
-            System.out.println("Добавлено: " + month.number);
+            System.out.println("Добавлено: " + month.getNumber());
         } catch (SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     public static void addMonths(int id, int count, Month lastMonth) {
-        LocalDate date = LocalDate.parse(lastMonth.date);
+        LocalDate date = LocalDate.parse(lastMonth.getDate());
         int daysOfMonth = date.getDayOfMonth();
         if (daysOfMonth > 1) {
             daysOfMonth--;
@@ -59,13 +72,9 @@ public class MonthModel {
             daysOfMonth = 0;
         }
         
-        System.out.println(date.toString());
-        lastMonth.date = date.toString();
-        System.out.println(date.toString());
-        updateMonth(lastMonth.id, lastMonth);
+        lastMonth.setDate(date.toString());
+        updateMonth(lastMonth.getId(), lastMonth);
           
-       
-        
         if(count == 1 && daysOfMonth > 1) {
             date = date.plusDays(daysOfMonth);
         } else {
@@ -73,8 +82,11 @@ public class MonthModel {
         }
         
         for(int i = 1; i <= count; i++) {
-            MonthModel.addMonth(i, new Month(lastMonth.number + i, date.toString(), 0.00, 0.00,
-                0.00, 0.00, 0.00, false, false, id, 0.00, 0.00, 0.00));
+            Month newMonth = new Month();
+            newMonth.setNumber(lastMonth.getNumber() + i);
+            newMonth.setDate(date.toString());
+            newMonth.setIdContract(id);
+            MonthModel.addMonth(newMonth);
 
             if(i == count - 1 && daysOfMonth > 1) {
                 date = date.plusDays(daysOfMonth);
@@ -88,28 +100,34 @@ public class MonthModel {
     }
     
     public static void updateMonth(int id, Month month) {
-        System.out.println(month.date);
         try {
             PreparedStatement ps = db.conn.prepareStatement("UPDATE MONTH\n" +
-                            "SET date=?, cost=?, fine=?, cost_water=?,\n" +
-                            "cost_electricity=?, cost_heading=?, paid_rent=?, paid_communal=?,\n" +
-                            "index_water=?, index_electricity=?, index_heading=?\n" +
+                            "SET date=?, cost=?, fine=?, count_water=?,\n" +
+                            "count_electricity=?, count_heading=?, paid_rent=?, paid_communal=?,\n" +
+                            "tariff_water=?, tariff_electricity=?, tariff_heading=?,\n" +
+                            "index_cost=?, count_garbage=?, tariff_garbage=?,\n" +
+                            "tax_land=?, paid_tax_land=?\n" +
                             "WHERE id=?;");
-            ps.setString(1, month.date);
-            ps.setDouble(2, month.cost);
-            ps.setDouble(3, month.fine);
-            ps.setDouble(4, month.cost_water);
-            ps.setDouble(5, month.cost_electricity);
-            ps.setDouble(6, month.cost_heading);
-            ps.setBoolean(7, month.paid_rent);
-            ps.setBoolean(8, month.paid_communal);
-            ps.setDouble(9, month.index_water);
-            ps.setDouble(10, month.index_electricity);
-            ps.setDouble(11, month.index_heading);
-            ps.setInt(12, id);
+            ps.setString(1, month.getDate());
+            ps.setDouble(2, month.getCost());
+            ps.setDouble(3, month.getFine());
+            ps.setDouble(4, month.getCountWater());
+            ps.setDouble(5, month.getCountElectricity());
+            ps.setDouble(6, month.getCountHeading());
+            ps.setBoolean(7, month.getPaidRent());
+            ps.setBoolean(8, month.getPaidCommunal());
+            ps.setDouble(9, month.getTariffWater());
+            ps.setDouble(10, month.getTariffElectricity());
+            ps.setDouble(11, month.getTariffHeading());
+            ps.setDouble(12, month.getIndexCost());
+            ps.setDouble(13, month.getCountGarbage());
+            ps.setDouble(14, month.getTariffGarbage());
+            ps.setDouble(15, month.getTaxLand());
+            ps.setBoolean(16, month.getPaidTaxLand());
+            ps.setInt(17, id);
             
             ps.executeUpdate();
-            System.out.println("Изменено: " + month.number);
+            System.out.println("Изменено: " + month.getNumber());
         } catch (SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -124,8 +142,8 @@ public class MonthModel {
         }
     }
     
-    public static ArrayList<Month> getMonths(int id) {
-        ArrayList months = new ArrayList<Month>();
+    public static ObservableList<Month> getMonths(int id) {
+        ObservableList months = FXCollections.observableArrayList();
         try {
             ResultSet rs = db.stmt.executeQuery("SELECT * FROM MONTH WHERE id_contract='" + id + "'");
             
@@ -160,12 +178,16 @@ public class MonthModel {
     }
     
     private static Month createObjectMonth(ResultSet rs) throws SQLException {
-        Month month = new Month(rs.getInt("number"), rs.getString("date"),
-                rs.getDouble("cost"), rs.getDouble("fine"), rs.getDouble("cost_water"),
-                rs.getDouble("cost_electricity"), rs.getDouble("cost_heading"), rs.getBoolean("paid_rent"),
-                rs.getBoolean("paid_communal"), rs.getInt("id_contract"), rs.getDouble("index_water"),
-                rs.getDouble("index_electricity"), rs.getDouble("index_heading"));
-        month.id = rs.getInt("id");
+        Month month = new Month(rs.getInt("number"), rs.getInt("number_rent_acc"),
+                rs.getInt("number_communal_acc"),
+                rs.getString("date"), rs.getDouble("cost"),
+                rs.getDouble("index_cost"), rs.getDouble("fine"), rs.getDouble("count_water"),
+                rs.getDouble("count_electricity"), rs.getDouble("count_heading"),
+                rs.getDouble("count_garbage"), rs.getBoolean("paid_rent"),
+                rs.getBoolean("paid_communal"), rs.getInt("id_contract"), rs.getDouble("tariff_water"),
+                rs.getDouble("tariff_electricity"), rs.getDouble("tariff_heading"),
+                rs.getDouble("tariff_garbage"), rs.getDouble("tax_land"), rs.getBoolean("paid_tax_land"));
+        month.setId(rs.getInt("id"));
         
         return month;
     }
