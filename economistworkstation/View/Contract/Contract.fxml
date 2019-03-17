@@ -13,14 +13,13 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-
-<AnchorPane prefHeight="450.0" prefWidth="940.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="economistworkstation.Controller.ContractController">
+<AnchorPane xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="economistworkstation.Controller.ContractController">
    <children>
       <SplitPane dividerPositions="0.5" prefHeight="500.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
             <AnchorPane>
                <children>
-                  <SplitPane dividerPositions="0.5" prefHeight="448.0" prefWidth="466.0">
+                  <SplitPane dividerPositions="0.5" prefHeight="448.0" prefWidth="466.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <items>
                         <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
                            <content>
@@ -100,7 +99,7 @@
             </AnchorPane>
             <AnchorPane>
                <children>
-                  <SplitPane dividerPositions="0.5" prefHeight="448.0">
+                  <SplitPane dividerPositions="0.5" prefHeight="448.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <items>
                         <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
                            <content>
@@ -149,7 +148,7 @@
                                     <ButtonBar buttonMinWidth="55.0" layoutX="26.0" layoutY="281.0" prefHeight="40.0" prefWidth="178.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                        <buttons>
                                           <Button mnemonicParsing="false" onAction="#handleEditMonth" text="Edit..." />
-                                          <Button mnemonicParsing="false" onAction="#handleDelete" text="Delete" />
+                                          <Button mnemonicParsing="false" onAction="#handleAccount" text="Счёт" />
                                        </buttons>
                                     </ButtonBar>
                                     <Label layoutX="14.0" layoutY="32.0" text="Арендная плата" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="30.0" />
@@ -166,22 +165,28 @@
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                        </rowConstraints>
                                        <children>
                                           <Label text="Стоимость воды" />
-                                          <Label text="Индекс для воды" GridPane.rowIndex="1" />
-                                          <Label fx:id="costWaterLabel" text="Label" GridPane.columnIndex="1" />
-                                          <Label fx:id="indexWaterLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                                          <Label text="Тариф на воду" GridPane.rowIndex="1" />
+                                          <Label fx:id="countWaterLabel" text="Label" GridPane.columnIndex="1" />
+                                          <Label fx:id="tariffWaterLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                           <Label text="Стоимость электричества" GridPane.rowIndex="2" />
-                                          <Label text="Индекс электричества" GridPane.rowIndex="3" />
-                                          <Label fx:id="costElectricityLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                                          <Label fx:id="indexElectricityLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                          <Label text="Стоимость heading" GridPane.rowIndex="4" />
-                                          <Label text="Индекс heading" GridPane.rowIndex="5" />
-                                          <Label text="Состояние" GridPane.rowIndex="6" />
-                                          <Label fx:id="costHeadingLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                          <Label fx:id="indexHeadingLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                                          <Label fx:id="isPaidCommunalLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                                          <Label text="Тариф на электричества" GridPane.rowIndex="3" />
+                                          <Label fx:id="countElectricityLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                                          <Label fx:id="tariffElectricityLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                          <Label text="Стоимость отопления" GridPane.rowIndex="4" />
+                                          <Label text="Тариф на отопление" GridPane.rowIndex="5" />
+                                          <Label text="Состояние" GridPane.rowIndex="8" />
+                                          <Label fx:id="countHeadingLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                          <Label fx:id="tariffHeadingLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                          <Label fx:id="isPaidCommunalLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                                          <Label text="Стоимость мусора" GridPane.rowIndex="6" />
+                                          <Label text="Тариф на вывоз мусора" GridPane.rowIndex="7" />
+                                          <Label fx:id="countGarbageLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                                          <Label fx:id="tariffGarbageLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                                        </children>
                                     </GridPane>
                                     <Label layoutX="5.0" layoutY="127.0" text="Коммунальные платежи" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="170.0" />
