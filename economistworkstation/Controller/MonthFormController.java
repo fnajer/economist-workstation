@@ -5,20 +5,10 @@
  */
 package economistworkstation.Controller;
 
-import static economistworkstation.Controller.RenterProfileController.id;
 import economistworkstation.Entity.Month;
-import economistworkstation.Entity.Renter;
-import economistworkstation.Model.MonthModel;
-import economistworkstation.Model.RenterModel;
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
+import economistworkstation.Util;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -28,131 +18,197 @@ import javafx.stage.Stage;
  *
  * @author fnajer
  */
-public class MonthFormController implements Initializable {
-
-    public static ContractProfileController parentWindow; 
-    public static int id;
-    
-    public void setWindow(ContractProfileController parent) {
-        parentWindow = parent;
-    }
-    
-    public void setId(int id) {
-        this.id = id;
-    }
-    
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-         System.out.println(id);
-        Month month = MonthModel.getMonth(id);
-         System.out.println(month);
-        number.setText(Integer.toString(month.number));
-        date.setText(month.date);
-        cost.setText(Double.toString(month.cost));
-        fine.setText(Double.toString(month.fine));
-        cost_water.setText(Double.toString(month.cost_water));
-        cost_electricity.setText(Double.toString(month.cost_electricity));
-        cost_heading.setText(Double.toString(month.cost_heading));
-        paid_rent.setText(Boolean.toString(month.paid_rent));
-        paid_communal.setText(Boolean.toString(month.paid_communal));
-        id_contract.setText(Integer.toString(month.id_contract));
-        index_water.setText(Double.toString(month.index_water));
-        index_electricity.setText(Double.toString(month.index_electricity));
-        index_heading.setText(Double.toString(month.index_heading));
-        
-        cost_water.textProperty().addListener((observable, oldValue, newValue) -> {
-            double total = Double.parseDouble(cost_water.getText()) * Double.parseDouble(index_water.getText());
-            label_water.setText(Double.toString(total));
-        });
-        index_water.textProperty().addListener((observable, oldValue, newValue) -> {
-            double total = Double.parseDouble(cost_water.getText()) * Double.parseDouble(index_water.getText());
-            label_water.setText(Double.toString(total));
-        });
-        
-        cost_electricity.textProperty().addListener((observable, oldValue, newValue) -> {
-            double total = Double.parseDouble(cost_electricity.getText()) * Double.parseDouble(index_electricity.getText());
-            label_electricity.setText(Double.toString(total));
-        });
-        index_electricity.textProperty().addListener((observable, oldValue, newValue) -> {
-            double total = Double.parseDouble(cost_electricity.getText()) * Double.parseDouble(index_electricity.getText());
-            label_electricity.setText(Double.toString(total));
-        });
-        
-        cost_heading.textProperty().addListener((observable, oldValue, newValue) -> {
-            double total = Double.parseDouble(cost_heading.getText()) * Double.parseDouble(index_heading.getText());
-            label_heading.setText(Double.toString(total));
-        });
-        index_heading.textProperty().addListener((observable, oldValue, newValue) -> {
-            double total = Double.parseDouble(cost_heading.getText()) * Double.parseDouble(index_heading.getText());
-            label_heading.setText(Double.toString(total));
-        });
-    }
-    
-    @FXML
-    public void displayPage() throws Exception { 
-        Parent container = FXMLLoader.load(getClass().getResource("/economistworkstation/View/Month/MonthForm.fxml"));
-        
-        Stage stage = new Stage();
-        stage.setTitle("Редактирование месяца");
-        stage.setScene(new Scene(container));
-        stage.show();
-    }
+public class MonthFormController {
 
     @FXML
-    private Button saveBtn;
+    private TextField costField;
+
     @FXML
-    private Label number;
+    private TextField indexCostField;
+
     @FXML
-    private Label date;
+    private TextField fineField;
+
     @FXML
-    private TextField cost;
-    @FXML
-    private TextField fine;
-    @FXML
-    private TextField cost_water;
-    @FXML
-    private TextField cost_electricity;
-    @FXML
-    private TextField cost_heading;
-    @FXML
-    private Label paid_rent;
-    @FXML
-    private Label paid_communal;
-    @FXML
-    private Label id_contract;
+    private TextField taxLandField;
     
     @FXML
-    private Label label_water;
+    private Label isPaidTaxLandField;
+    
     @FXML
-    private Label label_electricity;
+    private TextField countHeadingField;
+
     @FXML
-    private Label label_heading;
+    private TextField countElectricityField;
+
     @FXML
-    private TextField index_water;
+    private TextField countWaterField;
+    
     @FXML
-    private TextField index_electricity;
+    private TextField countGarbageField;
+
     @FXML
-    private TextField index_heading;
+    private Label numberField;
+
+    @FXML
+    private Label dateField;
+
+    @FXML
+    private Label isPaidRentField;
+
+    @FXML
+    private Label isPaidCommunalField;
+
+    @FXML
+    private TextField tariffWaterField;
+
+    @FXML
+    private TextField tariffElectricityField;
+
+    @FXML
+    private TextField tariffHeadingField;
+    
+    @FXML
+    private TextField tariffGarbageField;
+    
+    private Stage dialogStage;
+    private Month month;
+    private boolean okClicked = false;
+    
+    public void setDialogStage(Stage dialogStage) {
+        this.dialogStage = dialogStage;
+    }
+    
+    public void setMonth(Month month) {
+        this.month = month;
+
+        numberField.setText(Integer.toString(month.getNumber()));
+        dateField.setText(month.getDate());
+        
+        costField.setText(Double.toString(month.getCost()));
+        indexCostField.setText(Double.toString(month.getIndexCost()));
+        fineField.setText(Double.toString(month.getFine()));
+        isPaidRentField.setText(Util.boolToString(month.getPaidRent()));
+
+        taxLandField.setText(Double.toString(month.getTaxLand()));
+        isPaidTaxLandField.setText(Util.boolToString(month.getPaidTaxLand()));
+        
+        countWaterField.setText(Double.toString(month.getCountWater()));
+        tariffWaterField.setText(Double.toString(month.getTariffWater()));
+        countElectricityField.setText(Double.toString(month.getCountElectricity()));
+        tariffElectricityField.setText(Double.toString(month.getTariffElectricity()));
+        countHeadingField.setText(Double.toString(month.getCountHeading()));
+        tariffHeadingField.setText(Double.toString(month.getTariffHeading()));
+        countGarbageField.setText(Double.toString(month.getCountHeading()));
+        tariffGarbageField.setText(Double.toString(month.getTariffHeading()));
+        isPaidCommunalField.setText(Util.boolToString(month.getPaidCommunal()));
+    }
+    
+    public boolean isOkClicked() {
+        return okClicked;
+    }
+    
+    @FXML
+    private void handleOk() {
+        if (isInputValid()) {
+ 
+            month.setNumber(Integer.parseInt(numberField.getText()));
+            month.setDate(dateField.getText());
+            
+            month.setCost(Double.parseDouble(costField.getText()));
+            month.setIndexCost(Double.parseDouble(indexCostField.getText()));
+            month.setFine(Double.parseDouble(fineField.getText()));
+            month.setPaidRent(Util.stringToBool(isPaidRentField.getText()));
+
+            month.setTaxLand(Double.parseDouble(taxLandField.getText()));
+            month.setPaidTaxLand(Util.stringToBool(isPaidTaxLandField.getText()));
+            
+            month.setCountWater(Double.parseDouble(countWaterField.getText()));
+            month.setTariffWater(Double.parseDouble(tariffWaterField.getText()));
+            month.setCountElectricity(Double.parseDouble(countElectricityField.getText()));
+            month.setTariffElectricity(Double.parseDouble(tariffElectricityField.getText()));
+            month.setCountHeading(Double.parseDouble(countHeadingField.getText()));
+            month.setTariffHeading(Double.parseDouble(tariffHeadingField.getText()));
+            month.setCountGarbage(Double.parseDouble(countGarbageField.getText()));
+            month.setTariffGarbage(Double.parseDouble(tariffGarbageField.getText()));
+            month.setPaidCommunal(Util.stringToBool(isPaidCommunalField.getText()));
+
+            okClicked = true;
+            dialogStage.close();
+        }
+    }
+    
+    @FXML
+    private void handleCancel() {
+        dialogStage.close();
+    }
+    
+    private boolean isInputValid() {
+        String errorMessage = "";
+
+//        if (firstNameField.getText() == null || firstNameField.getText().length() == 0) {
+//            errorMessage += "Введите имя!\n"; 
+//        }
+//        if (lastNameField.getText() == null || lastNameField.getText().length() == 0) {
+//            errorMessage += "Введите фамилию!\n"; 
+//        }
+//        if (patronymicField.getText() == null || patronymicField.getText().length() == 0) {
+//            errorMessage += "Введите отчество!\n"; 
+//        }
+//        if (addressField.getText() == null || addressField.getText().length() == 0) {
+//            errorMessage += "Введите адрес!\n"; 
+//        }
+//        if (birthdayField.getText() == null || birthdayField.getText().length() == 0) {
+//            errorMessage += "Неверная дата рождения!\n"; 
+//        }
+//        if (personField.getText() == null || personField.getText().length() == 0) {
+//            errorMessage += "Введите физ. лицо!\n";
+//        }
+
+        if (errorMessage.length() == 0) {
+            return true;
+        } else {
+            // Показываем сообщение об ошибке.
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.initOwner(dialogStage);
+            alert.setTitle("Некорректные данные");
+            alert.setHeaderText("Заполните поля корректно");
+            alert.setContentText(errorMessage);
+            
+            alert.showAndWait();
+            
+            return false;
+    }}
+    
    
-    @FXML
-    public void updateMonth(ActionEvent event) {
-        
-        Month month = createMonth();
-        MonthModel.updateMonth(id, month);
-        Stage stage = (Stage) saveBtn.getScene().getWindow();
-
-        stage.close();
-        parentWindow.showListMonths();    
-    }
-    
-    public Month createMonth() {
-        Month month = new Month(Integer.parseInt(number.getText()), date.getText(),
-                Double.parseDouble(cost.getText()), Double.parseDouble(fine.getText()),
-                Double.parseDouble(cost_water.getText()), Double.parseDouble(cost_electricity.getText()),
-                Double.parseDouble(cost_heading.getText()), Boolean.parseBoolean(paid_rent.getText()),
-                Boolean.parseBoolean(paid_communal.getText()), Integer.parseInt(id_contract.getText()),
-                Double.parseDouble(index_water.getText()), Double.parseDouble(index_electricity.getText()),
-                Double.parseDouble(index_heading.getText()));
-        return month;
-    } 
+//    @Override
+//    public void initialize(URL url, ResourceBundle rb) {
+//        
+//        cost_water.textProperty().addListener((observable, oldValue, newValue) -> {
+//            double total = Double.parseDouble(cost_water.getText()) * Double.parseDouble(index_water.getText());
+//            label_water.setText(Double.toString(total));
+//        });
+//        index_water.textProperty().addListener((observable, oldValue, newValue) -> {
+//            double total = Double.parseDouble(cost_water.getText()) * Double.parseDouble(index_water.getText());
+//            label_water.setText(Double.toString(total));
+//        });
+//        
+//        cost_electricity.textProperty().addListener((observable, oldValue, newValue) -> {
+//            double total = Double.parseDouble(cost_electricity.getText()) * Double.parseDouble(index_electricity.getText());
+//            label_electricity.setText(Double.toString(total));
+//        });
+//        index_electricity.textProperty().addListener((observable, oldValue, newValue) -> {
+//            double total = Double.parseDouble(cost_electricity.getText()) * Double.parseDouble(index_electricity.getText());
+//            label_electricity.setText(Double.toString(total));
+//        });
+//        
+//        cost_heading.textProperty().addListener((observable, oldValue, newValue) -> {
+//            double total = Double.parseDouble(cost_heading.getText()) * Double.parseDouble(index_heading.getText());
+//            label_heading.setText(Double.toString(total));
+//        });
+//        index_heading.textProperty().addListener((observable, oldValue, newValue) -> {
+//            double total = Double.parseDouble(cost_heading.getText()) * Double.parseDouble(index_heading.getText());
+//            label_heading.setText(Double.toString(total));
+//        });
+//    }
 }
