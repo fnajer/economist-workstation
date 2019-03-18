@@ -36,6 +36,43 @@ public class ExcelCreator {
         HSSFWorkbook workbook;
         try (FileInputStream inputStream = new FileInputStream(file)) {
             workbook = new HSSFWorkbook(inputStream);
+            
+            for (Sheet sheet : workbook) {
+                for (Row row : sheet) {
+                    for (Cell cell : row) {
+                        CellType cellType = cell.getCellType();
+                        
+                        if (cellType == STRING) {
+                            String cellString = cell.getStringCellValue();
+                            
+                            Pattern pattern = Pattern.compile("<\\w+>");
+                            Matcher matcher = pattern.matcher(cellString);
+                            while(matcher.find()) {
+                                String foundedTag = matcher.group();
+                                System.out.println(foundedTag);
+                                if ("<date>".equals(foundedTag)) {
+                                    LocalDate date = LocalDate.now();
+                                    String resultString = cellString.replaceAll(foundedTag, date.toString());
+                                    cell.setCellValue(resultString);
+                                    cellString = resultString;
+                                }
+                                if ("<numAcc>".equals(foundedTag)) {
+                                    String resultString = cellString.replaceAll(foundedTag, "acc");
+                                    cell.setCellValue(resultString);
+                                    cellString = resultString;
+                                } 
+                            }
+                        }
+                    }
+                }
+            }
+//            HSSFSheet sheet = workbook.getSheetAt(0);
+//            HSSFCell cell = sheet.getRow(1).getCell(2);
+//            cell.setCellValue(cell.getNumericCellValue() * 2);
+//            cell = sheet.getRow(2).getCell(2);
+//            cell.setCellValue(cell.getNumericCellValue() * 2);
+//            cell = sheet.getRow(3).getCell(2);
+//            cell.setCellValue(cell.getNumericCellValue() * 2);
         }
 
         try (OutputStream out = new FileOutputStream("C:\\Users\\fnajer\\Desktop\\workbookNew.xls")) {
