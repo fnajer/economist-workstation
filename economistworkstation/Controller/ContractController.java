@@ -147,7 +147,66 @@ public class ContractController implements Initializable, BaseController {
         }
     }
 
-   
+    @FXML
+    void handleEditMonth(ActionEvent event) {
+        Month selectedMonth = monthTable.getSelectionModel().getSelectedItem();
+        
+        if (selectedMonth != null) {
+            boolean okClicked = showMonthForm(selectedMonth);
+            if (okClicked) {
+                MonthModel.updateMonth(selectedMonth.getId(), selectedMonth);
+                showMonthDetails(selectedMonth);
+            }
+
+        } else {
+            // Ничего не выбрано.
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.initOwner(mainApp.getPrimaryStage());
+            alert.setTitle("No Selection");
+            alert.setHeaderText("No Month Selected");
+            alert.setContentText("Please select a month in the table.");
+
+            alert.showAndWait();
+        }
+    }
+ 
+    
+    public boolean showMonthForm(Month month) {
+        try {
+            // Загружаем fxml-файл и создаём новую сцену
+            // для всплывающего диалогового окна.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(EconomistWorkstation.class.getResource("View/Month/MonthForm.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            
+            // Создаём диалоговое окно Stage.
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Edit Month");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(mainApp.getPrimaryStage());
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+            
+            // Передаём адресата в контроллер.
+            MonthFormController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setMonth(month);
+            
+            // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
+            dialogStage.showAndWait();
+            
+            return controller.isOkClicked();
+        } catch (IOException ex) {
+            Logger.getLogger(ContractController.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+    
+    @FXML
+    void handleAccount(ActionEvent event) throws IOException {
+        Month month = monthTable.getSelectionModel().getSelectedItem();
+        ExcelCreator.printAccountPayment(month);
+    }
     
     private ObservableList<Contract> contracts;
     private ObservableList<Month> months;
