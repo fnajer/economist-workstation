@@ -6,6 +6,7 @@
 package economistworkstation;
 
 import economistworkstation.Entity.Month;
+import economistworkstation.Util.Money;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -60,7 +61,13 @@ public class ExcelCreator {
                                     String resultString = cellString.replaceAll(foundedTag, "acc");
                                     cell.setCellValue(resultString);
                                     cellString = resultString;
-                                } 
+                                }
+                                if ("<sumInWords>".equals(foundedTag)) {
+                                    String sumInWords = Money.digits2Text(145.00);
+                                    String resultString = cellString.replaceAll(foundedTag, sumInWords);
+                                    cell.setCellValue(resultString);
+                                    cellString = resultString;
+                                }
                             }
                         }
                     }
