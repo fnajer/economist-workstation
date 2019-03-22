@@ -19,7 +19,7 @@ import economistworkstation.Model.BuildingModel;
 import economistworkstation.Model.ContractModel;
 import economistworkstation.Model.MonthModel;
 import economistworkstation.Model.RenterModel;
-import economistworkstation.Util;
+import economistworkstation.Util.Util;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.logging.Level;

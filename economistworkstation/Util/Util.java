@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package economistworkstation;
+package economistworkstation.Util;
 
 /**
  *
@@ -24,10 +24,6 @@ public class Util {
     }
     
     public static boolean stringToBool(String paid) {
-       if (paid == "Оплачено") {
-           return true;
-       } else {
-           return false;
-       }
+        return "Оплачено".equals(paid);
     }
 }

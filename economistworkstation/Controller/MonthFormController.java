@@ -6,7 +6,7 @@
 package economistworkstation.Controller;
 
 import economistworkstation.Entity.Month;
-import economistworkstation.Util;
+import economistworkstation.Util.Util;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
