@@ -7,6 +7,7 @@ package economistworkstation;
 
 import economistworkstation.Entity.Month;
 import economistworkstation.Util.Money;
+import economistworkstation.Util.TagParser;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -44,31 +45,8 @@ public class ExcelCreator {
                         CellType cellType = cell.getCellType();
                         
                         if (cellType == STRING) {
-                            String cellString = cell.getStringCellValue();
+                            TagParser.convertTag(cell);
                             
-                            Pattern pattern = Pattern.compile("<\\w+>");
-                            Matcher matcher = pattern.matcher(cellString);
-                            while(matcher.find()) {
-                                String foundedTag = matcher.group();
-                                System.out.println(foundedTag);
-                                if ("<date>".equals(foundedTag)) {
-                                    LocalDate date = LocalDate.now();
-                                    String resultString = cellString.replaceAll(foundedTag, date.toString());
-                                    cell.setCellValue(resultString);
-                                    cellString = resultString;
-                                }
-                                if ("<numAcc>".equals(foundedTag)) {
-                                    String resultString = cellString.replaceAll(foundedTag, "acc");
-                                    cell.setCellValue(resultString);
-                                    cellString = resultString;
-                                }
-                                if ("<sumInWords>".equals(foundedTag)) {
-                                    String sumInWords = Money.digits2Text(145.00);
-                                    String resultString = cellString.replaceAll(foundedTag, sumInWords);
-                                    cell.setCellValue(resultString);
-                                    cellString = resultString;
-                                }
-                            }
                         }
                     }
                 }
