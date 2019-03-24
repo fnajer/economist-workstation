@@ -5,3 +5,7 @@
 .mainFxmlClass {
 
 }
+
+.redRow {
+    -fx-background-color: red;
+}

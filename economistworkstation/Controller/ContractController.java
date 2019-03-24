@@ -22,6 +22,7 @@ import economistworkstation.Model.RenterModel;
 import economistworkstation.Util.Util;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
@@ -33,12 +34,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 /**
  *
  * @author fnajer
@@ -222,7 +225,7 @@ public class ContractController implements Initializable, BaseController {
        
         contracts = ContractModel.getContracts();
         contractTable.setItems(contracts);
-
+        
         numberContractColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         idRenterColumn.setCellValueFactory(new PropertyValueFactory<>("idRenter"));
         
@@ -233,6 +236,42 @@ public class ContractController implements Initializable, BaseController {
         // дополнительную информацию об адресате.
         contractTable.getSelectionModel().selectedItemProperty().addListener(
             (observable, oldValue, newValue) -> showDetails(newValue));
+     
+        
+        contractTable.setRowFactory((tableView) -> createRow());
+    }
+    
+    private TableRow<Contract> createRow() {
+        TableRow<Contract> row = new TableRow<>();
+            
+        ChangeListener<String> timeoutContractListener = (obs, oldEndDate, newEndDate) -> {
+            checkTimeoutContract(row, newEndDate);
+        };
+        row.itemProperty().addListener((obs, previousContract, currentContract) -> {
+
+            if (previousContract != null) {
+                previousContract.dateEndProperty().removeListener(timeoutContractListener);
+            }
+            if (currentContract != null) {
+                currentContract.dateEndProperty().addListener(timeoutContractListener);
+                checkTimeoutContract(row, currentContract.getDateEnd());
+            } else {
+                row.getStyleClass().removeAll(Collections.singleton("redRow"));
+            }
+        });
+
+        return row;
+    }
+    
+    private void checkTimeoutContract(TableRow<Contract> row, String newEndDate) {
+        LocalDate currentDate = LocalDate.now();
+        LocalDate endDate = LocalDate.parse(newEndDate);
+        LocalDate warningDate = endDate.minusMonths(3);
+        if (currentDate.isAfter(warningDate) || currentDate.isEqual(warningDate)) {
+            row.getStyleClass().add("redRow");
+        } else {
+            row.getStyleClass().removeAll(Collections.singleton("redRow"));
+        }
     }
     
     private Contract contract;
@@ -243,6 +282,7 @@ public class ContractController implements Initializable, BaseController {
         System.out.println(contract);
         this.contract = contract;
         if (contract != null) {
+            
             renter = RenterModel.getRenter(contract.getIdRenter());
             building = BuildingModel.getBuilding(contract.getIdBuilding());
             
@@ -263,6 +303,7 @@ public class ContractController implements Initializable, BaseController {
             squareLabel.setText("");
         }
     }
+    
     private final ChangeListener<Month> listener = (observable, oldValue, newValue) -> 
             showMonthDetails(newValue);
     

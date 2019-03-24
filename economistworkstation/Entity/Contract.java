@@ -64,6 +64,10 @@ public class Contract {
     public void setDateEnd(String dateEnd) {
         this.dateEnd.set(dateEnd);
     }
+    
+    public StringProperty dateEndProperty() {
+        return dateEnd;
+    }
      
     public int getIdRenter() {
         return idRenter.get();
