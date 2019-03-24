@@ -14,6 +14,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDate;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -31,6 +34,21 @@ import org.apache.poi.ss.usermodel.Workbook;
  * @author fnajer
  */
 public class ExcelCreator {
+    public static void iterateCells(HSSFWorkbook workbook, Consumer<Cell> method) {
+        for (Sheet sheet : workbook) {
+            for (Row row : sheet) {
+                for (Cell cell : row) {
+                    CellType cellType = cell.getCellType();
+                    if (cellType == STRING) {
+                        method.accept(cell);
+
+                    }
+                }
+            }
+        }
+    }
+
+    
     public static void printAccountPayment(Month month) throws IOException {
        
         File file = new File("C:\\Users\\fnajer\\Desktop\\workbook.xls");
@@ -39,18 +57,7 @@ public class ExcelCreator {
         try (FileInputStream inputStream = new FileInputStream(file)) {
             workbook = new HSSFWorkbook(inputStream);
             
-            for (Sheet sheet : workbook) {
-                for (Row row : sheet) {
-                    for (Cell cell : row) {
-                        CellType cellType = cell.getCellType();
-                        
-                        if (cellType == STRING) {
-                            TagParser.convertTag(cell);
-                            
-                        }
-                    }
-                }
-            }
+            iterateCells(workbook, TagParser::convertTags);
 //            HSSFSheet sheet = workbook.getSheetAt(0);
 //            HSSFCell cell = sheet.getRow(1).getCell(2);
 //            cell.setCellValue(cell.getNumericCellValue() * 2);
