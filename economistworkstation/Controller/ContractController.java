@@ -135,7 +135,7 @@ public class ContractController implements Initializable, BaseController {
             date = date.plusMonths(countMonths);
             contract.setDateEnd(date.toString());
 
-            ContractModel.updateContract(contract.getId(), contract);
+            ContractModel.updateContract(contract.getId(), contract, true);
             MonthModel.addMonths(contract.getId(), countMonths, lastMonth);
         
             showDetails(contract);
@@ -407,7 +407,7 @@ public class ContractController implements Initializable, BaseController {
         if (selectedContract != null) {
             boolean okClicked = showContractForm(selectedContract);
             if (okClicked) {
-                ContractModel.updateContract(selectedContract.getId(), selectedContract);
+                ContractModel.updateContract(selectedContract.getId(), selectedContract, false);
                 showDetails(selectedContract);
             }
 

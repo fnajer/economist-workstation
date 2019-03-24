@@ -40,45 +40,19 @@ public class ContractModel {
             ps.setInt(4, contract.getIdBuilding());
             
             ps.executeUpdate();
-  
-            LocalDate date_start = LocalDate.parse(contract.getDateStart());
-            LocalDate date_end = LocalDate.parse(contract.getDateEnd());
-            long diffOfDates = ChronoUnit.MONTHS.between(date_start, date_end);
-            //LocalDate.parse(text)
-
+            
             ResultSet rs = ps.getGeneratedKeys();
+        
             if (rs.next()) {
                 idContract = rs.getInt(1);
+                contract.setId(idContract);
+                System.out.println("Добавлено: " + idContract);
                 
-                int dayOfMonth = date_start.getDayOfMonth();
-                if (dayOfMonth == 1) {
-                    dayOfMonth = 0;
-                } else {
-                    dayOfMonth--;
-                    diffOfDates++; //т.к. периодов оплаты больше, чем месяцев
-                }
-                
-                date_start = date_start.minusDays(dayOfMonth).plusMonths(1);
-                for(int i = 1; i <= diffOfDates; i++) {
-                    Month newMonth = new Month();
-                    newMonth.setNumber(i);
-                    newMonth.setDate(date_start.toString());
-                    newMonth.setIdContract(idContract);
-                    MonthModel.addMonth(newMonth);
-                    
-                    if(i == diffOfDates - 1 && dayOfMonth > 1) {
-                        date_start = date_start.plusDays(dayOfMonth);
-                        continue;
-                    }
-                    
-                    date_start = date_start.plusMonths(1);
-                }
-                
-                System.out.println("Добавлено: " + contract.getDateStart());
+                createMonths(contract);
+                System.out.println("Месяцы добавлены. Id контракта: " + idContract);
             } else {
-                System.out.println("id didnt got");
+                System.out.println("Error upon creating contract. Id didn got");
             }
-
         } catch (SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -86,8 +60,9 @@ public class ContractModel {
         return idContract;
     }
     
-    public static void updateContract(int id, Contract contract) {
+    public static void updateContract(int id, Contract contract, boolean extend) {
         try {
+            
             PreparedStatement ps = db.conn.prepareStatement("UPDATE CONTRACT\n" +
                             "SET date_start=?, date_end=?, id_renter=?, id_building=?\n" +
                             "WHERE id=?;");
@@ -99,8 +74,43 @@ public class ContractModel {
             
             ps.executeUpdate();
             System.out.println("Изменено: " + contract.getId());
+            
+            if (!extend) {
+                MonthModel.deleteMonths(id);
+                createMonths(contract);
+                System.out.println("Месяцы добавлены. Id контракта: " + contract.getId());
+            }
         } catch (SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private static void createMonths(Contract contract) throws SQLException {
+        LocalDate date_start = LocalDate.parse(contract.getDateStart());
+        LocalDate date_end = LocalDate.parse(contract.getDateEnd());
+        long diffOfDates = ChronoUnit.MONTHS.between(date_start, date_end);
+        
+        int dayOfMonth = date_start.getDayOfMonth();
+        if (dayOfMonth == 1) {
+            dayOfMonth = 0;
+        } else {
+            dayOfMonth--;
+            diffOfDates++; //т.к. периодов оплаты больше, чем месяцев
+        }
+
+        date_start = date_start.minusDays(dayOfMonth).plusMonths(1);
+        for(int i = 1; i <= diffOfDates; i++) {
+            Month newMonth = new Month();
+            newMonth.setNumber(i);
+            newMonth.setDate(date_start.toString());
+            newMonth.setIdContract(contract.getId());
+            MonthModel.addMonth(newMonth);
+
+            if(i == diffOfDates - 1 && dayOfMonth > 1) {
+                date_start = date_start.plusDays(dayOfMonth);
+                continue;
+            }
+            date_start = date_start.plusMonths(1);
         }
     }
     
