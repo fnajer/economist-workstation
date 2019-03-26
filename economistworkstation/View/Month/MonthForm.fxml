@@ -10,7 +10,6 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-
 <AnchorPane xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="economistworkstation.Controller.MonthFormController">
    <children>
       <ScrollPane fitToWidth="true" prefHeight="600.0" prefWidth="420.0">
@@ -29,6 +28,7 @@
                       <ColumnConstraints hgrow="SOMETIMES" maxWidth="269.0" minWidth="10.0" prefWidth="269.0" />
                     </columnConstraints>
                     <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -53,42 +53,44 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label text="Стоимость" GridPane.rowIndex="4" />
-                        <Label text="Индекс стоимости" GridPane.rowIndex="5" />
-                        <Label text="Пеня" GridPane.rowIndex="6" />
-                        <Label text="Вода, м³" GridPane.rowIndex="13" />
-                        <Label text="Электроэнергия, кВт" GridPane.rowIndex="15" />
-                        <Label text="Теплоэнергия, м²|Гкал" GridPane.rowIndex="17" />
-                         <TextField fx:id="costField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                         <TextField fx:id="indexCostField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                         <TextField fx:id="fineField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                         <TextField fx:id="countHeadingField" GridPane.columnIndex="1" GridPane.rowIndex="17" />
-                         <TextField fx:id="countElectricityField" GridPane.columnIndex="1" GridPane.rowIndex="15" />
-                         <TextField fx:id="countWaterField" GridPane.columnIndex="1" GridPane.rowIndex="13" />
+                        <Label text="Стоимость" GridPane.rowIndex="5" />
+                        <Label text="Индекс стоимости" GridPane.rowIndex="6" />
+                        <Label text="Пеня" GridPane.rowIndex="7" />
+                        <Label text="Вода, м³" GridPane.rowIndex="14" />
+                        <Label text="Электроэнергия, кВт" GridPane.rowIndex="16" />
+                        <Label text="Теплоэнергия, м²|Гкал" GridPane.rowIndex="18" />
+                         <TextField fx:id="costField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                         <TextField fx:id="indexCostField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                         <TextField fx:id="fineField" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                         <TextField fx:id="countHeadingField" GridPane.columnIndex="1" GridPane.rowIndex="18" />
+                         <TextField fx:id="countElectricityField" GridPane.columnIndex="1" GridPane.rowIndex="16" />
+                         <TextField fx:id="countWaterField" GridPane.columnIndex="1" GridPane.rowIndex="14" />
                         <Label text="Месяц №" />
                         <Label fx:id="numberField" text="Label" GridPane.columnIndex="1" />
                         <Label text="Дата оплаты" GridPane.rowIndex="1" />
                         <Label fx:id="dateField" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label text="Арендная плата" GridPane.rowIndex="3" />
-                        <Label text="Состояние" GridPane.rowIndex="7" />
-                        <Label fx:id="isPaidRentField" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                        <Label prefHeight="17.0" prefWidth="139.0" text="Коммунальные платежи" GridPane.rowIndex="12" />
-                        <Label text="Тариф на воду" GridPane.rowIndex="14" />
-                        <Label text="Тариф на теплоэнергии" GridPane.rowIndex="18" />
-                        <Label text="Состояние" GridPane.rowIndex="21" />
-                        <Label text="Тариф на электроэнергию" GridPane.rowIndex="16" />
-                        <Label fx:id="isPaidCommunalField" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="21" />
-                        <TextField fx:id="tariffWaterField" GridPane.columnIndex="1" GridPane.rowIndex="14" />
-                        <TextField fx:id="tariffElectricityField" GridPane.columnIndex="1" GridPane.rowIndex="16" />
-                        <TextField fx:id="tariffHeadingField" GridPane.columnIndex="1" GridPane.rowIndex="18" />
-                        <Label text="Мусор, м²|м³" GridPane.rowIndex="19" />
-                        <Label text="Тариф на мусор" GridPane.rowIndex="20" />
-                        <TextField fx:id="countGarbageField" GridPane.columnIndex="1" GridPane.rowIndex="19" />
-                        <TextField fx:id="tariffGarbageField" GridPane.columnIndex="1" GridPane.rowIndex="20" />
-                        <TextField fx:id="taxLandField" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-                        <Label text="Земельный налог" GridPane.rowIndex="9" />
-                        <Label text="Состояние" GridPane.rowIndex="10" />
-                        <Label fx:id="isPaidTaxLandField" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                        <Label text="Арендная плата" GridPane.rowIndex="4" />
+                        <Label text="Состояние" GridPane.rowIndex="8" />
+                        <Label fx:id="isPaidRentField" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                        <Label prefHeight="17.0" prefWidth="139.0" text="Коммунальные платежи" GridPane.rowIndex="13" />
+                        <Label text="Тариф на воду" GridPane.rowIndex="15" />
+                        <Label text="Тариф на теплоэнергии" GridPane.rowIndex="19" />
+                        <Label text="Состояние" GridPane.rowIndex="22" />
+                        <Label text="Тариф на электроэнергию" GridPane.rowIndex="17" />
+                        <Label fx:id="isPaidCommunalField" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="22" />
+                        <TextField fx:id="tariffWaterField" GridPane.columnIndex="1" GridPane.rowIndex="15" />
+                        <TextField fx:id="tariffElectricityField" GridPane.columnIndex="1" GridPane.rowIndex="17" />
+                        <TextField fx:id="tariffHeadingField" GridPane.columnIndex="1" GridPane.rowIndex="19" />
+                        <Label text="Мусор, м²|м³" GridPane.rowIndex="20" />
+                        <Label text="Тариф на мусор" GridPane.rowIndex="21" />
+                        <TextField fx:id="countGarbageField" GridPane.columnIndex="1" GridPane.rowIndex="20" />
+                        <TextField fx:id="tariffGarbageField" GridPane.columnIndex="1" GridPane.rowIndex="21" />
+                        <TextField fx:id="taxLandField" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                        <Label text="Земельный налог" GridPane.rowIndex="10" />
+                        <Label text="Состояние" GridPane.rowIndex="11" />
+                        <Label fx:id="isPaidTaxLandField" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+                        <Label fx:id="numberCommunalAccField" text="Label" GridPane.rowIndex="2" />
+                        <Label fx:id="numberRentAccField" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                   </GridPane>
                </children>

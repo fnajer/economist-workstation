@@ -20,6 +20,7 @@
       <Menu mnemonicParsing="false" text="Договор">
         <items>
           <MenuItem fx:id="contracts" mnemonicParsing="false" onAction="#showList" text="Показать список" />
+            <MenuItem fx:id="accounts" mnemonicParsing="false" onAction="#updateAccounts" text="Переназначить счета" />
         </items>
       </Menu>
       <Menu mnemonicParsing="false" text="Арендатор">
