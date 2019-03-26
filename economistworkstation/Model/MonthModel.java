@@ -178,22 +178,20 @@ public class MonthModel {
         return month;
     }
     
-    private static void updateAccountNumbers() {
-        ObservableList months = FXCollections.observableArrayList();
+    public static void updateAccountNumbers() {
         try {
             LocalDate currentYear = LocalDate.now().with(firstDayOfYear());
             LocalDate nextYear = currentYear.plusYears(1);
             
             ResultSet rs = db.stmt.executeQuery("SELECT id \n" +
                 "FROM MONTH\n" +
-                "WHERE date >= " + currentYear + " AND date < " + nextYear + " \n" +
+                "WHERE date >= '" + currentYear + "' AND date < '" + nextYear + "' \n" +
                 "ORDER BY date, id_contract;");
             int number = 1;
             int idMonth;
             
             while (rs.next()) {
                 idMonth = rs.getInt("id");
-                
                 PreparedStatement ps = db.conn.prepareStatement("UPDATE MONTH\n" +
                             "SET number_rent_acc=?, number_communal_acc=?\n" +
                             "WHERE id=?;");
@@ -202,6 +200,7 @@ public class MonthModel {
                 ps.setInt(3, idMonth);
                 
                 number += 2;
+                ps.executeUpdate();
             }
             
             System.out.println("Обновление порядка счета месяцев завершено.");

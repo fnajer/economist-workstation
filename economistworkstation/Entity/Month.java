@@ -105,7 +105,7 @@ public class Month {
     }
     
     public int getNumberCommunalAcc() {
-        return number.get();
+        return numberCommunalAcc.get();
     }
 
     public void setNumberCommunalAcc(int numberCommunalAcc) {

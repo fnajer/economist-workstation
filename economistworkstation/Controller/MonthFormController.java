@@ -48,6 +48,12 @@ public class MonthFormController {
     private TextField countGarbageField;
 
     @FXML
+    private Label numberRentAccField;
+    
+    @FXML
+    private Label numberCommunalAccField;
+    
+    @FXML
     private Label numberField;
 
     @FXML
@@ -83,6 +89,8 @@ public class MonthFormController {
         this.month = month;
 
         numberField.setText(Integer.toString(month.getNumber()));
+        numberRentAccField.setText(Integer.toString(month.getNumberRentAcc()));
+        numberCommunalAccField.setText(Integer.toString(month.getNumberCommunalAcc()));
         dateField.setText(month.getDate());
         
         costField.setText(Double.toString(month.getCost()));
