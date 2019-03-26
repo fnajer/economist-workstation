@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -175,6 +176,39 @@ public class MonthModel {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
         }
         return month;
+    }
+    
+    private static void updateAccountNumbers() {
+        ObservableList months = FXCollections.observableArrayList();
+        try {
+            LocalDate currentYear = LocalDate.now().with(firstDayOfYear());
+            LocalDate nextYear = currentYear.plusYears(1);
+            
+            ResultSet rs = db.stmt.executeQuery("SELECT id \n" +
+                "FROM MONTH\n" +
+                "WHERE date >= " + currentYear + " AND date < " + nextYear + " \n" +
+                "ORDER BY date, id_contract;");
+            int number = 1;
+            int idMonth;
+            
+            while (rs.next()) {
+                idMonth = rs.getInt("id");
+                
+                PreparedStatement ps = db.conn.prepareStatement("UPDATE MONTH\n" +
+                            "SET number_rent_acc=?, number_communal_acc=?\n" +
+                            "WHERE id=?;");
+                ps.setInt(1, number);
+                ps.setInt(2, number + 1);
+                ps.setInt(3, idMonth);
+                
+                number += 2;
+            }
+            
+            System.out.println("Обновление порядка счета месяцев завершено.");
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     private static Month createObjectMonth(ResultSet rs) throws SQLException {
