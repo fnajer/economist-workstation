@@ -6,6 +6,7 @@
 package economistworkstation.Controller;
 
 import economistworkstation.EconomistWorkstation;
+import economistworkstation.Model.MonthModel;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -78,9 +79,7 @@ public class MenuController implements Initializable {
         String pathName = String.format("View/%s/%s.fxml", name, name);
         return pathName;
     }
-    /**
-     * Открывает диалоговое окно about.
-     */
+    
     @FXML
     private void handleAbout() {
         Alert alert = new Alert(AlertType.INFORMATION);
@@ -89,6 +88,19 @@ public class MenuController implements Initializable {
         alert.setContentText("Author: Alexey\nWebsite: http://vk.com");
 
         alert.showAndWait();
+    }
+    /**
+     * Открывает диалоговое окно about.
+     */
+    @FXML
+    private void updateAccounts() {
+        MonthModel.updateAccountNumbers();
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Информация");
+        alert.setHeaderText("Обновление номеров счетов");
+        alert.setContentText("Переназначение номеров завершено.");
+        alert.showAndWait();
+        contracts.fire();
     }
 
     /**
