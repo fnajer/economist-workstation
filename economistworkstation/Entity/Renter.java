@@ -77,6 +77,11 @@ public class Renter {
         this.patronymic.set(patronymic);
     }
     
+    public String getFullName() {
+        return lastName.get() + ' ' + firstName.get().charAt(0) + ". " + 
+                patronymic.get().charAt(0) + '.';
+    }
+    
     public String getAddress() {
         return address.get();
     }

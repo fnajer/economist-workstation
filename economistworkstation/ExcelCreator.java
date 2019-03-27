@@ -5,7 +5,12 @@
  */
 package economistworkstation;
 
+import economistworkstation.Entity.Building;
+import economistworkstation.Entity.Contract;
 import economistworkstation.Entity.Month;
+import economistworkstation.Entity.Renter;
+import economistworkstation.Model.BuildingModel;
+import economistworkstation.Model.RenterModel;
 import economistworkstation.Util.Money;
 import economistworkstation.Util.TagParser;
 import java.io.File;
@@ -34,14 +39,14 @@ import org.apache.poi.ss.usermodel.Workbook;
  * @author fnajer
  */
 public class ExcelCreator {
-    public static void iterateCells(HSSFWorkbook workbook, Consumer<Cell> method) {
+    public static void iterateCells(HSSFWorkbook workbook, Consumer<ContractData> method, ContractData data) {
         for (Sheet sheet : workbook) {
             for (Row row : sheet) {
                 for (Cell cell : row) {
                     CellType cellType = cell.getCellType();
                     if (cellType == STRING) {
-                        method.accept(cell);
-
+                        data.setCell(cell);
+                        method.accept(data);
                     }
                 }
             }
@@ -49,7 +54,7 @@ public class ExcelCreator {
     }
 
     
-    public static void printAccountPayment(Month month) throws IOException {
+    public static void printAccountPayment(Contract contract, Month month) throws IOException {
        
         File file = new File("C:\\Users\\fnajer\\Desktop\\workbook.xls");
 
@@ -57,7 +62,11 @@ public class ExcelCreator {
         try (FileInputStream inputStream = new FileInputStream(file)) {
             workbook = new HSSFWorkbook(inputStream);
             
-            iterateCells(workbook, TagParser::convertTags);
+            Renter renter = RenterModel.getRenter(contract.getIdRenter());
+            Building building = BuildingModel.getBuilding(contract.getIdBuilding());
+            ContractData data = new ContractData(null, month, building, renter, contract, workbook);
+            
+            iterateCells(workbook, TagParser::convertTags, data);
 //            HSSFSheet sheet = workbook.getSheetAt(0);
 //            HSSFCell cell = sheet.getRow(1).getCell(2);
 //            cell.setCellValue(cell.getNumericCellValue() * 2);

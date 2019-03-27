@@ -208,7 +208,7 @@ public class ContractController implements Initializable, BaseController {
     @FXML
     void handleAccount(ActionEvent event) throws IOException {
         Month month = monthTable.getSelectionModel().getSelectedItem();
-        ExcelCreator.printAccountPayment(month);
+        ExcelCreator.printAccountPayment(contract, month);
     }
     
     private ObservableList<Contract> contracts;
