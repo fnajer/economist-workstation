@@ -301,6 +301,16 @@ public class Month {
         return monthName;
     }
     
+    static public double calcCostWater(Month month) {
+        return month.getCountWater() * month.getTariffWater();
+    }
+    static public double calcCostElectricity(Month month) {
+        return month.getCountElectricity() * month.getTariffElectricity();
+    }
+    static public double calcCostHeading(Month month) {
+        return month.getCountHeading() * month.getTariffHeading();
+    }
+    
     @Override
     public String toString() {
         return getDate() + ' ' + getNumber();
