@@ -146,7 +146,8 @@ public class MonthModel {
     public static ObservableList<Month> getMonths(int id) {
         ObservableList months = FXCollections.observableArrayList();
         try {
-            ResultSet rs = db.stmt.executeQuery("SELECT * FROM MONTH WHERE id_contract='" + id + "'");
+            ResultSet rs = db.stmt.executeQuery("SELECT * FROM MONTH WHERE id_contract='" + 
+                    id + "' ORDER BY number;");
             
             
             while (rs.next()) {
