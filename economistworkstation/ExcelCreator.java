@@ -40,6 +40,7 @@ import org.apache.poi.ss.usermodel.Workbook;
  */
 public class ExcelCreator {
     public static void iterateCells(HSSFWorkbook workbook, Consumer<ContractData> method, ContractData data) {
+        TagParser.sumForWords = 0;
         for (Sheet sheet : workbook) {
             for (Row row : sheet) {
                 for (Cell cell : row) {

@@ -25,7 +25,7 @@ import org.apache.poi.ss.usermodel.FormulaEvaluator;
  * @author fnajer
  */
 public class TagParser {
-    
+    public static double sumForWords;
     
     public static void convertTags (ContractData data) {
         Cell cell = data.getCell();
@@ -87,12 +87,22 @@ public class TagParser {
                 String sumRent = Double.toString(Month.calcSumRent(month));
                 newValue = sumRent;
                 
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                double resultDouble = Double.parseDouble(resultString);
+                cell.setCellValue(resultDouble);
+                
+                TagParser.sumForWords += resultDouble;
                 return;
             }
             if ("<taxLand>".equals(foundedTag)) {
                 String taxLand = Double.toString(month.getTaxLand());
                 newValue = taxLand;
                 
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                double resultDouble = Double.parseDouble(resultString);
+                cell.setCellValue(resultDouble);
+                
+                TagParser.sumForWords += resultDouble;
                 return;
             }
             if ("<sumRentAcc>".equals(foundedTag)) {
@@ -100,6 +110,7 @@ public class TagParser {
                 return;
             }
             if ("<sumInWords>".equals(foundedTag)) {
+                double sum = TagParser.sumForWords;
                 String sumInWords = Money.digits2Text(sum);
                 newValue = sumInWords;
             }
@@ -112,18 +123,33 @@ public class TagParser {
                 String costWater = Double.toString(Month.calcCostWater(month));
                 newValue = costWater;
                 
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                double resultDouble = Double.parseDouble(resultString);
+                cell.setCellValue(resultDouble);
+                
+                TagParser.sumForWords += resultDouble;
                 return;
             }
             if ("<costElectricity>".equals(foundedTag)) {
                 String costElectricity = Double.toString(Month.calcCostElectricity(month));
                 newValue = costElectricity;
                 
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                double resultDouble = Double.parseDouble(resultString);
+                cell.setCellValue(resultDouble);
+                
+                TagParser.sumForWords += resultDouble;
                 return;
             }
             if ("<costHeading>".equals(foundedTag)) {
                 String costHeading = Double.toString(Month.calcCostHeading(month));
                 newValue = costHeading;
                 
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                double resultDouble = Double.parseDouble(resultString);
+                cell.setCellValue(resultDouble);
+                
+                TagParser.sumForWords += resultDouble;
                 return;
             }
             
