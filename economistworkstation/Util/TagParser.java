@@ -17,12 +17,15 @@ import java.util.regex.Pattern;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellValue;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
 
 /**
  *
  * @author fnajer
  */
 public class TagParser {
+    
     
     public static void convertTags (ContractData data) {
         Cell cell = data.getCell();
@@ -70,7 +73,7 @@ public class TagParser {
             if ("<square>".equals(foundedTag)) {
                 newValue = Double.toString(building.getSquare());
             }
-            if ("<monthName>".equals(foundedTag)) {
+            if ("<monthNameAndYear>".equals(foundedTag)) {
                 LocalDate date = LocalDate.parse(month.getDate());
                 int monthNum = date.getMonth().minus(1).getValue();
                 String monthName = Month.getMonthName(monthNum);
@@ -84,13 +87,44 @@ public class TagParser {
                 String sumRent = Double.toString(Month.calcSumRent(month));
                 newValue = sumRent;
                 
-                resultString = cellString.replaceAll(foundedTag, newValue);
-                cell.setCellValue(Double.parseDouble(resultString));
+                return;
+            }
+            if ("<taxLand>".equals(foundedTag)) {
+                String taxLand = Double.toString(month.getTaxLand());
+                newValue = taxLand;
+                
+                return;
+            }
+            if ("<sumRentAcc>".equals(foundedTag)) {
+                cell.setCellFormula("SUM(D15:D17)");
                 return;
             }
             if ("<sumInWords>".equals(foundedTag)) {
-                String sumInWords = Money.digits2Text(145.00);
+                String sumInWords = Money.digits2Text(sum);
                 newValue = sumInWords;
+            }
+            
+            if ("<sumCommunalAcc>".equals(foundedTag)) {
+                cell.setCellFormula("SUM(D16:D19)");
+                return;
+            }
+            if ("<costWater>".equals(foundedTag)) {
+                String costWater = Double.toString(Month.calcCostWater(month));
+                newValue = costWater;
+                
+                return;
+            }
+            if ("<costElectricity>".equals(foundedTag)) {
+                String costElectricity = Double.toString(Month.calcCostElectricity(month));
+                newValue = costElectricity;
+                
+                return;
+            }
+            if ("<costHeading>".equals(foundedTag)) {
+                String costHeading = Double.toString(Month.calcCostHeading(month));
+                newValue = costHeading;
+                
+                return;
             }
             
             resultString = cellString.replaceAll(foundedTag, newValue);
