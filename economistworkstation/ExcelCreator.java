@@ -70,37 +70,32 @@ public class ExcelCreator {
             iterateCells(workbook, TagParser::convertTags, data);
 //            HSSFSheet sheet = workbook.getSheetAt(0);
 //            HSSFCell cell = sheet.getRow(1).getCell(2);
-//            cell.setCellValue(cell.getNumericCellValue() * 2);
-//            cell = sheet.getRow(2).getCell(2);
-//            cell.setCellValue(cell.getNumericCellValue() * 2);
-//            cell = sheet.getRow(3).getCell(2);
-//            cell.setCellValue(cell.getNumericCellValue() * 2);
         }
 
         try (OutputStream out = new FileOutputStream("C:\\Users\\fnajer\\Desktop\\workbookNew.xls")) {
             workbook.write(out);
         }
         System.out.println("Обновлен документ 'Счет для оплаты'");
-        
-        
-//        Workbook wb = new HSSFWorkbook ();
+    }
     
-        //Sheet sheet = wb.createSheet("Счёт");
-        
-//        // Создать строку и поместить в нее несколько ячеек. Строки основаны на 0.
-//        Row row = sheet.createRow(0);
-//        // Создаем ячейку и помещаем в нее значение.
-//        Cell cell = row.createCell(0);
-//        cell.setCellValue(1);
-//
-//        // Или сделать это в одной строке.
-//        row.createCell(2).setCellValue(1.2);
-//        row.createCell(3).setCellValue(true);
-        
-//        try (OutputStream fileOut = new FileOutputStream ("C:\\Users\\fnajer\\Desktop\\workbook.xls")) {
-//            wb.write (fileOut);
-//            System.out.println("Создан документ 'Счет для оплаты'");
-//        }
-//        wb.close ();
+    public static void printAccountCalculation(Contract contract, Month month) throws IOException {
+       
+        File file = new File("C:\\Users\\fnajer\\Desktop\\workbookCalc.xls");
+
+        HSSFWorkbook workbook;
+        try (FileInputStream inputStream = new FileInputStream(file)) {
+            workbook = new HSSFWorkbook(inputStream);
+            
+            Renter renter = RenterModel.getRenter(contract.getIdRenter());
+            Building building = BuildingModel.getBuilding(contract.getIdBuilding());
+            ContractData data = new ContractData(null, month, building, renter, contract, workbook);
+            
+            iterateCells(workbook, TagParser::convertTags, data);
+        }
+
+        try (OutputStream out = new FileOutputStream("C:\\Users\\fnajer\\Desktop\\workbookCalcNew.xls")) {
+            workbook.write(out);
+        }
+        System.out.println("Обновлен документ 'Счет для оплаты'");
     }
 }

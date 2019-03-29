@@ -41,7 +41,6 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 /**
  *
  * @author fnajer
@@ -209,6 +208,12 @@ public class ContractController implements Initializable, BaseController {
     void handleAccount(ActionEvent event) throws IOException {
         Month month = monthTable.getSelectionModel().getSelectedItem();
         ExcelCreator.printAccountPayment(contract, month);
+    }
+    
+    @FXML
+    void handleCalculation(ActionEvent event) throws IOException {
+        Month month = monthTable.getSelectionModel().getSelectedItem();
+        ExcelCreator.printAccountCalculation(contract, month);
     }
     
     private ObservableList<Contract> contracts;
