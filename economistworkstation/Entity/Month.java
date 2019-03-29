@@ -256,7 +256,7 @@ public class Month {
         return month.getCost() * month.getIndexCost();
     }
     
-    static public String getMonthName(int monthNum) {
+    static public String getMonthName(int monthNum, boolean genitive) {
         String monthName = "";
         switch(monthNum) {
             case 1:
@@ -298,6 +298,14 @@ public class Month {
             default:
                 monthName = "Not found";
         }
+        if (genitive) {
+            if (monthNum != 3 && monthNum != 8) {
+                monthName = monthName.substring(0, monthName.length() - 1);
+                monthName = monthName + 'я';
+            } else {
+                monthName = monthName + 'а';
+            }
+        }
         return monthName;
     }
     
@@ -309,6 +317,9 @@ public class Month {
     }
     static public double calcCostHeading(Month month) {
         return month.getCountHeading() * month.getTariffHeading();
+    }
+    static public double calcCostGarbage(Month month) {
+        return month.getCountGarbage() * month.getTariffGarbage();
     }
     
     @Override
