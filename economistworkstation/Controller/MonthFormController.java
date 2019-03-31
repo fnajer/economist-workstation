@@ -218,24 +218,67 @@ public class MonthFormController {
     private Label sumRentWithFineLabel;
     
     
-    
-    @FXML
-    private Label costWaterLabel;
-
-    @FXML
-    private Label costElectricityLabel;
-
-    @FXML
-    private Label costHeadingLabel;
-
-    @FXML
-    private Label costGarbageLabel;
-    
     private void initCalc() {
         displaySum();
         addCalcListeners();
     }
     
+    
    
+    public void addCalcListeners() {
+        
+        countWaterField.textProperty().addListener((observable, oldValue, newValue) -> {
+            setCost(countWaterField, tariffWaterField, costWaterLabel);
+            printSum("communal");
+        });
+        tariffWaterField.textProperty().addListener((observable, oldValue, newValue) -> {
+            setCost(countWaterField, tariffWaterField, costWaterLabel);
+            printSum("communal");
+        });
+        
+        countElectricityField.textProperty().addListener((observable, oldValue, newValue) -> {
+            setCost(countElectricityField, tariffElectricityField, costElectricityLabel);
+            printSum("communal");
+        });
+        tariffElectricityField.textProperty().addListener((observable, oldValue, newValue) -> {
+            setCost(countElectricityField, tariffElectricityField, costElectricityLabel);
+            printSum("communal");
+        });
+        
+        countHeadingField.textProperty().addListener((observable, oldValue, newValue) -> {
+           setCost(countHeadingField, tariffHeadingField, costHeadingLabel);
+           printSum("communal");
+        });
+        tariffHeadingField.textProperty().addListener((observable, oldValue, newValue) -> {
+            setCost(countHeadingField, tariffHeadingField, costHeadingLabel);
+            printSum("communal");
+        });
+        
+        countGarbageField.textProperty().addListener((observable, oldValue, newValue) -> {
+           setCost(countGarbageField, tariffGarbageField, costGarbageLabel);
+           printSum("communal");
+        });
+        tariffGarbageField.textProperty().addListener((observable, oldValue, newValue) -> {
+            setCost(countGarbageField, tariffGarbageField, costGarbageLabel);
+            printSum("communal");
+        });
+        costInternetField.textProperty().addListener((observable, oldValue, newValue) -> {
+            printSum("communal");
+        });
+        costTelephoneField.textProperty().addListener((observable, oldValue, newValue) -> {
+            printSum("communal");
+        });
+        
+        costField.textProperty().addListener((observable, oldValue, newValue) -> {
+            setCost(costField, indexCostField, sumRentLabel);
+            printSum("rentFine");
+        });
+        indexCostField.textProperty().addListener((observable, oldValue, newValue) -> {
+            setCost(costField, indexCostField, sumRentLabel);
+            printSum("rentFine");
+        });
+        fineField.textProperty().addListener((observable, oldValue, newValue) -> {
+            printSum("rentFine");
+        });
     }
 }
