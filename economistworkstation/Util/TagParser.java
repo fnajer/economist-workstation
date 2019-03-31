@@ -232,7 +232,7 @@ public class TagParser {
         }
     }
     
-    private static DecimalFormat getDecimalFormat(Locale locale) {
+    public static DecimalFormat getDecimalFormat(Locale locale) {
         DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(locale);
         DecimalFormat df = new DecimalFormat("#.##", otherSymbols);
         df.setRoundingMode(RoundingMode.HALF_UP);

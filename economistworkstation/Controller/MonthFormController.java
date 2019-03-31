@@ -6,9 +6,17 @@
 package economistworkstation.Controller;
 
 import economistworkstation.Entity.Month;
+import economistworkstation.Util.TagParser;
 import economistworkstation.Util.Util;
+import java.net.URL;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -77,6 +85,12 @@ public class MonthFormController {
     @FXML
     private TextField tariffGarbageField;
     
+    @FXML
+    private TextField costInternetField;
+    
+    @FXML
+    private TextField costTelephoneField;
+    
     private Stage dialogStage;
     private Month month;
     private boolean okClicked = false;
@@ -109,7 +123,11 @@ public class MonthFormController {
         tariffHeadingField.setText(Double.toString(month.getTariffHeading()));
         countGarbageField.setText(Double.toString(month.getCountHeading()));
         tariffGarbageField.setText(Double.toString(month.getTariffHeading()));
+        costInternetField.setText(Double.toString(month.getCostInternet()));
+        costTelephoneField.setText(Double.toString(month.getCostTelephone()));
         isPaidCommunalField.setText(Util.boolToString(month.getPaidCommunal()));
+        
+        initCalc();
     }
     
     public boolean isOkClicked() {
@@ -139,6 +157,8 @@ public class MonthFormController {
             month.setTariffHeading(Double.parseDouble(tariffHeadingField.getText()));
             month.setCountGarbage(Double.parseDouble(countGarbageField.getText()));
             month.setTariffGarbage(Double.parseDouble(tariffGarbageField.getText()));
+            month.setCostInternet(Double.parseDouble(costInternetField.getText()));
+            month.setCostTelephone(Double.parseDouble(costTelephoneField.getText()));
             month.setPaidCommunal(Util.stringToBool(isPaidCommunalField.getText()));
 
             okClicked = true;
@@ -188,35 +208,34 @@ public class MonthFormController {
             return false;
     }}
     
+    @FXML
+    private Label sumCommunalLabel;
+
+    @FXML
+    private Label sumRentLabel;
+
+    @FXML
+    private Label sumRentWithFineLabel;
+    
+    
+    
+    @FXML
+    private Label costWaterLabel;
+
+    @FXML
+    private Label costElectricityLabel;
+
+    @FXML
+    private Label costHeadingLabel;
+
+    @FXML
+    private Label costGarbageLabel;
+    
+    private void initCalc() {
+        displaySum();
+        addCalcListeners();
+    }
+    
    
-//    @Override
-//    public void initialize(URL url, ResourceBundle rb) {
-//        
-//        cost_water.textProperty().addListener((observable, oldValue, newValue) -> {
-//            double total = Double.parseDouble(cost_water.getText()) * Double.parseDouble(index_water.getText());
-//            label_water.setText(Double.toString(total));
-//        });
-//        index_water.textProperty().addListener((observable, oldValue, newValue) -> {
-//            double total = Double.parseDouble(cost_water.getText()) * Double.parseDouble(index_water.getText());
-//            label_water.setText(Double.toString(total));
-//        });
-//        
-//        cost_electricity.textProperty().addListener((observable, oldValue, newValue) -> {
-//            double total = Double.parseDouble(cost_electricity.getText()) * Double.parseDouble(index_electricity.getText());
-//            label_electricity.setText(Double.toString(total));
-//        });
-//        index_electricity.textProperty().addListener((observable, oldValue, newValue) -> {
-//            double total = Double.parseDouble(cost_electricity.getText()) * Double.parseDouble(index_electricity.getText());
-//            label_electricity.setText(Double.toString(total));
-//        });
-//        
-//        cost_heading.textProperty().addListener((observable, oldValue, newValue) -> {
-//            double total = Double.parseDouble(cost_heading.getText()) * Double.parseDouble(index_heading.getText());
-//            label_heading.setText(Double.toString(total));
-//        });
-//        index_heading.textProperty().addListener((observable, oldValue, newValue) -> {
-//            double total = Double.parseDouble(cost_heading.getText()) * Double.parseDouble(index_heading.getText());
-//            label_heading.setText(Double.toString(total));
-//        });
-//    }
+    }
 }
