@@ -31,6 +31,8 @@ public class Month {
     private final DoubleProperty countElectricity;
     private final DoubleProperty countHeading;
     private final DoubleProperty countGarbage;
+    private final DoubleProperty costInternet;
+    private final DoubleProperty costTelephone;
     private final BooleanProperty isPaidRent;
     private final BooleanProperty isPaidCommunal;
     private final IntegerProperty idContract;
@@ -42,13 +44,14 @@ public class Month {
     private final BooleanProperty isPaidTaxLand;
      
     public Month() {
-        this(0, 0, 0, null, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, false, false, 0, 0.0,
-                0.0, 0.0, 0.0, 0.0, false);
+        this(0, 0, 0, null, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                false, false, 0, 0.0, 0.0, 0.0, 0.0, 0.0, false);
     }
     
     public Month(int number, int numberRentAcc, int numberCommunalAcc, String date,
             double cost, double indexCost, double fine, double countWater, 
             double countElectricity, double countHeading, double countGarbage,
+            double costInternet, double costTelephone,
             boolean isPaidRent, boolean isPaidCommunal, int idContract,
             double tariffWater, double tariffElectricity, double tariffHeading,
             double tariffGarbage, double taxLand, boolean isPaidTaxLand) {
@@ -64,6 +67,8 @@ public class Month {
        this.countElectricity = new SimpleDoubleProperty(countElectricity);
        this.countHeading = new SimpleDoubleProperty(countHeading);
        this.countGarbage = new SimpleDoubleProperty(countGarbage);
+       this.costInternet = new SimpleDoubleProperty(costInternet); 
+       this.costTelephone = new SimpleDoubleProperty(costTelephone); 
        this.isPaidRent = new SimpleBooleanProperty(isPaidRent);  
        this.isPaidCommunal = new SimpleBooleanProperty(isPaidCommunal);
        this.idContract = new SimpleIntegerProperty(idContract);
@@ -178,6 +183,22 @@ public class Month {
 
     public void setCountGarbage(double countGarbage) {
         this.countGarbage.set(countGarbage);
+    }
+    
+     public double getCostInternet() {
+        return costInternet.get();
+    }
+
+    public void setCostInternet(double costInternet) {
+        this.costInternet.set(costInternet);
+    }
+    
+     public double getCostTelephone() {
+        return costTelephone.get();
+    }
+
+    public void setCostTelephone(double costTelephone) {
+        this.costTelephone.set(costTelephone);
     }
     
     public boolean getPaidRent() {
