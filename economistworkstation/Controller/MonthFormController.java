@@ -217,7 +217,33 @@ public class MonthFormController {
     @FXML
     private Label sumRentWithFineLabel;
     
-  
+    @FXML
+    void payAcc(ActionEvent event) {
+        Button button = (Button) event.getSource();
+        String id = button.getId();
+        
+        Label label;
+        switch(id) {
+            case "communal":
+                label = isPaidCommunalField;
+                break;
+            case "taxLand":
+                label = isPaidTaxLandField;
+                break;
+            case "rent":
+                label = isPaidRentField;
+                break;
+            default:
+                label = null;
+        }
+        boolean isPaid = !Util.stringToBool(label.getText());
+        label.setText(Util.boolToString(isPaid));
+        
+        if (isPaid)
+            button.setText("Отменить");
+        else
+            button.setText("Оплатить");
+    }
     
     @FXML
     private Label costWaterLabel;
