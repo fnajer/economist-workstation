@@ -34,8 +34,9 @@ public class MonthModel {
                     + "(id, number, date, cost, index_cost, fine, count_water,"
                     + "count_electricity, count_heading, paid_rent, paid_communal,"
                     + "id_contract, tariff_water, tariff_electricity, tariff_heading,"
-                    + "count_garbage, tariff_garbage, tax_land, paid_tax_land) "
-                    + "values(NULL,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                    + "count_garbage, tariff_garbage, tax_land, paid_tax_land,"
+                    + "cost_internet, cost_telephone) "
+                    + "values(NULL,?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
             ps.setInt(1, month.getNumber());
             ps.setString(2, month.getDate());
             ps.setDouble(3, month.getCost());
@@ -54,6 +55,8 @@ public class MonthModel {
             ps.setDouble(16, month.getTariffGarbage());
             ps.setDouble(17, month.getTaxLand());
             ps.setBoolean(18, month.getPaidTaxLand());
+            ps.setDouble(19, month.getCostInternet());
+            ps.setDouble(20, month.getCostTelephone());
             
             ps.executeUpdate();
             System.out.println("Добавлено: " + month.getNumber());
@@ -107,7 +110,7 @@ public class MonthModel {
                             "count_electricity=?, count_heading=?, paid_rent=?, paid_communal=?,\n" +
                             "tariff_water=?, tariff_electricity=?, tariff_heading=?,\n" +
                             "index_cost=?, count_garbage=?, tariff_garbage=?,\n" +
-                            "tax_land=?, paid_tax_land=?\n" +
+                            "tax_land=?, paid_tax_land=?, cost_internet=?, cost_telephone=?\n" +
                             "WHERE id=?;");
             ps.setString(1, month.getDate());
             ps.setDouble(2, month.getCost());
@@ -125,7 +128,9 @@ public class MonthModel {
             ps.setDouble(14, month.getTariffGarbage());
             ps.setDouble(15, month.getTaxLand());
             ps.setBoolean(16, month.getPaidTaxLand());
-            ps.setInt(17, id);
+            ps.setDouble(17, month.getCostInternet());
+            ps.setDouble(18, month.getCostTelephone());
+            ps.setInt(19, id);
             
             ps.executeUpdate();
             System.out.println("Изменено: " + month.getNumber());
@@ -217,7 +222,8 @@ public class MonthModel {
                 rs.getString("date"), rs.getDouble("cost"),
                 rs.getDouble("index_cost"), rs.getDouble("fine"), rs.getDouble("count_water"),
                 rs.getDouble("count_electricity"), rs.getDouble("count_heading"),
-                rs.getDouble("count_garbage"), rs.getBoolean("paid_rent"),
+                rs.getDouble("count_garbage"), rs.getDouble("cost_internet"), 
+                rs.getDouble("cost_telephone"), rs.getBoolean("paid_rent"),
                 rs.getBoolean("paid_communal"), rs.getInt("id_contract"), rs.getDouble("tariff_water"),
                 rs.getDouble("tariff_electricity"), rs.getDouble("tariff_heading"),
                 rs.getDouble("tariff_garbage"), rs.getDouble("tax_land"), rs.getBoolean("paid_tax_land"));
