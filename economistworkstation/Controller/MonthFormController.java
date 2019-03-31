@@ -217,13 +217,62 @@ public class MonthFormController {
     @FXML
     private Label sumRentWithFineLabel;
     
+  
+    
+    @FXML
+    private Label costWaterLabel;
+
+    @FXML
+    private Label costElectricityLabel;
+
+    @FXML
+    private Label costHeadingLabel;
+
+    @FXML
+    private Label costGarbageLabel;
     
     private void initCalc() {
         displaySum();
         addCalcListeners();
     }
     
+    private void displaySum() {
+        setCost(countWaterField, tariffWaterField, costWaterLabel);
+        setCost(countElectricityField, tariffElectricityField, costElectricityLabel);
+        setCost(countHeadingField, tariffHeadingField, costHeadingLabel);
+        setCost(countGarbageField, tariffGarbageField, costGarbageLabel);
+        printSum("communal");
+        setCost(costField, indexCostField, sumRentLabel);
+        printSum("rentFine");
+    }
     
+    private void setCost(TextField count, TextField tariff, Label label) {
+        double total = Double.parseDouble(count.getText()) * Double.parseDouble(tariff.getText());
+        String formatTotal = TagParser.getDecimalFormat(Locale.US).format(total);
+        label.setText(formatTotal);
+    }
+    
+    private void calcSum(Label label, Control ...controls) {
+        double sum = 0;
+        String formatSum;
+        
+        for (Control control: controls) {
+            if (control instanceof Label)
+                sum += Double.parseDouble(((Label) control).getText());
+            else if (control instanceof TextField)
+                sum += Double.parseDouble(((TextField) control).getText());
+        }
+        formatSum = TagParser.getDecimalFormat(Locale.US).format(sum);
+        label.setText(formatSum);
+    }
+    
+    private void printSum(String sumFor) {
+        if (sumFor.equals("communal"))
+            calcSum(sumCommunalLabel, costWaterLabel, costElectricityLabel, costHeadingLabel,
+                    costGarbageLabel, costInternetField, costTelephoneField);
+        else if(sumFor.equals("rentFine"))
+            calcSum(sumRentWithFineLabel, sumRentLabel, fineField);
+    }
    
     public void addCalcListeners() {
         
