@@ -19,6 +19,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 /**
@@ -127,8 +128,21 @@ public class MonthFormController {
         costTelephoneField.setText(Double.toString(month.getCostTelephone()));
         isPaidCommunalField.setText(Util.boolToString(month.getPaidCommunal()));
         
+        setTextAndColor(month.getPaidRent(), isPaidRentField, rentBtn);
+        setTextAndColor(month.getPaidTaxLand(), isPaidTaxLandField, taxLandBtn);
+        setTextAndColor(month.getPaidCommunal(), isPaidCommunalField, communalBtn);
+        
         initCalc();
     }
+    
+    @FXML
+    private Button communalBtn;
+
+    @FXML
+    private Button rentBtn;
+
+    @FXML
+    private Button taxLandBtn;
     
     public boolean isOkClicked() {
         return okClicked;
@@ -224,13 +238,13 @@ public class MonthFormController {
         
         Label label;
         switch(id) {
-            case "communal":
+            case "communalBtn":
                 label = isPaidCommunalField;
                 break;
-            case "taxLand":
+            case "taxLandBtn":
                 label = isPaidTaxLandField;
                 break;
-            case "rent":
+            case "rentBtn":
                 label = isPaidRentField;
                 break;
             default:
@@ -239,10 +253,18 @@ public class MonthFormController {
         boolean isPaid = !Util.stringToBool(label.getText());
         label.setText(Util.boolToString(isPaid));
         
-        if (isPaid)
+        setTextAndColor(isPaid, label, button);
+    }
+    
+    private void setTextAndColor(boolean isPaid, Label label, Button button) {
+        if (isPaid) {
+            label.setTextFill(Color.web("#96DA1B"));
             button.setText("Отменить");
-        else
+        }
+        else {
+            label.setTextFill(Color.web("#DA221B"));
             button.setText("Оплатить");
+        }
     }
     
     @FXML

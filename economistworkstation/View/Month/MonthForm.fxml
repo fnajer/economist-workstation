@@ -151,9 +151,9 @@
                               <Insets left="10.0" right="10.0" />
                            </GridPane.margin>
                         </TextField>
-                        <Button fx:id="communal" mnemonicParsing="false" onAction="#payAcc" text="Оплатить" GridPane.columnIndex="2" GridPane.rowIndex="16" />
-                        <Button fx:id="rent" mnemonicParsing="false" onAction="#payAcc" text="Оплатить" GridPane.columnIndex="2" GridPane.rowIndex="6" />
-                        <Button fx:id="taxLand" mnemonicParsing="false" onAction="#payAcc" text="Оплатить" GridPane.columnIndex="2" GridPane.rowIndex="8" />
+                        <Button fx:id="communalBtn" mnemonicParsing="false" onAction="#payAcc" text="Оплатить" GridPane.columnIndex="2" GridPane.rowIndex="16" />
+                        <Button fx:id="rentBtn" mnemonicParsing="false" onAction="#payAcc" text="Оплатить" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+                        <Button fx:id="taxLandBtn" mnemonicParsing="false" onAction="#payAcc" text="Оплатить" GridPane.columnIndex="2" GridPane.rowIndex="8" />
                         <Label text="Сумма" GridPane.columnIndex="4" GridPane.rowIndex="10" />
                         <Label fx:id="costWaterLabel" text="Label" GridPane.columnIndex="4" GridPane.rowIndex="11" />
                         <Label fx:id="costElectricityLabel" text="Label" GridPane.columnIndex="4" GridPane.rowIndex="12" />
