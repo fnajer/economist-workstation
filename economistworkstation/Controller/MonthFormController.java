@@ -287,6 +287,28 @@ public class MonthFormController {
             return false;
     }}
     
+    private boolean isPositive(TextField tf) {
+        try {
+            double value = Double.parseDouble(tf.getText());
+            System.out.println(value > 0);
+            return value > 0;
+        } catch(NumberFormatException e) {
+            System.out.println(false);
+            return false;
+        }
+    }
+    
+    private void setColorLabels(TextField ...tfs) {
+        for (TextField tf: tfs) {
+            int index = Arrays.asList(this.textFields).indexOf(tf);
+            if (!isPositive(tf)) {
+                labels[index].setTextFill(Color.web("#C8C1C1"));
+            } else {
+                labels[index].setTextFill(Color.web("#0F0A0A"));
+            }
+        }
+    }
+    
     @FXML
     private Label sumCommunalLabel;
 
