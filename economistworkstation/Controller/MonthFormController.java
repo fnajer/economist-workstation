@@ -30,6 +30,67 @@ import javafx.stage.Stage;
 public class MonthFormController {
 
     @FXML
+    private Label costLabel;
+
+    @FXML
+    private Label indexCostLabel;
+
+    @FXML
+    private Label fineLabel;
+
+    @FXML
+    private Label countWaterLabel;
+
+    @FXML
+    private Label countElectricityLabel;
+    
+    @FXML
+    private Label countHeadingLabel;
+    
+    @FXML
+    private Label tariffWaterLabel;
+
+    @FXML
+    private Label tariffHeadingLabel;
+
+    @FXML
+    private Label tariffElectricityLabel;
+    
+    @FXML
+    private Label countGarbageLabel;
+
+    @FXML
+    private Label tariffGarbageLabel;
+    
+    @FXML
+    private Label costInternetLabel;
+
+    @FXML
+    private Label costTelephoneLabel;
+    
+    @FXML
+    private Label taxLandLabel;
+
+    
+    private Label[] labels;
+    private TextField[] textFields;
+    
+    public MonthFormController() {
+        Label[] labels = {costLabel, indexCostLabel, fineLabel, taxLandLabel,
+            countWaterLabel, tariffWaterLabel, countElectricityLabel, 
+            tariffElectricityLabel, countHeadingLabel, tariffHeadingLabel,
+            countGarbageLabel, tariffGarbageLabel, costInternetLabel,
+            costTelephoneLabel};
+        TextField[] textFields = {costField, indexCostField, fineField, taxLandField,
+            countWaterField, tariffWaterField, countElectricityField,
+            tariffElectricityField, countHeadingField, tariffHeadingField,
+            countGarbageField, tariffGarbageField, costInternetField,
+            costTelephoneField};
+        this.labels = labels;
+        this.textFields = textFields;
+    }
+
+    @FXML
     private TextField costField;
 
     @FXML
@@ -221,6 +282,20 @@ public class MonthFormController {
             
             return false;
     }}
+    
+//    private void setNullValues(Control ...controls) {
+//        double sum = 0;
+//        String formatSum;
+//        
+//        for (Control control: controls) {
+//            if (control instanceof Label)
+//                sum += Double.parseDouble(((Label) control).getText());
+//            else if (control instanceof TextField)
+//                sum += Double.parseDouble(((TextField) control).getText());
+//        }
+//        formatSum = TagParser.getDecimalFormat(Locale.US).format(sum);
+//        label.setText(formatSum);
+//    }
     
     @FXML
     private Label sumCommunalLabel;
