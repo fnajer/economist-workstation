@@ -342,6 +342,12 @@ public class Month {
     static public double calcCostGarbage(Month month) {
         return month.getCountGarbage() * month.getTariffGarbage();
     }
+    static public double calcCostInternet(Month month) {
+        return month.getCostInternet();
+    }
+    static public double calcCostTelephone(Month month) {
+        return month.getCostTelephone();
+    }
     
     @Override
     public String toString() {

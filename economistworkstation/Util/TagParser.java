@@ -154,9 +154,31 @@ public class TagParser {
                 TagParser.sumForWords += resultDouble;
                 return;
             }
-             if ("<costGarbage>".equals(foundedTag)) {
+            if ("<costGarbage>".equals(foundedTag)) {
                 String costGarbage = Double.toString(Month.calcCostGarbage(month));
                 newValue = costGarbage;
+                
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                double resultDouble = Double.parseDouble(resultString);
+                cell.setCellValue(resultDouble);
+                
+                TagParser.sumForWords += resultDouble;
+                return;
+            }
+            if ("<costInternet>".equals(foundedTag)) {
+                String costInternet = Double.toString(Month.calcCostInternet(month));
+                newValue = costInternet;
+                
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                double resultDouble = Double.parseDouble(resultString);
+                cell.setCellValue(resultDouble);
+                
+                TagParser.sumForWords += resultDouble;
+                return;
+            }
+            if ("<costTelephone>".equals(foundedTag)) {
+                String costTelephone = Double.toString(Month.calcCostTelephone(month));
+                newValue = costTelephone;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
                 double resultDouble = Double.parseDouble(resultString);
