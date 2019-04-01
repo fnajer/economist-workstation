@@ -51,12 +51,11 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label text="Стоимость" GridPane.rowIndex="4" />
-                        <Label text="Индекс стоимости" GridPane.columnIndex="2" GridPane.rowIndex="4" />
-                        <Label text="Пеня" GridPane.rowIndex="5" />
-                        <Label text="Вода, м³" GridPane.rowIndex="11" />
-                        <Label text="Электроэнергия, кВт" GridPane.rowIndex="12" />
-                        <Label text="Теплоэнергия, м²|Гкал" GridPane.rowIndex="13" />
+                        <Label fx:id="costLabel" text="Стоимость" GridPane.rowIndex="4" />
+                        <Label fx:id="indexCostLabel" text="Индекс стоимости" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                        <Label fx:id="fineLabel" text="Пеня" GridPane.rowIndex="5" />
+                        <Label fx:id="countWaterLabel" text="Вода, м³" GridPane.rowIndex="11" />
+                        <Label fx:id="countElectricityLabel" text="Электроэнергия, кВт" GridPane.rowIndex="12" />
                          <TextField fx:id="costField" GridPane.columnIndex="1" GridPane.rowIndex="4">
                            <GridPane.margin>
                               <Insets left="10.0" right="10.0" />
@@ -95,10 +94,10 @@
                         <Label text="Состояние" GridPane.rowIndex="6" />
                         <Label fx:id="isPaidRentField" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="6" />
                         <Label prefHeight="17.0" prefWidth="139.0" text="Коммунальные платежи" GridPane.rowIndex="10" />
-                        <Label text="Тариф на воду" GridPane.columnIndex="2" GridPane.rowIndex="11" />
-                        <Label text="Тариф на теплоэнергии" GridPane.columnIndex="2" GridPane.rowIndex="13" />
+                        <Label fx:id="tariffWaterLabel" text="Тариф на воду" GridPane.columnIndex="2" GridPane.rowIndex="11" />
+                        <Label fx:id="tariffHeadingLabel" text="Тариф на теплоэнергии" GridPane.columnIndex="2" GridPane.rowIndex="13" />
                         <Label text="Состояние" GridPane.rowIndex="16" />
-                        <Label text="Тариф на электроэнергию" GridPane.columnIndex="2" GridPane.rowIndex="12" />
+                        <Label fx:id="tariffElectricityLabel" text="Тариф на электроэнергию" GridPane.columnIndex="2" GridPane.rowIndex="12" />
                         <Label fx:id="isPaidCommunalField" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="16" />
                         <TextField fx:id="tariffWaterField" GridPane.columnIndex="3" GridPane.rowIndex="11">
                            <GridPane.margin>
@@ -115,8 +114,8 @@
                               <Insets left="10.0" right="10.0" />
                            </GridPane.margin>
                         </TextField>
-                        <Label text="Мусор, м²|м³" GridPane.rowIndex="14" />
-                        <Label text="Тариф на мусор" GridPane.columnIndex="2" GridPane.rowIndex="14" />
+                        <Label fx:id="countGarbageLabel" text="Мусор, м²|м³" GridPane.rowIndex="14" />
+                        <Label fx:id="tariffGarbageLabel" text="Тариф на мусор" GridPane.columnIndex="2" GridPane.rowIndex="14" />
                         <TextField fx:id="countGarbageField" GridPane.columnIndex="1" GridPane.rowIndex="14">
                            <GridPane.margin>
                               <Insets left="10.0" right="10.0" />
@@ -132,15 +131,15 @@
                               <Insets left="10.0" right="10.0" />
                            </GridPane.margin>
                         </TextField>
-                        <Label text="Земельный налог, руб" GridPane.rowIndex="7" />
+                        <Label fx:id="taxLandLabel" text="Земельный налог, руб" GridPane.rowIndex="7" />
                         <Label text="Состояние" GridPane.rowIndex="8" />
                         <Label fx:id="isPaidTaxLandField" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                         <Label fx:id="numberCommunalAccField" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                         <Label fx:id="numberRentAccField" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label text="Номер счета аренды:" GridPane.rowIndex="1" />
                         <Label text="Номер коммунального счета" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-                        <Label text="Интернет, руб" GridPane.rowIndex="15" />
-                        <Label text="Телефон, руб" GridPane.columnIndex="2" GridPane.rowIndex="15" />
+                        <Label fx:id="costInternetLabel" text="Интернет, руб" GridPane.rowIndex="15" />
+                        <Label fx:id="costTelephoneLabel" text="Телефон, руб" GridPane.columnIndex="2" GridPane.rowIndex="15" />
                         <TextField fx:id="costInternetField" GridPane.columnIndex="1" GridPane.rowIndex="15">
                            <GridPane.margin>
                               <Insets left="10.0" right="10.0" />
@@ -163,7 +162,11 @@
                         <Label text="Сумма" GridPane.columnIndex="4" GridPane.rowIndex="3" />
                         <Label fx:id="sumRentLabel" text="Label" GridPane.columnIndex="4" GridPane.rowIndex="4" />
                         <Label fx:id="sumRentWithFineLabel" text="Label" GridPane.columnIndex="4" GridPane.rowIndex="6" />
+                        <Label fx:id="countHeadingLabel" text="Теплоэнергия, м²|Гкал" GridPane.rowIndex="13" />
                      </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
                   </GridPane>
                </children>
             </AnchorPane>
