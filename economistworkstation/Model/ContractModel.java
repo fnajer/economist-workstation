@@ -9,6 +9,7 @@ import economistworkstation.Database;
 import economistworkstation.EconomistWorkstation;
 import economistworkstation.Entity.Contract;
 import economistworkstation.Entity.Month;
+import economistworkstation.Entity.Renter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -127,8 +128,8 @@ public class ContractModel {
     public static ObservableList<Contract> getContracts() {
         ObservableList contracts = FXCollections.observableArrayList();
         try {
-            ResultSet rs = db.stmt.executeQuery("SELECT * FROM CONTRACT");
-            
+            ResultSet rs = db.stmt.executeQuery("SELECT * FROM CONTRACT "
+                    + "LEFT JOIN RENTER ON CONTRACT.id_renter=RENTER.id");
             
             while (rs.next()) {
                 contracts.add(createObjectContract(rs));
@@ -164,6 +165,12 @@ public class ContractModel {
         Contract contract = new Contract(rs.getString("date_start"), rs.getString("date_end"), rs.getInt("id_renter"), 
         rs.getInt("id_building"));
         contract.setId(rs.getInt("id"));
+        
+        String checkString = rs.getString("subject");
+        if (checkString != null) {
+            Renter renter = RenterModel.createObjectRenter(rs);
+            contract.setRenter(renter);
+        }
         
         return contract;
     }

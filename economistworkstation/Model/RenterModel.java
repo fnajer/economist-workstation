@@ -115,7 +115,7 @@ public class RenterModel {
         return renter;
     }
     
-    private static Renter createObjectRenter(ResultSet rs) throws SQLException {
+    public static Renter createObjectRenter(ResultSet rs) throws SQLException {
         Renter renter = new Renter(rs.getString("first_name"), rs.getString("last_name"),
             rs.getString("patronymic"), rs.getString("address"), rs.getString("birthday"),
             rs.getString("subject"));

@@ -6,6 +6,7 @@
 package economistworkstation.Entity;
 
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -20,6 +21,7 @@ public class Contract {
     private final StringProperty dateEnd;
     private final IntegerProperty idRenter;
     private final IntegerProperty idBuilding;
+    private Renter renter;
     
     public Contract() {
         this(null, null, 0, 0);
@@ -30,7 +32,8 @@ public class Contract {
        this.dateStart = new SimpleStringProperty(dateStart);
        this.dateEnd = new SimpleStringProperty(dateEnd);
        this.idRenter = new SimpleIntegerProperty(idRenter); 
-       this.idBuilding = new SimpleIntegerProperty(idBuilding); 
+       this.idBuilding = new SimpleIntegerProperty(idBuilding);
+       this.renter = null;
     }
     
     public int getId() {
@@ -43,6 +46,7 @@ public class Contract {
     
     public IntegerProperty idProperty() {
         return id;
+
     }
     
     public String getDateStart() {
@@ -87,6 +91,18 @@ public class Contract {
 
     public void setIdBuilding(int idBuilding) {
         this.idBuilding.set(idBuilding);
+    }
+    
+    public Renter getRenter() {
+        return renter;
+    }
+
+    public void setRenter(Renter renter) {
+        this.renter = renter;
+    }
+    
+    public StringProperty renterProperty() {
+        return new SimpleStringProperty(renter.getFullName());
     }
     
     @Override

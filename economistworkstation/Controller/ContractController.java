@@ -232,7 +232,7 @@ public class ContractController implements Initializable, BaseController {
         contractTable.setItems(contracts);
         
         numberContractColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        idRenterColumn.setCellValueFactory(new PropertyValueFactory<>("idRenter"));
+        idRenterColumn.setCellValueFactory(new PropertyValueFactory<>("renter"));
         
         // Очистка дополнительной информации об адресате.
         showDetails(null);
