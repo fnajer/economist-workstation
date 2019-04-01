@@ -9,6 +9,7 @@ import economistworkstation.Entity.Month;
 import economistworkstation.Util.TagParser;
 import economistworkstation.Util.Util;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -28,7 +29,7 @@ import javafx.stage.Stage;
  * @author fnajer
  */
 public class MonthFormController {
-
+    
     @FXML
     private Label costLabel;
 
@@ -75,7 +76,7 @@ public class MonthFormController {
     private Label[] labels;
     private TextField[] textFields;
     
-    public MonthFormController() {
+    private void setConstArrays() {
         Label[] labels = {costLabel, indexCostLabel, fineLabel, taxLandLabel,
             countWaterLabel, tariffWaterLabel, countElectricityLabel, 
             tariffElectricityLabel, countHeadingLabel, tariffHeadingLabel,
@@ -193,6 +194,9 @@ public class MonthFormController {
         setTextAndColor(month.getPaidTaxLand(), isPaidTaxLandField, taxLandBtn);
         setTextAndColor(month.getPaidCommunal(), isPaidCommunalField, communalBtn);
         
+        setConstArrays();
+        setColorLabels(textFields);
+        
         initCalc();
     }
     
@@ -283,20 +287,6 @@ public class MonthFormController {
             return false;
     }}
     
-//    private void setNullValues(Control ...controls) {
-//        double sum = 0;
-//        String formatSum;
-//        
-//        for (Control control: controls) {
-//            if (control instanceof Label)
-//                sum += Double.parseDouble(((Label) control).getText());
-//            else if (control instanceof TextField)
-//                sum += Double.parseDouble(((TextField) control).getText());
-//        }
-//        formatSum = TagParser.getDecimalFormat(Locale.US).format(sum);
-//        label.setText(formatSum);
-//    }
-    
     @FXML
     private Label sumCommunalLabel;
 
@@ -370,23 +360,38 @@ public class MonthFormController {
     }
     
     private void setCost(TextField count, TextField tariff, Label label) {
-        double total = Double.parseDouble(count.getText()) * Double.parseDouble(tariff.getText());
-        String formatTotal = TagParser.getDecimalFormat(Locale.US).format(total);
-        label.setText(formatTotal);
+        try {
+            double total = Double.parseDouble(count.getText()) * Double.parseDouble(tariff.getText());
+            if (total < 0) throw new NumberFormatException();
+            String formatTotal = TagParser.getDecimalFormat(Locale.US).format(total);
+            label.setText(formatTotal);
+        } catch(NumberFormatException e) {
+            label.setText("...");    
+        }
     }
     
     private void calcSum(Label label, Control ...controls) {
-        double sum = 0;
-        String formatSum;
-        
-        for (Control control: controls) {
-            if (control instanceof Label)
-                sum += Double.parseDouble(((Label) control).getText());
-            else if (control instanceof TextField)
-                sum += Double.parseDouble(((TextField) control).getText());
+        try {
+            double sum = 0;
+            double value;
+            String formatSum;
+
+            for (Control control: controls) {
+                if (control instanceof Label) {
+                    value = Double.parseDouble(((Label) control).getText());
+                    if (value < 0) throw new NumberFormatException();
+                    sum += value;
+                } else if(control instanceof TextField) {
+                    value = Double.parseDouble(((TextField) control).getText());
+                    if (value < 0) throw new NumberFormatException();
+                    sum += value;
+                }
+            }
+            formatSum = TagParser.getDecimalFormat(Locale.US).format(sum);
+            label.setText(formatSum);
+        } catch(NumberFormatException e) {
+            label.setText("...");
         }
-        formatSum = TagParser.getDecimalFormat(Locale.US).format(sum);
-        label.setText(formatSum);
     }
     
     private void printSum(String sumFor) {
@@ -402,55 +407,72 @@ public class MonthFormController {
         countWaterField.textProperty().addListener((observable, oldValue, newValue) -> {
             setCost(countWaterField, tariffWaterField, costWaterLabel);
             printSum("communal");
+            setColorLabels(countWaterField);
         });
         tariffWaterField.textProperty().addListener((observable, oldValue, newValue) -> {
             setCost(countWaterField, tariffWaterField, costWaterLabel);
             printSum("communal");
+            setColorLabels(tariffWaterField);
         });
         
         countElectricityField.textProperty().addListener((observable, oldValue, newValue) -> {
             setCost(countElectricityField, tariffElectricityField, costElectricityLabel);
             printSum("communal");
+            setColorLabels(countElectricityField);
         });
         tariffElectricityField.textProperty().addListener((observable, oldValue, newValue) -> {
             setCost(countElectricityField, tariffElectricityField, costElectricityLabel);
             printSum("communal");
+            setColorLabels(tariffElectricityField);
         });
         
         countHeadingField.textProperty().addListener((observable, oldValue, newValue) -> {
            setCost(countHeadingField, tariffHeadingField, costHeadingLabel);
            printSum("communal");
+           setColorLabels(countHeadingField);
         });
         tariffHeadingField.textProperty().addListener((observable, oldValue, newValue) -> {
             setCost(countHeadingField, tariffHeadingField, costHeadingLabel);
             printSum("communal");
+            setColorLabels(tariffHeadingField);
         });
         
         countGarbageField.textProperty().addListener((observable, oldValue, newValue) -> {
            setCost(countGarbageField, tariffGarbageField, costGarbageLabel);
            printSum("communal");
+           setColorLabels(countGarbageField);
         });
         tariffGarbageField.textProperty().addListener((observable, oldValue, newValue) -> {
             setCost(countGarbageField, tariffGarbageField, costGarbageLabel);
             printSum("communal");
+            setColorLabels(tariffGarbageField);
         });
         costInternetField.textProperty().addListener((observable, oldValue, newValue) -> {
             printSum("communal");
+            setColorLabels(costInternetField);
         });
         costTelephoneField.textProperty().addListener((observable, oldValue, newValue) -> {
             printSum("communal");
+            setColorLabels(costTelephoneField);
         });
         
         costField.textProperty().addListener((observable, oldValue, newValue) -> {
             setCost(costField, indexCostField, sumRentLabel);
             printSum("rentFine");
+            setColorLabels(costField);
         });
         indexCostField.textProperty().addListener((observable, oldValue, newValue) -> {
             setCost(costField, indexCostField, sumRentLabel);
             printSum("rentFine");
+            setColorLabels(indexCostField);
         });
         fineField.textProperty().addListener((observable, oldValue, newValue) -> {
             printSum("rentFine");
+            setColorLabels(fineField);
+        });
+        
+        taxLandField.textProperty().addListener((observable, oldValue, newValue) -> {
+            setColorLabels(taxLandField);
         });
     }
 }
