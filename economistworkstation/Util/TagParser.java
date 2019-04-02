@@ -11,15 +11,18 @@ import economistworkstation.Entity.Contract;
 import economistworkstation.Entity.Month;
 import economistworkstation.Entity.Renter;
 import economistworkstation.Entity.User;
+import economistworkstation.ExcelCreator;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 
 /**
  *
@@ -91,6 +94,10 @@ public class TagParser {
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
                 double resultDouble = Double.parseDouble(resultString);
+                
+                if (rowWillDeleted(resultDouble, cell))
+                    return; 
+                
                 cell.setCellValue(resultDouble);
                 
                 TagParser.sumForWords += resultDouble;
@@ -102,6 +109,10 @@ public class TagParser {
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
                 double resultDouble = Double.parseDouble(resultString);
+                
+                if (rowWillDeleted(resultDouble, cell))
+                    return; 
+                
                 cell.setCellValue(resultDouble);
                 
                 TagParser.sumForWords += resultDouble;
@@ -127,6 +138,10 @@ public class TagParser {
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
                 double resultDouble = Double.parseDouble(resultString);
+                
+                if (rowWillDeleted(resultDouble, cell))
+                    return; 
+                
                 cell.setCellValue(resultDouble);
                 
                 TagParser.sumForWords += resultDouble;
@@ -138,6 +153,10 @@ public class TagParser {
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
                 double resultDouble = Double.parseDouble(resultString);
+                
+                if (rowWillDeleted(resultDouble, cell))
+                    return; 
+                
                 cell.setCellValue(resultDouble);
                 
                 TagParser.sumForWords += resultDouble;
@@ -149,6 +168,10 @@ public class TagParser {
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
                 double resultDouble = Double.parseDouble(resultString);
+                
+                if (rowWillDeleted(resultDouble, cell))
+                    return; 
+                
                 cell.setCellValue(resultDouble);
                 
                 TagParser.sumForWords += resultDouble;
@@ -160,6 +183,10 @@ public class TagParser {
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
                 double resultDouble = Double.parseDouble(resultString);
+                
+                if (rowWillDeleted(resultDouble, cell))
+                    return; 
+                
                 cell.setCellValue(resultDouble);
                 
                 TagParser.sumForWords += resultDouble;
@@ -171,6 +198,10 @@ public class TagParser {
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
                 double resultDouble = Double.parseDouble(resultString);
+                
+                if (rowWillDeleted(resultDouble, cell))
+                    return; 
+                
                 cell.setCellValue(resultDouble);
                 
                 TagParser.sumForWords += resultDouble;
@@ -182,6 +213,10 @@ public class TagParser {
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
                 double resultDouble = Double.parseDouble(resultString);
+                
+                if (rowWillDeleted(resultDouble, cell))
+                    return; 
+                
                 cell.setCellValue(resultDouble);
                 
                 TagParser.sumForWords += resultDouble;
@@ -252,6 +287,18 @@ public class TagParser {
             cell.setCellValue(resultString);
             cellString = resultString;
         }
+    }
+    
+    public static ArrayList<Integer> rowsForDelete = new ArrayList<Integer>();
+    
+    private static boolean rowWillDeleted(double value, Cell cell) {
+        if (value <= 0) {
+            Row row = cell.getRow();
+            int rowIndex = row.getRowNum();
+            rowsForDelete.add(rowIndex);
+            return true;
+        }
+        return false;
     }
     
     public static DecimalFormat getDecimalFormat(Locale locale) {
