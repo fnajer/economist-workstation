@@ -30,6 +30,7 @@ import org.apache.poi.ss.usermodel.Row;
  */
 public class TagParser {
     public static double sumForWords;
+    public static String typeDoc;
     
     public static void convertTags (ContractData data) {
         Cell cell = data.getCell();
@@ -124,6 +125,12 @@ public class TagParser {
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
                 double resultDouble = Double.parseDouble(resultString);
+                
+                if ("calculation".equals(TagParser.typeDoc)) {
+                    int index = cell.getRow().getRowNum() - 1;
+                    Cell extraCell = cell.getRow().getSheet().getRow(index).getCell(0);
+                    rowWillDeleted(resultDouble, extraCell);
+                }
                 
                 if (rowWillDeleted(resultDouble, cell))
                     return; 
@@ -310,6 +317,14 @@ public class TagParser {
         if (value <= 0) {
             Row row = cell.getRow();
             int rowIndex = row.getRowNum();
+            
+            if (!rowsForDelete.isEmpty()) {
+//                if (rowIndex == rowsForDelete.get(rowsForDelete.size() - 1) ||
+//                        rowIndex == rowsForDelete.get(rowsForDelete.size() - 2))
+                if (rowsForDelete.contains(rowIndex))
+                    return true;
+            }
+                
             rowsForDelete.add(rowIndex);
             return true;
         }

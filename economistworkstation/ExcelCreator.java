@@ -81,7 +81,7 @@ public class ExcelCreator {
     
     public static void printAccountPayment(Contract contract, Month month) throws IOException {
        
-        File file = new File("C:\\Users\\fnajer\\Desktop\\workbook.xls");
+        File file = new File("C:\\Users\\fnajer\\Desktop\\workbook1.xls");
 
         HSSFWorkbook workbook;
         try (FileInputStream inputStream = new FileInputStream(file)) {
@@ -114,6 +114,7 @@ public class ExcelCreator {
             Building building = BuildingModel.getBuilding(contract.getIdBuilding());
             ContractData data = new ContractData(null, month, building, renter, contract, workbook);
             
+            TagParser.typeDoc = "calculation";
             iterateCells(workbook, TagParser::convertTags, data);
         }
 
