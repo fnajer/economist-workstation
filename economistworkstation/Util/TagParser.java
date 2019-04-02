@@ -103,6 +103,21 @@ public class TagParser {
                 TagParser.sumForWords += resultDouble;
                 return;
             }
+            if ("<fine>".equals(foundedTag)) {
+                String sumRent = getDecimalFormat(Locale.US).format(month.getFine());
+                newValue = sumRent;
+                
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                double resultDouble = Double.parseDouble(resultString);
+                
+                if (rowWillDeleted(resultDouble, cell))
+                    return; 
+                
+                cell.setCellValue(resultDouble);
+                
+                TagParser.sumForWords += resultDouble;
+                return;
+            }
             if ("<taxLand>".equals(foundedTag)) {
                 String taxLand = getDecimalFormat(Locale.US).format(month.getTaxLand());
                 newValue = taxLand;
