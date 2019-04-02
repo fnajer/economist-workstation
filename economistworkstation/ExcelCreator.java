@@ -19,12 +19,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -41,7 +43,9 @@ import org.apache.poi.ss.usermodel.Workbook;
 public class ExcelCreator {
     public static void iterateCells(HSSFWorkbook workbook, Consumer<ContractData> method, ContractData data) {
         TagParser.sumForWords = 0;
+        TagParser.rowsForDelete.clear();
         for (Sheet sheet : workbook) {
+            ExcelCreator.sheet = sheet;
             for (Row row : sheet) {
                 for (Cell cell : row) {
                     CellType cellType = cell.getCellType();
@@ -52,8 +56,28 @@ public class ExcelCreator {
                 }
             }
         }
+        
+        int deletion = 0;
+        for (int row : TagParser.rowsForDelete) {
+            removeRow(row - deletion);
+            deletion++;
+        }
     }
+    
+    private static Sheet sheet;
 
+    public static void removeRow(int rowIndex) {
+        int lastRowNum=sheet.getLastRowNum();
+        if(rowIndex>=0&&rowIndex<lastRowNum){
+            sheet.shiftRows(rowIndex+1,lastRowNum, -1);
+        }
+        if(rowIndex==lastRowNum){
+            Row removingRow=sheet.getRow(rowIndex);
+            if(removingRow!=null){
+                sheet.removeRow(removingRow);
+            }
+        }
+    }
     
     public static void printAccountPayment(Contract contract, Month month) throws IOException {
        
