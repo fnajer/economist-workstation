@@ -6,6 +6,7 @@
 package economistworkstation.Controller;
 
 import economistworkstation.EconomistWorkstation;
+import economistworkstation.ExcelCreator;
 import economistworkstation.Model.MonthModel;
 import java.io.IOException;
 import java.net.URL;
@@ -101,6 +102,11 @@ public class MenuController implements Initializable {
         alert.setContentText("Переназначение номеров завершено.");
         alert.showAndWait();
         contracts.fire();
+    }
+    
+    @FXML
+    private void printCalculationAll() throws IOException {
+        ExcelCreator.printCalculationAll();
     }
 
     /**

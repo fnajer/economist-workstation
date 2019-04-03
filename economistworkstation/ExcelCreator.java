@@ -144,5 +144,32 @@ public class ExcelCreator {
         return workbook;
     }
     
-   
+    private static String process;
+    private static int indexRow;
+    private static int indexColumn;
+    
+    
+    
+    public static void printCalculationAll() throws IOException {
+        OutputStream out;
+        HSSFWorkbook workbook = new HSSFWorkbook();
+                
+        Contract contract = ContractModel.getContract(51);
+        ObservableList<Month> months = MonthModel.getMonths(contract.getId());
+
+        ExcelCreator.process = "printAll";
+        HSSFWorkbook oneCalcWb = printAccountCalculation(contract, months.get(0));
+        rewriteWb(workbook, oneCalcWb);
+
+        out = new FileOutputStream("C:\\Users\\fnajer\\Desktop\\workbookCalcAllNew.xls");
+        workbook.write(out);
+
+//        id++;
+//        
+//        workbook = printAccountCalculation(contract, months.get(1));
+//        workbook.write(out);
+        out.close();
+
+        System.out.println("Обновлен документ 'Общие расчеты'");
+    }
 }

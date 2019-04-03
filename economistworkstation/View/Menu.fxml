@@ -26,6 +26,7 @@
       <Menu mnemonicParsing="false" text="Арендатор">
          <items>
             <MenuItem fx:id="renters" mnemonicParsing="false" onAction="#showList" text="Показать список" />
+            <MenuItem mnemonicParsing="false" onAction="#printCalculationAll" text="Вывод всех расчетов" />
          </items>
       </Menu>
       <Menu mnemonicParsing="false" text="Здание">
