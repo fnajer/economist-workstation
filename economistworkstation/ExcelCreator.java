@@ -10,6 +10,8 @@ import economistworkstation.Entity.Contract;
 import economistworkstation.Entity.Month;
 import economistworkstation.Entity.Renter;
 import economistworkstation.Model.BuildingModel;
+import economistworkstation.Model.ContractModel;
+import economistworkstation.Model.MonthModel;
 import economistworkstation.Model.RenterModel;
 import economistworkstation.Util.Money;
 import economistworkstation.Util.TagParser;
@@ -25,11 +27,13 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javafx.collections.ObservableList;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
 import static org.apache.poi.ss.usermodel.CellType.STRING;
 import org.apache.poi.ss.usermodel.Row;
@@ -43,6 +47,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 public class ExcelCreator {
     public static void iterateCells(HSSFWorkbook workbook, Consumer<ContractData> method, ContractData data) {
         TagParser.sumForWords = 0;
+        TagParser.rowsForClear.clear();
         TagParser.rowsForDelete.clear();
         for (Sheet sheet : workbook) {
             ExcelCreator.sheet = sheet;
@@ -57,6 +62,10 @@ public class ExcelCreator {
             }
         }
         
+        for (int row : TagParser.rowsForClear) {
+            clearRow(row);
+        }
+        
         int deletion = 0;
         for (int row : TagParser.rowsForDelete) {
             removeRow(row - deletion);
@@ -66,6 +75,13 @@ public class ExcelCreator {
     
     private static Sheet sheet;
 
+    public static void clearRow(int rowIndex) {
+        Row row = sheet.getRow(rowIndex);
+        for (Cell cell : row) {
+            cell.setCellValue("");
+        }
+    }
+    
     public static void removeRow(int rowIndex) {
         int lastRowNum=sheet.getLastRowNum();
         if(rowIndex>=0&&rowIndex<lastRowNum){
@@ -81,7 +97,7 @@ public class ExcelCreator {
     
     public static void printAccountPayment(Contract contract, Month month) throws IOException {
        
-        File file = new File("C:\\Users\\fnajer\\Desktop\\workbook1.xls");
+        File file = new File("C:\\Users\\fnajer\\Desktop\\workbook.xls");
 
         HSSFWorkbook workbook;
         try (FileInputStream inputStream = new FileInputStream(file)) {
@@ -91,9 +107,8 @@ public class ExcelCreator {
             Building building = BuildingModel.getBuilding(contract.getIdBuilding());
             ContractData data = new ContractData(null, month, building, renter, contract, workbook);
             
+            TagParser.typeDoc = "account";
             iterateCells(workbook, TagParser::convertTags, data);
-//            HSSFSheet sheet = workbook.getSheetAt(0);
-//            HSSFCell cell = sheet.getRow(1).getCell(2);
         }
 
         try (OutputStream out = new FileOutputStream("C:\\Users\\fnajer\\Desktop\\workbookNew.xls")) {
@@ -102,7 +117,7 @@ public class ExcelCreator {
         System.out.println("Обновлен документ 'Счет для оплаты'");
     }
     
-    public static void printAccountCalculation(Contract contract, Month month) throws IOException {
+    public static HSSFWorkbook printAccountCalculation(Contract contract, Month month) throws IOException {
        
         File file = new File("C:\\Users\\fnajer\\Desktop\\workbookCalc.xls");
 
@@ -117,10 +132,17 @@ public class ExcelCreator {
             TagParser.typeDoc = "calculation";
             iterateCells(workbook, TagParser::convertTags, data);
         }
+        
+        if ("printAll".equals(ExcelCreator.process))
+            return workbook;
 
         try (OutputStream out = new FileOutputStream("C:\\Users\\fnajer\\Desktop\\workbookCalcNew.xls")) {
             workbook.write(out);
         }
-        System.out.println("Обновлен документ 'Счет для оплаты'");
+        
+        System.out.println("Обновлен документ 'Расчет для оплаты'");
+        return workbook;
     }
+    
+   
 }

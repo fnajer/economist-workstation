@@ -96,9 +96,6 @@ public class TagParser {
                 resultString = cellString.replaceAll(foundedTag, newValue);
                 double resultDouble = Double.parseDouble(resultString);
                 
-                if (rowWillDeleted(resultDouble, cell))
-                    return; 
-                
                 cell.setCellValue(resultDouble);
                 
                 TagParser.sumForWords += resultDouble;
@@ -111,8 +108,10 @@ public class TagParser {
                 resultString = cellString.replaceAll(foundedTag, newValue);
                 double resultDouble = Double.parseDouble(resultString);
                 
-                if (rowWillDeleted(resultDouble, cell))
-                    return; 
+                if ("account".equals(TagParser.typeDoc)) {
+                    if (rowWillClear(resultDouble, cell))
+                        return;
+                }
                 
                 cell.setCellValue(resultDouble);
                 
@@ -126,14 +125,10 @@ public class TagParser {
                 resultString = cellString.replaceAll(foundedTag, newValue);
                 double resultDouble = Double.parseDouble(resultString);
                 
-                if ("calculation".equals(TagParser.typeDoc)) {
-                    int index = cell.getRow().getRowNum() - 1;
-                    Cell extraCell = cell.getRow().getSheet().getRow(index).getCell(0);
-                    rowWillDeleted(resultDouble, extraCell);
+                if ("account".equals(TagParser.typeDoc)) {
+                    if (rowWillClear(resultDouble, cell))
+                        return;
                 }
-                
-                if (rowWillDeleted(resultDouble, cell))
-                    return; 
                 
                 cell.setCellValue(resultDouble);
                 
@@ -161,8 +156,9 @@ public class TagParser {
                 resultString = cellString.replaceAll(foundedTag, newValue);
                 double resultDouble = Double.parseDouble(resultString);
                 
-                if (rowWillDeleted(resultDouble, cell))
-                    return; 
+                if ("account".equals(TagParser.typeDoc))
+                    if (rowWillDelete(resultDouble, cell))
+                        return;
                 
                 cell.setCellValue(resultDouble);
                 
@@ -176,8 +172,9 @@ public class TagParser {
                 resultString = cellString.replaceAll(foundedTag, newValue);
                 double resultDouble = Double.parseDouble(resultString);
                 
-                if (rowWillDeleted(resultDouble, cell))
-                    return; 
+                if ("account".equals(TagParser.typeDoc))
+                    if (rowWillDelete(resultDouble, cell))
+                        return; 
                 
                 cell.setCellValue(resultDouble);
                 
@@ -191,8 +188,13 @@ public class TagParser {
                 resultString = cellString.replaceAll(foundedTag, newValue);
                 double resultDouble = Double.parseDouble(resultString);
                 
-                if (rowWillDeleted(resultDouble, cell))
-                    return; 
+                if ("account".equals(TagParser.typeDoc))
+                    if (rowWillDelete(resultDouble, cell))
+                        return;
+                
+                if ("calculation".equals(TagParser.typeDoc)) 
+                    if (rowWillClear(resultDouble, cell))
+                        return; 
                 
                 cell.setCellValue(resultDouble);
                 
@@ -206,8 +208,9 @@ public class TagParser {
                 resultString = cellString.replaceAll(foundedTag, newValue);
                 double resultDouble = Double.parseDouble(resultString);
                 
-                if (rowWillDeleted(resultDouble, cell))
-                    return; 
+                if ("account".equals(TagParser.typeDoc))
+                    if (rowWillDelete(resultDouble, cell))
+                        return;
                 
                 cell.setCellValue(resultDouble);
                 
@@ -221,8 +224,13 @@ public class TagParser {
                 resultString = cellString.replaceAll(foundedTag, newValue);
                 double resultDouble = Double.parseDouble(resultString);
                 
-                if (rowWillDeleted(resultDouble, cell))
-                    return; 
+                if ("account".equals(TagParser.typeDoc))
+                    if (rowWillDelete(resultDouble, cell))
+                        return;
+                
+                if ("calculation".equals(TagParser.typeDoc)) 
+                    if (rowWillClear(resultDouble, cell))
+                        return; 
                 
                 cell.setCellValue(resultDouble);
                 
@@ -236,8 +244,13 @@ public class TagParser {
                 resultString = cellString.replaceAll(foundedTag, newValue);
                 double resultDouble = Double.parseDouble(resultString);
                 
-                if (rowWillDeleted(resultDouble, cell))
-                    return; 
+                if ("account".equals(TagParser.typeDoc))
+                    if (rowWillDelete(resultDouble, cell))
+                        return;
+                
+                if ("calculation".equals(TagParser.typeDoc)) 
+                    if (rowWillClear(resultDouble, cell))
+                        return; 
                 
                 cell.setCellValue(resultDouble);
                 
@@ -304,26 +317,35 @@ public class TagParser {
                 newValue = user.getFullName();
             }
             
-            
             resultString = cellString.replaceAll(foundedTag, newValue);
             cell.setCellValue(resultString);
             cellString = resultString;
         }
     }
     
+    public static ArrayList<Integer> rowsForClear = new ArrayList<Integer>();
     public static ArrayList<Integer> rowsForDelete = new ArrayList<Integer>();
     
-    private static boolean rowWillDeleted(double value, Cell cell) {
+    private static boolean rowWillClear(double value, Cell cell) {
         if (value <= 0) {
             Row row = cell.getRow();
             int rowIndex = row.getRowNum();
             
-            if (!rowsForDelete.isEmpty()) {
-//                if (rowIndex == rowsForDelete.get(rowsForDelete.size() - 1) ||
-//                        rowIndex == rowsForDelete.get(rowsForDelete.size() - 2))
-                if (rowsForDelete.contains(rowIndex))
-                    return true;
-            }
+            if (!rowsForClear.isEmpty() && rowsForClear.contains(rowIndex)) 
+                return true;
+                
+            rowsForClear.add(rowIndex);
+            return true;
+        }
+        return false;
+    }
+    private static boolean rowWillDelete(double value, Cell cell) {
+        if (value <= 0) {
+            Row row = cell.getRow();
+            int rowIndex = row.getRowNum();
+            
+            if (!rowsForDelete.isEmpty() && rowsForDelete.contains(rowIndex)) 
+                return true;
                 
             rowsForDelete.add(rowIndex);
             return true;
