@@ -161,7 +161,7 @@ public class ContractModel {
         return contract;
     }
     
-    private static Contract createObjectContract(ResultSet rs) throws SQLException {
+    public static Contract createObjectContract(ResultSet rs) throws SQLException {
         Contract contract = new Contract(rs.getString("date_start"), rs.getString("date_end"), rs.getInt("id_renter"), 
         rs.getInt("id_building"));
         contract.setId(rs.getInt("id"));

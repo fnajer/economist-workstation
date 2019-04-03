@@ -84,7 +84,7 @@ public class BuildingModel {
         return buildings;
     }
     
-    private static Building createObjectBuilding(ResultSet rs) throws SQLException {
+    public static Building createObjectBuilding(ResultSet rs) throws SQLException {
         Building building = new Building(rs.getString("type"), rs.getDouble("square"), rs.getDouble("cost_balance"), 
         rs.getDouble("cost_residue"));
         building.setId(rs.getInt("id"));

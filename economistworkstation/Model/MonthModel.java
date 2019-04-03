@@ -5,6 +5,7 @@
  */
 package economistworkstation.Model;
 
+import economistworkstation.ContractData;
 import economistworkstation.Database;
 import economistworkstation.EconomistWorkstation;
 import economistworkstation.Entity.Month;
@@ -160,6 +161,32 @@ public class MonthModel {
             }
             
             System.out.println("Извлечение месяцев завершено.");
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return months;
+    }
+    
+    public static ObservableList<ContractData> getContractData(LocalDate month) {
+        ObservableList months = FXCollections.observableArrayList();
+        LocalDate nextMonth = month.plusMonths(1);
+        
+        try {
+            ResultSet rs = db.stmt.executeQuery("SELECT * FROM MONTH LEFT JOIN "
+                    + "CONTRACT ON MONTH.ID_CONTRACT=CONTRACT.id "
+                    + "WHERE date >= '" + month + "' AND date < '" + nextMonth + "' "
+                    + "ORDER BY id_contract;");
+            
+            
+            while (rs.next()) {
+                months.add(new ContractData(null, createObjectMonth(rs),
+                        BuildingModel.createObjectBuilding(rs),
+                        RenterModel.createObjectRenter(rs), 
+                        ContractModel.createObjectContract(rs), null));
+            }
+            
+            System.out.println("Извлечение целых контрактов завершено.");
             
         } catch (SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
