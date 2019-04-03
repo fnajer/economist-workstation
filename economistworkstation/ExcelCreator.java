@@ -148,7 +148,43 @@ public class ExcelCreator {
     private static int indexRow;
     private static int indexColumn;
     
-    
+    private static void rewriteWb(HSSFWorkbook workbook, HSSFWorkbook oneCalcWb) {
+        sheet = workbook.createSheet("new sheet");
+        for (Sheet sheet1 : oneCalcWb) {
+            for (Row row : sheet1) {
+                indexRow = row.getRowNum();
+//                CellStyle cs = row.getRowStyle();
+                short width = row.getHeight();
+                Row newRow = sheet.createRow(indexRow);
+                newRow.setHeight(width);
+                
+//                workbook.getFontAt(indexRow)
+//                CellStyle ns = workbook.createCellStyle();
+//                ns.cloneStyleFrom(cs);
+//                newRow.setRowStyle(ns);
+                for (Cell cell : row) {
+                    CellType cellType = cell.getCellType();
+                    CellStyle cellStyle = cell.getCellStyle();
+                    CellStyle newStyle = workbook.createCellStyle();
+                   
+                    newStyle.cloneStyleFrom(cellStyle);
+                    indexColumn = cell.getColumnIndex();
+                    System.out.println(indexColumn);
+                    Cell newCell = newRow.createCell(indexColumn, STRING);
+                    newCell.setCellValue("");
+                    newCell.setCellStyle(newStyle);
+                    
+                    int i = sheet1.getColumnWidth(indexColumn);
+//                   sheet.setColumnWidth(i);
+                    if (cellType == STRING) {
+                        //System.out.println(newCell);
+                        newCell.setCellValue(cell.getStringCellValue());
+                    }
+                    
+                }
+            }
+        }
+    }
     
     public static void printCalculationAll() throws IOException {
         OutputStream out;
