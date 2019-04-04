@@ -213,8 +213,10 @@ public class ExcelCreator {
         for (Sheet sheet : workbook) {
             ExcelCreator.sheet = sheet;
             int indexStartRow = addTemplateRows(workbook, data.size());
+            TagParser.indexStartRow = indexStartRow + 1;
             int i = 0;
             ContractData currentContractData = data.get(i);
+            TagParser.num = 1;
             for (Row row : sheet) {
                 if (row.getRowNum() > indexStartRow && row.getRowNum() < indexStartRow + data.size()) {
                     i++;

@@ -23,6 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.util.CellReference;
 
 /**
  *
@@ -31,6 +32,8 @@ import org.apache.poi.ss.usermodel.Row;
 public class TagParser {
     public static double sumForWords;
     public static String typeDoc;
+    public static int num;
+    public static int indexStartRow;
     
     public static boolean findTag(Cell cell, String srcPattern) {
         String cellString = cell.getStringCellValue();
@@ -88,7 +91,7 @@ public class TagParser {
                 newValue = formattedString;
             }
             if ("<square>".equals(foundedTag)) {
-                newValue = Double.toString(building.getSquare());
+                newValue = getDecimalFormat(Locale.getDefault()).format(building.getSquare());
             }
             if ("<monthNameAndYear>".equals(foundedTag)) {
                 LocalDate date = LocalDate.parse(month.getDate());
@@ -366,6 +369,12 @@ public class TagParser {
                 User user = new User();
                 newValue = user.getFullName();
             }
+            //acruals statement
+            if ("<num>".equals(foundedTag)) {
+                cell.setCellValue(num++);
+                return;
+            }
+            
             
             resultString = cellString.replaceAll(foundedTag, newValue);
             cell.setCellValue(resultString);
