@@ -184,6 +184,31 @@ public class ExcelCreator {
     
     
     
+    private static void addTemplateRows(Workbook workbook, int contractsSize) {
+        int indexStartRow = findRow(workbook, "<num>");
+        if (indexStartRow != -1)
+            for (int i = indexStartRow + 1; i < contractsSize + indexStartRow; i++) {
+                copyRow(workbook, sheet, indexStartRow, indexStartRow+1);
+            }
+    }
+    
+    public static void buildAcr(Workbook workbook, Consumer<ContractData> method,
+            ObservableList<ContractData> data) {
+        for (Sheet sheet : workbook) {
+            ExcelCreator.sheet = sheet;
+            addTemplateRows(workbook, data.size());
+            for (Row row : sheet) {
+                for (Cell cell : row) {
+                    CellType cellType = cell.getCellType();
+                    if (cellType == STRING) {
+                        //data.setCell(cell);
+                        //method.accept(data);
+                    }
+                }
+            }
+        }
+    }
+    
     public static void printAcruals() throws IOException {
         File file = new File("C:\\Users\\fnajer\\Desktop\\workbookAcr.xls");
 
