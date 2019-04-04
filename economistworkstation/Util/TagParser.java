@@ -32,6 +32,16 @@ public class TagParser {
     public static double sumForWords;
     public static String typeDoc;
     
+    public static boolean findTag(Cell cell, String srcPattern) {
+        String cellString = cell.getStringCellValue();
+        Pattern pattern = Pattern.compile(srcPattern);
+        Matcher matcher = pattern.matcher(cellString);
+        while(matcher.find()) {
+            return true;
+        }
+        return false;
+    }
+    
     public static void convertTags (ContractData data) {
         Cell cell = data.getCell();
         Month month = data.getMonth();

@@ -182,7 +182,22 @@ public class ExcelCreator {
         }
     }
     
-    
+    public static int findRow(Workbook workbook, String searchString) {
+        boolean isFounded;
+        for (Sheet sheet : workbook) {
+            for (Row row : sheet) {
+                for (Cell cell : row) {
+                    CellType cellType = cell.getCellType();
+                    if (cellType == STRING) {
+                        isFounded = TagParser.findTag(cell, searchString);
+                        if (isFounded)
+                            return cell.getRowIndex();
+                    }
+                }
+            }
+        }
+        return -1;
+    }
     
     private static void addTemplateRows(Workbook workbook, int contractsSize) {
         int indexStartRow = findRow(workbook, "<num>");
