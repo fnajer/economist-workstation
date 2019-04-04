@@ -199,25 +199,32 @@ public class ExcelCreator {
         return -1;
     }
     
-    private static void addTemplateRows(Workbook workbook, int contractsSize) {
+    private static int addTemplateRows(Workbook workbook, int contractsSize) {
         int indexStartRow = findRow(workbook, "<num>");
         if (indexStartRow != -1)
             for (int i = indexStartRow + 1; i < contractsSize + indexStartRow; i++) {
                 copyRow(workbook, sheet, indexStartRow, indexStartRow+1);
             }
+        return indexStartRow;
     }
     
     public static void buildAcr(Workbook workbook, Consumer<ContractData> method,
             ObservableList<ContractData> data) {
         for (Sheet sheet : workbook) {
             ExcelCreator.sheet = sheet;
-            addTemplateRows(workbook, data.size());
+            int indexStartRow = addTemplateRows(workbook, data.size());
+            int i = 0;
+            ContractData currentContractData = data.get(i);
             for (Row row : sheet) {
+                if (row.getRowNum() > indexStartRow && row.getRowNum() < indexStartRow + data.size()) {
+                    i++;
+                    currentContractData = data.get(i);
+                }
                 for (Cell cell : row) {
                     CellType cellType = cell.getCellType();
                     if (cellType == STRING) {
-                        //data.setCell(cell);
-                        //method.accept(data);
+                        currentContractData.setCell(cell);
+                        method.accept(currentContractData);
                     }
                 }
             }
@@ -232,7 +239,7 @@ public class ExcelCreator {
         try (FileInputStream inputStream = new FileInputStream(file)) {
             workbook = new HSSFWorkbook(inputStream);
             
-            LocalDate data = LocalDate.parse("2019-06-01");
+            LocalDate data = LocalDate.parse("2019-05-01");
             fullContracts = MonthModel.getContractData(data);
             
             TagParser.typeDoc = "acrual";
