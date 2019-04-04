@@ -184,6 +184,28 @@ public class ExcelCreator {
     
     
     
+    public static void printAcruals() throws IOException {
+        File file = new File("C:\\Users\\fnajer\\Desktop\\workbookAcr.xls");
+
+        Workbook workbook;
+        ObservableList<ContractData> fullContracts;
+        try (FileInputStream inputStream = new FileInputStream(file)) {
+            workbook = new HSSFWorkbook(inputStream);
+            
+            LocalDate data = LocalDate.parse("2019-06-01");
+            fullContracts = MonthModel.getContractData(data);
+            
+            TagParser.typeDoc = "acrual";
+            buildAcr(workbook, TagParser::convertTags, fullContracts);
+        }
+        
+        try (OutputStream out = new FileOutputStream("C:\\Users\\fnajer\\Desktop\\workbookAcrNew.xls")) {
+            workbook.write(out);
+        }
+        
+        System.out.println("Создан документ 'Ведомость начислений'");
+    }
+    
     private static void copyRow(Workbook workbook, Sheet worksheet, 
             int sourceRowNum, int destinationRowNum) {
         // Get the source / new row

@@ -21,12 +21,12 @@
         <items>
           <MenuItem fx:id="contracts" mnemonicParsing="false" onAction="#showList" text="Показать список" />
             <MenuItem fx:id="accounts" mnemonicParsing="false" onAction="#updateAccounts" text="Переназначить счета" />
+            <MenuItem mnemonicParsing="false" onAction="#printAcruals" text="Ведомость начисления за месяц" />
         </items>
       </Menu>
       <Menu mnemonicParsing="false" text="Арендатор">
          <items>
             <MenuItem fx:id="renters" mnemonicParsing="false" onAction="#showList" text="Показать список" />
-            <MenuItem mnemonicParsing="false" onAction="#printCalculationAll" text="Вывод всех расчетов" />
          </items>
       </Menu>
       <Menu mnemonicParsing="false" text="Здание">

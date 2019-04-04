@@ -169,18 +169,20 @@ public class MonthModel {
     }
     
     public static ObservableList<ContractData> getContractData(LocalDate month) {
-        ObservableList months = FXCollections.observableArrayList();
+        ObservableList contractsData = FXCollections.observableArrayList();
         LocalDate nextMonth = month.plusMonths(1);
         
         try {
-            ResultSet rs = db.stmt.executeQuery("SELECT * FROM MONTH LEFT JOIN "
-                    + "CONTRACT ON MONTH.ID_CONTRACT=CONTRACT.id "
+            ResultSet rs = db.stmt.executeQuery("SELECT * FROM MONTH "
+                    + "LEFT JOIN CONTRACT ON MONTH.ID_CONTRACT=CONTRACT.id "
+                    + "LEFT JOIN RENTER ON CONTRACT.ID_RENTER=RENTER.id "
+                    + "LEFT JOIN BUILDING ON CONTRACT.ID_BUILDING=BUILDING.id "
                     + "WHERE date >= '" + month + "' AND date < '" + nextMonth + "' "
                     + "ORDER BY id_contract;");
             
             
             while (rs.next()) {
-                months.add(new ContractData(null, createObjectMonth(rs),
+                contractsData.add(new ContractData(null, createObjectMonth(rs),
                         BuildingModel.createObjectBuilding(rs),
                         RenterModel.createObjectRenter(rs), 
                         ContractModel.createObjectContract(rs), null));
@@ -191,7 +193,7 @@ public class MonthModel {
         } catch (SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return months;
+        return contractsData;
     }
     
     public static Month getMonth(int id) {

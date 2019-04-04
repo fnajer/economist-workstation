@@ -105,8 +105,8 @@ public class MenuController implements Initializable {
     }
     
     @FXML
-    private void printCalculationAll() throws IOException {
-        ExcelCreator.printCalculationAll();
+    private void printAcruals() throws IOException {
+        ExcelCreator.printAcruals();
     }
 
     /**
