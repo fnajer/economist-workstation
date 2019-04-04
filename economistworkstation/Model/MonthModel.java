@@ -180,7 +180,6 @@ public class MonthModel {
                     + "WHERE date >= '" + month + "' AND date < '" + nextMonth + "' "
                     + "ORDER BY id_contract;");
             
-            
             while (rs.next()) {
                 contractsData.add(new ContractData(null, createObjectMonth(rs),
                         BuildingModel.createObjectBuilding(rs),

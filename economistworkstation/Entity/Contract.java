@@ -46,7 +46,6 @@ public class Contract {
     
     public IntegerProperty idProperty() {
         return id;
-
     }
     
     public String getDateStart() {

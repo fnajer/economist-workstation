@@ -49,7 +49,7 @@ public class TagParser {
         Building building = data.getBuilding();
         Contract contract = data.getContract();
         String cellString = cell.getStringCellValue();
-                            
+        
         Pattern pattern = Pattern.compile("<\\w+>");
         Matcher matcher = pattern.matcher(cellString);
         while(matcher.find()) {
@@ -78,7 +78,8 @@ public class TagParser {
                 newValue = renter.getFullName();
             }
             if ("<numContract>".equals(foundedTag)) {
-                newValue = Integer.toString(contract.getId());
+                System.out.println(contract.getId());
+                newValue = Integer.toString(month.getIdContract());
             }
             if ("<dateStartContract>".equals(foundedTag)) {
                 LocalDate date = LocalDate.parse(contract.getDateStart());
@@ -106,6 +107,11 @@ public class TagParser {
                 resultString = cellString.replaceAll(foundedTag, newValue);
                 double resultDouble = Double.parseDouble(resultString);
                 
+                if ("acrual".equals(TagParser.typeDoc)) {
+                    if (cellWillClear(resultDouble, cell))
+                        return;
+                }
+                
                 cell.setCellValue(resultDouble);
                 
                 TagParser.sumForWords += resultDouble;
@@ -123,6 +129,11 @@ public class TagParser {
                         return;
                 }
                 
+                if ("acrual".equals(TagParser.typeDoc)) {
+                    if (cellWillClear(resultDouble, cell))
+                        return;
+                }
+                
                 cell.setCellValue(resultDouble);
                 
                 TagParser.sumForWords += resultDouble;
@@ -137,6 +148,11 @@ public class TagParser {
                 
                 if ("account".equals(TagParser.typeDoc)) {
                     if (rowWillClear(resultDouble, cell))
+                        return;
+                }
+                
+                if ("acrual".equals(TagParser.typeDoc)) {
+                    if (cellWillClear(resultDouble, cell))
                         return;
                 }
                 
@@ -170,6 +186,10 @@ public class TagParser {
                     if (rowWillDelete(resultDouble, cell))
                         return;
                 
+                if ("acrual".equals(TagParser.typeDoc))
+                    if (cellWillClear(resultDouble, cell))
+                        return;
+                
                 cell.setCellValue(resultDouble);
                 
                 TagParser.sumForWords += resultDouble;
@@ -185,6 +205,10 @@ public class TagParser {
                 if ("account".equals(TagParser.typeDoc))
                     if (rowWillDelete(resultDouble, cell))
                         return; 
+                
+                if ("acrual".equals(TagParser.typeDoc))
+                    if (cellWillClear(resultDouble, cell))
+                        return;
                 
                 cell.setCellValue(resultDouble);
                 
@@ -206,6 +230,10 @@ public class TagParser {
                     if (rowWillClear(resultDouble, cell))
                         return; 
                 
+                if ("acrual".equals(TagParser.typeDoc))
+                    if (cellWillClear(resultDouble, cell))
+                        return;
+                
                 cell.setCellValue(resultDouble);
                 
                 TagParser.sumForWords += resultDouble;
@@ -220,6 +248,10 @@ public class TagParser {
                 
                 if ("account".equals(TagParser.typeDoc))
                     if (rowWillDelete(resultDouble, cell))
+                        return;
+                
+                if ("acrual".equals(TagParser.typeDoc))
+                    if (cellWillClear(resultDouble, cell))
                         return;
                 
                 cell.setCellValue(resultDouble);
@@ -242,6 +274,10 @@ public class TagParser {
                     if (rowWillClear(resultDouble, cell))
                         return; 
                 
+                if ("acrual".equals(TagParser.typeDoc))
+                    if (cellWillClear(resultDouble, cell))
+                        return;
+                
                 cell.setCellValue(resultDouble);
                 
                 TagParser.sumForWords += resultDouble;
@@ -261,6 +297,10 @@ public class TagParser {
                 if ("calculation".equals(TagParser.typeDoc)) 
                     if (rowWillClear(resultDouble, cell))
                         return; 
+                
+                if ("acrual".equals(TagParser.typeDoc))
+                    if (cellWillClear(resultDouble, cell))
+                        return;
                 
                 cell.setCellValue(resultDouble);
                 
@@ -358,6 +398,13 @@ public class TagParser {
                 return true;
                 
             rowsForDelete.add(rowIndex);
+            return true;
+        }
+        return false;
+    }
+    private static boolean cellWillClear(double value, Cell cell) {
+        if (value <= 0) {
+            cell.setCellValue("");
             return true;
         }
         return false;
