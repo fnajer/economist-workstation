@@ -374,7 +374,49 @@ public class TagParser {
                 cell.setCellValue(num++);
                 return;
             }
-            
+            if ("<sumMonth>".equals(foundedTag)) {
+                int rowIndex = cell.getRowIndex() + 1;
+                cell.setCellFormula("SUM(D" + rowIndex + ":N" + rowIndex + ")");
+                return;
+            }
+            if ("<sumOne>".equals(foundedTag)) {
+                int rowIndex = cell.getRowIndex() - 1;
+                int columnNumber = cell.getColumnIndex();
+                String columnLetter = CellReference.convertNumToColString(columnNumber);
+                cell.setCellFormula("SUM(" + columnLetter + indexStartRow + ":" + columnLetter + rowIndex + ")");
+                return;
+            }
+            if ("<sumRentAcr>".equals(foundedTag)) {
+                int rowIndex = cell.getRowIndex();
+                cell.setCellFormula("SUM(D" + rowIndex + ":G" + rowIndex + ")");
+                return;
+            }
+            if ("<sumCommunalAcr>".equals(foundedTag)) {
+                int rowIndex = cell.getRowIndex();
+                cell.setCellFormula("SUM(I" + rowIndex + ":N" + rowIndex + ")");
+                return;
+            }
+            if ("<sumAcr>".equals(foundedTag)) {
+                int rowIndex = cell.getRowIndex() + 1;
+                cell.setCellFormula("SUM(D" + rowIndex + ":N" + rowIndex + ")");
+                return;
+            }
+            if ("<squareInNum>".equals(foundedTag)) {
+                String square = getDecimalFormat(Locale.US).format(building.getSquare());
+                newValue = square;
+                
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                double resultDouble = Double.parseDouble(resultString);
+                
+                if ("acrual".equals(TagParser.typeDoc)) {
+                    if (cellWillClear(resultDouble, cell))
+                        return;
+                }
+                
+                cell.setCellValue(resultDouble);
+                
+                return;
+            }
             
             resultString = cellString.replaceAll(foundedTag, newValue);
             cell.setCellValue(resultString);
