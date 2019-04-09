@@ -8,13 +8,10 @@ package economistworkstation.Controller;
 import economistworkstation.Entity.Month;
 import economistworkstation.Util.TagParser;
 import economistworkstation.Util.Util;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.Locale;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
@@ -29,131 +26,148 @@ import javafx.stage.Stage;
  * @author fnajer
  */
 public class MonthFormController {
+    @FXML
+    private Label numberField;
+    @FXML
+    private Label numberRentAccField;
+    @FXML
+    private Label numberServicesAccField;
+    @FXML
+    private Label startPeriodField;
+    @FXML
+    private Label endPeriodField;
     
+    //calculation
     @FXML
-    private Label costLabel;
-
+    private Label costRentLabel;
     @FXML
-    private Label indexCostLabel;
-
+    private TextField costRentField;
+    @FXML
+    private TextField indexCostRentField;
+    @FXML
+    private Label sumRentLabel;
+    @FXML
+    private Label addCostRentLabel;
+    @FXML
+    private Label sumAddCostRentLabel;
+    //payment
+    @FXML
+    private Label paymentRentField;
+    @FXML
+    private Label statePaymentRentLabel;
+    @FXML
+    private Label balancePaymentRentLabel;
+    
+    //calculation
+    @FXML
+    private TextField fineField;
     @FXML
     private Label fineLabel;
-
     @FXML
-    private Label countWaterLabel;
-
+    private Label addCostFineLabel;
     @FXML
-    private Label countElectricityLabel;
+    private Label sumAddCostFineLabel;
+    @FXML
+    private Label sumRentWithFineLabel;
+    //payment
+    @FXML
+    private Label paymentFineField;
+    @FXML
+    private Label statePaymentFineLabel;
+    @FXML
+    private Label balancePaymentFineLabel;
     
+    //calculation
     @FXML
-    private Label countHeadingLabel;
-    
-    @FXML
-    private Label tariffWaterLabel;
-
-    @FXML
-    private Label tariffHeadingLabel;
-
-    @FXML
-    private Label tariffElectricityLabel;
-    
-    @FXML
-    private Label countGarbageLabel;
-
-    @FXML
-    private Label tariffGarbageLabel;
-    
-    @FXML
-    private Label costInternetLabel;
-
-    @FXML
-    private Label costTelephoneLabel;
-    
+    private TextField taxLandField;
     @FXML
     private Label taxLandLabel;
-
+    @FXML
+    private Label addCostTaxLandLabel;
+    @FXML
+    private Label sumAddCostTaxLandLabel;
+    //payment
+    @FXML
+    private Label paymentTaxLandField;
+    @FXML
+    private Label statePaymentTaxLandLabel;
+    @FXML
+    private Label balancePaymentTaxLandLabel;
+    
+    //calculation
+    @FXML
+    private TextField countWaterField;
+    @FXML
+    private Label countWaterLabel;
+    @FXML
+    private TextField tariffWaterField;
+    @FXML
+    private TextField countElectricityField;
+    @FXML
+    private Label countElectricityLabel;
+    @FXML
+    private TextField tariffElectricityField;
+    @FXML
+    private TextField costHeadingField;
+    @FXML
+    private Label costHeadingLabel;
+    @FXML
+    private TextField costGarbageField;
+    @FXML
+    private Label costGarbageLabel;
+    @FXML
+    private TextField costInternetField;
+    @FXML
+    private Label costInternetLabel;
+    @FXML
+    private TextField costTelephoneField;
+    @FXML
+    private Label costTelephoneLabel;
+    @FXML
+    private Label sumServicesLabel;
+    @FXML
+    private Label addCostServicesLabel;
+    //payment
+    @FXML
+    private Label paymentServicesField;
+    @FXML
+    private Label statePaymentServicesLabel;
+    @FXML
+    private Label balancePaymentServicesLabel;
+    
+    //calculation
+    @FXML
+    private TextField costEquipmentField;
+    @FXML
+    private Label costEquipmentLabel;
+    @FXML
+    private Label addCostEquipmentLabel;
+    @FXML
+    private Label sumAddCostEquipmentLabel;
+    //payment
+    @FXML
+    private Label paymentEquipmentField;
+    @FXML
+    private Label statePaymentEquipmentLabel;
+    @FXML
+    private Label balancePaymentEquipmentLabel;
     
     private Label[] labels;
     private TextField[] textFields;
     
-    private void setConstArrays() {
-        Label[] labels = {costLabel, indexCostLabel, fineLabel, taxLandLabel,
-            countWaterLabel, tariffWaterLabel, countElectricityLabel, 
-            tariffElectricityLabel, countHeadingLabel, tariffHeadingLabel,
-            countGarbageLabel, tariffGarbageLabel, costInternetLabel,
+    private void setMatchArrays() {
+        this.labels = new Label[]{costRentLabel, costRentLabel, fineLabel, 
+            taxLandLabel, countWaterLabel, countWaterLabel, countElectricityLabel, 
+            countElectricityLabel, costHeadingLabel,
+            costGarbageLabel, costInternetLabel,
             costTelephoneLabel};
-        TextField[] textFields = {costField, indexCostField, fineField, taxLandField,
-            countWaterField, tariffWaterField, countElectricityField,
-            tariffElectricityField, countHeadingField, tariffHeadingField,
-            countGarbageField, tariffGarbageField, costInternetField,
+        this.textFields = new TextField[]{costRentField, indexCostRentField, fineField, 
+            taxLandField, countWaterField, tariffWaterField, countElectricityField,
+            tariffElectricityField, costHeadingField,
+            costGarbageField, costInternetField,
             costTelephoneField};
-        this.labels = labels;
-        this.textFields = textFields;
     }
 
-    @FXML
-    private TextField costField;
-
-    @FXML
-    private TextField indexCostField;
-
-    @FXML
-    private TextField fineField;
-
-    @FXML
-    private TextField taxLandField;
-    
-    @FXML
-    private Label isPaidTaxLandField;
-    
-    @FXML
-    private TextField countHeadingField;
-
-    @FXML
-    private TextField countElectricityField;
-
-    @FXML
-    private TextField countWaterField;
-    
-    @FXML
-    private TextField countGarbageField;
-
-    @FXML
-    private Label numberRentAccField;
-    
-    @FXML
-    private Label numberCommunalAccField;
-    
-    @FXML
-    private Label numberField;
-
-    @FXML
-    private Label dateField;
-
-    @FXML
-    private Label isPaidRentField;
-
-    @FXML
-    private Label isPaidCommunalField;
-
-    @FXML
-    private TextField tariffWaterField;
-
-    @FXML
-    private TextField tariffElectricityField;
-
-    @FXML
-    private TextField tariffHeadingField;
-    
-    @FXML
-    private TextField tariffGarbageField;
-    
-    @FXML
-    private TextField costInternetField;
-    
-    @FXML
-    private TextField costTelephoneField;
-    
     private Stage dialogStage;
     private Month month;
     private boolean okClicked = false;
@@ -167,13 +181,13 @@ public class MonthFormController {
 
         numberField.setText(Integer.toString(month.getNumber()));
         numberRentAccField.setText(Integer.toString(month.getNumberRentAcc()));
-        numberCommunalAccField.setText(Integer.toString(month.getNumberCommunalAcc()));
-        dateField.setText(month.getDate());
+        numberServicesAccField.setText(Integer.toString(month.getNumberCommunalAcc()));
+        endPeriodField.setText(month.getDate());
         
-        costField.setText(Double.toString(month.getCost()));
-        indexCostField.setText(Double.toString(month.getIndexCost()));
+        costRentField.setText(Double.toString(month.getCost()));
+        indexCostRentField.setText(Double.toString(month.getIndexCost()));
         fineField.setText(Double.toString(month.getFine()));
-        isPaidRentField.setText(Util.boolToString(month.getPaidRent()));
+        paidRentField.setText(Util.boolToString(month.getPaidRent()));
 
         taxLandField.setText(Double.toString(month.getTaxLand()));
         isPaidTaxLandField.setText(Util.boolToString(month.getPaidTaxLand()));
@@ -182,19 +196,19 @@ public class MonthFormController {
         tariffWaterField.setText(Double.toString(month.getTariffWater()));
         countElectricityField.setText(Double.toString(month.getCountElectricity()));
         tariffElectricityField.setText(Double.toString(month.getTariffElectricity()));
-        countHeadingField.setText(Double.toString(month.getCountHeading()));
+        costHeadingField.setText(Double.toString(month.getCountHeading()));
         tariffHeadingField.setText(Double.toString(month.getTariffHeading()));
-        countGarbageField.setText(Double.toString(month.getCountHeading()));
+        costGarbageField.setText(Double.toString(month.getCountHeading()));
         tariffGarbageField.setText(Double.toString(month.getTariffHeading()));
         costInternetField.setText(Double.toString(month.getCostInternet()));
         costTelephoneField.setText(Double.toString(month.getCostTelephone()));
         isPaidCommunalField.setText(Util.boolToString(month.getPaidCommunal()));
         
-        setTextAndColor(month.getPaidRent(), isPaidRentField, rentBtn);
+        setTextAndColor(month.getPaidRent(), paidRentField, rentBtn);
         setTextAndColor(month.getPaidTaxLand(), isPaidTaxLandField, taxLandBtn);
         setTextAndColor(month.getPaidCommunal(), isPaidCommunalField, communalBtn);
         
-        setConstArrays();
+        setMatchArrays();
         setColorLabels(textFields);
         
         initCalc();
@@ -218,12 +232,12 @@ public class MonthFormController {
         if (isInputValid()) {
  
             month.setNumber(Integer.parseInt(numberField.getText()));
-            month.setDate(dateField.getText());
+            month.setDate(endPeriodField.getText());
             
-            month.setCost(Double.parseDouble(costField.getText()));
-            month.setIndexCost(Double.parseDouble(indexCostField.getText()));
+            month.setCost(Double.parseDouble(costRentField.getText()));
+            month.setIndexCost(Double.parseDouble(indexCostRentField.getText()));
             month.setFine(Double.parseDouble(fineField.getText()));
-            month.setPaidRent(Util.stringToBool(isPaidRentField.getText()));
+            month.setPaidRent(Util.stringToBool(paidRentField.getText()));
 
             month.setTaxLand(Double.parseDouble(taxLandField.getText()));
             month.setPaidTaxLand(Util.stringToBool(isPaidTaxLandField.getText()));
@@ -232,9 +246,9 @@ public class MonthFormController {
             month.setTariffWater(Double.parseDouble(tariffWaterField.getText()));
             month.setCountElectricity(Double.parseDouble(countElectricityField.getText()));
             month.setTariffElectricity(Double.parseDouble(tariffElectricityField.getText()));
-            month.setCountHeading(Double.parseDouble(countHeadingField.getText()));
+            month.setCountHeading(Double.parseDouble(costHeadingField.getText()));
             month.setTariffHeading(Double.parseDouble(tariffHeadingField.getText()));
-            month.setCountGarbage(Double.parseDouble(countGarbageField.getText()));
+            month.setCountGarbage(Double.parseDouble(costGarbageField.getText()));
             month.setTariffGarbage(Double.parseDouble(tariffGarbageField.getText()));
             month.setCostInternet(Double.parseDouble(costInternetField.getText()));
             month.setCostTelephone(Double.parseDouble(costTelephoneField.getText()));
@@ -312,11 +326,6 @@ public class MonthFormController {
     @FXML
     private Label sumCommunalLabel;
 
-    @FXML
-    private Label sumRentLabel;
-
-    @FXML
-    private Label sumRentWithFineLabel;
     
     @FXML
     void payAcc(ActionEvent event) {
@@ -332,7 +341,7 @@ public class MonthFormController {
                 label = isPaidTaxLandField;
                 break;
             case "rentBtn":
-                label = isPaidRentField;
+                label = paidRentField;
                 break;
             default:
                 label = null;
@@ -374,10 +383,10 @@ public class MonthFormController {
     private void displaySum() {
         setCost(countWaterField, tariffWaterField, costWaterLabel);
         setCost(countElectricityField, tariffElectricityField, costElectricityLabel);
-        setCost(countHeadingField, tariffHeadingField, costHeadingLabel);
-        setCost(countGarbageField, tariffGarbageField, costGarbageLabel);
+        setCost(costHeadingField, tariffHeadingField, costHeadingLabel);
+        setCost(costGarbageField, tariffGarbageField, costGarbageLabel);
         printSum("communal");
-        setCost(costField, indexCostField, sumRentLabel);
+        setCost(costRentField, indexCostRentField, sumRentLabel);
         printSum("rentFine");
     }
     
@@ -448,24 +457,24 @@ public class MonthFormController {
             setColorLabels(tariffElectricityField);
         });
         
-        countHeadingField.textProperty().addListener((observable, oldValue, newValue) -> {
-           setCost(countHeadingField, tariffHeadingField, costHeadingLabel);
+        costHeadingField.textProperty().addListener((observable, oldValue, newValue) -> {
+           setCost(costHeadingField, tariffHeadingField, costHeadingLabel);
            printSum("communal");
-           setColorLabels(countHeadingField);
+           setColorLabels(costHeadingField);
         });
         tariffHeadingField.textProperty().addListener((observable, oldValue, newValue) -> {
-            setCost(countHeadingField, tariffHeadingField, costHeadingLabel);
+            setCost(costHeadingField, tariffHeadingField, costHeadingLabel);
             printSum("communal");
             setColorLabels(tariffHeadingField);
         });
         
-        countGarbageField.textProperty().addListener((observable, oldValue, newValue) -> {
-           setCost(countGarbageField, tariffGarbageField, costGarbageLabel);
+        costGarbageField.textProperty().addListener((observable, oldValue, newValue) -> {
+           setCost(costGarbageField, tariffGarbageField, costGarbageLabel);
            printSum("communal");
-           setColorLabels(countGarbageField);
+           setColorLabels(costGarbageField);
         });
         tariffGarbageField.textProperty().addListener((observable, oldValue, newValue) -> {
-            setCost(countGarbageField, tariffGarbageField, costGarbageLabel);
+            setCost(costGarbageField, tariffGarbageField, costGarbageLabel);
             printSum("communal");
             setColorLabels(tariffGarbageField);
         });
@@ -478,15 +487,15 @@ public class MonthFormController {
             setColorLabels(costTelephoneField);
         });
         
-        costField.textProperty().addListener((observable, oldValue, newValue) -> {
-            setCost(costField, indexCostField, sumRentLabel);
+        costRentField.textProperty().addListener((observable, oldValue, newValue) -> {
+            setCost(costRentField, indexCostRentField, sumRentLabel);
             printSum("rentFine");
-            setColorLabels(costField);
+            setColorLabels(costRentField);
         });
-        indexCostField.textProperty().addListener((observable, oldValue, newValue) -> {
-            setCost(costField, indexCostField, sumRentLabel);
+        indexCostRentField.textProperty().addListener((observable, oldValue, newValue) -> {
+            setCost(costRentField, indexCostRentField, sumRentLabel);
             printSum("rentFine");
-            setColorLabels(indexCostField);
+            setColorLabels(indexCostRentField);
         });
         fineField.textProperty().addListener((observable, oldValue, newValue) -> {
             printSum("rentFine");
