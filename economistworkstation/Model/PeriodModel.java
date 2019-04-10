@@ -53,7 +53,7 @@ public class PeriodModel {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-  
+
     
     public static void addPeriods(int id, int count, Period lastPeriod) {
         LocalDate date = LocalDate.parse(lastPeriod.getEndPeriod());
@@ -231,6 +231,65 @@ public class PeriodModel {
         } catch (SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private static Payment createObjectRent(ResultSet rs) throws SQLException {
+        if(rs.getInt("id_rent") != 0) {
+            Payment rent = new Rent(rs.getDouble("paid_rent"), 
+                    rs.getString("date_paid_rent"),
+                    rs.getDouble("cost"), 
+                    rs.getDouble("index_cost"));
+            rent.setId(rs.getInt("id_rent"));
+            return rent;
+        }
+        return null;
+    }
+    private static Payment createObjectFine(ResultSet rs) throws SQLException {
+        if(rs.getInt("id_fine") != 0) {
+            Payment fine = new Fine(rs.getDouble("paid_fine"), 
+                    rs.getString("date_paid_tax_land"),
+                    rs.getDouble("fine"));
+            fine.setId(rs.getInt("id_fine"));
+            return fine;
+        }
+        return null;
+    }
+    private static Payment createObjectTaxLand(ResultSet rs) throws SQLException {
+        if(rs.getInt("id_tax_land") != 0) {
+            Payment fine = new TaxLand(rs.getDouble("paid_tax_land"), 
+                    rs.getString("date_paid_tax_land"),
+                    rs.getDouble("cost_tax_land"));
+            fine.setId(rs.getInt("id_tax_land"));
+            return fine;
+        }
+        return null;
+    }
+    private static Payment createObjectEquipment(ResultSet rs) throws SQLException {
+        if(rs.getInt("id_equipment") != 0) {
+            Payment fine = new RentEquipment(rs.getDouble("paid_equipment"), 
+                    rs.getString("date_paid_equipment"),
+                    rs.getDouble("cost_equipment"));
+            fine.setId(rs.getInt("id_equipment"));
+            return fine;
+        }
+        return null;
+    }
+    private static Payment createObjectServices(ResultSet rs) throws SQLException {
+        if(rs.getInt("id_services") != 0) {
+            Payment services = new Services(rs.getDouble("paid_services"), 
+                    rs.getString("date_paid_services"),
+                    rs.getDouble("count_water"),
+                    rs.getDouble("count_electricity"), 
+                    rs.getDouble("cost_heading"),
+                    rs.getDouble("cost_garbage"), 
+                    rs.getDouble("cost_internet"), 
+                    rs.getDouble("cost_telephone"),
+                    rs.getDouble("tariff_water"),
+                    rs.getDouble("tariff_electricity"));
+            services.setId(rs.getInt("id_services"));
+            return services;
+        }
+        return null;
     }
     
     private static Period createObjectPeriod(ResultSet rs) throws SQLException {
