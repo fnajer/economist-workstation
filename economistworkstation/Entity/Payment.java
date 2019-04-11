@@ -5,6 +5,8 @@
  */
 package economistworkstation.Entity;
 
+import economistworkstation.Database;
+import java.sql.SQLException;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -16,7 +18,7 @@ import javafx.beans.property.StringProperty;
  *
  * @author fnajer
  */
-public class Payment {
+public abstract class Payment {
     private final IntegerProperty id;
     private final DoubleProperty paid;
     private final StringProperty datePaid;
@@ -30,6 +32,9 @@ public class Payment {
         this.paid = new SimpleDoubleProperty(paid);
         this.datePaid = new SimpleStringProperty(datePaid);
     }
+    
+    public abstract int addPaymentToDb(Database db) throws SQLException;
+    public abstract int updatePaymentToDb(Database db) throws SQLException;
     
     public int getId() {
         return id.get();
