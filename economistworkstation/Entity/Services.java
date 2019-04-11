@@ -5,6 +5,11 @@
  */
 package economistworkstation.Entity;
 
+import economistworkstation.Database;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 
@@ -103,6 +108,64 @@ public class Services extends Payment {
     }
     public double calcCostElectricity(Services services) {
         return services.getCountElectricity() * services.getTariffElectricity();
+    }
+    
+    @Override
+    public int addPaymentToDb(Database db) throws SQLException {
+        int idRent = 0;
+        
+        PreparedStatement ps = db.conn.prepareStatement("insert into Rent "
+                + "(id, paid_services, date_paid_services, count_water, tariff_water, "
+                + "count_electricity, tariff_electricity, cost_meter_heading, "
+                + "cost_meter_garbage, cost_internet, cost_telephone) "
+                + "values(NULL,?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+        ps.setDouble(1, getPaid());
+        ps.setString(2, getDatePaid());
+        ps.setDouble(3, getCountWater());
+        ps.setDouble(4, getTariffWater());
+        ps.setDouble(5, getCountElectricity());
+        ps.setDouble(6, getCostHeading());
+        ps.setDouble(7, getCostGarbage());
+        ps.setDouble(8, getCostInternet());
+        ps.setDouble(9, getCostTelephone());
+
+        ResultSet rs = ps.getGeneratedKeys();
+        
+        if (rs.next()) {
+            idRent = rs.getInt(1);
+        }
+        ps.executeUpdate();
+        System.out.println("Добавлен платеж на аренду помещения: " + idRent);
+        return idRent;
+    }
+    @Override
+    public int updatePaymentToDb(Database db) throws SQLException {
+        int idRent = 0;
+        
+        PreparedStatement ps = db.conn.prepareStatement("UPDATE Rent "
+                + "SET paid_services=?, date_paid_services=?, count_water=?, tariff_water=? "
+                + "count_electricity=?, tariff_electricity=?, cost_meter_heading=?, "
+                + "cost_meter_garbage=?, cost_internet=?, cost_telephone=? "
+                + "WHERE id=?;", Statement.RETURN_GENERATED_KEYS);
+        ps.setDouble(1, getPaid());
+        ps.setString(2, getDatePaid());
+        ps.setDouble(3, getCountWater());
+        ps.setDouble(4, getTariffWater());
+        ps.setDouble(5, getCountElectricity());
+        ps.setDouble(6, getCostHeading());
+        ps.setDouble(7, getCostGarbage());
+        ps.setDouble(8, getCostInternet());
+        ps.setDouble(9, getCostTelephone());
+        ps.setInt(10, getId());
+        
+        ResultSet rs = ps.getGeneratedKeys();
+        
+        if (rs.next()) {
+            idRent = rs.getInt(1);
+        }
+        ps.executeUpdate();
+        System.out.println("Изменен платеж на аренду помещения: " + idRent);
+        return idRent;
     }
    
     @Override
