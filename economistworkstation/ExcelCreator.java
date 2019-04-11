@@ -8,6 +8,7 @@ package economistworkstation;
 import economistworkstation.Entity.Building;
 import economistworkstation.Entity.Contract;
 import economistworkstation.Entity.Month;
+import economistworkstation.Entity.Period;
 import economistworkstation.Entity.Renter;
 import economistworkstation.Model.BuildingModel;
 import economistworkstation.Model.ContractModel;
@@ -97,7 +98,7 @@ public class ExcelCreator {
         }
     }
     
-    public static void printAccountPayment(Contract contract, Month month) throws IOException {
+    public static void printAccountPayment(Contract contract, Period period) throws IOException {
        
         File file = new File("C:\\Users\\fnajer\\Desktop\\workbook.xls");
 
@@ -107,7 +108,7 @@ public class ExcelCreator {
             
             Renter renter = RenterModel.getRenter(contract.getIdRenter());
             Building building = BuildingModel.getBuilding(contract.getIdBuilding());
-            ContractData data = new ContractData(null, month, building, renter, contract, workbook);
+            ContractData data = new ContractData(null, period, building, renter, contract, workbook);
             
             TagParser.typeDoc = "account";
             iterateCells(workbook, TagParser::convertTags, data);
@@ -119,7 +120,7 @@ public class ExcelCreator {
         System.out.println("Обновлен документ 'Счет для оплаты'");
     }
     
-    public static void printAccountCalculation(Contract contract, Month month) throws IOException {
+    public static void printAccountCalculation(Contract contract, Period period) throws IOException {
         File file = new File("C:\\Users\\fnajer\\Desktop\\workbookCalc.xls");
 
         HSSFWorkbook workbook;
@@ -128,7 +129,7 @@ public class ExcelCreator {
             
             Renter renter = RenterModel.getRenter(contract.getIdRenter());
             Building building = BuildingModel.getBuilding(contract.getIdBuilding());
-            ContractData data = new ContractData(null, month, building, renter, contract, workbook);
+            ContractData data = new ContractData(null, period, building, renter, contract, workbook);
             
             TagParser.typeDoc = "calculation";
             iterateCells(workbook, TagParser::convertTags, data);

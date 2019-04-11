@@ -8,6 +8,7 @@ package economistworkstation;
 import economistworkstation.Entity.Building;
 import economistworkstation.Entity.Contract;
 import economistworkstation.Entity.Month;
+import economistworkstation.Entity.Period;
 import economistworkstation.Entity.Renter;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -31,10 +32,10 @@ public class ContractData {
     }
     
       
-    public ContractData(Cell cell, Month month, Building building, Renter renter, 
+    public ContractData(Cell cell, Period period, Building building, Renter renter, 
             Contract contract, HSSFWorkbook workbook) {
        this.cell = new SimpleObjectProperty(cell);
-       this.month = new SimpleObjectProperty(month);
+       this.month = new SimpleObjectProperty(period);
        this.building = new SimpleObjectProperty(building);
        this.renter = new SimpleObjectProperty(renter);
        this.contract = new SimpleObjectProperty(contract);
