@@ -5,6 +5,14 @@
  */
 package economistworkstation.Entity;
 
+import economistworkstation.Database;
+import economistworkstation.EconomistWorkstation;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 
@@ -43,6 +51,50 @@ public class Rent extends Payment {
     
     public double calcSumRent(Rent rent) {
         return rent.getCost() * rent.getIndexCost();
+    }
+    
+    @Override
+    public int addPaymentToDb(Database db) throws SQLException {
+        int idRent = 0;
+        
+        PreparedStatement ps = db.conn.prepareStatement("insert into Rent "
+                + "(id, paid_rent, date_paid_rent, cost, index_cost) "
+                + "values(NULL,?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+        ps.setDouble(1, getPaid());
+        ps.setString(2, getDatePaid());
+        ps.setDouble(3, getCost());
+        ps.setDouble(4, getIndexCost());
+
+        ResultSet rs = ps.getGeneratedKeys();
+        
+        if (rs.next()) {
+            idRent = rs.getInt(1);
+        }
+        ps.executeUpdate();
+        System.out.println("Добавлен платеж на аренду помещения: " + idRent);
+        return idRent;
+    }
+    @Override
+    public int updatePaymentToDb(Database db) throws SQLException {
+        int idRent = 0;
+        
+        PreparedStatement ps = db.conn.prepareStatement("UPDATE Rent "
+                + "SET paid_rent=?, date_paid_rent=?, cost=?, index_cost=? "
+                + "WHERE id=?;", Statement.RETURN_GENERATED_KEYS);
+        ps.setDouble(1, getPaid());
+        ps.setString(2, getDatePaid());
+        ps.setDouble(3, getCost());
+        ps.setDouble(4, getIndexCost());
+        ps.setInt(5, getId());
+        
+        ResultSet rs = ps.getGeneratedKeys();
+        
+        if (rs.next()) {
+            idRent = rs.getInt(1);
+        }
+        ps.executeUpdate();
+        System.out.println("Изменен платеж на аренду помещения: " + idRent);
+        return idRent;
     }
     
     @Override
