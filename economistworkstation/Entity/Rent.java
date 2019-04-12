@@ -54,47 +54,29 @@ public class Rent extends Payment {
     }
     
     @Override
-    public int addPaymentToDb(Database db) throws SQLException {
-        int idRent = 0;
-        
-        PreparedStatement ps = db.conn.prepareStatement("insert into Rent "
+    public PreparedStatement getInsertStatement(Database db) throws SQLException {
+        PreparedStatement ps = db.conn.prepareStatement("INSERT INTO RENT "
                 + "(id, paid_rent, date_paid_rent, cost, index_cost) "
-                + "values(NULL,?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                + "VALUES(NULL,?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         ps.setDouble(1, getPaid());
         ps.setString(2, getDatePaid());
         ps.setDouble(3, getCost());
         ps.setDouble(4, getIndexCost());
-
-        ResultSet rs = ps.getGeneratedKeys();
         
-        if (rs.next()) {
-            idRent = rs.getInt(1);
-        }
-        ps.executeUpdate();
-        System.out.println("Добавлен платеж на аренду помещения: " + idRent);
-        return idRent;
+        return ps;
     }
     @Override
-    public int updatePaymentToDb(Database db) throws SQLException {
-        int idRent = 0;
-        
-        PreparedStatement ps = db.conn.prepareStatement("UPDATE Rent "
+    public PreparedStatement getUpdateStatement(Database db) throws SQLException {
+        PreparedStatement ps = db.conn.prepareStatement("UPDATE RENT "
                 + "SET paid_rent=?, date_paid_rent=?, cost=?, index_cost=? "
-                + "WHERE id=?;", Statement.RETURN_GENERATED_KEYS);
+                + "WHERE id=?", Statement.RETURN_GENERATED_KEYS);
         ps.setDouble(1, getPaid());
         ps.setString(2, getDatePaid());
         ps.setDouble(3, getCost());
         ps.setDouble(4, getIndexCost());
         ps.setInt(5, getId());
         
-        ResultSet rs = ps.getGeneratedKeys();
-        
-        if (rs.next()) {
-            idRent = rs.getInt(1);
-        }
-        ps.executeUpdate();
-        System.out.println("Изменен платеж на аренду помещения: " + idRent);
-        return idRent;
+        return ps;
     }
     
     @Override
