@@ -18,14 +18,14 @@ import javafx.beans.property.SimpleDoubleProperty;
  * @author fnajer
  */
 
-public class RentEquipment extends Payment {
+public class Equipment extends Payment {
     private final DoubleProperty costEquipment;
     
-    public RentEquipment() {
+    public Equipment() {
         this(0.0, null, 0.0);
     }
     
-    public RentEquipment(double paid, String datePaid, double costEquipment) {
+    public Equipment(double paid, String datePaid, double costEquipment) {
         super(paid, datePaid);
         this.costEquipment = new SimpleDoubleProperty(costEquipment);
     }
@@ -38,45 +38,27 @@ public class RentEquipment extends Payment {
     }
     
     @Override
-    public int addPaymentToDb(Database db) throws SQLException {
-        int idFine = 0;
-        
-        PreparedStatement ps = db.conn.prepareStatement("insert into RENTEQUIPMENT "
+    public PreparedStatement getInsertStatement(Database db) throws SQLException {
+        PreparedStatement ps = db.conn.prepareStatement("INSERT INTO EQUIPMENT "
                 + "(id, paid_equipment, date_paid_equipment, cost_equipment) "
-                + "values(NULL,?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                + "VALUES(NULL,?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         ps.setDouble(1, getPaid());
         ps.setString(2, getDatePaid());
         ps.setDouble(3, getCostEquipment());
 
-        ResultSet rs = ps.getGeneratedKeys();
-        
-        if (rs.next()) {
-            idFine = rs.getInt(1);
-        }
-        ps.executeUpdate();
-        System.out.println("Добавлен платеж на аренду помещения: " + idFine);
-        return idFine;
+        return ps;
     }
     @Override
-    public int updatePaymentToDb(Database db) throws SQLException {
-        int idFine = 0;
-        
-        PreparedStatement ps = db.conn.prepareStatement("UPDATE RENTEQUIPMENT "
+    public PreparedStatement getUpdateStatement(Database db) throws SQLException {
+        PreparedStatement ps = db.conn.prepareStatement("UPDATE EQUIPMENT "
                 + "SET paid_equipment=?, date_paid_equipment=?, cost_equipment=? "
-                + "WHERE id=?;", Statement.RETURN_GENERATED_KEYS);
+                + "WHERE id=?", Statement.RETURN_GENERATED_KEYS);
         ps.setDouble(1, getPaid());
         ps.setString(2, getDatePaid());
         ps.setDouble(3, getCostEquipment());
         ps.setInt(4, getId());
         
-        ResultSet rs = ps.getGeneratedKeys();
-        
-        if (rs.next()) {
-            idFine = rs.getInt(1);
-        }
-        ps.executeUpdate();
-        System.out.println("Изменен платеж на аренду помещения: " + idFine);
-        return idFine;
+        return ps;
     }
     
     @Override
