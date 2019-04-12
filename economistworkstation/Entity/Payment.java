@@ -6,6 +6,7 @@
 package economistworkstation.Entity;
 
 import economistworkstation.Database;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -33,8 +34,8 @@ public abstract class Payment {
         this.datePaid = new SimpleStringProperty(datePaid);
     }
     
-    public abstract int addPaymentToDb(Database db) throws SQLException;
-    public abstract int updatePaymentToDb(Database db) throws SQLException;
+    public abstract PreparedStatement getInsertStatement(Database db) throws SQLException;
+    public abstract PreparedStatement getUpdateStatement(Database db) throws SQLException;
     
     public int getId() {
         return id.get();
