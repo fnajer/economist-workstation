@@ -111,14 +111,12 @@ public class Services extends Payment {
     }
     
     @Override
-    public int addPaymentToDb(Database db) throws SQLException {
-        int idRent = 0;
-        
-        PreparedStatement ps = db.conn.prepareStatement("insert into Rent "
+    public PreparedStatement getInsertStatement(Database db) throws SQLException{
+        PreparedStatement ps = db.conn.prepareStatement("INSERT INTO SERVICES "
                 + "(id, paid_services, date_paid_services, count_water, tariff_water, "
                 + "count_electricity, tariff_electricity, cost_meter_heading, "
                 + "cost_meter_garbage, cost_internet, cost_telephone) "
-                + "values(NULL,?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+                + "VALUES(NULL,?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         ps.setDouble(1, getPaid());
         ps.setString(2, getDatePaid());
         ps.setDouble(3, getCountWater());
@@ -128,25 +126,16 @@ public class Services extends Payment {
         ps.setDouble(7, getCostGarbage());
         ps.setDouble(8, getCostInternet());
         ps.setDouble(9, getCostTelephone());
-
-        ResultSet rs = ps.getGeneratedKeys();
         
-        if (rs.next()) {
-            idRent = rs.getInt(1);
-        }
-        ps.executeUpdate();
-        System.out.println("Добавлен платеж на аренду помещения: " + idRent);
-        return idRent;
+        return ps;
     }
     @Override
-    public int updatePaymentToDb(Database db) throws SQLException {
-        int idRent = 0;
-        
-        PreparedStatement ps = db.conn.prepareStatement("UPDATE Rent "
+    public PreparedStatement getUpdateStatement(Database db) throws SQLException {
+        PreparedStatement ps = db.conn.prepareStatement("UPDATE SERVICES "
                 + "SET paid_services=?, date_paid_services=?, count_water=?, tariff_water=? "
                 + "count_electricity=?, tariff_electricity=?, cost_meter_heading=?, "
                 + "cost_meter_garbage=?, cost_internet=?, cost_telephone=? "
-                + "WHERE id=?;", Statement.RETURN_GENERATED_KEYS);
+                + "WHERE id=?", Statement.RETURN_GENERATED_KEYS);
         ps.setDouble(1, getPaid());
         ps.setString(2, getDatePaid());
         ps.setDouble(3, getCountWater());
@@ -158,14 +147,7 @@ public class Services extends Payment {
         ps.setDouble(9, getCostTelephone());
         ps.setInt(10, getId());
         
-        ResultSet rs = ps.getGeneratedKeys();
-        
-        if (rs.next()) {
-            idRent = rs.getInt(1);
-        }
-        ps.executeUpdate();
-        System.out.println("Изменен платеж на аренду помещения: " + idRent);
-        return idRent;
+        return ps;
     }
    
     @Override
