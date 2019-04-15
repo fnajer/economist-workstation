@@ -12,7 +12,7 @@ import economistworkstation.Entity.Period;
 import economistworkstation.Entity.Renter;
 import economistworkstation.Model.BuildingModel;
 import economistworkstation.Model.ContractModel;
-import economistworkstation.Model.MonthModel;
+import economistworkstation.Model.PeriodModel;
 import economistworkstation.Model.RenterModel;
 import economistworkstation.Util.Money;
 import economistworkstation.Util.TagParser;
@@ -243,7 +243,7 @@ public class ExcelCreator {
             workbook = new HSSFWorkbook(inputStream);
             
             LocalDate data = LocalDate.parse("2019-05-01");
-            fullContracts = MonthModel.getContractData(data);
+            fullContracts = PeriodModel.getContractData(data);
             
             TagParser.typeDoc = "acrual";
             buildAcr(workbook, TagParser::convertTags, fullContracts);

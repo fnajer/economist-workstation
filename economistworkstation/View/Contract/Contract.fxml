@@ -105,10 +105,10 @@
                            <content>
                               <AnchorPane>
                                  <children>
-                                    <TableView fx:id="monthTable" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                    <TableView fx:id="periodTable" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                        <columns>
-                                          <TableColumn fx:id="numberMonthColumn" prefWidth="75.0" text="№ месяца" />
-                                          <TableColumn fx:id="dateMonthColumn" prefWidth="82.0" text="Дата" />
+                                          <TableColumn fx:id="numberPeriodColumn" prefWidth="75.0" text="№ месяца" />
+                                          <TableColumn fx:id="datePeriodColumn" prefWidth="82.0" text="Дата" />
                                        </columns>
                                        <columnResizePolicy>
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -142,12 +142,12 @@
                                           <Label fx:id="indexCostLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                                           <Label fx:id="fineLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                           <Label text="Состояние" GridPane.rowIndex="3" />
-                                          <Label fx:id="isPaidRentLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                          <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                        </children>
                                     </GridPane>
                                     <ButtonBar buttonMinWidth="55.0" layoutX="26.0" layoutY="281.0" prefHeight="40.0" prefWidth="178.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                        <buttons>
-                                          <Button mnemonicParsing="false" onAction="#handleEditMonth" text="Edit..." />
+                                          <Button mnemonicParsing="false" onAction="#handleEditPeriod" text="Edit..." />
                                           <Button mnemonicParsing="false" onAction="#handleAccount" text="Счёт" />
                                           <Button mnemonicParsing="false" onAction="#handleCalculation" text="Расчёт" />
                                        </buttons>
@@ -179,15 +179,15 @@
                                           <Label fx:id="countElectricityLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                                           <Label fx:id="tariffElectricityLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                           <Label text="Стоимость отопления" GridPane.rowIndex="4" />
-                                          <Label text="Тариф на отопление" GridPane.rowIndex="5" />
+                                          <Label text="Стоимость мусора" GridPane.rowIndex="5" />
                                           <Label text="Состояние" GridPane.rowIndex="8" />
-                                          <Label fx:id="countHeadingLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                                          <Label fx:id="tariffHeadingLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                                          <Label fx:id="isPaidCommunalLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                                          <Label text="Стоимость мусора" GridPane.rowIndex="6" />
-                                          <Label text="Тариф на вывоз мусора" GridPane.rowIndex="7" />
-                                          <Label fx:id="countGarbageLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                                          <Label fx:id="tariffGarbageLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                                          <Label fx:id="costHeadingLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                                          <Label fx:id="costGarbageLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                                          <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                                          <Label text="ffw" GridPane.rowIndex="6" />
+                                          <Label text="fwfwff" GridPane.rowIndex="7" />
+                                          <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                                          <Label text="Label" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                                        </children>
                                     </GridPane>
                                     <Label layoutX="5.0" layoutY="127.0" text="Коммунальные платежи" AnchorPane.leftAnchor="5.0" AnchorPane.topAnchor="170.0" />

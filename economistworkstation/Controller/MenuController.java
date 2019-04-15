@@ -7,7 +7,7 @@ package economistworkstation.Controller;
 
 import economistworkstation.EconomistWorkstation;
 import economistworkstation.ExcelCreator;
-import economistworkstation.Model.MonthModel;
+import economistworkstation.Model.PeriodModel;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -95,7 +95,7 @@ public class MenuController implements Initializable {
      */
     @FXML
     private void updateAccounts() {
-        MonthModel.updateAccountNumbers();
+        PeriodModel.updateAccountNumbers();
         Alert alert = new Alert(AlertType.INFORMATION);
         alert.setTitle("Информация");
         alert.setHeaderText("Обновление номеров счетов");

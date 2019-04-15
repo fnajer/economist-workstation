@@ -50,7 +50,7 @@ public class TaxLand extends Payment {
     }
     @Override
     public PreparedStatement getUpdateStatement(Database db) throws SQLException {
-        PreparedStatement ps = db.conn.prepareStatement("UPDATE FINE "
+        PreparedStatement ps = db.conn.prepareStatement("UPDATE TAXLAND "
                 + "SET paid_tax_land=?, date_paid_tax_land=?, tax_land=? "
                 + "WHERE id=?;", Statement.RETURN_GENERATED_KEYS);
         ps.setDouble(1, getPaid());

@@ -49,8 +49,8 @@ public class Rent extends Payment {
         this.indexCost.set(indexCost);
     }
     
-    public double calcSumRent(Rent rent) {
-        return rent.getCost() * rent.getIndexCost();
+    public double calcSumRent() {
+        return getCost() * getIndexCost();
     }
     
     @Override
