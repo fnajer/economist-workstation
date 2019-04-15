@@ -21,7 +21,7 @@ import org.apache.poi.ss.usermodel.Cell;
  */
 public class ContractData {
     private final ObjectProperty cell;
-    private final ObjectProperty month;
+    private final ObjectProperty period;
     private final ObjectProperty building;
     private final ObjectProperty renter;
     private final ObjectProperty contract;
@@ -35,7 +35,7 @@ public class ContractData {
     public ContractData(Cell cell, Period period, Building building, Renter renter, 
             Contract contract, HSSFWorkbook workbook) {
        this.cell = new SimpleObjectProperty(cell);
-       this.month = new SimpleObjectProperty(period);
+       this.period = new SimpleObjectProperty(period);
        this.building = new SimpleObjectProperty(building);
        this.renter = new SimpleObjectProperty(renter);
        this.contract = new SimpleObjectProperty(contract);
@@ -51,12 +51,12 @@ public class ContractData {
         this.cell.set(cell);
     }
     
-    public Month getMonth() {
-        return (Month) month.get();
+    public Period getPeriod() {
+        return (Period) period.get();
     }
 
-    public void setMonth(Month month) {
-        this.month.set(month);
+    public void setPeriod(Period period) {
+        this.period.set(period);
     }
      
     public Building getBuilding() {
