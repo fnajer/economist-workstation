@@ -24,7 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
+        
 /**
  *
  * @author fnajer
@@ -35,7 +35,7 @@ public class PeriodModel {
     public static void addPeriod(Period period) {
         try {
             PreparedStatement ps = db.conn.prepareStatement("INSERT INTO PERIOD "
-                    + "(id, number, end_period, id_contract, id_rent, id_fine,"
+                    + "(id, number, date_end, id_contract, id_rent, id_fine,"
                     + "id_tax_land, id_services, id_equipment) "
                     + "VALUES(NULL,?, ?, ?, ?, ?, ?, ?)");
             ps.setInt(1, period.getNumber());
@@ -95,18 +95,18 @@ public class PeriodModel {
     public static void updatePeriod(int id, Period period) {
         try {
             PreparedStatement ps = db.conn.prepareStatement("UPDATE Period "
-                    + "SET number=?, end_period=?, id_contract=?, id_rent=?, "
+                    + "SET number=?, date_end=?, id_contract=?, id_rent=?, "
                     + "id_fine =?, id_tax_land=?, id_services=?, id_equipment=? "
                     + "WHERE id=?;");
                     
             ps.setInt(1, period.getNumber());
             ps.setString(2, period.getEndPeriod());
             ps.setInt(3, period.getIdContract());
-            ps.setInt(4, getPayment(period.getRentPayment()));
-            ps.setInt(5, getPayment(period.getFinePayment()));
-            ps.setInt(6, getPayment(period.getTaxLandPayment()));
-            ps.setInt(7, getPayment(period.getServicesPayment()));
-            ps.setInt(8, getPayment(period.getEquipmentPayment()));
+            ps.setObject(4, getPayment(period.getRentPayment()), java.sql.Types.INTEGER);
+            ps.setObject(5, getPayment(period.getFinePayment()), java.sql.Types.INTEGER);
+            ps.setObject(6, getPayment(period.getTaxLandPayment()), java.sql.Types.INTEGER);
+            ps.setObject(7, getPayment(period.getServicesPayment()), java.sql.Types.INTEGER);
+            ps.setObject(8, getPayment(period.getEquipmentPayment()), java.sql.Types.INTEGER);
             ps.setInt(9, id);
             
             ps.executeUpdate();
@@ -116,8 +116,8 @@ public class PeriodModel {
         }
     }
     
-    public static int getPayment(Payment payment) {
-        if (payment == null) return 0;
+    public static Integer getPayment(Payment payment) {
+        if (payment == null) return null;
         
         PreparedStatement ps;
         String state;
@@ -130,13 +130,15 @@ public class PeriodModel {
                 ps = payment.getUpdateStatement(db);
                 state = "Update";
             }
+     
+            ps.executeUpdate();
             
             ResultSet rs = ps.getGeneratedKeys();
-        
+            
             if (rs.next()) {
                 payment.setId(rs.getInt(1));
             }
-            ps.executeUpdate();
+            
             System.out.println(String.format("%s: %s", state, payment));
             
         } catch (SQLException ex) {
@@ -157,9 +159,13 @@ public class PeriodModel {
     public static ObservableList<Period> getPeriods(int id) {
         ObservableList months = FXCollections.observableArrayList();
         try {
-            ResultSet rs = db.stmt.executeQuery("SELECT * FROM PERIOD WHERE id_contract='" + 
-                    id + "' ORDER BY number;");
-            
+            ResultSet rs = db.stmt.executeQuery("SELECT * FROM PERIOD "
+                    + "LEFT JOIN RENT ON PERIOD.ID_RENT=RENT.id "
+                    + "LEFT JOIN FINE ON PERIOD.ID_FINE=FINE.id "
+                    + "LEFT JOIN TAXLAND ON PERIOD.ID_TAX_LAND=TAXLAND.id "
+                    + "LEFT JOIN EQUIPMENT ON PERIOD.ID_EQUIPMENT=EQUIPMENT.id "
+                    + "WHERE id_contract='"
+                    + id + "' ORDER BY number;");
             
             while (rs.next()) {
                 months.add(createObjectPeriod(rs));
@@ -179,6 +185,10 @@ public class PeriodModel {
         
         try {
             ResultSet rs = db.stmt.executeQuery("SELECT * FROM PERIOD "
+                    + "LEFT JOIN RENT ON PERIOD.ID_RENT=RENT.id "
+                    + "LEFT JOIN FINE ON PERIOD.ID_FINE=FINE.id "
+                    + "LEFT JOIN TAXLAND ON PERIOD.ID_TAX_LAND=TAXLAND.id "
+                    + "LEFT JOIN EQUIPMENT ON PERIOD.ID_EQUIPMENT=EQUIPMENT.id "
                     + "LEFT JOIN CONTRACT ON PERIOD.ID_CONTRACT=CONTRACT.id "
                     + "LEFT JOIN RENTER ON CONTRACT.ID_RENTER=RENTER.id "
                     + "LEFT JOIN BUILDING ON CONTRACT.ID_BUILDING=BUILDING.id "
@@ -200,23 +210,6 @@ public class PeriodModel {
         return contractsData;
     }
     
-    public static Period getPeriod(int id) {
-        Period month = null;
-        try {
-            ResultSet rs = db.stmt.executeQuery("SELECT * FROM PERIOD WHERE id='" + id + "'");
-    
-            if (rs.next()) {
-                month = createObjectPeriod(rs);
-            }
-            
-            System.out.println("Извлечение месяца завершено.");
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return month;
-    }
-    
     public static void updateAccountNumbers() {
         try {
             LocalDate currentYear = LocalDate.now().with(firstDayOfYear());
@@ -232,7 +225,7 @@ public class PeriodModel {
             while (rs.next()) {
                 idPeriod = rs.getInt("id");
                 PreparedStatement ps = db.conn.prepareStatement("UPDATE PERIOD\n" +
-                            "SET number_rent_acc=?, number_communal_acc=?\n" +
+                            "SET number_rent_acc=?, number_services_acc=?\n" +
                             "WHERE id=?;");
                 ps.setInt(1, number);
                 ps.setInt(2, number + 1);
@@ -274,7 +267,7 @@ public class PeriodModel {
         if(rs.getInt("id_tax_land") != 0) {
             Payment fine = new TaxLand(rs.getDouble("paid_tax_land"), 
                     rs.getString("date_paid_tax_land"),
-                    rs.getDouble("cost_tax_land"));
+                    rs.getDouble("tax_land"));
             fine.setId(rs.getInt("id_tax_land"));
             return fine;
         }
@@ -311,8 +304,8 @@ public class PeriodModel {
     private static Period createObjectPeriod(ResultSet rs) throws SQLException {
         Period period = new Period(rs.getInt("number"), 
                     rs.getInt("number_rent_acc"),
-                    rs.getInt("number_communal_acc"),
-                    rs.getString("end_period"),  
+                    rs.getInt("number_services_acc"),
+                    rs.getString("date_end"),  
                     rs.getInt("id_contract"),
                     createObjectRent(rs),
                     createObjectFine(rs),
