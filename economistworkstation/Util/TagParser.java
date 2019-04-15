@@ -8,8 +8,13 @@ package economistworkstation.Util;
 import economistworkstation.ContractData;
 import economistworkstation.Entity.Building;
 import economistworkstation.Entity.Contract;
-import economistworkstation.Entity.Month;
+import economistworkstation.Entity.Equipment;
+import economistworkstation.Entity.Fine;
+import economistworkstation.Entity.Period;
+import economistworkstation.Entity.Rent;
 import economistworkstation.Entity.Renter;
+import economistworkstation.Entity.Services;
+import economistworkstation.Entity.TaxLand;
 import economistworkstation.Entity.User;
 import economistworkstation.ExcelCreator;
 import java.math.RoundingMode;
@@ -47,7 +52,7 @@ public class TagParser {
     
     public static void convertTags (ContractData data) {
         Cell cell = data.getCell();
-        Month month = data.getMonth();
+        Period period = data.getPeriod();
         Renter renter = data.getRenter();
         Building building = data.getBuilding();
         Contract contract = data.getContract();
@@ -61,6 +66,12 @@ public class TagParser {
             String foundedTag = matcher.group();
             System.out.println(foundedTag);
             
+            Rent rent = (Rent) period.getRentPayment();
+            Fine fine = (Fine) period.getFinePayment();
+            TaxLand taxLand = (TaxLand) period.getTaxLandPayment();
+            Equipment equipment = (Equipment) period.getEquipmentPayment();
+            Services services = (Services) period.getServicesPayment();
+            
             //rent account
             if ("<date>".equals(foundedTag)) {
                 LocalDate date = LocalDate.now();
@@ -69,10 +80,10 @@ public class TagParser {
                 newValue = formattedString;
             }
             if ("<numRentAcc>".equals(foundedTag)) {
-                newValue = Integer.toString(month.getNumberRentAcc());
+                newValue = Integer.toString(period.getNumberRentAcc());
             }
             if ("<numCommunalAcc>".equals(foundedTag)) {
-                newValue = Integer.toString(month.getNumberCommunalAcc());
+                newValue = Integer.toString(period.getNumberServicesAcc());
             }
             if ("<subject>".equals(foundedTag)) {
                 newValue = renter.getSubject();
@@ -82,7 +93,7 @@ public class TagParser {
             }
             if ("<numContract>".equals(foundedTag)) {
                 System.out.println(contract.getId());
-                newValue = Integer.toString(month.getIdContract());
+                newValue = Integer.toString(period.getIdContract());
             }
             if ("<dateStartContract>".equals(foundedTag)) {
                 LocalDate date = LocalDate.parse(contract.getDateStart());
@@ -94,9 +105,9 @@ public class TagParser {
                 newValue = getDecimalFormat(Locale.getDefault()).format(building.getSquare());
             }
             if ("<monthNameAndYear>".equals(foundedTag)) {
-                LocalDate date = LocalDate.parse(month.getDate());
+                LocalDate date = LocalDate.parse(period.getEndPeriod());
                 int monthNum = date.getMonth().minus(1).getValue();
-                String monthName = Month.getMonthName(monthNum, false);
+                String monthName = period.getMonthName(monthNum, false);
                 int monthYear = date.getYear();
                 if (monthNum == 12) {
                     monthYear--;
@@ -104,7 +115,7 @@ public class TagParser {
                 newValue = monthName + ' ' + Integer.toString(monthYear);
             }
             if ("<sumRent>".equals(foundedTag)) {
-                String sumRent = getDecimalFormat(Locale.US).format(Month.calcSumRent(month));
+                String sumRent = getDecimalFormat(Locale.US).format(rent.calcSumRent());
                 newValue = sumRent;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
@@ -121,7 +132,7 @@ public class TagParser {
                 return;
             }
             if ("<fine>".equals(foundedTag)) {
-                String sumRent = getDecimalFormat(Locale.US).format(month.getFine());
+                String sumRent = getDecimalFormat(Locale.US).format(fine.getFine());
                 newValue = sumRent;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
@@ -143,8 +154,8 @@ public class TagParser {
                 return;
             }
             if ("<taxLand>".equals(foundedTag)) {
-                String taxLand = getDecimalFormat(Locale.US).format(month.getTaxLand());
-                newValue = taxLand;
+                String costTaxLand = getDecimalFormat(Locale.US).format(taxLand.getTaxLand());
+                newValue = costTaxLand;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
                 double resultDouble = Double.parseDouble(resultString);
@@ -179,7 +190,7 @@ public class TagParser {
                 return;
             }
             if ("<costWater>".equals(foundedTag)) {
-                String costWater = Double.toString(Month.calcCostWater(month));
+                String costWater = Double.toString(services.calcCostWater());
                 newValue = costWater;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
@@ -199,7 +210,7 @@ public class TagParser {
                 return;
             }
             if ("<costElectricity>".equals(foundedTag)) {
-                String costElectricity = Double.toString(Month.calcCostElectricity(month));
+                String costElectricity = Double.toString(services.calcCostElectricity());
                 newValue = costElectricity;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
@@ -219,7 +230,7 @@ public class TagParser {
                 return;
             }
             if ("<costHeading>".equals(foundedTag)) {
-                String costHeading = Double.toString(Month.calcCostHeading(month));
+                String costHeading = Double.toString(services.calcCostHeading());
                 newValue = costHeading;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
@@ -243,7 +254,7 @@ public class TagParser {
                 return;
             }
             if ("<costGarbage>".equals(foundedTag)) {
-                String costGarbage = Double.toString(Month.calcCostGarbage(month));
+                String costGarbage = Double.toString(services.calcCostGarbage());
                 newValue = costGarbage;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
@@ -263,7 +274,7 @@ public class TagParser {
                 return;
             }
             if ("<costInternet>".equals(foundedTag)) {
-                String costInternet = Double.toString(Month.calcCostInternet(month));
+                String costInternet = Double.toString(services.calcCostInternet());
                 newValue = costInternet;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
@@ -287,7 +298,7 @@ public class TagParser {
                 return;
             }
             if ("<costTelephone>".equals(foundedTag)) {
-                String costTelephone = Double.toString(Month.calcCostTelephone(month));
+                String costTelephone = Double.toString(services.calcCostTelephone());
                 newValue = costTelephone;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
@@ -319,50 +330,50 @@ public class TagParser {
                 newValue = building.getType();
             }
             if ("<currentMonthNameAndYear>".equals(foundedTag)) {
-                LocalDate date = LocalDate.parse(month.getDate());
+                LocalDate date = LocalDate.parse(period.getEndPeriod());
                 int monthNum = date.getMonth().getValue();
-                String monthName = Month.getMonthName(monthNum, false);
+                String monthName = period.getMonthName(monthNum, false);
                 int monthYear = date.getYear();
 
                 newValue = monthName + ' ' + Integer.toString(monthYear);
             }
             if ("<month>".equals(foundedTag)) {
-                LocalDate date = LocalDate.parse(month.getDate());
+                LocalDate date = LocalDate.parse(period.getEndPeriod());
                 int monthNum = date.getMonth().minus(1).getValue();
-                String monthName = Month.getMonthName(monthNum, false);
+                String monthName = period.getMonthName(monthNum, false);
 
                 newValue = monthName;
             }
             if ("<monthGenitive>".equals(foundedTag)) {
-                LocalDate date = LocalDate.parse(month.getDate());
+                LocalDate date = LocalDate.parse(period.getEndPeriod());
                 int monthNum = date.getMonth().minus(1).getValue();
-                String monthName = Month.getMonthName(monthNum, true);
+                String monthName = period.getMonthName(monthNum, true);
 
                 newValue = monthName;
             }
             if ("<getCalcSumRent>".equals(foundedTag)) {
-                String cost = getDecimalFormat(Locale.getDefault()).format(month.getCost());
-                String index = getDecimalFormat(Locale.getDefault()).format(month.getIndexCost());
+                String cost = getDecimalFormat(Locale.getDefault()).format(rent.getCost());
+                String index = getDecimalFormat(Locale.getDefault()).format(rent.getIndexCost());
                 newValue = cost + '*' + index + '=';
             }
             if ("<getCalcCostWater>".equals(foundedTag)) {
-                String count = getDecimalFormat(Locale.getDefault()).format(month.getCountWater());
-                String tariff = getDecimalFormat(Locale.getDefault()).format(month.getTariffWater());
+                String count = getDecimalFormat(Locale.getDefault()).format(services.getCountWater());
+                String tariff = getDecimalFormat(Locale.getDefault()).format(services.getTariffWater());
                 newValue = count + '*' + tariff + '=';
             }
             if ("<getCalcCostElectricity>".equals(foundedTag)) {
-                String count = getDecimalFormat(Locale.getDefault()).format(month.getCountElectricity());
-                String tariff = getDecimalFormat(Locale.getDefault()).format(month.getTariffElectricity());
+                String count = getDecimalFormat(Locale.getDefault()).format(services.getCountElectricity());
+                String tariff = getDecimalFormat(Locale.getDefault()).format(services.getTariffElectricity());
                 newValue = count + '*' + tariff + '=';
             }
             if ("<getCalcCostHeading>".equals(foundedTag)) {
-                String count = getDecimalFormat(Locale.getDefault()).format(month.getCountHeading());
-                String tariff = getDecimalFormat(Locale.getDefault()).format(month.getTariffHeading());
+                String count = getDecimalFormat(Locale.getDefault()).format(services.getCostHeading());
+                String tariff = getDecimalFormat(Locale.getDefault()).format(building.getSquare());
                 newValue = count + '*' + tariff + '=';
             }
             if ("<getCalcCostGarbage>".equals(foundedTag)) {
-                String count = getDecimalFormat(Locale.getDefault()).format(month.getCountGarbage());
-                String tariff = getDecimalFormat(Locale.getDefault()).format(month.getTariffGarbage());
+                String count = getDecimalFormat(Locale.getDefault()).format(services.getCostGarbage());
+                String tariff = getDecimalFormat(Locale.getDefault()).format(building.getSquare());
                 newValue = count + '*' + tariff + '=';
             }
             if ("<user>".equals(foundedTag)) {
