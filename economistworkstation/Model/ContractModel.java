@@ -8,7 +8,7 @@ package economistworkstation.Model;
 import economistworkstation.Database;
 import economistworkstation.EconomistWorkstation;
 import economistworkstation.Entity.Contract;
-import economistworkstation.Entity.Month;
+import economistworkstation.Entity.Period;
 import economistworkstation.Entity.Renter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -49,7 +49,7 @@ public class ContractModel {
                 contract.setId(idContract);
                 System.out.println("Добавлено: " + idContract);
                 
-                createMonths(contract);
+                createPeriods(contract);
                 System.out.println("Месяцы добавлены. Id контракта: " + idContract);
             } else {
                 System.out.println("Error upon creating contract. Id didn got");
@@ -65,7 +65,7 @@ public class ContractModel {
         try {
             
             PreparedStatement ps = db.conn.prepareStatement("UPDATE CONTRACT\n" +
-                            "SET date_start=?, date_end=?, id_renter=?, id_building=?\n" +
+                            "SET date_start=?, date_expire=?, id_renter=?, id_building=?\n" +
                             "WHERE id=?;");
             ps.setString(1, contract.getDateStart());
             ps.setString(2, contract.getDateEnd());
@@ -77,8 +77,8 @@ public class ContractModel {
             System.out.println("Изменено: " + contract.getId());
             
             if (!extend) {
-                MonthModel.deleteMonths(id);
-                createMonths(contract);
+                PeriodModel.deletePeriods(id);
+                createPeriods(contract);
                 System.out.println("Месяцы добавлены. Id контракта: " + contract.getId());
             }
         } catch (SQLException ex) {
@@ -86,10 +86,10 @@ public class ContractModel {
         }
     }
     
-    private static void createMonths(Contract contract) throws SQLException {
+    private static void createPeriods(Contract contract) throws SQLException {
         LocalDate date_start = LocalDate.parse(contract.getDateStart());
-        LocalDate date_end = LocalDate.parse(contract.getDateEnd());
-        long diffOfDates = ChronoUnit.MONTHS.between(date_start, date_end);
+        LocalDate date_expire = LocalDate.parse(contract.getDateEnd());
+        long diffOfDates = ChronoUnit.MONTHS.between(date_start, date_expire);
         
         int dayOfMonth = date_start.getDayOfMonth();
         if (dayOfMonth == 1) {
@@ -101,11 +101,11 @@ public class ContractModel {
 
         date_start = date_start.minusDays(dayOfMonth).plusMonths(1);
         for(int i = 1; i <= diffOfDates; i++) {
-            Month newMonth = new Month();
-            newMonth.setNumber(i);
-            newMonth.setDate(date_start.toString());
-            newMonth.setIdContract(contract.getId());
-            MonthModel.addMonth(newMonth);
+            Period newPeriod = new Period();
+            newPeriod.setNumber(i);
+            newPeriod.setEndPeriod(date_start.toString());
+            newPeriod.setIdContract(contract.getId());
+            PeriodModel.addPeriod(newPeriod);
 
             if(i == diffOfDates - 1 && dayOfMonth > 1) {
                 date_start = date_start.plusDays(dayOfMonth);
@@ -117,7 +117,7 @@ public class ContractModel {
     
     public static void deleteContract(int id) {
         try {
-            MonthModel.deleteMonths(id);
+            PeriodModel.deletePeriods(id);
             db.stmt.executeUpdate("DELETE FROM CONTRACT WHERE id='" + id + "'");
             System.out.println("Удалено: " + id);
         } catch (SQLException ex) {
@@ -162,7 +162,7 @@ public class ContractModel {
     }
     
     public static Contract createObjectContract(ResultSet rs) throws SQLException {
-        Contract contract = new Contract(rs.getString("date_start"), rs.getString("date_end"), rs.getInt("id_renter"), 
+        Contract contract = new Contract(rs.getString("date_start"), rs.getString("date_expire"), rs.getInt("id_renter"), 
         rs.getInt("id_building"));
         contract.setId(rs.getInt("id"));
         
