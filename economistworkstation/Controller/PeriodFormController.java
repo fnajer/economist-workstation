@@ -295,7 +295,31 @@ public class PeriodFormController {
         }
     }
     
+    public boolean isFilled(TextField ...tfs) {
+        for (TextField tf : tfs) {
+            if (tf.getText().length() != 0)
+                return true;
+        }
+        return false;
+    }
     
+    public Double parseField(TextField field) {
+        String fieldString = field.getText();
+        try {
+            double value = Double.parseDouble(fieldString);
+            DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.US);
+            DecimalFormat df = new DecimalFormat("#.##", otherSymbols);
+            df.setRoundingMode(RoundingMode.HALF_UP);
+
+            return Double.parseDouble(df.format(value));
+        } catch(NumberFormatException e) {
+            //if("".equals(fieldString)) 
+            System.err.println(String.format(
+                    "Field value '%s' is not correct. Replaced by 0",
+                    fieldString));
+            return null;
+        }
+    }
     
     @FXML
     private void handleCancel() {
