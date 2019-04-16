@@ -5,9 +5,19 @@
  */
 package economistworkstation.Controller;
 
+import economistworkstation.Entity.Fine;
 import economistworkstation.Entity.Month;
+import economistworkstation.Entity.Payment;
+import economistworkstation.Entity.Period;
+import economistworkstation.Entity.Rent;
+import economistworkstation.Entity.Equipment;
+import economistworkstation.Entity.Services;
+import economistworkstation.Entity.TaxLand;
 import economistworkstation.Util.TagParser;
 import economistworkstation.Util.Util;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.Arrays;
 import java.util.Locale;
 import javafx.event.ActionEvent;
@@ -26,7 +36,7 @@ import javafx.stage.Stage;
  *
  * @author fnajer
  */
-public class MonthFormController {
+public class PeriodFormController {
     @FXML
     private Label numberField;
     @FXML
@@ -174,37 +184,51 @@ public class MonthFormController {
     }
 
     private Stage dialogStage;
-    private Month month;
+    private Period period;
     private boolean okClicked = false;
     
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }
     
-    public void setMonth(Month month) {
-        this.month = month;
-
-        numberField.setText(Integer.toString(month.getNumber()));
-        numberRentAccField.setText(Integer.toString(month.getNumberRentAcc()));
-        numberServicesAccField.setText(Integer.toString(month.getNumberCommunalAcc()));
-        endPeriodField.setText(month.getDate());
+    public void setPeriod(Period period) {
+        this.period = period;
         
-        costRentField.setText(Double.toString(month.getCost()));
-        indexCostRentField.setText(Double.toString(month.getIndexCost()));
-        fineField.setText(Double.toString(month.getFine()));
-//        statePaymentRentLabel.setText(Util.boolToString(month.getPaidRent()));
-
-        taxLandField.setText(Double.toString(month.getTaxLand()));
-//        isPaidTaxLandField.setText(Util.boolToString(month.getPaidTaxLand()));
+        numberField.setText(Integer.toString(period.getNumber()));
+        numberRentAccField.setText(Integer.toString(period.getNumberRentAcc()));
+        numberServicesAccField.setText(Integer.toString(period.getNumberServicesAcc()));
+        endPeriodField.setText(period.getEndPeriod());
         
-        countWaterField.setText(Double.toString(month.getCountWater()));
-        tariffWaterField.setText(Double.toString(month.getTariffWater()));
-        countElectricityField.setText(Double.toString(month.getCountElectricity()));
-        tariffElectricityField.setText(Double.toString(month.getTariffElectricity()));
-        costHeadingField.setText(Double.toString(month.getCountHeading()));
-        costGarbageField.setText(Double.toString(month.getCountHeading()));
-        costInternetField.setText(Double.toString(month.getCostInternet()));
-        costTelephoneField.setText(Double.toString(month.getCostTelephone()));
+        if (period.getRentPayment() != null) {
+            Rent rent = (Rent) period.getRentPayment();
+            costRentField.setText(Double.toString(rent.getCost()));
+            indexCostRentField.setText(Double.toString(rent.getIndexCost()));
+//        statePaymentRentLabel.setText(Util.boolToString(period.getPaidRent()));
+        }
+        if (period.getFinePayment() != null) {
+            Fine fine = (Fine) period.getFinePayment();
+            fineField.setText(Double.toString(fine.getFine()));
+        }
+        if (period.getTaxLandPayment() != null) {
+            TaxLand taxLand = (TaxLand) period.getTaxLandPayment();
+            taxLandField.setText(Double.toString(taxLand.getTaxLand()));
+            //        isPaidTaxLandField.setText(Util.boolToString(period.getPaidTaxLand()));
+        }
+        if (period.getServicesPayment() != null) {
+            Services services = (Services) period.getServicesPayment();
+            countWaterField.setText(Double.toString(services.getCountWater()));
+            tariffWaterField.setText(Double.toString(services.getTariffWater()));
+            countElectricityField.setText(Double.toString(services.getCountElectricity()));
+            tariffElectricityField.setText(Double.toString(services.getTariffElectricity()));
+            costHeadingField.setText(Double.toString(services.getCostHeading()));
+            costGarbageField.setText(Double.toString(services.getCostGarbage()));
+            costInternetField.setText(Double.toString(services.getCostInternet()));
+            costTelephoneField.setText(Double.toString(services.getCostTelephone()));
+        }
+        if (period.getEquipmentPayment() != null) {
+            Equipment equipment = (Equipment) period.getEquipmentPayment();
+            costEquipmentField.setText(Double.toString(equipment.getCostEquipment()));
+        }
         
         setMatchArrays();
         setColorLabels(textFields);
@@ -220,30 +244,58 @@ public class MonthFormController {
     private void handleOk() {
         if (isInputValid()) {
  
-            month.setNumber(Integer.parseInt(numberField.getText()));
-            month.setDate(endPeriodField.getText());
+            period.setNumber(Integer.parseInt(numberField.getText()));
+            period.setEndPeriod(endPeriodField.getText());
             
-            month.setCost(Double.parseDouble(costRentField.getText()));
-            month.setIndexCost(Double.parseDouble(indexCostRentField.getText()));
-            month.setFine(Double.parseDouble(fineField.getText()));
-//            month.setPaidRent(Util.stringToBool(paidRentField.getText()));
-
-            month.setTaxLand(Double.parseDouble(taxLandField.getText()));
-//            month.setPaidTaxLand(Util.stringToBool(isPaidTaxLandField.getText()));
+            if (isFilled(costRentField, indexCostRentField)) {
+                Rent rent = (Rent) period.getRentPayment();
+                if (rent == null)
+                    rent = new Rent();
+                rent.setCost(Double.parseDouble(costRentField.getText()));
+                rent.setIndexCost(Double.parseDouble(indexCostRentField.getText()));
+//            period.setPaidRent(Util.stringToBool(paidRentField.getText()));
+                period.setRentPayment(rent);
+            }
+            if (isFilled(fineField)) {
+                Fine fine = (Fine) period.getFinePayment();
+                if (fine == null)
+                    fine = new Fine();
+                fine.setFine(Double.parseDouble(fineField.getText()));
+                period.setFinePayment(fine);
+            }
+            if (isFilled(taxLandField)) {
+                TaxLand taxLand = (TaxLand) period.getTaxLandPayment();
+                if (taxLand == null)
+                    taxLand = new TaxLand();
+                taxLand.setTaxLand(Double.parseDouble(taxLandField.getText()));
+//            period.setPaidTaxLand(Util.stringToBool(isPaidTaxLandField.getText()));
+                period.setTaxLandPayment(taxLand);
+            }
             
-            month.setCountWater(Double.parseDouble(countWaterField.getText()));
-            month.setTariffWater(Double.parseDouble(tariffWaterField.getText()));
-            month.setCountElectricity(Double.parseDouble(countElectricityField.getText()));
-            month.setTariffElectricity(Double.parseDouble(tariffElectricityField.getText()));
-            month.setCountHeading(Double.parseDouble(costHeadingField.getText()));
-            month.setCountGarbage(Double.parseDouble(costGarbageField.getText()));
-            month.setCostInternet(Double.parseDouble(costInternetField.getText()));
-            month.setCostTelephone(Double.parseDouble(costTelephoneField.getText()));
-
+            if (isFilled(countWaterField, tariffWaterField, countElectricityField,
+                    tariffElectricityField, costHeadingField, costGarbageField,
+                    costInternetField, costTelephoneField)) {
+                Services services = (Services) period.getServicesPayment();
+                if (services == null)
+                    services = new Services();
+                services.setCountWater(parseField(countWaterField));
+                services.setTariffWater(parseField(tariffWaterField));
+                services.setCountElectricity(parseField(countElectricityField));
+                services.setTariffElectricity(parseField(tariffElectricityField));
+                services.setCostHeading(parseField(costHeadingField));
+                services.setCostGarbage(parseField(costGarbageField));
+                services.setCostInternet(parseField(costInternetField));
+                services.setCostTelephone(parseField(costTelephoneField));
+//            period.setPaidRent(Util.stringToBool(paidRentField.getText()));
+                period.setServicesPayment(services);
+            }
+            
             okClicked = true;
             dialogStage.close();
         }
     }
+    
+    
     
     @FXML
     private void handleCancel() {
@@ -293,7 +345,7 @@ public class MonthFormController {
             System.out.println(value > 0);
             return value > 0;
         } catch(NumberFormatException e) {
-            System.out.println(false);
+            System.out.println("false - set gray color");
             return false;
         }
     }
@@ -337,9 +389,17 @@ public class MonthFormController {
         printSum("rentFine");
     }
     
-    private void setCost(TextField count, TextField tariff, Label label) {
+    private void setCost(TextField firstField, TextField secondField, Label label) {
         try {
-            double total = Double.parseDouble(count.getText()) * Double.parseDouble(tariff.getText());
+            String count = firstField.getText();
+            String tariff = secondField.getText();
+            
+            if ("".equals(count) && "".equals(tariff)) {
+                label.setText("");  
+                return;
+            }
+            
+            double total = Double.parseDouble(count) * Double.parseDouble(tariff);
             if (total < 0) throw new NumberFormatException();
             String formatTotal = TagParser.getDecimalFormat(Locale.US).format(total);
             label.setText(formatTotal);
@@ -353,17 +413,18 @@ public class MonthFormController {
             double sum = 0;
             double value;
             String formatSum;
+            String givenText = "";
 
             for (Control control: controls) {
-                if (control instanceof Label) {
-                    value = Double.parseDouble(((Label) control).getText());
-                    if (value < 0) throw new NumberFormatException();
-                    sum += value;
-                } else if(control instanceof TextField) {
-                    value = Double.parseDouble(((TextField) control).getText());
-                    if (value < 0) throw new NumberFormatException();
-                    sum += value;
-                }
+                if (control instanceof Label)
+                    givenText = ((Label) control).getText();
+                else if(control instanceof TextField)
+                    givenText = ((TextField) control).getText();
+                
+                if ("".equals(givenText)) continue;
+                value = Double.parseDouble(givenText);
+                if (value < 0) throw new NumberFormatException();
+                sum += value;
             }
             formatSum = TagParser.getDecimalFormat(Locale.US).format(sum);
             label.setText(formatSum);
@@ -410,16 +471,16 @@ public class MonthFormController {
         });
         
         costGarbageField.textProperty().addListener((observable, oldValue, newValue) -> {
-           printSum("communal");
+           printSum("services");
            setColorLabels(costGarbageField);
         });
         
         costInternetField.textProperty().addListener((observable, oldValue, newValue) -> {
-            printSum("communal");
+            printSum("services");
             setColorLabels(costInternetField);
         });
         costTelephoneField.textProperty().addListener((observable, oldValue, newValue) -> {
-            printSum("communal");
+            printSum("services");
             setColorLabels(costTelephoneField);
         });
         
