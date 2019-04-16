@@ -12,12 +12,19 @@ import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 
 import economistworkstation.Entity.Contract;
+import economistworkstation.Entity.Fine;
 import economistworkstation.Entity.Month;
+import economistworkstation.Entity.Payment;
+import economistworkstation.Entity.Period;
+import economistworkstation.Entity.Rent;
 import economistworkstation.Entity.Renter;
+import economistworkstation.Entity.Services;
+import economistworkstation.Entity.TaxLand;
 import economistworkstation.ExcelCreator;
 import economistworkstation.Model.BuildingModel;
 import economistworkstation.Model.ContractModel;
 import economistworkstation.Model.MonthModel;
+import economistworkstation.Model.PeriodModel;
 import economistworkstation.Model.RenterModel;
 import economistworkstation.Util.Util;
 import java.io.IOException;
@@ -75,13 +82,13 @@ public class ContractController implements Initializable, BaseController {
     private TextField extendCount;
 
     @FXML
-    private TableView<Month> monthTable;
+    private TableView<Period> periodTable;
 
     @FXML
-    private TableColumn<Month, String> numberMonthColumn;
+    private TableColumn<Period, String> numberPeriodColumn;
 
     @FXML
-    private TableColumn<Month, String> dateMonthColumn;
+    private TableColumn<Period, String> datePeriodColumn;
 
     @FXML
     private Label costLabel;
@@ -91,9 +98,6 @@ public class ContractController implements Initializable, BaseController {
 
     @FXML
     private Label fineLabel;
-
-    @FXML
-    private Label isPaidRentLabel;
 
     @FXML
     private Label countWaterLabel;
@@ -108,34 +112,25 @@ public class ContractController implements Initializable, BaseController {
     private Label tariffElectricityLabel;
 
     @FXML
-    private Label countHeadingLabel;
+    private Label costHeadingLabel;
 
     @FXML
-    private Label tariffHeadingLabel;
-
-    @FXML
-    private Label countGarbageLabel;
-
-    @FXML
-    private Label tariffGarbageLabel;
-    
-    @FXML
-    private Label isPaidCommunalLabel;
+    private Label costGarbageLabel;
 
     @FXML
     void extendContract(ActionEvent event) {
         int countMonths = Integer.parseInt(extendCount.getText());
         
         if (countMonths > 0 && countMonths < 100) {
-            monthTable.getSelectionModel().selectLast();
-            Month lastMonth = monthTable.getSelectionModel().getSelectedItem();
+            periodTable.getSelectionModel().selectLast();
+            Period lastPeriod = periodTable.getSelectionModel().getSelectedItem();
             
             LocalDate date = LocalDate.parse(contract.getDateEnd());
             date = date.plusMonths(countMonths);
             contract.setDateEnd(date.toString());
 
             ContractModel.updateContract(contract.getId(), contract, true);
-            MonthModel.addMonths(contract.getId(), countMonths, lastMonth);
+            PeriodModel.addPeriods(contract.getId(), countMonths, lastPeriod);
         
             showDetails(contract);
         } else {
@@ -150,49 +145,49 @@ public class ContractController implements Initializable, BaseController {
     }
 
     @FXML
-    void handleEditMonth(ActionEvent event) {
-        Month selectedMonth = monthTable.getSelectionModel().getSelectedItem();
+    void handleEditPeriod(ActionEvent event) {
+        Period selectedPeriod = periodTable.getSelectionModel().getSelectedItem();
         
-        if (selectedMonth != null) {
-            boolean okClicked = showMonthForm(selectedMonth);
+        if (selectedPeriod != null) {
+            boolean okClicked = showPeriodForm(selectedPeriod);
             if (okClicked) {
-                MonthModel.updateMonth(selectedMonth.getId(), selectedMonth);
-                showMonthDetails(selectedMonth);
+                PeriodModel.updatePeriod(selectedPeriod.getId(), selectedPeriod);
+                showPeriodDetails(selectedPeriod);
             }
 
         } else {
             // Ничего не выбрано.
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.initOwner(mainApp.getPrimaryStage());
-            alert.setTitle("No Selection");
-            alert.setHeaderText("No Month Selected");
-            alert.setContentText("Please select a month in the table.");
+            alert.setTitle("Не выбран");
+            alert.setHeaderText("Период не выбран");
+            alert.setContentText("Пожалуйста, выберие период в таблице.");
 
             alert.showAndWait();
         }
     }
  
     
-    public boolean showMonthForm(Month month) {
+    public boolean showPeriodForm(Period period) {
         try {
             // Загружаем fxml-файл и создаём новую сцену
             // для всплывающего диалогового окна.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(EconomistWorkstation.class.getResource("View/Month/MonthForm.fxml"));
+            loader.setLocation(EconomistWorkstation.class.getResource("View/Period/PeriodForm.fxml"));
             AnchorPane page = (AnchorPane) loader.load();
             
             // Создаём диалоговое окно Stage.
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("Edit Month");
+            dialogStage.setTitle("Редактировать период");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(mainApp.getPrimaryStage());
             Scene scene = new Scene(page);
             dialogStage.setScene(scene);
             
             // Передаём адресата в контроллер.
-            MonthFormController controller = loader.getController();
+            PeriodFormController controller = loader.getController();
             controller.setDialogStage(dialogStage);
-            controller.setMonth(month);
+            controller.setPeriod(period);
             
             // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
             dialogStage.showAndWait();
@@ -206,18 +201,18 @@ public class ContractController implements Initializable, BaseController {
     
     @FXML
     void handleAccount(ActionEvent event) throws IOException {
-        Month month = monthTable.getSelectionModel().getSelectedItem();
-        ExcelCreator.printAccountPayment(contract, month);
+        Period period = periodTable.getSelectionModel().getSelectedItem();
+        ExcelCreator.printAccountPayment(contract, period);
     }
     
     @FXML
     void handleCalculation(ActionEvent event) throws IOException {
-        Month month = monthTable.getSelectionModel().getSelectedItem();
-        ExcelCreator.printAccountCalculation(contract, month);
+        Period period = periodTable.getSelectionModel().getSelectedItem();
+        ExcelCreator.printAccountCalculation(contract, period);
     }
     
     private ObservableList<Contract> contracts;
-    private ObservableList<Month> months;
+    private ObservableList<Period> periods;
     private EconomistWorkstation mainApp;
     
     @Override
@@ -298,7 +293,7 @@ public class ContractController implements Initializable, BaseController {
             typeLabel.setText(building.getType());
             squareLabel.setText(Double.toString(building.getSquare()));
             
-            showListMonths(contract.getId());
+            showListPeriods(contract.getId());
         } else {
             firstNameLabel.setText("");
             lastNameLabel.setText("");
@@ -309,63 +304,46 @@ public class ContractController implements Initializable, BaseController {
         }
     }
     
-    private final ChangeListener<Month> listener = (observable, oldValue, newValue) -> 
-            showMonthDetails(newValue);
+    private final ChangeListener<Period> listener = (observable, oldValue, newValue) -> 
+            showPeriodDetails(newValue);
     
-    public void showListMonths(int id) {
-        months = MonthModel.getMonths(id);
+    public void showListPeriods(int id) {
+        periods = PeriodModel.getPeriods(id);
        
-        monthTable.getSelectionModel().selectedItemProperty().removeListener(this.listener);
-        monthTable.setItems(months);
+        periodTable.getSelectionModel().selectedItemProperty().removeListener(this.listener);
+        periodTable.setItems(periods);
         
-        numberMonthColumn.setCellValueFactory(new PropertyValueFactory<>("number"));
-        dateMonthColumn.setCellValueFactory(new PropertyValueFactory<>("date"));
+        numberPeriodColumn.setCellValueFactory(new PropertyValueFactory<>("number"));
+        datePeriodColumn.setCellValueFactory(new PropertyValueFactory<>("endPeriod"));
  
         // Очистка дополнительной информации об адресате.
-        showMonthDetails(null);
+        showPeriodDetails(null);
 
         // Слушаем изменения выбора, и при изменении отображаем
         // дополнительную информацию об адресате.
-        monthTable.getSelectionModel().selectedItemProperty().addListener(listener);
-
-//            Button paymentBtn = new Button("Вывод расчетов");
-//            Button accountBtn = new Button("Выписать счет");
-
+        periodTable.getSelectionModel().selectedItemProperty().addListener(listener);
     }
     
-    public void showMonthDetails(Month month) {
-        if (month != null) {
-            costLabel.setText(Double.toString(month.getCost()));
-            indexCostLabel.setText(Double.toString(month.getIndexCost()));
-            fineLabel.setText(Double.toString(month.getFine()));
-            isPaidRentLabel.setText(Util.boolToString(month.getPaidRent()));
+  
+    
+    public void showPeriodDetails(Period period) {
+        clearDetails();
+        if (period != null) {
             
-            countWaterLabel.setText(Double.toString(month.getCountWater()));
-            tariffWaterLabel.setText(Double.toString(month.getTariffWater()));
-            countElectricityLabel.setText(Double.toString(month.getCountElectricity()));
-            tariffElectricityLabel.setText(Double.toString(month.getTariffElectricity()));
-            countHeadingLabel.setText(Double.toString(month.getCountHeading()));
-            tariffHeadingLabel.setText(Double.toString(month.getTariffHeading()));
-            countGarbageLabel.setText(Double.toString(month.getCountGarbage()));
-            tariffGarbageLabel.setText(Double.toString(month.getTariffGarbage()));
-            isPaidCommunalLabel.setText(Util.boolToString(month.getPaidCommunal()));
-            
-        } else {
-            costLabel.setText("");
-            indexCostLabel.setText("");
-            fineLabel.setText("");
-            isPaidRentLabel.setText("");
-            
-            countWaterLabel.setText("");
-            tariffWaterLabel.setText("");
-            countElectricityLabel.setText("");
-            tariffElectricityLabel.setText("");
-            countHeadingLabel.setText("");
-            tariffHeadingLabel.setText("");
-            countGarbageLabel.setText("");
-            tariffGarbageLabel.setText("");
-            isPaidCommunalLabel.setText("");
         }
+    }
+    
+    private void clearDetails() {
+        costLabel.setText("");
+        indexCostLabel.setText("");
+        fineLabel.setText("");
+
+        countWaterLabel.setText("");
+        tariffWaterLabel.setText("");
+        countElectricityLabel.setText("");
+        tariffElectricityLabel.setText("");
+        costHeadingLabel.setText("");
+        costGarbageLabel.setText("");
     }
     
     @FXML
@@ -379,9 +357,9 @@ public class ContractController implements Initializable, BaseController {
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.initOwner(mainApp.getPrimaryStage());
-            alert.setTitle("No Selection");
-            alert.setHeaderText("No Contract Selected");
-            alert.setContentText("Please select a contract in the table.");
+            alert.setTitle("Не выбран");
+            alert.setHeaderText("Контракт не выбран");
+            alert.setContentText("Пожалуйста, выберите контракт в таблице.");
     
             alert.showAndWait();
         }
@@ -420,9 +398,9 @@ public class ContractController implements Initializable, BaseController {
             // Ничего не выбрано.
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.initOwner(mainApp.getPrimaryStage());
-            alert.setTitle("No Selection");
-            alert.setHeaderText("No Person Selected");
-            alert.setContentText("Please select a person in the table.");
+            alert.setTitle("Не выбран");
+            alert.setHeaderText("Контракт не выбран");
+            alert.setContentText("Пожалуйста, выберите контракт в таблице.");
 
             alert.showAndWait();
         }
@@ -438,7 +416,7 @@ public class ContractController implements Initializable, BaseController {
             
             // Создаём диалоговое окно Stage.
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("Edit Person");
+            dialogStage.setTitle("Редактировать контракт");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(mainApp.getPrimaryStage());
             Scene scene = new Scene(page);
