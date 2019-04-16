@@ -324,12 +324,35 @@ public class ContractController implements Initializable, BaseController {
         periodTable.getSelectionModel().selectedItemProperty().addListener(listener);
     }
     
-  
+    private boolean isExist(Payment payment) {
+        return payment != null;
+    }
     
     public void showPeriodDetails(Period period) {
         clearDetails();
         if (period != null) {
+            Rent rent = (Rent) period.getRentPayment();
+            Fine fine = (Fine) period.getFinePayment();
+            Services services = (Services) period.getServicesPayment();
             
+            if (isExist(rent)) {
+                costLabel.setText(Double.toString(rent.getCost()));
+                indexCostLabel.setText(Double.toString(rent.getIndexCost()));
+                
+    //        statePaymentRentLabel.setText(Util.boolToString(period.getPaidRent()));
+            }
+            if (isExist(fine)) {
+                fineLabel.setText(Double.toString(fine.getFine()));
+            }
+            if (isExist(services)) {
+                
+                countWaterLabel.setText(Double.toString(services.getCountWater()));
+                tariffWaterLabel.setText(Double.toString(services.getTariffWater()));
+                countElectricityLabel.setText(Double.toString(services.getCountElectricity()));
+                tariffElectricityLabel.setText(Double.toString(services.getTariffElectricity()));
+                costHeadingLabel.setText(Double.toString(services.getCostHeading()));
+                costGarbageLabel.setText(Double.toString(services.getCostGarbage()));
+            }
         }
     }
     
