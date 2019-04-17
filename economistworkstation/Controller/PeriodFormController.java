@@ -216,14 +216,14 @@ public class PeriodFormController {
         }
         if (period.getServicesPayment() != null) {
             Services services = (Services) period.getServicesPayment();
-            countWaterField.setText(Double.toString(services.getCountWater()));
-            tariffWaterField.setText(Double.toString(services.getTariffWater()));
-            countElectricityField.setText(Double.toString(services.getCountElectricity()));
-            tariffElectricityField.setText(Double.toString(services.getTariffElectricity()));
-            costHeadingField.setText(Double.toString(services.getCostHeading()));
-            costGarbageField.setText(Double.toString(services.getCostGarbage()));
-            costInternetField.setText(Double.toString(services.getCostInternet()));
-            costTelephoneField.setText(Double.toString(services.getCostTelephone()));
+            setText(countWaterField, services.getCountWater());
+            setText(tariffWaterField, services.getTariffWater());
+            setText(countElectricityField, services.getCountElectricity());
+            setText(tariffElectricityField, services.getTariffElectricity());
+            setText(costHeadingField, services.getCostHeading());
+            setText(costGarbageField, services.getCostGarbage());
+            setText(costInternetField, services.getCostInternet());
+            setText(costTelephoneField, services.getCostTelephone());
         }
         if (period.getEquipmentPayment() != null) {
             Equipment equipment = (Equipment) period.getEquipmentPayment();
@@ -234,6 +234,19 @@ public class PeriodFormController {
         setColorLabels(textFields);
         
         initCalc();
+    }
+    
+    private void setText(TextField tf, Double value) {
+        try {
+            String text = Double.toString(value);
+            tf.setText(text);
+        } catch (NullPointerException e) {
+            System.err.println(String.format(
+                    "%s: value for %s from db is null", 
+                    this.getClass().getSimpleName(),
+                    tf.getId()));
+            tf.setText("");
+        }
     }
     
     public boolean isOkClicked() {
@@ -313,9 +326,10 @@ public class PeriodFormController {
 
             return Double.parseDouble(df.format(value));
         } catch(NumberFormatException e) {
-            //if("".equals(fieldString)) 
             System.err.println(String.format(
-                    "Field value '%s' is not correct. Replaced by 0",
+                    "%s: %s value '%s' is not correct. Replaced by null",
+                    this.getClass().getSimpleName(),
+                    field.getId(),
                     fieldString));
             return null;
         }
