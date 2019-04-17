@@ -23,7 +23,6 @@ import economistworkstation.Entity.TaxLand;
 import economistworkstation.ExcelCreator;
 import economistworkstation.Model.BuildingModel;
 import economistworkstation.Model.ContractModel;
-import economistworkstation.Model.MonthModel;
 import economistworkstation.Model.PeriodModel;
 import economistworkstation.Model.RenterModel;
 import economistworkstation.Util.Util;
