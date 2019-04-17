@@ -201,18 +201,17 @@ public class PeriodFormController {
         
         if (period.getRentPayment() != null) {
             Rent rent = (Rent) period.getRentPayment();
-            costRentField.setText(Double.toString(rent.getCost()));
-            indexCostRentField.setText(Double.toString(rent.getIndexCost()));
+            setText(costRentField, rent.getCost());
+            setText(indexCostRentField, rent.getIndexCost());
 //        statePaymentRentLabel.setText(Util.boolToString(period.getPaidRent()));
         }
         if (period.getFinePayment() != null) {
             Fine fine = (Fine) period.getFinePayment();
-            fineField.setText(Double.toString(fine.getFine()));
+            setText(fineField, fine.getFine());
         }
         if (period.getTaxLandPayment() != null) {
             TaxLand taxLand = (TaxLand) period.getTaxLandPayment();
-            taxLandField.setText(Double.toString(taxLand.getTaxLand()));
-            //        isPaidTaxLandField.setText(Util.boolToString(period.getPaidTaxLand()));
+            setText(taxLandField, taxLand.getTaxLand());
         }
         if (period.getServicesPayment() != null) {
             Services services = (Services) period.getServicesPayment();
@@ -227,7 +226,7 @@ public class PeriodFormController {
         }
         if (period.getEquipmentPayment() != null) {
             Equipment equipment = (Equipment) period.getEquipmentPayment();
-            costEquipmentField.setText(Double.toString(equipment.getCostEquipment()));
+            setText(costEquipmentField, equipment.getCostEquipment());
         }
         
         setMatchArrays();
@@ -264,8 +263,8 @@ public class PeriodFormController {
                 Rent rent = (Rent) period.getRentPayment();
                 if (rent == null)
                     rent = new Rent();
-                rent.setCost(Double.parseDouble(costRentField.getText()));
-                rent.setIndexCost(Double.parseDouble(indexCostRentField.getText()));
+                rent.setCost(parseField(costRentField));
+                rent.setIndexCost(parseField(indexCostRentField));
 //            period.setPaidRent(Util.stringToBool(paidRentField.getText()));
                 period.setRentPayment(rent);
             }
@@ -273,18 +272,16 @@ public class PeriodFormController {
                 Fine fine = (Fine) period.getFinePayment();
                 if (fine == null)
                     fine = new Fine();
-                fine.setFine(Double.parseDouble(fineField.getText()));
+                fine.setFine(parseField(fineField));
                 period.setFinePayment(fine);
             }
             if (isFilled(taxLandField)) {
                 TaxLand taxLand = (TaxLand) period.getTaxLandPayment();
                 if (taxLand == null)
                     taxLand = new TaxLand();
-                taxLand.setTaxLand(Double.parseDouble(taxLandField.getText()));
-//            period.setPaidTaxLand(Util.stringToBool(isPaidTaxLandField.getText()));
+                taxLand.setTaxLand(parseField(taxLandField));
                 period.setTaxLandPayment(taxLand);
             }
-            
             if (isFilled(countWaterField, tariffWaterField, countElectricityField,
                     tariffElectricityField, costHeadingField, costGarbageField,
                     costInternetField, costTelephoneField)) {
@@ -299,8 +296,14 @@ public class PeriodFormController {
                 services.setCostGarbage(parseField(costGarbageField));
                 services.setCostInternet(parseField(costInternetField));
                 services.setCostTelephone(parseField(costTelephoneField));
-//            period.setPaidRent(Util.stringToBool(paidRentField.getText()));
                 period.setServicesPayment(services);
+            }
+            if (isFilled(costEquipmentField)) {
+                Equipment equipment = (Equipment) period.getEquipmentPayment();
+                if (equipment == null)
+                    equipment = new Equipment();
+                equipment.setCostEquipment(parseField(costEquipmentField));
+                period.setEquipmentPayment(equipment);
             }
             
             okClicked = true;
