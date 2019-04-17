@@ -164,6 +164,7 @@ public class PeriodModel {
                     + "LEFT JOIN FINE ON PERIOD.ID_FINE=FINE.id "
                     + "LEFT JOIN TAXLAND ON PERIOD.ID_TAX_LAND=TAXLAND.id "
                     + "LEFT JOIN EQUIPMENT ON PERIOD.ID_EQUIPMENT=EQUIPMENT.id "
+                    + "LEFT JOIN SERVICES ON PERIOD.ID_SERVICES=SERVICES.id "
                     + "WHERE id_contract='"
                     + id + "' ORDER BY number;");
             
@@ -189,6 +190,7 @@ public class PeriodModel {
                     + "LEFT JOIN FINE ON PERIOD.ID_FINE=FINE.id "
                     + "LEFT JOIN TAXLAND ON PERIOD.ID_TAX_LAND=TAXLAND.id "
                     + "LEFT JOIN EQUIPMENT ON PERIOD.ID_EQUIPMENT=EQUIPMENT.id "
+                    + "LEFT JOIN SERVICES ON PERIOD.ID_SERVICES=SERVICES.id "
                     + "LEFT JOIN CONTRACT ON PERIOD.ID_CONTRACT=CONTRACT.id "
                     + "LEFT JOIN RENTER ON CONTRACT.ID_RENTER=RENTER.id "
                     + "LEFT JOIN BUILDING ON CONTRACT.ID_BUILDING=BUILDING.id "
@@ -287,14 +289,14 @@ public class PeriodModel {
         if(rs.getInt("id_services") != 0) {
             Payment services = new Services(rs.getDouble("paid_services"), 
                     rs.getString("date_paid_services"),
-                    rs.getDouble("count_water"),
-                    rs.getDouble("count_electricity"), 
-                    rs.getDouble("cost_heading"),
-                    rs.getDouble("cost_garbage"), 
-                    rs.getDouble("cost_internet"), 
-                    rs.getDouble("cost_telephone"),
-                    rs.getDouble("tariff_water"),
-                    rs.getDouble("tariff_electricity"));
+                    rs.getObject("count_water"),
+                    rs.getObject("count_electricity"), 
+                    rs.getObject("cost_meter_heading"),
+                    rs.getObject("cost_meter_garbage"), 
+                    rs.getObject("cost_internet"), 
+                    rs.getObject("cost_telephone"),
+                    rs.getObject("tariff_water"),
+                    rs.getObject("tariff_electricity"));
             services.setId(rs.getInt("id_services"));
             return services;
         }
