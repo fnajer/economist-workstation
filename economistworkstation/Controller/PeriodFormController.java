@@ -201,22 +201,24 @@ public class PeriodFormController {
         startPeriodLabel.setText(period.getStartPeriod(contract.getDateStart()));
         endPeriodLabel.setText(period.getEndPeriod());
         
-        if (period.getRentPayment() != null) {
-            Rent rent = (Rent) period.getRentPayment();
+        Rent rent = (Rent) period.getRentPayment();
+        Fine fine = (Fine) period.getFinePayment();
+        TaxLand taxLand = (TaxLand) period.getTaxLandPayment();
+        Services services = (Services) period.getServicesPayment();
+        Equipment equipment = (Equipment) period.getEquipmentPayment();
+        
+        if (isExist(rent)) {
             setText(costRentField, rent.getCost());
             setText(indexCostRentField, rent.getIndexCost());
 //        statePaymentRentLabel.setText(Util.boolToString(period.getPaidRent()));
         }
-        if (period.getFinePayment() != null) {
-            Fine fine = (Fine) period.getFinePayment();
+        if (isExist(fine)) {
             setText(fineField, fine.getFine());
         }
-        if (period.getTaxLandPayment() != null) {
-            TaxLand taxLand = (TaxLand) period.getTaxLandPayment();
+        if (isExist(taxLand)) {
             setText(taxLandField, taxLand.getTaxLand());
         }
-        if (period.getServicesPayment() != null) {
-            Services services = (Services) period.getServicesPayment();
+        if (isExist(services)) {
             setText(countWaterField, services.getCountWater());
             setText(tariffWaterField, services.getTariffWater());
             setText(countElectricityField, services.getCountElectricity());
@@ -226,8 +228,7 @@ public class PeriodFormController {
             setText(costInternetField, services.getCostInternet());
             setText(costTelephoneField, services.getCostTelephone());
         }
-        if (period.getEquipmentPayment() != null) {
-            Equipment equipment = (Equipment) period.getEquipmentPayment();
+        if (isExist(equipment)) {
             setText(costEquipmentField, equipment.getCostEquipment());
         }
         
@@ -235,6 +236,10 @@ public class PeriodFormController {
         setColorLabels(textFields);
         
         initCalc();
+    }
+    
+    private boolean isExist(Payment payment) {
+        return payment != null;
     }
     
     private void setText(TextField tf, Double value) {
