@@ -186,7 +186,7 @@ public class ContractController implements Initializable, BaseController {
             // Передаём адресата в контроллер.
             PeriodFormController controller = loader.getController();
             controller.setDialogStage(dialogStage);
-            controller.setPeriod(period);
+            controller.setPeriod(period, contract);
             
             // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
             dialogStage.showAndWait();

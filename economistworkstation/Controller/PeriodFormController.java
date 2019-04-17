@@ -5,6 +5,7 @@
  */
 package economistworkstation.Controller;
 
+import economistworkstation.Entity.Contract;
 import economistworkstation.Entity.Fine;
 import economistworkstation.Entity.Month;
 import economistworkstation.Entity.Payment;
@@ -191,12 +192,13 @@ public class PeriodFormController {
         this.dialogStage = dialogStage;
     }
     
-    public void setPeriod(Period period) {
+    public void setPeriod(Period period, Contract contract) {
         this.period = period;
         
         numberLabel.setText(Integer.toString(period.getNumber()));
         numberRentAccLabel.setText(Integer.toString(period.getNumberRentAcc()));
         numberServicesAccLabel.setText(Integer.toString(period.getNumberServicesAcc()));
+        startPeriodLabel.setText(period.getStartPeriod(contract.getDateStart()));
         endPeriodLabel.setText(period.getEndPeriod());
         
         if (period.getRentPayment() != null) {
