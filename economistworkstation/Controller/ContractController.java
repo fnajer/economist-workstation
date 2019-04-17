@@ -345,14 +345,26 @@ public class ContractController implements Initializable, BaseController {
                 fineLabel.setText(Double.toString(fine.getFine()));
             }
             if (isExist(services)) {
-                
-                countWaterLabel.setText(Double.toString(services.getCountWater()));
-                tariffWaterLabel.setText(Double.toString(services.getTariffWater()));
-                countElectricityLabel.setText(Double.toString(services.getCountElectricity()));
-                tariffElectricityLabel.setText(Double.toString(services.getTariffElectricity()));
-                costHeadingLabel.setText(Double.toString(services.getCostHeading()));
-                costGarbageLabel.setText(Double.toString(services.getCostGarbage()));
+                setText(countWaterLabel, services.getCountWater());
+                setText(tariffWaterLabel, services.getTariffWater());
+                setText(countElectricityLabel, services.getCountElectricity());
+                setText(tariffElectricityLabel, services.getTariffElectricity());
+                setText(costHeadingLabel, services.getCostHeading());
+                setText(costGarbageLabel, services.getCostGarbage());
             }
+        }
+    }
+    
+    private void setText(Label label, Double value) {
+        try {
+            String text = Double.toString(value);
+            label.setText(text);
+        } catch (NullPointerException e) {
+            System.err.println(String.format(
+                    "%s: value for %s from db is null", 
+                    this.getClass().getSimpleName(),
+                    label.getId()));
+            label.setText("");
         }
     }
     
