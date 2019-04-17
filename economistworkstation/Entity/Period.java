@@ -5,6 +5,7 @@
  */
 package economistworkstation.Entity;
 
+import java.time.LocalDate;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -186,6 +187,22 @@ public class Period {
             }
         }
         return monthName;
+    }
+    
+    public String getStartPeriod(String dateStartContract) {
+        int currentNumber = getNumber();
+        
+        if (currentNumber == 1)
+            return dateStartContract;
+        
+        LocalDate startPeriod;
+        LocalDate endPeriod = LocalDate.parse(getEndPeriod());
+        int numDay = endPeriod.getDayOfMonth();
+        if (numDay == 1)
+            startPeriod = endPeriod.minusMonths(1);
+        else
+            startPeriod = endPeriod.minusDays(numDay - 1);
+        return startPeriod.toString();
     }
     
     @Override
