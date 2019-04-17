@@ -36,7 +36,7 @@
                               <Font name="Times New Roman" size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="numberField" text="Label">
+                        <Label fx:id="numberLabel" text="Label">
                            <padding>
                               <Insets left="65.0" />
                            </padding>
@@ -49,14 +49,14 @@
                               <Insets left="45.0" />
                            </padding>
                         </Label>
-                        <Label fx:id="endPeriodField" prefWidth="128.0" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label fx:id="endPeriodLabel" prefWidth="128.0" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <padding>
                               <Insets left="65.0" />
                            </padding>
                         </Label>
                         <Label text="Длительность периода:" GridPane.rowIndex="1" />
                         <Label text="с" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label fx:id="startPeriodField" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                        <Label fx:id="startPeriodLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1">
                            <padding>
                               <Insets left="10.0" />
                            </padding>
@@ -78,13 +78,13 @@
                     </rowConstraints>
                      <children>
                         <Label prefHeight="17.0" prefWidth="144.0" text="Номер счета за аренду:" />
-                        <Label fx:id="numberRentAccField" text="Label" GridPane.columnIndex="1">
+                        <Label fx:id="numberRentAccLabel" text="Label" GridPane.columnIndex="1">
                            <GridPane.margin>
                               <Insets left="5.0" />
                            </GridPane.margin>
                         </Label>
                         <Label text="Номер счета за услуги:" GridPane.columnIndex="2" />
-                        <Label fx:id="numberServicesAccField" text="Label" GridPane.columnIndex="3" />
+                        <Label fx:id="numberServicesAccLabel" text="Label" GridPane.columnIndex="3" />
                      </children>
                      <padding>
                         <Insets left="10.0" />

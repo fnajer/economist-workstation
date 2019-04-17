@@ -38,15 +38,15 @@ import javafx.stage.Stage;
  */
 public class PeriodFormController {
     @FXML
-    private Label numberField;
+    private Label numberLabel;
     @FXML
-    private Label numberRentAccField;
+    private Label numberRentAccLabel;
     @FXML
-    private Label numberServicesAccField;
+    private Label numberServicesAccLabel;
     @FXML
-    private Label startPeriodField;
+    private Label startPeriodLabel;
     @FXML
-    private Label endPeriodField;
+    private Label endPeriodLabel;
     
     //calculation
     @FXML
@@ -194,10 +194,10 @@ public class PeriodFormController {
     public void setPeriod(Period period) {
         this.period = period;
         
-        numberField.setText(Integer.toString(period.getNumber()));
-        numberRentAccField.setText(Integer.toString(period.getNumberRentAcc()));
-        numberServicesAccField.setText(Integer.toString(period.getNumberServicesAcc()));
-        endPeriodField.setText(period.getEndPeriod());
+        numberLabel.setText(Integer.toString(period.getNumber()));
+        numberRentAccLabel.setText(Integer.toString(period.getNumberRentAcc()));
+        numberServicesAccLabel.setText(Integer.toString(period.getNumberServicesAcc()));
+        endPeriodLabel.setText(period.getEndPeriod());
         
         if (period.getRentPayment() != null) {
             Rent rent = (Rent) period.getRentPayment();
@@ -255,10 +255,7 @@ public class PeriodFormController {
     @FXML
     private void handleOk() {
         if (isInputValid()) {
- 
-            period.setNumber(Integer.parseInt(numberField.getText()));
-            period.setEndPeriod(endPeriodField.getText());
-            
+
             if (isFilled(costRentField, indexCostRentField)) {
                 Rent rent = (Rent) period.getRentPayment();
                 if (rent == null)
