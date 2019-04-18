@@ -67,10 +67,15 @@ public class TagParser {
             System.out.println(foundedTag);
             
             Rent rent = (Rent) period.getRentPayment();
+            rent = rent == null ? new Rent() : rent;
             Fine fine = (Fine) period.getFinePayment();
+            fine = fine == null ? new Fine() : fine;
             TaxLand taxLand = (TaxLand) period.getTaxLandPayment();
+            taxLand = taxLand == null ? new TaxLand() : taxLand;
             Equipment equipment = (Equipment) period.getEquipmentPayment();
+            equipment = equipment == null ? new Equipment() : equipment;
             Services services = (Services) period.getServicesPayment();
+            services = services == null ? new Services() : services;
             
             //rent account
             if ("<date>".equals(foundedTag)) {
@@ -115,7 +120,7 @@ public class TagParser {
                 newValue = monthName + ' ' + Integer.toString(monthYear);
             }
             if ("<sumRent>".equals(foundedTag)) {
-                String sumRent = getDecimalFormat(Locale.US).format(rent.calcSumRent());
+                String sumRent = parseProperty(rent.calcSumRent(), Locale.US);
                 newValue = sumRent;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
@@ -132,7 +137,7 @@ public class TagParser {
                 return;
             }
             if ("<fine>".equals(foundedTag)) {
-                String sumRent = getDecimalFormat(Locale.US).format(fine.getFine());
+                String sumRent = parseProperty(fine.getFine(), Locale.US);
                 newValue = sumRent;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
@@ -154,7 +159,7 @@ public class TagParser {
                 return;
             }
             if ("<taxLand>".equals(foundedTag)) {
-                String costTaxLand = getDecimalFormat(Locale.US).format(taxLand.getTaxLand());
+                String costTaxLand = parseProperty(taxLand.getTaxLand(), Locale.US);
                 newValue = costTaxLand;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
@@ -352,28 +357,29 @@ public class TagParser {
                 newValue = monthName;
             }
             if ("<getCalcSumRent>".equals(foundedTag)) {
-                String cost = getDecimalFormat(Locale.getDefault()).format(rent.getCost());
-                String index = getDecimalFormat(Locale.getDefault()).format(rent.getIndexCost());
+                
+                String cost = parseProperty(rent.getCost(), Locale.US);
+                String index = parseProperty(rent.getIndexCost(), Locale.US);
                 newValue = cost + '*' + index + '=';
             }
             if ("<getCalcCostWater>".equals(foundedTag)) {
-                String count = getDecimalFormat(Locale.getDefault()).format(services.getCountWater());
-                String tariff = getDecimalFormat(Locale.getDefault()).format(services.getTariffWater());
+                String count = parseProperty(services.getCountWater(), Locale.US);
+                String tariff = parseProperty(services.getTariffWater(), Locale.US);
                 newValue = count + '*' + tariff + '=';
             }
             if ("<getCalcCostElectricity>".equals(foundedTag)) {
-                String count = getDecimalFormat(Locale.getDefault()).format(services.getCountElectricity());
-                String tariff = getDecimalFormat(Locale.getDefault()).format(services.getTariffElectricity());
+                String count = parseProperty(services.getCountElectricity(), Locale.US);
+                String tariff = parseProperty(services.getTariffElectricity(), Locale.US);
                 newValue = count + '*' + tariff + '=';
             }
             if ("<getCalcCostHeading>".equals(foundedTag)) {
-                String count = getDecimalFormat(Locale.getDefault()).format(services.getCostHeading());
-                String tariff = getDecimalFormat(Locale.getDefault()).format(building.getSquare());
+                String count = parseProperty(services.getCostHeading(), Locale.US);
+                String tariff = parseProperty(building.getSquare(), Locale.US);
                 newValue = count + '*' + tariff + '=';
             }
             if ("<getCalcCostGarbage>".equals(foundedTag)) {
-                String count = getDecimalFormat(Locale.getDefault()).format(services.getCostGarbage());
-                String tariff = getDecimalFormat(Locale.getDefault()).format(building.getSquare());
+                String count = parseProperty(services.getCostGarbage(), Locale.US);
+                String tariff = parseProperty(building.getSquare(), Locale.US);
                 newValue = count + '*' + tariff + '=';
             }
             if ("<user>".equals(foundedTag)) {
@@ -478,5 +484,18 @@ public class TagParser {
         df.setRoundingMode(RoundingMode.HALF_UP);
         
         return df;
+    }
+    
+    public static String parseProperty(Double doubleObject, Locale locale) {
+        DecimalFormat df = getDecimalFormat(locale);
+        try {
+            return df.format(doubleObject);
+        } catch(IllegalArgumentException e) {
+            System.err.println(String.format(
+                    "%s: value '%s' is not correct. Replaced by 0.0",
+                    "TagParser",
+                    doubleObject));
+            return "0.0";
+        }
     }
 }
