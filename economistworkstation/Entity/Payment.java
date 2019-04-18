@@ -36,6 +36,7 @@ public abstract class Payment {
     
     public abstract PreparedStatement getInsertStatement(Database db) throws SQLException;
     public abstract PreparedStatement getUpdateStatement(Database db) throws SQLException;
+    public abstract PreparedStatement getDeleteStatement(Database db) throws SQLException;
     
     public int getId() {
         return id.get();

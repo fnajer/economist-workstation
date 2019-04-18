@@ -84,7 +84,14 @@ public class Rent extends Payment {
         
         return ps;
     }
-    
+    @Override
+    public PreparedStatement getDeleteStatement(Database db) throws SQLException {
+        PreparedStatement ps = db.conn.prepareStatement("DELETE FROM FINE "
+                + "WHERE id=?", Statement.RETURN_GENERATED_KEYS);
+        ps.setInt(1, getId());
+        
+        return ps;
+    }
     
     @Override
     public String toString() {

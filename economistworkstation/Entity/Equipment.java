@@ -7,11 +7,10 @@ package economistworkstation.Entity;
 
 import economistworkstation.Database;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 /**
  *
@@ -19,21 +18,21 @@ import javafx.beans.property.SimpleDoubleProperty;
  */
 
 public class Equipment extends Payment {
-    private final DoubleProperty costEquipment;
+    private final ObjectProperty costEquipment;
     
     public Equipment() {
-        this(0.0, null, 0.0);
+        this(0.0, null, null);
     }
     
-    public Equipment(double paid, String datePaid, double costEquipment) {
+    public Equipment(double paid, String datePaid, Object costEquipment) {
         super(paid, datePaid);
-        this.costEquipment = new SimpleDoubleProperty(costEquipment);
+        this.costEquipment = new SimpleObjectProperty(costEquipment);
     }
     
-    public double getCostEquipment() {
-        return costEquipment.get();
+    public Double getCostEquipment() {
+        return (Double) costEquipment.get();
     }
-    public void setCostEquipment(double costEquipment) {
+    public void setCostEquipment(Double costEquipment) {
         this.costEquipment.set(costEquipment);
     }
     
@@ -44,7 +43,7 @@ public class Equipment extends Payment {
                 + "VALUES(NULL,?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         ps.setDouble(1, getPaid());
         ps.setString(2, getDatePaid());
-        ps.setDouble(3, getCostEquipment());
+        ps.setObject(3, getCostEquipment(), java.sql.Types.DOUBLE);
 
         return ps;
     }
@@ -55,8 +54,16 @@ public class Equipment extends Payment {
                 + "WHERE id=?", Statement.RETURN_GENERATED_KEYS);
         ps.setDouble(1, getPaid());
         ps.setString(2, getDatePaid());
-        ps.setDouble(3, getCostEquipment());
+        ps.setObject(3, getCostEquipment(), java.sql.Types.DOUBLE);
         ps.setInt(4, getId());
+        
+        return ps;
+    }
+    @Override
+    public PreparedStatement getDeleteStatement(Database db) throws SQLException {
+        PreparedStatement ps = db.conn.prepareStatement("DELETE FROM EQUIPMENT "
+                + "WHERE id=?", Statement.RETURN_GENERATED_KEYS);
+        ps.setInt(1, getId());
         
         return ps;
     }

@@ -7,11 +7,10 @@ package economistworkstation.Entity;
 
 import economistworkstation.Database;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 /**
  *
@@ -19,21 +18,21 @@ import javafx.beans.property.SimpleDoubleProperty;
  */
 
 public class Fine extends Payment {
-    private final DoubleProperty fine;
+    private final ObjectProperty fine;
     
     public Fine() {
-        this(0.0, null, 0.0);
+        this(0.0, null, null);
     }
     
-    public Fine(double paid, String datePaid, double fine) {
+    public Fine(double paid, String datePaid, Object fine) {
         super(paid, datePaid);
-        this.fine = new SimpleDoubleProperty(fine);
+        this.fine = new SimpleObjectProperty(fine);
     }
     
-    public double getFine() {
-        return fine.get();
+    public Double getFine() {
+        return (Double) fine.get();
     }
-    public void setFine(double fine) {
+    public void setFine(Double fine) {
         this.fine.set(fine);
     }
     
@@ -44,7 +43,7 @@ public class Fine extends Payment {
                 + "VALUES(NULL,?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         ps.setDouble(1, getPaid());
         ps.setString(2, getDatePaid());
-        ps.setDouble(3, getFine());
+        ps.setObject(3, getFine(), java.sql.Types.DOUBLE);
 
         return ps;
     }
@@ -55,8 +54,16 @@ public class Fine extends Payment {
                 + "WHERE id=?", Statement.RETURN_GENERATED_KEYS);
         ps.setDouble(1, getPaid());
         ps.setString(2, getDatePaid());
-        ps.setDouble(3, getFine());
+        ps.setObject(3, getFine(), java.sql.Types.DOUBLE);
         ps.setInt(4, getId());
+        
+        return ps;
+    }
+    @Override
+    public PreparedStatement getDeleteStatement(Database db) throws SQLException {
+        PreparedStatement ps = db.conn.prepareStatement("DELETE FROM FINE "
+                + "WHERE id=?", Statement.RETURN_GENERATED_KEYS);
+        ps.setInt(1, getId());
         
         return ps;
     }

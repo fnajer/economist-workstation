@@ -189,7 +189,14 @@ public class Services extends Payment {
         
         return ps;
     }
-    
+    @Override
+    public PreparedStatement getDeleteStatement(Database db) throws SQLException {
+        PreparedStatement ps = db.conn.prepareStatement("DELETE FROM SERVICES "
+                + "WHERE id=?", Statement.RETURN_GENERATED_KEYS);
+        ps.setInt(1, getId());
+        
+        return ps;
+    }
    
     @Override
     public String toString() {
