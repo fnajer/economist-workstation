@@ -251,7 +251,7 @@ public class PeriodFormController {
                     "%s: value for %s from db is null", 
                     this.getClass().getSimpleName(),
                     tf.getId()));
-            tf.setText("");
+            tf.clear();
         }
     }
     
@@ -262,34 +262,50 @@ public class PeriodFormController {
     @FXML
     private void handleOk() {
         if (isInputValid()) {
-
+            Rent rent = (Rent) period.getRentPayment();
+            Fine fine = (Fine) period.getFinePayment();
+            TaxLand taxLand = (TaxLand) period.getTaxLandPayment();
+            Services services = (Services) period.getServicesPayment();
+            Equipment equipment = (Equipment) period.getEquipmentPayment();
+            
             if (isFilled(costRentField, indexCostRentField)) {
-                Rent rent = (Rent) period.getRentPayment();
                 if (rent == null)
                     rent = new Rent();
                 rent.setCost(parseField(costRentField));
                 rent.setIndexCost(parseField(indexCostRentField));
 //            period.setPaidRent(Util.stringToBool(paidRentField.getText()));
                 period.setRentPayment(rent);
+            } else if (isExist(rent)) {
+                Rent rentForDelete = new Rent();
+                rentForDelete.setId(rent.getId());
+                rentForDelete.setPaid(-1);
+                period.setRentPayment(rentForDelete);
             }
             if (isFilled(fineField)) {
-                Fine fine = (Fine) period.getFinePayment();
                 if (fine == null)
                     fine = new Fine();
                 fine.setFine(parseField(fineField));
                 period.setFinePayment(fine);
+            } else if (isExist(fine)) {
+                Fine fineForDelete = new Fine();
+                fineForDelete.setId(fine.getId());
+                fineForDelete.setPaid(-1);
+                period.setFinePayment(fineForDelete);
             }
             if (isFilled(taxLandField)) {
-                TaxLand taxLand = (TaxLand) period.getTaxLandPayment();
                 if (taxLand == null)
                     taxLand = new TaxLand();
                 taxLand.setTaxLand(parseField(taxLandField));
                 period.setTaxLandPayment(taxLand);
+            } else if (isExist(taxLand)) {
+                TaxLand taxLandForDelete = new TaxLand();
+                taxLandForDelete.setId(taxLand.getId());
+                taxLandForDelete.setPaid(-1);
+                period.setTaxLandPayment(taxLandForDelete);
             }
             if (isFilled(countWaterField, tariffWaterField, countElectricityField,
                     tariffElectricityField, costHeadingField, costGarbageField,
                     costInternetField, costTelephoneField)) {
-                Services services = (Services) period.getServicesPayment();
                 if (services == null)
                     services = new Services();
                 services.setCountWater(parseField(countWaterField));
@@ -301,13 +317,22 @@ public class PeriodFormController {
                 services.setCostInternet(parseField(costInternetField));
                 services.setCostTelephone(parseField(costTelephoneField));
                 period.setServicesPayment(services);
+            } else if (isExist(services)) {
+                Services servicesForDelete = new Services();
+                servicesForDelete.setId(services.getId());
+                servicesForDelete.setPaid(-1);
+                period.setServicesPayment(servicesForDelete);
             }
             if (isFilled(costEquipmentField)) {
-                Equipment equipment = (Equipment) period.getEquipmentPayment();
                 if (equipment == null)
                     equipment = new Equipment();
                 equipment.setCostEquipment(parseField(costEquipmentField));
                 period.setEquipmentPayment(equipment);
+            } else if (isExist(equipment)) {
+                Equipment equipmentForDelete = new Equipment();
+                equipmentForDelete.setId(equipment.getId());
+                equipmentForDelete.setPaid(-1);
+                period.setEquipmentPayment(equipmentForDelete);
             }
             
             okClicked = true;
