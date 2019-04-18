@@ -37,15 +37,10 @@ public class PeriodModel {
             PreparedStatement ps = db.conn.prepareStatement("INSERT INTO PERIOD "
                     + "(id, number, date_end, id_contract, id_rent, id_fine,"
                     + "id_tax_land, id_services, id_equipment) "
-                    + "VALUES(NULL,?, ?, ?, ?, ?, ?, ?)");
+                    + "VALUES(NULL,?, ?, ?, NULL, NULL, NULL, NULL, NULL)");
             ps.setInt(1, period.getNumber());
             ps.setString(2, period.getEndPeriod());
             ps.setInt(3, period.getIdContract());
-            ps.setInt(4, getPayment(period.getRentPayment()));
-            ps.setInt(5, getPayment(period.getFinePayment()));
-            ps.setInt(6, getPayment(period.getTaxLandPayment()));
-            ps.setInt(7, getPayment(period.getServicesPayment()));
-            ps.setInt(8, getPayment(period.getEquipmentPayment()));
             
             ps.executeUpdate();
             System.out.println("Добавлен период: " + period.getNumber());
@@ -102,11 +97,11 @@ public class PeriodModel {
             ps.setInt(1, period.getNumber());
             ps.setString(2, period.getEndPeriod());
             ps.setInt(3, period.getIdContract());
-            ps.setObject(4, getPayment(period.getRentPayment()), java.sql.Types.INTEGER);
-            ps.setObject(5, getPayment(period.getFinePayment()), java.sql.Types.INTEGER);
-            ps.setObject(6, getPayment(period.getTaxLandPayment()), java.sql.Types.INTEGER);
-            ps.setObject(7, getPayment(period.getServicesPayment()), java.sql.Types.INTEGER);
-            ps.setObject(8, getPayment(period.getEquipmentPayment()), java.sql.Types.INTEGER);
+            ps.setObject(4, idRent, java.sql.Types.INTEGER);
+            ps.setObject(5, idFine, java.sql.Types.INTEGER);
+            ps.setObject(6, idTaxLand, java.sql.Types.INTEGER);
+            ps.setObject(7, idServices, java.sql.Types.INTEGER);
+            ps.setObject(8, idEquipment, java.sql.Types.INTEGER);
             ps.setInt(9, id);
             
             ps.executeUpdate();
@@ -122,8 +117,13 @@ public class PeriodModel {
         PreparedStatement ps;
         String state;
         try {
-            
-            if (payment.getId() == 0) {
+            if (payment.getPaid() == -1) {
+                ps = payment.getDeleteStatement(db);
+                state = "Delete";
+                ps.executeUpdate();
+                System.out.println(String.format("%s: %s", state, payment));
+                return null;
+            } else if (payment.getId() == 0) {
                 ps = payment.getInsertStatement(db);
                 state = "Insert";
             } else {
