@@ -106,22 +106,46 @@ public class Services extends Payment {
     }
     
     public Double calcCostWater() {
-        return getCountWater() * getTariffWater();
+        try {
+            return getCountWater() * getTariffWater();
+        } catch(NullPointerException e) {
+            return 0.0;
+        }
     }
     public Double calcCostElectricity() {
-        return getCountElectricity() * getTariffElectricity();
+        try {
+            return getCountElectricity() * getTariffElectricity();
+        } catch(NullPointerException e) {
+            return 0.0;
+        }
     }
     public Double calcCostHeading() {
-        return getCostHeading();
+        Double cost = getCostHeading();
+        if (cost != null)
+            return cost;
+        else
+            return 0.0;
     }
     public Double calcCostGarbage() {
-        return getCostGarbage();
+        Double cost = getCostGarbage();
+        if (cost != null)
+            return cost;
+        else
+            return 0.0;
     }
     public Double calcCostInternet() {
-        return getCostInternet();
+        Double cost = getCostInternet();
+        if (cost != null)
+            return cost;
+        else
+            return 0.0;
     }
     public Double calcCostTelephone() {
-        return getCostTelephone();
+        Double cost = getCostTelephone();
+        if (cost != null)
+            return cost;
+        else
+            return 0.0;
     }
     
     @Override
@@ -165,6 +189,7 @@ public class Services extends Payment {
         
         return ps;
     }
+    
    
     @Override
     public String toString() {

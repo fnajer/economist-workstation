@@ -14,7 +14,9 @@ import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 /**
  *
@@ -22,35 +24,39 @@ import javafx.beans.property.SimpleDoubleProperty;
  */
 
 public class Rent extends Payment {
-    private final DoubleProperty cost;
-    private final DoubleProperty indexCost;
+    private final ObjectProperty cost;
+    private final ObjectProperty indexCost;
     
     public Rent() {
-        this(0.0, null, 0.0, 0.0);
+        this(0.0, null, null, null);
     }
     
-    public Rent(double paid, String datePaid, double cost, double indexCost) {
+    public Rent(double paid, String datePaid, Object cost, Object indexCost) {
         super(paid, datePaid);
-        this.cost = new SimpleDoubleProperty(cost);
-        this.indexCost = new SimpleDoubleProperty(indexCost);
+        this.cost = new SimpleObjectProperty(cost);
+        this.indexCost = new SimpleObjectProperty(indexCost);
     }
     
-    public double getCost() {
-        return cost.get();
+    public Double getCost() {
+        return (Double) cost.get();
     }
-    public void setCost(double cost) {
+    public void setCost(Double cost) {
         this.cost.set(cost);
     }
     
-    public double getIndexCost() {
-        return indexCost.get();
+    public Double getIndexCost() {
+        return (Double) indexCost.get();
     }
-    public void setIndexCost(double indexCost) {
+    public void setIndexCost(Double indexCost) {
         this.indexCost.set(indexCost);
     }
     
-    public double calcSumRent() {
-        return getCost() * getIndexCost();
+    public Double calcSumRent() {
+        try {
+            return getCost() * getIndexCost();
+        } catch(NullPointerException e) {
+            return 0.0;
+        }
     }
     
     @Override
@@ -60,8 +66,8 @@ public class Rent extends Payment {
                 + "VALUES(NULL,?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         ps.setDouble(1, getPaid());
         ps.setString(2, getDatePaid());
-        ps.setDouble(3, getCost());
-        ps.setDouble(4, getIndexCost());
+        ps.setObject(3, getCost(), java.sql.Types.DOUBLE);
+        ps.setObject(4, getIndexCost(), java.sql.Types.DOUBLE);
         
         return ps;
     }
@@ -72,12 +78,13 @@ public class Rent extends Payment {
                 + "WHERE id=?", Statement.RETURN_GENERATED_KEYS);
         ps.setDouble(1, getPaid());
         ps.setString(2, getDatePaid());
-        ps.setDouble(3, getCost());
-        ps.setDouble(4, getIndexCost());
+        ps.setObject(3, getCost(), java.sql.Types.DOUBLE);
+        ps.setObject(4, getIndexCost(), java.sql.Types.DOUBLE);
         ps.setInt(5, getId());
         
         return ps;
     }
+    
     
     @Override
     public String toString() {
