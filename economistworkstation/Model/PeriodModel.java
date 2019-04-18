@@ -89,6 +89,17 @@ public class PeriodModel {
     
     public static void updatePeriod(int id, Period period) {
         try {
+            Integer idRent = getPayment(period.getRentPayment());
+            if (idRent == null) period.setRentPayment(null);
+            Integer idFine = getPayment(period.getFinePayment());
+            if (idFine == null) period.setFinePayment(null);
+            Integer idTaxLand = getPayment(period.getTaxLandPayment());
+            if (idTaxLand == null) period.setTaxLandPayment(null);
+            Integer idServices = getPayment(period.getServicesPayment());
+            if (idServices == null) period.setServicesPayment(null);
+            Integer idEquipment = getPayment(period.getEquipmentPayment());
+            if (idEquipment == null) period.setEquipmentPayment(null);
+            
             PreparedStatement ps = db.conn.prepareStatement("UPDATE Period "
                     + "SET number=?, date_end=?, id_contract=?, id_rent=?, "
                     + "id_fine =?, id_tax_land=?, id_services=?, id_equipment=? "
