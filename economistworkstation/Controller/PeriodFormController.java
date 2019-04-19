@@ -186,12 +186,12 @@ public class PeriodFormController {
             taxLandLabel, countWaterLabel, countWaterLabel, countElectricityLabel, 
             countElectricityLabel, costHeadingLabel,
             costGarbageLabel, costInternetLabel,
-            costTelephoneLabel};
+            costTelephoneLabel, costEquipmentLabel};
         this.textFields = new TextField[]{costRentField, indexCostRentField, fineField, 
             taxLandField, countWaterField, tariffWaterField, countElectricityField,
             tariffElectricityField, costHeadingField,
             costGarbageField, costInternetField,
-            costTelephoneField};
+            costTelephoneField, costEquipmentField};
     }
 
     private Stage dialogStage;
@@ -442,10 +442,16 @@ public class PeriodFormController {
         setCost(countWaterField, tariffWaterField, costWaterLabel);
         setCost(countElectricityField, tariffElectricityField, costElectricityLabel);
         printSum("services");
+        printSum("servicesExtra");
+        printSum("taxLandExtra");
+        printSum("equipmentExtra");
+        printSum("servicesExtra");
         setCost(costRentField, indexCostRentField, sumRentLabel);
-        printSum("rentFine");
+        printSum("rentExtra");
+        printSum("fineExtra");
+        printSum("rentFineExtra");
     }
-    
+       
     private void setCost(TextField firstField, TextField secondField, Label label) {
         try {
             String count = firstField.getText();
@@ -478,7 +484,7 @@ public class PeriodFormController {
                 else if(control instanceof TextField)
                     givenText = ((TextField) control).getText();
                 
-                if ("".equals(givenText)) continue;
+                if ("".equals(givenText) || "Нет".equals(givenText)) continue;
                 value = Double.parseDouble(givenText);
                 if (value < 0) throw new NumberFormatException();
                 sum += value;
@@ -491,73 +497,111 @@ public class PeriodFormController {
     }
     
     private void printSum(String sumFor) {
-        if (sumFor.equals("services"))
+        if (sumFor.equals("servicesExtra"))
             calcSum(sumServicesLabel, costWaterLabel, costElectricityLabel, costHeadingField,
-                    costGarbageField, costInternetField, costTelephoneField);
-        else if(sumFor.equals("rentFine"))
-            calcSum(sumRentWithFineLabel, sumRentLabel, fineField);
+                    costGarbageField, costInternetField, costTelephoneField, extraCostServicesLabel);
+        else if(sumFor.equals("rentExtra"))
+            calcSum(sumExtraCostRentLabel, sumRentLabel, extraCostRentLabel);
+        else if(sumFor.equals("fineExtra"))
+            calcSum(sumExtraCostFineLabel, fineField, extraCostFineLabel);
+        else if(sumFor.equals("rentFineExtra"))
+            calcSum(sumRentWithFineLabel, sumExtraCostRentLabel, sumExtraCostFineLabel);
+        else if(sumFor.equals("taxLandExtra"))
+            calcSum(sumExtraCostTaxLandLabel, taxLandField, extraCostTaxLandLabel);
+        else if(sumFor.equals("equipmentExtra"))
+            calcSum(sumExtraCostEquipmentLabel, costEquipmentField, extraCostEquipmentLabel);
     }
    
     public void addCalcListeners() {
         
         countWaterField.textProperty().addListener((observable, oldValue, newValue) -> {
             setCost(countWaterField, tariffWaterField, costWaterLabel);
-            printSum("services");
+            printSum("servicesExtra");
             setColorLabels(countWaterField);
         });
         tariffWaterField.textProperty().addListener((observable, oldValue, newValue) -> {
             setCost(countWaterField, tariffWaterField, costWaterLabel);
-            printSum("services");
+            printSum("servicesExtra");
             setColorLabels(tariffWaterField);
         });
         
         countElectricityField.textProperty().addListener((observable, oldValue, newValue) -> {
             setCost(countElectricityField, tariffElectricityField, costElectricityLabel);
-            printSum("services");
+            printSum("servicesExtra");
             setColorLabels(countElectricityField);
         });
         tariffElectricityField.textProperty().addListener((observable, oldValue, newValue) -> {
             setCost(countElectricityField, tariffElectricityField, costElectricityLabel);
-            printSum("services");
+            printSum("servicesExtra");
             setColorLabels(tariffElectricityField);
         });
         
         costHeadingField.textProperty().addListener((observable, oldValue, newValue) -> {
-           printSum("services");
+           printSum("servicesExtra");
            setColorLabels(costHeadingField);
         });
         
         costGarbageField.textProperty().addListener((observable, oldValue, newValue) -> {
-           printSum("services");
+           printSum("servicesExtra");
            setColorLabels(costGarbageField);
         });
         
         costInternetField.textProperty().addListener((observable, oldValue, newValue) -> {
-            printSum("services");
+            printSum("servicesExtra");
             setColorLabels(costInternetField);
         });
         costTelephoneField.textProperty().addListener((observable, oldValue, newValue) -> {
-            printSum("services");
+            printSum("servicesExtra");
             setColorLabels(costTelephoneField);
+        });
+        extraCostServicesLabel.textProperty().addListener((observable, oldValue, newValue) -> {
+            printSum("servicesExtra");
         });
         
         costRentField.textProperty().addListener((observable, oldValue, newValue) -> {
             setCost(costRentField, indexCostRentField, sumRentLabel);
-            printSum("rentFine");
+            printSum("rentFineExtra");
             setColorLabels(costRentField);
         });
         indexCostRentField.textProperty().addListener((observable, oldValue, newValue) -> {
             setCost(costRentField, indexCostRentField, sumRentLabel);
-            printSum("rentFine");
+            printSum("rentFineExtra");
             setColorLabels(indexCostRentField);
         });
+        sumRentLabel.textProperty().addListener((observable, oldValue, newValue) -> {
+            printSum("rentExtra");
+        });
+        extraCostRentLabel.textProperty().addListener((observable, oldValue, newValue) -> {
+            printSum("rentExtra");
+        });
         fineField.textProperty().addListener((observable, oldValue, newValue) -> {
-            printSum("rentFine");
+            printSum("fineExtra");
             setColorLabels(fineField);
+        });
+        extraCostFineLabel.textProperty().addListener((observable, oldValue, newValue) -> {
+            printSum("fineExtra");
+        });
+        sumExtraCostRentLabel.textProperty().addListener((observable, oldValue, newValue) -> {
+            printSum("rentFineExtra");
+        });
+        sumExtraCostFineLabel.textProperty().addListener((observable, oldValue, newValue) -> {
+            printSum("rentFineExtra");
         });
         
         taxLandField.textProperty().addListener((observable, oldValue, newValue) -> {
+            printSum("taxLandExtra");
             setColorLabels(taxLandField);
+        });
+        extraCostTaxLandLabel.textProperty().addListener((observable, oldValue, newValue) -> {
+            printSum("taxLandExtra");
+        });
+        
+        costEquipmentField.textProperty().addListener((observable, oldValue, newValue) -> {
+            printSum("equipmentExtra");
+            setColorLabels(costEquipmentField);
+        });
+        extraCostEquipmentLabel.textProperty().addListener((observable, oldValue, newValue) -> {
+            printSum("equipmentExtra");
         });
     }
     
