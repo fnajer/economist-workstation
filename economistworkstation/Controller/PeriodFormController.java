@@ -543,6 +543,45 @@ public class PeriodFormController {
             setColorLabels(taxLandField);
         });
     }
-
+    
+    @FXML
+    void handleExtraCost(ActionEvent event) {
+        boolean okClicked = showExtraCostForm(period);
+        if (okClicked) {
+            PeriodModel.updateExtraCostPeriod(period.getId(), period);
+            refreshExtraCost();
+        }
+    }
+    
+    public boolean showExtraCostForm(Period period) {
+        try {
+            // Загружаем fxml-файл и создаём новую сцену
+            // для всплывающего диалогового окна.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(EconomistWorkstation.class.getResource("View/Period/ExtraCostForm.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            
+            // Создаём диалоговое окно Stage.
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Добавить дополнительную стоимость");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(this.dialogStage);
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+            
+            // Передаём адресата в контроллер.
+            ExtraCostFormController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setExtraCost(period.getExtraCost(), period);
+            
+            // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
+            dialogStage.showAndWait();
+            
+            return controller.isOkClicked();
+        } catch (IOException ex) {
+            Logger.getLogger(PeriodFormController.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
     
 }
