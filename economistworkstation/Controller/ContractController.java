@@ -335,13 +335,12 @@ public class ContractController implements Initializable, BaseController {
             Services services = (Services) period.getServicesPayment();
             
             if (isExist(rent)) {
-                costLabel.setText(Double.toString(rent.getCost()));
-                indexCostLabel.setText(Double.toString(rent.getIndexCost()));
-                
+                setText(costLabel, rent.getCost());
+                setText(indexCostLabel, rent.getIndexCost());
     //        statePaymentRentLabel.setText(Util.boolToString(period.getPaidRent()));
             }
             if (isExist(fine)) {
-                fineLabel.setText(Double.toString(fine.getFine()));
+                setText(fineLabel, fine.getFine());
             }
             if (isExist(services)) {
                 setText(countWaterLabel, services.getCountWater());
