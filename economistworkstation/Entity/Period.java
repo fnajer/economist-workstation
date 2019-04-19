@@ -29,15 +29,16 @@ public class Period {
     private final ObjectProperty<Payment> taxLandPayment;
     private final ObjectProperty<Payment> servicesPayment;
     private final ObjectProperty<Payment> equipmentPayment;
+    private final ObjectProperty<ExtraCost> extraCost;
      
     public Period() {
-        this(0, 0, 0, null, 0, null, null, null, null, null);
+        this(0, 0, 0, null, 0, null, null, null, null, null, null);
     }
     
     public Period(int number, int numberRentAcc, int numberServicesAcc, 
             String endPeriod, int idContract, Payment rentPayment,
             Payment finePayment, Payment taxLandPayment, Payment servicesPayment,
-            Payment equipmentPayment) {
+            Payment equipmentPayment, ExtraCost extraCost) {
        this.id = new SimpleIntegerProperty(0);
        this.number = new SimpleIntegerProperty(number);
        this.numberRentAcc = new SimpleIntegerProperty(numberRentAcc);
@@ -50,6 +51,8 @@ public class Period {
        this.taxLandPayment = new SimpleObjectProperty(taxLandPayment);
        this.servicesPayment = new SimpleObjectProperty(servicesPayment);
        this.equipmentPayment = new SimpleObjectProperty(equipmentPayment);
+       
+       this.extraCost = new SimpleObjectProperty(extraCost);
     }
     
       
@@ -102,7 +105,7 @@ public class Period {
     }
     
     public Payment getRentPayment() {
-        return rentPayment.get();
+        return rentPayment.get();  
     }
     public void setRentPayment(Payment rentPayment) {
         this.rentPayment.set(rentPayment);
@@ -134,6 +137,13 @@ public class Period {
     }
     public void setEquipmentPayment(Payment equipmentPayment) {
         this.equipmentPayment.set(equipmentPayment);
+    }
+    
+    public ExtraCost getExtraCost() {
+        return extraCost.get();
+    }
+    public void setExtraCost(ExtraCost extraCost) {
+        this.extraCost.set(extraCost);
     }
    
     public String getMonthName(int monthNum, boolean genitive) {
