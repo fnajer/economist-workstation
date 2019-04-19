@@ -89,6 +89,40 @@ public class ExtraCost {
         this.costEquipment.set(costEquipment);
     }
     
+    public PreparedStatement getInsertStatement(Database db) throws SQLException {
+        PreparedStatement ps = db.conn.prepareStatement("INSERT INTO EXTRACOST "
+                + "(id, extra_cost_rent, extra_cost_fine, extra_cost_tax_land, "
+                + "extra_cost_services, extra_cost_equipment) "
+                + "VALUES(NULL,?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+        ps.setObject(1, getCostRent(), java.sql.Types.DOUBLE);
+        ps.setObject(2, getCostFine(), java.sql.Types.DOUBLE);
+        ps.setObject(3, getCostTaxLand(), java.sql.Types.DOUBLE);
+        ps.setObject(4, getCostServices(), java.sql.Types.DOUBLE);
+        ps.setObject(5, getCostEquipment(), java.sql.Types.DOUBLE);
+        
+        return ps;
+    }
+    public PreparedStatement getUpdateStatement(Database db) throws SQLException {
+        PreparedStatement ps = db.conn.prepareStatement("UPDATE EXTRACOST "
+                + "SET extra_cost_rent=?, extra_cost_fine=?, extra_cost_tax_land=?, "
+                + "extra_cost_services=?, extra_cost_equipment=? "
+                + "WHERE id=?", Statement.RETURN_GENERATED_KEYS);
+        ps.setObject(1, getCostRent(), java.sql.Types.DOUBLE);
+        ps.setObject(2, getCostFine(), java.sql.Types.DOUBLE);
+        ps.setObject(3, getCostTaxLand(), java.sql.Types.DOUBLE);
+        ps.setObject(4, getCostServices(), java.sql.Types.DOUBLE);
+        ps.setObject(5, getCostEquipment(), java.sql.Types.DOUBLE);
+        ps.setInt(6, getId());
+        
+        return ps;
+    }
+    public PreparedStatement getDeleteStatement(Database db) throws SQLException {
+        PreparedStatement ps = db.conn.prepareStatement("DELETE FROM EXTRACOST "
+                + "WHERE id=?", Statement.RETURN_GENERATED_KEYS);
+        ps.setInt(1, getId());
+        
+        return ps;
+    }
     
     @Override
     public String toString() {
