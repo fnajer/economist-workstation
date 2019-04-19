@@ -251,6 +251,23 @@ public class PeriodFormController {
         
         initCalc();
     }
+    
+    private void refreshExtraCost() {
+        ExtraCost extraCost = period.getExtraCost();
+        if (isExist(extraCost)) {
+            setText(extraCostRentLabel, extraCost.getCostRent());
+            setText(extraCostFineLabel, extraCost.getCostFine());
+            setText(extraCostTaxLandLabel, extraCost.getCostTaxLand());
+            setText(extraCostServicesLabel, extraCost.getCostServices());
+            setText(extraCostEquipmentLabel, extraCost.getCostEquipment());
+        } else {
+            extraCostRentLabel.setText("Нет");
+            extraCostFineLabel.setText("Нет");
+            extraCostTaxLandLabel.setText("Нет");
+            extraCostServicesLabel.setText("Нет");
+            extraCostEquipmentLabel.setText("Нет");
+        }
+    }
 
     public boolean isOkClicked() {
         return okClicked;
