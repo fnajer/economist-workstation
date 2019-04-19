@@ -8,6 +8,7 @@ package economistworkstation.Model;
 import economistworkstation.ContractData;
 import economistworkstation.Database;
 import economistworkstation.EconomistWorkstation;
+import economistworkstation.Entity.ExtraCost;
 import economistworkstation.Entity.Fine;
 import economistworkstation.Entity.Payment;
 import economistworkstation.Entity.Period;
@@ -36,8 +37,8 @@ public class PeriodModel {
         try {
             PreparedStatement ps = db.conn.prepareStatement("INSERT INTO PERIOD "
                     + "(id, number, date_end, id_contract, id_rent, id_fine,"
-                    + "id_tax_land, id_services, id_equipment) "
-                    + "VALUES(NULL,?, ?, ?, NULL, NULL, NULL, NULL, NULL)");
+                    + "id_tax_land, id_services, id_equipment, id_extra_cost) "
+                    + "VALUES(NULL,?, ?, ?, NULL, NULL, NULL, NULL, NULL, NULL)");
             ps.setInt(1, period.getNumber());
             ps.setString(2, period.getEndPeriod());
             ps.setInt(3, period.getIdContract());
@@ -100,10 +101,10 @@ public class PeriodModel {
             Integer idEquipment = getPayment(period.getEquipmentPayment());
             if (idEquipment == null) period.setEquipmentPayment(null);
             
-            PreparedStatement ps = db.conn.prepareStatement("UPDATE Period "
+            PreparedStatement ps = db.conn.prepareStatement("UPDATE PERIOD "
                     + "SET number=?, date_end=?, id_contract=?, id_rent=?, "
                     + "id_fine =?, id_tax_land=?, id_services=?, id_equipment=? "
-                    + "WHERE id=?;");
+                    + "WHERE id=?");
                     
             ps.setInt(1, period.getNumber());
             ps.setString(2, period.getEndPeriod());
@@ -121,7 +122,7 @@ public class PeriodModel {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+            
     public static Integer getPayment(Payment payment) {
         if (payment == null) return null;
         
@@ -176,8 +177,9 @@ public class PeriodModel {
                     + "LEFT JOIN TAXLAND ON PERIOD.ID_TAX_LAND=TAXLAND.id "
                     + "LEFT JOIN EQUIPMENT ON PERIOD.ID_EQUIPMENT=EQUIPMENT.id "
                     + "LEFT JOIN SERVICES ON PERIOD.ID_SERVICES=SERVICES.id "
+                    + "LEFT JOIN EXTRACOST ON PERIOD.ID_EXTRA_COST=EXTRACOST.id "
                     + "WHERE id_contract='"
-                    + id + "' ORDER BY number;");
+                    + id + "' ORDER BY number");
             
             while (rs.next()) {
                 months.add(createObjectPeriod(rs));
@@ -202,10 +204,11 @@ public class PeriodModel {
                     + "LEFT JOIN TAXLAND ON PERIOD.ID_TAX_LAND=TAXLAND.id "
                     + "LEFT JOIN EQUIPMENT ON PERIOD.ID_EQUIPMENT=EQUIPMENT.id "
                     + "LEFT JOIN SERVICES ON PERIOD.ID_SERVICES=SERVICES.id "
+                    + "LEFT JOIN EXTRACOST ON PERIOD.ID_EXTRA_COST=EXTRACOST.id "
                     + "LEFT JOIN CONTRACT ON PERIOD.ID_CONTRACT=CONTRACT.id "
                     + "LEFT JOIN RENTER ON CONTRACT.ID_RENTER=RENTER.id "
                     + "LEFT JOIN BUILDING ON CONTRACT.ID_BUILDING=BUILDING.id "
-                    + "WHERE date >= '" + month + "' AND date < '" + nextMonth + "' "
+                    + "WHERE date_end >= '" + month + "' AND date_end < '" + nextMonth + "' "
                     + "ORDER BY id_contract;");
             
             while (rs.next()) {
@@ -259,8 +262,8 @@ public class PeriodModel {
         if(rs.getInt("id_rent") != 0) {
             Payment rent = new Rent(rs.getDouble("paid_rent"), 
                     rs.getString("date_paid_rent"),
-                    rs.getDouble("cost"), 
-                    rs.getDouble("index_cost"));
+                    rs.getObject("cost"), 
+                    rs.getObject("index_cost"));
             rent.setId(rs.getInt("id_rent"));
             return rent;
         }
@@ -270,7 +273,7 @@ public class PeriodModel {
         if(rs.getInt("id_fine") != 0) {
             Payment fine = new Fine(rs.getDouble("paid_fine"), 
                     rs.getString("date_paid_tax_land"),
-                    rs.getDouble("fine"));
+                    rs.getObject("fine"));
             fine.setId(rs.getInt("id_fine"));
             return fine;
         }
@@ -280,7 +283,7 @@ public class PeriodModel {
         if(rs.getInt("id_tax_land") != 0) {
             Payment fine = new TaxLand(rs.getDouble("paid_tax_land"), 
                     rs.getString("date_paid_tax_land"),
-                    rs.getDouble("tax_land"));
+                    rs.getObject("tax_land"));
             fine.setId(rs.getInt("id_tax_land"));
             return fine;
         }
@@ -290,7 +293,7 @@ public class PeriodModel {
         if(rs.getInt("id_equipment") != 0) {
             Payment fine = new Equipment(rs.getDouble("paid_equipment"), 
                     rs.getString("date_paid_equipment"),
-                    rs.getDouble("cost_equipment"));
+                    rs.getObject("cost_equipment"));
             fine.setId(rs.getInt("id_equipment"));
             return fine;
         }
@@ -313,6 +316,18 @@ public class PeriodModel {
         }
         return null;
     }
+    private static ExtraCost createObjectExtraCost(ResultSet rs) throws SQLException {
+        if(rs.getInt("id_extra_cost") != 0) {
+            ExtraCost extraCost = new ExtraCost(rs.getObject("extra_cost_rent"), 
+                    rs.getObject("extra_cost_fine"),
+                    rs.getObject("extra_cost_tax_land"),
+                    rs.getObject("extra_cost_services"), 
+                    rs.getObject("extra_cost_equipment"));
+            extraCost.setId(rs.getInt("id_extra_cost"));
+            return extraCost;
+        }
+        return null;
+    }
     
     private static Period createObjectPeriod(ResultSet rs) throws SQLException {
         Period period = new Period(rs.getInt("number"), 
@@ -324,7 +339,8 @@ public class PeriodModel {
                     createObjectFine(rs),
                     createObjectTaxLand(rs),
                     createObjectServices(rs),
-                    createObjectEquipment(rs));
+                    createObjectEquipment(rs),
+                    createObjectExtraCost(rs));
         period.setId(rs.getInt("id"));
         
         return period;
