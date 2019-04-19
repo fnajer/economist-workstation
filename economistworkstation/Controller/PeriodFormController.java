@@ -5,31 +5,41 @@
  */
 package economistworkstation.Controller;
 
+import economistworkstation.EconomistWorkstation;
+import economistworkstation.Entity.ExtraCost;
 import economistworkstation.Entity.Contract;
 import economistworkstation.Entity.Fine;
-import economistworkstation.Entity.Month;
 import economistworkstation.Entity.Payment;
 import economistworkstation.Entity.Period;
 import economistworkstation.Entity.Rent;
 import economistworkstation.Entity.Equipment;
 import economistworkstation.Entity.Services;
 import economistworkstation.Entity.TaxLand;
+import economistworkstation.Model.PeriodModel;
 import economistworkstation.Util.TagParser;
 import economistworkstation.Util.Util;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
+import static economistworkstation.Util.Util.setText;
+import static economistworkstation.Util.Util.parseField;
+import static economistworkstation.Util.Util.isExist;
+import static economistworkstation.Util.Util.isFilled;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -59,9 +69,9 @@ public class PeriodFormController {
     @FXML
     private Label sumRentLabel;
     @FXML
-    private Label addCostRentLabel;
+    private Label extraCostRentLabel;
     @FXML
-    private Label sumAddCostRentLabel;
+    private Label sumExtraCostRentLabel;
     //payment
     @FXML
     private TextField paymentRentField;
@@ -76,9 +86,9 @@ public class PeriodFormController {
     @FXML
     private Label fineLabel;
     @FXML
-    private Label addCostFineLabel;
+    private Label extraCostFineLabel;
     @FXML
-    private Label sumAddCostFineLabel;
+    private Label sumExtraCostFineLabel;
     @FXML
     private Label sumRentWithFineLabel;
     //payment
@@ -95,9 +105,9 @@ public class PeriodFormController {
     @FXML
     private Label taxLandLabel;
     @FXML
-    private Label addCostTaxLandLabel;
+    private Label extraCostTaxLandLabel;
     @FXML
-    private Label sumAddCostTaxLandLabel;
+    private Label sumExtraCostTaxLandLabel;
     //payment
     @FXML
     private TextField paymentTaxLandField;
@@ -142,7 +152,7 @@ public class PeriodFormController {
     @FXML
     private Label sumServicesLabel;
     @FXML
-    private Label addCostServicesLabel;
+    private Label extraCostServicesLabel;
     //payment
     @FXML
     private TextField paymentServicesField;
@@ -157,9 +167,9 @@ public class PeriodFormController {
     @FXML
     private Label costEquipmentLabel;
     @FXML
-    private Label addCostEquipmentLabel;
+    private Label extraCostEquipmentLabel;
     @FXML
-    private Label sumAddCostEquipmentLabel;
+    private Label sumExtraCostEquipmentLabel;
     //payment
     @FXML
     private TextField paymentEquipmentField;
@@ -194,6 +204,8 @@ public class PeriodFormController {
     
     public void setPeriod(Period period, Contract contract) {
         this.period = period;
+        
+        Util.setCalledClass(this);
         
         numberLabel.setText(Integer.toString(period.getNumber()));
         numberRentAccLabel.setText(Integer.toString(period.getNumberRentAcc()));
@@ -232,29 +244,14 @@ public class PeriodFormController {
             setText(costEquipmentField, equipment.getCostEquipment());
         }
         
+        refreshExtraCost();
+        
         setMatchArrays();
         setColorLabels(textFields);
         
         initCalc();
     }
-    
-    private boolean isExist(Payment payment) {
-        return payment != null;
-    }
-    
-    private void setText(TextField tf, Double value) {
-        try {
-            String text = Double.toString(value);
-            tf.setText(text);
-        } catch (NullPointerException e) {
-            System.err.println(String.format(
-                    "%s: value for %s from db is null", 
-                    this.getClass().getSimpleName(),
-                    tf.getId()));
-            tf.clear();
-        }
-    }
-    
+
     public boolean isOkClicked() {
         return okClicked;
     }
@@ -337,33 +334,6 @@ public class PeriodFormController {
             
             okClicked = true;
             dialogStage.close();
-        }
-    }
-    
-    public boolean isFilled(TextField ...tfs) {
-        for (TextField tf : tfs) {
-            if (tf.getText().length() != 0)
-                return true;
-        }
-        return false;
-    }
-    
-    public Double parseField(TextField field) {
-        String fieldString = field.getText();
-        try {
-            double value = Double.parseDouble(fieldString);
-            DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.US);
-            DecimalFormat df = new DecimalFormat("#.##", otherSymbols);
-            df.setRoundingMode(RoundingMode.HALF_UP);
-
-            return Double.parseDouble(df.format(value));
-        } catch(NumberFormatException e) {
-            System.err.println(String.format(
-                    "%s: %s value '%s' is not correct. Replaced by null",
-                    this.getClass().getSimpleName(),
-                    field.getId(),
-                    fieldString));
-            return null;
         }
     }
     
@@ -573,4 +543,6 @@ public class PeriodFormController {
             setColorLabels(taxLandField);
         });
     }
+
+    
 }
