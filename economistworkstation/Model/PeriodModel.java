@@ -258,6 +258,61 @@ public class PeriodModel {
         }
     }
     
+    public static void updateExtraCostPeriod(int id, Period period) {
+        try {
+            Integer idExtraCost = getExtraCost(period.getExtraCost());
+            if (idExtraCost == null) period.setExtraCost(null);
+            System.out.println(idExtraCost);
+            PreparedStatement ps = db.conn.prepareStatement("UPDATE PERIOD "
+                    + "SET id_extra_cost=? "
+                    + "WHERE id=?");
+                    
+            ps.setObject(1, idExtraCost, java.sql.Types.INTEGER);
+            ps.setInt(2, id);
+            
+            ps.executeUpdate();
+            System.out.println("Изменен период: " + period.getNumber());
+        } catch (SQLException ex) {
+            Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+            
+    public static Integer getExtraCost(ExtraCost extraCost) {
+        if (extraCost == null) return null;
+        
+        PreparedStatement ps;
+        String state;
+        try {
+            if (extraCost.getCostRent() != null && extraCost.getCostRent() == -1.0) {
+                ps = extraCost.getDeleteStatement(db);
+                state = "Delete";
+                ps.executeUpdate();
+                System.out.println(String.format("%s: %s", state, extraCost));
+                return null;
+            } else if (extraCost.getId() == 0) {
+                ps = extraCost.getInsertStatement(db);
+                state = "Insert";
+            } else {
+                ps = extraCost.getUpdateStatement(db);
+                state = "Update";
+            }
+     
+            ps.executeUpdate();
+            
+            ResultSet rs = ps.getGeneratedKeys();
+            
+            if (rs.next()) {
+                extraCost.setId(rs.getInt(1));
+            }
+            
+            System.out.println(String.format("%s: %s", state, extraCost));
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(PeriodModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return extraCost.getId();
+    }
+    
     private static Payment createObjectRent(ResultSet rs) throws SQLException {
         if(rs.getInt("id_rent") != 0) {
             Payment rent = new Rent(rs.getDouble("paid_rent"), 
