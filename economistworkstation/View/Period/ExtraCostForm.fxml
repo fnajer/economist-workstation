@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="economistworkstation.Controller.BuildingFormController">
+<AnchorPane xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="economistworkstation.Controller.ExtraCostFormController">
    <children>
       <ButtonBar layoutX="186.0" layoutY="206.0" prefHeight="40.0" prefWidth="200.0" AnchorPane.bottomAnchor="5.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="10.0">
         <buttons>
@@ -35,11 +35,11 @@
             <Label text="Для услуг:" GridPane.rowIndex="3" />
             <Label text="Для аренды оборудования:" GridPane.rowIndex="4" />
             <Label prefHeight="17.0" prefWidth="157.0" text="Для аренды помещения:" />
-            <TextField fx:id="addCostRentField" GridPane.columnIndex="1" />
-            <TextField fx:id="addCostFineField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <TextField fx:id="addCostTaxLandField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <TextField fx:id="addCostServiceField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <TextField fx:id="addCostEquipmentField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <TextField fx:id="extraCostRentField" GridPane.columnIndex="1" />
+            <TextField fx:id="extraCostFineField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <TextField fx:id="extraCostTaxLandField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <TextField fx:id="extraCostServicesField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <TextField fx:id="extraCostEquipmentField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
          </children>
       </GridPane>
       <Label layoutX="10.0" layoutY="14.0" prefHeight="17.0" prefWidth="386.0" text="Добавить стоимость на счет платежа в виде дополнительной строки" />
