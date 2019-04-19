@@ -140,17 +140,17 @@
                                           <Label fx:id="statePaymentRentLabel" text="Label" GridPane.columnIndex="6" GridPane.rowIndex="3" />
                                           <Label text="Сумма" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                                           <Label fx:id="sumRentLabel" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="2" />
-                                          <Label fx:id="sumAddCostFineLabel" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="7" />
+                                          <Label fx:id="sumExtraCostFineLabel" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="7" />
                                           <Label text="Оплатили:" GridPane.columnIndex="5" GridPane.rowIndex="6" />
                                           <Label text="Оплатили:" GridPane.columnIndex="5" GridPane.rowIndex="2" />
                                           <Label fx:id="balancePaymentRentLabel" text="с учетом дебета" GridPane.columnIndex="5" GridPane.rowIndex="4" />
-                                          <Label fx:id="addCostRentLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                          <Label fx:id="extraCostRentLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                                           <Label fx:id="balancePaymentFineLabel" text="с учетом кредита" GridPane.columnIndex="5" GridPane.rowIndex="8" />
                                           <Label fx:id="statePaymentFineLabel" text="Label" GridPane.columnIndex="6" GridPane.rowIndex="7" />
                                           <Label text="Состояние:" GridPane.columnIndex="5" GridPane.rowIndex="7" />
                                           <Label text="Дополнительная стоимость:" GridPane.rowIndex="3" />
                                           <Label text="Дополнительная стоимость:" GridPane.rowIndex="7" />
-                                          <Label fx:id="addCostFineLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                                          <Label fx:id="extraCostFineLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                                           <TextField fx:id="paymentRentField" GridPane.columnIndex="6" GridPane.rowIndex="2">
                                              <GridPane.margin>
                                                 <Insets left="10.0" right="10.0" />
@@ -166,7 +166,7 @@
                                                 <Font name="Times New Roman" size="14.0" />
                                              </font>
                                           </Label>
-                                          <Label fx:id="sumAddCostRentLabel" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                                          <Label fx:id="sumExtraCostRentLabel" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="3" />
                                           <Label fx:id="sumRentWithFineLabel" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="8" />
                                           <Label text="Оплата" GridPane.columnIndex="5">
                                              <font>
@@ -232,8 +232,8 @@
                                              </GridPane.margin>
                                           </TextField>
                                           <Label text="Дополнительная стоимость:" GridPane.rowIndex="3" />
-                                          <Label fx:id="addCostTaxLandLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                          <Label fx:id="sumAddCostTaxLandLabel" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                          <Label fx:id="extraCostTaxLandLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                          <Label fx:id="sumExtraCostTaxLandLabel" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                                           <Label fx:id="balancePaymentTaxLandLabel" text="с учетом" GridPane.columnIndex="4" GridPane.rowIndex="4" />
                                        </children>
                                        <opaqueInsets>
@@ -339,7 +339,7 @@
                                           <Label text="Тариф" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                                           <Label text="Итого:" GridPane.rowIndex="9" />
                                           <Label text="Дополнительная стоимость:" GridPane.rowIndex="8" />
-                                          <Label fx:id="addCostServicesLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                                          <Label fx:id="extraCostServicesLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                                        </children>
                                        <opaqueInsets>
                                           <Insets />
@@ -401,8 +401,8 @@
                                              </GridPane.margin>
                                           </TextField>
                                           <Label text="Дополнительная стоимость" GridPane.rowIndex="3" />
-                                          <Label fx:id="addCostEquipmentLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                                          <Label fx:id="sumAddCostEquipmentLabel" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                                          <Label fx:id="extraCostEquipmentLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                                          <Label fx:id="sumExtraCostEquipmentLabel" text="Label" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                                           <Label fx:id="balancePaymentEquipmentLabel" text="с учетом" GridPane.columnIndex="4" GridPane.rowIndex="4" />
                                        </children>
                                        <opaqueInsets>
@@ -424,7 +424,7 @@
                   <ButtonBar layoutX="-13.0" layoutY="430.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="317.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="530.0">
                     <buttons>
                         <Button maxWidth="150.0" mnemonicParsing="false" prefHeight="25.0" text="Кредит и дебет" />
-                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="200.0" text="Дополнительная стоимость" />
+                        <Button mnemonicParsing="false" onAction="#handleExtraCost" prefHeight="25.0" prefWidth="200.0" text="Дополнительная стоимость" />
                     </buttons>
                   </ButtonBar>
                </children>
