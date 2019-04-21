@@ -7,12 +7,9 @@ package economistworkstation.Entity;
 
 import economistworkstation.Database;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 /**
@@ -31,10 +28,10 @@ public class Services extends Payment {
     private final ObjectProperty tariffElectricity;
     
     public Services() {
-        this(0.0, null, null, null, null, null, null, null, null, null);
+        this(null, null, null, null, null, null, null, null, null, null);
     }
     
-    public Services(double paid, String datePaid, Object countWater, 
+    public Services(Object paid, String datePaid, Object countWater, 
             Object countElectricity, Object costHeading, Object costGarbage,
             Object costInternet, Object costTelephone, Object tariffWater, 
             Object tariffElectricity) {
@@ -155,7 +152,7 @@ public class Services extends Payment {
                 + "count_electricity, tariff_electricity, cost_meter_heading, "
                 + "cost_meter_garbage, cost_internet, cost_telephone) "
                 + "VALUES(NULL,?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-        ps.setDouble(1, getPaid());
+        ps.setObject(1, getPaid(), java.sql.Types.DOUBLE);
         ps.setString(2, getDatePaid());
         ps.setObject(3, getCountWater(), java.sql.Types.DOUBLE);
         ps.setObject(4, getTariffWater(), java.sql.Types.DOUBLE);
@@ -175,7 +172,7 @@ public class Services extends Payment {
                 + "count_electricity=?, tariff_electricity=?, cost_meter_heading=?, "
                 + "cost_meter_garbage=?, cost_internet=?, cost_telephone=? "
                 + "WHERE id=?", Statement.RETURN_GENERATED_KEYS);
-        ps.setDouble(1, getPaid());
+        ps.setObject(1, getPaid(), java.sql.Types.DOUBLE);
         ps.setString(2, getDatePaid());
         ps.setObject(3, getCountWater(), java.sql.Types.DOUBLE);
         ps.setObject(4, getTariffWater(), java.sql.Types.DOUBLE);

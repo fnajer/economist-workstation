@@ -129,7 +129,7 @@ public class PeriodModel {
         PreparedStatement ps;
         String state;
         try {
-            if (payment.getPaid() == -1) {
+            if (payment.getPaid() != null && payment.getPaid() == -1.0) {
                 ps = payment.getDeleteStatement(db);
                 state = "Delete";
                 ps.executeUpdate();
@@ -315,7 +315,7 @@ public class PeriodModel {
     
     private static Payment createObjectRent(ResultSet rs) throws SQLException {
         if(rs.getInt("id_rent") != 0) {
-            Payment rent = new Rent(rs.getDouble("paid_rent"), 
+            Payment rent = new Rent(rs.getObject("paid_rent"), 
                     rs.getString("date_paid_rent"),
                     rs.getObject("cost"), 
                     rs.getObject("index_cost"));
@@ -326,7 +326,7 @@ public class PeriodModel {
     }
     private static Payment createObjectFine(ResultSet rs) throws SQLException {
         if(rs.getInt("id_fine") != 0) {
-            Payment fine = new Fine(rs.getDouble("paid_fine"), 
+            Payment fine = new Fine(rs.getObject("paid_fine"), 
                     rs.getString("date_paid_tax_land"),
                     rs.getObject("fine"));
             fine.setId(rs.getInt("id_fine"));
@@ -336,7 +336,7 @@ public class PeriodModel {
     }
     private static Payment createObjectTaxLand(ResultSet rs) throws SQLException {
         if(rs.getInt("id_tax_land") != 0) {
-            Payment fine = new TaxLand(rs.getDouble("paid_tax_land"), 
+            Payment fine = new TaxLand(rs.getObject("paid_tax_land"), 
                     rs.getString("date_paid_tax_land"),
                     rs.getObject("tax_land"));
             fine.setId(rs.getInt("id_tax_land"));
@@ -346,7 +346,7 @@ public class PeriodModel {
     }
     private static Payment createObjectEquipment(ResultSet rs) throws SQLException {
         if(rs.getInt("id_equipment") != 0) {
-            Payment fine = new Equipment(rs.getDouble("paid_equipment"), 
+            Payment fine = new Equipment(rs.getObject("paid_equipment"), 
                     rs.getString("date_paid_equipment"),
                     rs.getObject("cost_equipment"));
             fine.setId(rs.getInt("id_equipment"));
@@ -356,7 +356,7 @@ public class PeriodModel {
     }
     private static Payment createObjectServices(ResultSet rs) throws SQLException {
         if(rs.getInt("id_services") != 0) {
-            Payment services = new Services(rs.getDouble("paid_services"), 
+            Payment services = new Services(rs.getObject("paid_services"), 
                     rs.getString("date_paid_services"),
                     rs.getObject("count_water"),
                     rs.getObject("count_electricity"), 

@@ -21,10 +21,10 @@ public class Equipment extends Payment {
     private final ObjectProperty costEquipment;
     
     public Equipment() {
-        this(0.0, null, null);
+        this(null, null, null);
     }
     
-    public Equipment(double paid, String datePaid, Object costEquipment) {
+    public Equipment(Object paid, String datePaid, Object costEquipment) {
         super(paid, datePaid);
         this.costEquipment = new SimpleObjectProperty(costEquipment);
     }
@@ -41,7 +41,7 @@ public class Equipment extends Payment {
         PreparedStatement ps = db.conn.prepareStatement("INSERT INTO EQUIPMENT "
                 + "(id, paid_equipment, date_paid_equipment, cost_equipment) "
                 + "VALUES(NULL,?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-        ps.setDouble(1, getPaid());
+        ps.setObject(1, getPaid(), java.sql.Types.DOUBLE);
         ps.setString(2, getDatePaid());
         ps.setObject(3, getCostEquipment(), java.sql.Types.DOUBLE);
 
@@ -52,7 +52,7 @@ public class Equipment extends Payment {
         PreparedStatement ps = db.conn.prepareStatement("UPDATE EQUIPMENT "
                 + "SET paid_equipment=?, date_paid_equipment=?, cost_equipment=? "
                 + "WHERE id=?", Statement.RETURN_GENERATED_KEYS);
-        ps.setDouble(1, getPaid());
+        ps.setObject(1, getPaid(), java.sql.Types.DOUBLE);
         ps.setString(2, getDatePaid());
         ps.setObject(3, getCostEquipment(), java.sql.Types.DOUBLE);
         ps.setInt(4, getId());

@@ -7,12 +7,9 @@ package economistworkstation.Entity;
 
 import economistworkstation.Database;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 /**
@@ -24,10 +21,10 @@ public class TaxLand extends Payment {
     private final ObjectProperty taxLand;
     
     public TaxLand() {
-        this(0.0, null, null);
+        this(null, null, null);
     }
     
-    public TaxLand(double paid, String datePaid, Object taxLand) {
+    public TaxLand(Object paid, String datePaid, Object taxLand) {
         super(paid, datePaid);
         this.taxLand = new SimpleObjectProperty(taxLand);
     }
@@ -44,7 +41,7 @@ public class TaxLand extends Payment {
         PreparedStatement ps = db.conn.prepareStatement("INSERT INTO TAXLAND "
                 + "(id, paid_tax_land, date_paid_tax_land, tax_land) "
                 + "VALUES(NULL,?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-        ps.setDouble(1, getPaid());
+        ps.setObject(1, getPaid(), java.sql.Types.DOUBLE);
         ps.setString(2, getDatePaid());
         ps.setObject(3, getTaxLand(), java.sql.Types.DOUBLE);
 
@@ -55,7 +52,7 @@ public class TaxLand extends Payment {
         PreparedStatement ps = db.conn.prepareStatement("UPDATE TAXLAND "
                 + "SET paid_tax_land=?, date_paid_tax_land=?, tax_land=? "
                 + "WHERE id=?;", Statement.RETURN_GENERATED_KEYS);
-        ps.setDouble(1, getPaid());
+        ps.setObject(1, getPaid(), java.sql.Types.DOUBLE);
         ps.setString(2, getDatePaid());
         ps.setObject(3, getTaxLand(), java.sql.Types.DOUBLE);
         ps.setInt(4, getId());

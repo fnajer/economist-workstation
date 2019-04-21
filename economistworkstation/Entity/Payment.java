@@ -10,8 +10,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -21,16 +23,16 @@ import javafx.beans.property.StringProperty;
  */
 public abstract class Payment {
     private final IntegerProperty id;
-    private final DoubleProperty paid;
+    private final ObjectProperty paid;
     private final StringProperty datePaid;
     
     public Payment() {
-        this(0.0, null);
+        this(null, null);
     }
     
-    public Payment(double paid, String datePaid) {
+    public Payment(Object paid, String datePaid) {
         this.id = new SimpleIntegerProperty(0);
-        this.paid = new SimpleDoubleProperty(paid);
+        this.paid = new SimpleObjectProperty(paid);
         this.datePaid = new SimpleStringProperty(datePaid);
     }
     
@@ -45,10 +47,10 @@ public abstract class Payment {
         this.id.set(id);
     }
     
-    public double getPaid() {
-        return paid.get();
+    public Double getPaid() {
+        return (Double) paid.get();
     }
-    public void setPaid(double paid) {
+    public void setPaid(Double paid) {
         this.paid.set(paid);
     }
     
