@@ -39,11 +39,12 @@ public class TaxLand extends Payment {
     @Override
     public PreparedStatement getInsertStatement(Database db) throws SQLException {
         PreparedStatement ps = db.conn.prepareStatement("INSERT INTO TAXLAND "
-                + "(id, paid_tax_land, date_paid_tax_land, tax_land) "
-                + "VALUES(NULL,?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-        ps.setObject(1, getPaid(), java.sql.Types.DOUBLE);
-        ps.setString(2, getDatePaid());
-        ps.setObject(3, getTaxLand(), java.sql.Types.DOUBLE);
+                + "(id_tax_land, paid_tax_land, date_paid_tax_land, tax_land) "
+                + "VALUES(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+        ps.setInt(1, getId());
+        ps.setObject(2, getPaid(), java.sql.Types.DOUBLE);
+        ps.setString(3, getDatePaid());
+        ps.setObject(4, getTaxLand(), java.sql.Types.DOUBLE);
 
         return ps;
     }
@@ -51,7 +52,7 @@ public class TaxLand extends Payment {
     public PreparedStatement getUpdateStatement(Database db) throws SQLException {
         PreparedStatement ps = db.conn.prepareStatement("UPDATE TAXLAND "
                 + "SET paid_tax_land=?, date_paid_tax_land=?, tax_land=? "
-                + "WHERE id=?;", Statement.RETURN_GENERATED_KEYS);
+                + "WHERE id_tax_land=?", Statement.RETURN_GENERATED_KEYS);
         ps.setObject(1, getPaid(), java.sql.Types.DOUBLE);
         ps.setString(2, getDatePaid());
         ps.setObject(3, getTaxLand(), java.sql.Types.DOUBLE);
@@ -62,7 +63,7 @@ public class TaxLand extends Payment {
     @Override
     public PreparedStatement getDeleteStatement(Database db) throws SQLException {
         PreparedStatement ps = db.conn.prepareStatement("DELETE FROM TAXLAND "
-                + "WHERE id=?", Statement.RETURN_GENERATED_KEYS);
+                + "WHERE id_tax_land=?", Statement.RETURN_GENERATED_KEYS);
         ps.setInt(1, getId());
         
         return ps;

@@ -39,11 +39,12 @@ public class Fine extends Payment {
     @Override
     public PreparedStatement getInsertStatement(Database db) throws SQLException {
         PreparedStatement ps = db.conn.prepareStatement("INSERT INTO FINE "
-                + "(id, paid_fine, date_paid_fine, fine) "
-                + "VALUES(NULL,?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-        ps.setObject(1, getPaid(), java.sql.Types.DOUBLE);
-        ps.setString(2, getDatePaid());
-        ps.setObject(3, getFine(), java.sql.Types.DOUBLE);
+                + "(id_fine, paid_fine, date_paid_fine, fine) "
+                + "VALUES(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+        ps.setInt(1, getId());
+        ps.setObject(2, getPaid(), java.sql.Types.DOUBLE);
+        ps.setString(3, getDatePaid());
+        ps.setObject(4, getFine(), java.sql.Types.DOUBLE);
 
         return ps;
     }
@@ -51,7 +52,7 @@ public class Fine extends Payment {
     public PreparedStatement getUpdateStatement(Database db) throws SQLException {
         PreparedStatement ps = db.conn.prepareStatement("UPDATE FINE "
                 + "SET paid_fine=?, date_paid_fine=?, fine=? "
-                + "WHERE id=?", Statement.RETURN_GENERATED_KEYS);
+                + "WHERE id_fine=?", Statement.RETURN_GENERATED_KEYS);
         ps.setObject(1, getPaid(), java.sql.Types.DOUBLE);
         ps.setString(2, getDatePaid());
         ps.setObject(3, getFine(), java.sql.Types.DOUBLE);
@@ -62,7 +63,7 @@ public class Fine extends Payment {
     @Override
     public PreparedStatement getDeleteStatement(Database db) throws SQLException {
         PreparedStatement ps = db.conn.prepareStatement("DELETE FROM FINE "
-                + "WHERE id=?", Statement.RETURN_GENERATED_KEYS);
+                + "WHERE id_fine=?", Statement.RETURN_GENERATED_KEYS);
         ps.setInt(1, getId());
         
         return ps;

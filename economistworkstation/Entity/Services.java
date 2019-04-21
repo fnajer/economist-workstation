@@ -148,20 +148,21 @@ public class Services extends Payment {
     @Override
     public PreparedStatement getInsertStatement(Database db) throws SQLException{
         PreparedStatement ps = db.conn.prepareStatement("INSERT INTO SERVICES "
-                + "(id, paid_services, date_paid_services, count_water, tariff_water, "
+                + "(id_services, paid_services, date_paid_services, count_water, tariff_water, "
                 + "count_electricity, tariff_electricity, cost_meter_heading, "
                 + "cost_meter_garbage, cost_internet, cost_telephone) "
-                + "VALUES(NULL,?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-        ps.setObject(1, getPaid(), java.sql.Types.DOUBLE);
-        ps.setString(2, getDatePaid());
-        ps.setObject(3, getCountWater(), java.sql.Types.DOUBLE);
-        ps.setObject(4, getTariffWater(), java.sql.Types.DOUBLE);
-        ps.setObject(5, getCountElectricity(), java.sql.Types.DOUBLE);
-        ps.setObject(6, getTariffElectricity(), java.sql.Types.DOUBLE);
-        ps.setObject(7, getCostHeading(), java.sql.Types.DOUBLE);
-        ps.setObject(8, getCostGarbage(), java.sql.Types.DOUBLE);
-        ps.setObject(9, getCostInternet(), java.sql.Types.DOUBLE);
-        ps.setObject(10, getCostTelephone(), java.sql.Types.DOUBLE);
+                + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+        ps.setInt(1, getId());
+        ps.setObject(2, getPaid(), java.sql.Types.DOUBLE);
+        ps.setString(3, getDatePaid());
+        ps.setObject(4, getCountWater(), java.sql.Types.DOUBLE);
+        ps.setObject(5, getTariffWater(), java.sql.Types.DOUBLE);
+        ps.setObject(6, getCountElectricity(), java.sql.Types.DOUBLE);
+        ps.setObject(7, getTariffElectricity(), java.sql.Types.DOUBLE);
+        ps.setObject(8, getCostHeading(), java.sql.Types.DOUBLE);
+        ps.setObject(9, getCostGarbage(), java.sql.Types.DOUBLE);
+        ps.setObject(10, getCostInternet(), java.sql.Types.DOUBLE);
+        ps.setObject(11, getCostTelephone(), java.sql.Types.DOUBLE);
         
         return ps;
     }
@@ -171,7 +172,7 @@ public class Services extends Payment {
                 + "SET paid_services=?, date_paid_services=?, count_water=?, tariff_water=?, "
                 + "count_electricity=?, tariff_electricity=?, cost_meter_heading=?, "
                 + "cost_meter_garbage=?, cost_internet=?, cost_telephone=? "
-                + "WHERE id=?", Statement.RETURN_GENERATED_KEYS);
+                + "WHERE id_services=?", Statement.RETURN_GENERATED_KEYS);
         ps.setObject(1, getPaid(), java.sql.Types.DOUBLE);
         ps.setString(2, getDatePaid());
         ps.setObject(3, getCountWater(), java.sql.Types.DOUBLE);
@@ -189,7 +190,7 @@ public class Services extends Payment {
     @Override
     public PreparedStatement getDeleteStatement(Database db) throws SQLException {
         PreparedStatement ps = db.conn.prepareStatement("DELETE FROM SERVICES "
-                + "WHERE id=?", Statement.RETURN_GENERATED_KEYS);
+                + "WHERE id_services=?", Statement.RETURN_GENERATED_KEYS);
         ps.setInt(1, getId());
         
         return ps;

@@ -56,12 +56,13 @@ public class Rent extends Payment {
     @Override
     public PreparedStatement getInsertStatement(Database db) throws SQLException {
         PreparedStatement ps = db.conn.prepareStatement("INSERT INTO RENT "
-                + "(id, paid_rent, date_paid_rent, cost, index_cost) "
-                + "VALUES(NULL,?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-        ps.setObject(1, getPaid(), java.sql.Types.DOUBLE);
-        ps.setString(2, getDatePaid());
-        ps.setObject(3, getCost(), java.sql.Types.DOUBLE);
-        ps.setObject(4, getIndexCost(), java.sql.Types.DOUBLE);
+                + "(id_rent, paid_rent, date_paid_rent, cost, index_cost) "
+                + "VALUES(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+        ps.setInt(1, getId());
+        ps.setObject(2, getPaid(), java.sql.Types.DOUBLE);
+        ps.setString(3, getDatePaid());
+        ps.setObject(4, getCost(), java.sql.Types.DOUBLE);
+        ps.setObject(5, getIndexCost(), java.sql.Types.DOUBLE);
         
         return ps;
     }
@@ -69,7 +70,7 @@ public class Rent extends Payment {
     public PreparedStatement getUpdateStatement(Database db) throws SQLException {
         PreparedStatement ps = db.conn.prepareStatement("UPDATE RENT "
                 + "SET paid_rent=?, date_paid_rent=?, cost=?, index_cost=? "
-                + "WHERE id=?", Statement.RETURN_GENERATED_KEYS);
+                + "WHERE id_rent=?", Statement.RETURN_GENERATED_KEYS);
         ps.setObject(1, getPaid(), java.sql.Types.DOUBLE);
         ps.setString(2, getDatePaid());
         ps.setObject(3, getCost(), java.sql.Types.DOUBLE);
@@ -81,7 +82,7 @@ public class Rent extends Payment {
     @Override
     public PreparedStatement getDeleteStatement(Database db) throws SQLException {
         PreparedStatement ps = db.conn.prepareStatement("DELETE FROM FINE "
-                + "WHERE id=?", Statement.RETURN_GENERATED_KEYS);
+                + "WHERE id_rent=?", Statement.RETURN_GENERATED_KEYS);
         ps.setInt(1, getId());
         
         return ps;

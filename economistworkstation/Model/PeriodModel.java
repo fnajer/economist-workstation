@@ -36,9 +36,8 @@ public class PeriodModel {
     public static void addPeriod(Period period) {
         try {
             PreparedStatement ps = db.conn.prepareStatement("INSERT INTO PERIOD "
-                    + "(id, number, date_end, id_contract, id_rent, id_fine,"
-                    + "id_tax_land, id_services, id_equipment, id_extra_cost) "
-                    + "VALUES(NULL,?, ?, ?, NULL, NULL, NULL, NULL, NULL, NULL)");
+                    + "(id, number, date_end, id_contract) "
+                    + "VALUES(NULL,?, ?, ?)");
             ps.setInt(1, period.getNumber());
             ps.setString(2, period.getEndPeriod());
             ps.setInt(3, period.getIdContract());
@@ -90,31 +89,25 @@ public class PeriodModel {
     
     public static void updatePeriod(int id, Period period) {
         try {
-            Integer idRent = getPayment(period.getRentPayment());
+            Integer idRent = addPayment(period.getRentPayment(), id);
             if (idRent == null) period.setRentPayment(null);
-            Integer idFine = getPayment(period.getFinePayment());
+            Integer idFine = addPayment(period.getFinePayment(), id);
             if (idFine == null) period.setFinePayment(null);
-            Integer idTaxLand = getPayment(period.getTaxLandPayment());
+            Integer idTaxLand = addPayment(period.getTaxLandPayment(), id);
             if (idTaxLand == null) period.setTaxLandPayment(null);
-            Integer idServices = getPayment(period.getServicesPayment());
+            Integer idServices = addPayment(period.getServicesPayment(), id);
             if (idServices == null) period.setServicesPayment(null);
-            Integer idEquipment = getPayment(period.getEquipmentPayment());
+            Integer idEquipment = addPayment(period.getEquipmentPayment(), id);
             if (idEquipment == null) period.setEquipmentPayment(null);
-            
+
             PreparedStatement ps = db.conn.prepareStatement("UPDATE PERIOD "
-                    + "SET number=?, date_end=?, id_contract=?, id_rent=?, "
-                    + "id_fine =?, id_tax_land=?, id_services=?, id_equipment=? "
+                    + "SET number=?, date_end=?, id_contract=? "
                     + "WHERE id=?");
                     
             ps.setInt(1, period.getNumber());
             ps.setString(2, period.getEndPeriod());
             ps.setInt(3, period.getIdContract());
-            ps.setObject(4, idRent, java.sql.Types.INTEGER);
-            ps.setObject(5, idFine, java.sql.Types.INTEGER);
-            ps.setObject(6, idTaxLand, java.sql.Types.INTEGER);
-            ps.setObject(7, idServices, java.sql.Types.INTEGER);
-            ps.setObject(8, idEquipment, java.sql.Types.INTEGER);
-            ps.setInt(9, id);
+            ps.setInt(4, id);
             
             ps.executeUpdate();
             System.out.println("Изменен период: " + period.getNumber());
@@ -123,19 +116,21 @@ public class PeriodModel {
         }
     }
             
-    public static Integer getPayment(Payment payment) {
+    public static Integer addPayment(Payment payment, int id) {
         if (payment == null) return null;
         
         PreparedStatement ps;
         String state;
         try {
             if (payment.getPaid() != null && payment.getPaid() == -1.0) {
+                payment.setId(id);
                 ps = payment.getDeleteStatement(db);
                 state = "Delete";
                 ps.executeUpdate();
                 System.out.println(String.format("%s: %s", state, payment));
                 return null;
             } else if (payment.getId() == 0) {
+                payment.setId(id);
                 ps = payment.getInsertStatement(db);
                 state = "Insert";
             } else {
@@ -172,12 +167,12 @@ public class PeriodModel {
         ObservableList months = FXCollections.observableArrayList();
         try {
             ResultSet rs = db.stmt.executeQuery("SELECT * FROM PERIOD "
-                    + "LEFT JOIN RENT ON PERIOD.ID_RENT=RENT.id "
-                    + "LEFT JOIN FINE ON PERIOD.ID_FINE=FINE.id "
-                    + "LEFT JOIN TAXLAND ON PERIOD.ID_TAX_LAND=TAXLAND.id "
-                    + "LEFT JOIN EQUIPMENT ON PERIOD.ID_EQUIPMENT=EQUIPMENT.id "
-                    + "LEFT JOIN SERVICES ON PERIOD.ID_SERVICES=SERVICES.id "
-                    + "LEFT JOIN EXTRACOST ON PERIOD.ID_EXTRA_COST=EXTRACOST.id "
+                    + "LEFT JOIN RENT ON PERIOD.id=RENT.id_rent "
+                    + "LEFT JOIN FINE ON PERIOD.id=FINE.id_fine "
+                    + "LEFT JOIN TAXLAND ON PERIOD.id=TAXLAND.id_tax_land "
+                    + "LEFT JOIN EQUIPMENT ON PERIOD.id=EQUIPMENT.id_equipment "
+                    + "LEFT JOIN SERVICES ON PERIOD.id=SERVICES.id_services "
+                    + "LEFT JOIN EXTRACOST ON PERIOD.id=EXTRACOST.id_extra_cost "
                     + "WHERE id_contract='"
                     + id + "' ORDER BY number");
             
@@ -199,12 +194,12 @@ public class PeriodModel {
         
         try {
             ResultSet rs = db.stmt.executeQuery("SELECT * FROM PERIOD "
-                    + "LEFT JOIN RENT ON PERIOD.ID_RENT=RENT.id "
-                    + "LEFT JOIN FINE ON PERIOD.ID_FINE=FINE.id "
-                    + "LEFT JOIN TAXLAND ON PERIOD.ID_TAX_LAND=TAXLAND.id "
-                    + "LEFT JOIN EQUIPMENT ON PERIOD.ID_EQUIPMENT=EQUIPMENT.id "
-                    + "LEFT JOIN SERVICES ON PERIOD.ID_SERVICES=SERVICES.id "
-                    + "LEFT JOIN EXTRACOST ON PERIOD.ID_EXTRA_COST=EXTRACOST.id "
+                    + "LEFT JOIN RENT ON PERIOD.id=RENT.id_rent "
+                    + "LEFT JOIN FINE ON PERIOD.id=FINE.id_fine "
+                    + "LEFT JOIN TAXLAND ON PERIOD.id=TAXLAND.id_tax_land "
+                    + "LEFT JOIN EQUIPMENT ON PERIOD.id=EQUIPMENT.id_equipment "
+                    + "LEFT JOIN SERVICES ON PERIOD.id=SERVICES.id_services "
+                    + "LEFT JOIN EXTRACOST ON PERIOD.id=EXTRACOST.id_extra_cost "
                     + "LEFT JOIN CONTRACT ON PERIOD.ID_CONTRACT=CONTRACT.id "
                     + "LEFT JOIN RENTER ON CONTRACT.ID_RENTER=RENTER.id "
                     + "LEFT JOIN BUILDING ON CONTRACT.ID_BUILDING=BUILDING.id "
@@ -259,37 +254,25 @@ public class PeriodModel {
     }
     
     public static void updateExtraCostPeriod(int id, Period period) {
-        try {
-            Integer idExtraCost = getExtraCost(period.getExtraCost());
-            if (idExtraCost == null) period.setExtraCost(null);
-            System.out.println(idExtraCost);
-            PreparedStatement ps = db.conn.prepareStatement("UPDATE PERIOD "
-                    + "SET id_extra_cost=? "
-                    + "WHERE id=?");
-                    
-            ps.setObject(1, idExtraCost, java.sql.Types.INTEGER);
-            ps.setInt(2, id);
-            
-            ps.executeUpdate();
-            System.out.println("Изменен период: " + period.getNumber());
-        } catch (SQLException ex) {
-            Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        Integer idExtraCost = addExtraCost(period.getExtraCost(), id);
+        if (idExtraCost == null) period.setExtraCost(null);
     }
             
-    public static Integer getExtraCost(ExtraCost extraCost) {
+    public static Integer addExtraCost(ExtraCost extraCost, int id) {
         if (extraCost == null) return null;
         
         PreparedStatement ps;
         String state;
         try {
             if (extraCost.getCostRent() != null && extraCost.getCostRent() == -1.0) {
+                extraCost.setId(id);
                 ps = extraCost.getDeleteStatement(db);
                 state = "Delete";
                 ps.executeUpdate();
                 System.out.println(String.format("%s: %s", state, extraCost));
                 return null;
             } else if (extraCost.getId() == 0) {
+                extraCost.setId(id);
                 ps = extraCost.getInsertStatement(db);
                 state = "Insert";
             } else {

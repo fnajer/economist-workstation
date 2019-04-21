@@ -104,7 +104,7 @@ public class Util {
             String dateString = date.toString();
 
             return dateString;
-        } catch(NumberFormatException e) {
+        } catch(NullPointerException e) {
             System.err.println(String.format(
                     "%s: %s value '%s' is not correct",
                     calledClass.getClass().getSimpleName(),

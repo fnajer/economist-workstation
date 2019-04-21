@@ -78,7 +78,6 @@ public class ExtraCostFormController {
                 period.setExtraCost(extraCost);
             } else if (isExist(extraCost)) {
                 ExtraCost extraCostForDelete = new ExtraCost();
-                extraCostForDelete.setId(extraCost.getId());
                 extraCostForDelete.setCostRent(-1.0);
                 period.setExtraCost(extraCostForDelete);
             }

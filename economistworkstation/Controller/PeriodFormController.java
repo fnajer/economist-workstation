@@ -303,7 +303,7 @@ public class PeriodFormController {
             Services services = (Services) period.getServicesPayment();
             Equipment equipment = (Equipment) period.getEquipmentPayment();
             
-            if (isFilled(costRentField, indexCostRentField)) {
+            if (isFilled(costRentField, indexCostRentField, paymentRentField)) {
                 if (rent == null)
                     rent = new Rent();
                 rent.setCost(parseField(costRentField));
@@ -314,11 +314,10 @@ public class PeriodFormController {
                 period.setRentPayment(rent);
             } else if (isExist(rent)) {
                 Rent rentForDelete = new Rent();
-                rentForDelete.setId(rent.getId());
                 rentForDelete.setPaid(-1.0);
                 period.setRentPayment(rentForDelete);
             }
-            if (isFilled(fineField)) {
+            if (isFilled(fineField, paymentFineField)) {
                 if (fine == null)
                     fine = new Fine();
                 fine.setFine(parseField(fineField));
@@ -328,11 +327,10 @@ public class PeriodFormController {
                 period.setFinePayment(fine);
             } else if (isExist(fine)) {
                 Fine fineForDelete = new Fine();
-                fineForDelete.setId(fine.getId());
                 fineForDelete.setPaid(-1.0);
                 period.setFinePayment(fineForDelete);
             }
-            if (isFilled(taxLandField)) {
+            if (isFilled(taxLandField, paymentTaxLandField)) {
                 if (taxLand == null)
                     taxLand = new TaxLand();
                 taxLand.setTaxLand(parseField(taxLandField));
@@ -342,13 +340,12 @@ public class PeriodFormController {
                 period.setTaxLandPayment(taxLand);
             } else if (isExist(taxLand)) {
                 TaxLand taxLandForDelete = new TaxLand();
-                taxLandForDelete.setId(taxLand.getId());
                 taxLandForDelete.setPaid(-1.0);
                 period.setTaxLandPayment(taxLandForDelete);
             }
             if (isFilled(countWaterField, tariffWaterField, countElectricityField,
                     tariffElectricityField, costHeadingField, costGarbageField,
-                    costInternetField, costTelephoneField)) {
+                    costInternetField, costTelephoneField, paymentServicesField)) {
                 if (services == null)
                     services = new Services();
                 services.setCountWater(parseField(countWaterField));
@@ -365,11 +362,10 @@ public class PeriodFormController {
                 period.setServicesPayment(services);
             } else if (isExist(services)) {
                 Services servicesForDelete = new Services();
-                servicesForDelete.setId(services.getId());
                 servicesForDelete.setPaid(-1.0);
                 period.setServicesPayment(servicesForDelete);
             }
-            if (isFilled(costEquipmentField)) {
+            if (isFilled(costEquipmentField, paymentEquipmentField)) {
                 if (equipment == null)
                     equipment = new Equipment();
                 equipment.setCostEquipment(parseField(costEquipmentField));
@@ -379,7 +375,6 @@ public class PeriodFormController {
                 period.setEquipmentPayment(equipment);
             } else if (isExist(equipment)) {
                 Equipment equipmentForDelete = new Equipment();
-                equipmentForDelete.setId(equipment.getId());
                 equipmentForDelete.setPaid(-1.0);
                 period.setEquipmentPayment(equipmentForDelete);
             }
