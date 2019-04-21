@@ -38,19 +38,19 @@
             <Label prefHeight="17.0" prefWidth="157.0" text="Кредит аренды помещения:" />
             <Label fx:id="creditRentLabel" text="Label" GridPane.columnIndex="1" />
             <Label fx:id="debitRentLabel" text="Label" GridPane.columnIndex="3" />
-            <Label text="Label" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <Label fx:id="debitFineLabel" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="1" />
             <Label fx:id="creditFineLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <Label fx:id="creditTaxLandLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label text="Label" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+            <Label fx:id="debitTaxLandLabel" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="2" />
             <Label fx:id="creditServiceLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <Label text="Label" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+            <Label fx:id="debitServiceLabel" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="3" />
             <Label fx:id="creditEquipmentLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Label text="Label" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+            <Label fx:id="debitEquipmentLabel" text="Label" GridPane.columnIndex="3" GridPane.rowIndex="4" />
             <Label text="Дебет аренды помещения:" GridPane.columnIndex="2" />
-            <Label fx:id="debitFineLabel" text="Дебет пени:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <Label fx:id="debitTaxLandLabel" text="Дебет земельного налога:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <Label fx:id="debitServiceLabel" text="Дебет услуг:" GridPane.columnIndex="2" GridPane.rowIndex="3" />
-            <Label fx:id="debitEquipmentLabel" text="Дебет аренды оборудования:" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <Label text="Дебет пени:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Label text="Дебет земельного налога:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Label text="Дебет услуг:" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <Label text="Дебет аренды оборудования:" GridPane.columnIndex="2" GridPane.rowIndex="4" />
          </children>
       </GridPane>
       <Label layoutX="10.0" layoutY="14.0" prefHeight="17.0" prefWidth="298.0" text="Сальдо на текущий период (за все предыдущие)" />
