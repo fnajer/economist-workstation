@@ -76,6 +76,8 @@ public class PeriodFormController {
     @FXML
     private TextField paymentRentField;
     @FXML
+    private TextField datePaidRentField;
+    @FXML
     private Label statePaymentRentLabel;
     @FXML
     private Label balancePaymentRentLabel;
@@ -95,6 +97,8 @@ public class PeriodFormController {
     @FXML
     private TextField paymentFineField;
     @FXML
+    private TextField datePaidFineField;
+    @FXML
     private Label statePaymentFineLabel;
     @FXML
     private Label balancePaymentFineLabel;
@@ -111,6 +115,8 @@ public class PeriodFormController {
     //payment
     @FXML
     private TextField paymentTaxLandField;
+    @FXML
+    private TextField datePaidTaxLandField;
     @FXML
     private Label statePaymentTaxLandLabel;
     @FXML
@@ -157,6 +163,8 @@ public class PeriodFormController {
     @FXML
     private TextField paymentServicesField;
     @FXML
+    private TextField datePaidServicesField;
+    @FXML
     private Label statePaymentServicesLabel;
     @FXML
     private Label balancePaymentServicesLabel;
@@ -173,6 +181,8 @@ public class PeriodFormController {
     //payment
     @FXML
     private TextField paymentEquipmentField;
+    @FXML
+    private TextField datePaidEquipmentField;
     @FXML
     private Label statePaymentEquipmentLabel;
     @FXML
@@ -222,13 +232,16 @@ public class PeriodFormController {
         if (isExist(rent)) {
             setText(costRentField, rent.getCost());
             setText(indexCostRentField, rent.getIndexCost());
-//        statePaymentRentLabel.setText(Util.boolToString(period.getPaidRent()));
+            setText(paymentRentField, rent.getPaid());
+            //setText(statePaymentRentLabel.setText(Util.boolToString(period.getPaidRent()));
         }
         if (isExist(fine)) {
             setText(fineField, fine.getFine());
+            setText(paymentFineField, fine.getPaid());
         }
         if (isExist(taxLand)) {
             setText(taxLandField, taxLand.getTaxLand());
+            setText(paymentTaxLandField, taxLand.getPaid());
         }
         if (isExist(services)) {
             setText(countWaterField, services.getCountWater());
@@ -239,9 +252,11 @@ public class PeriodFormController {
             setText(costGarbageField, services.getCostGarbage());
             setText(costInternetField, services.getCostInternet());
             setText(costTelephoneField, services.getCostTelephone());
+            setText(paymentServicesField, services.getPaid());
         }
         if (isExist(equipment)) {
             setText(costEquipmentField, equipment.getCostEquipment());
+            setText(paymentEquipmentField, equipment.getPaid());
         }
         
         refreshExtraCost();
@@ -287,34 +302,39 @@ public class PeriodFormController {
                     rent = new Rent();
                 rent.setCost(parseField(costRentField));
                 rent.setIndexCost(parseField(indexCostRentField));
-//            period.setPaidRent(Util.stringToBool(paidRentField.getText()));
+                
+                rent.setPaid(parseField(paymentRentField));
                 period.setRentPayment(rent);
             } else if (isExist(rent)) {
                 Rent rentForDelete = new Rent();
                 rentForDelete.setId(rent.getId());
-                rentForDelete.setPaid(-1);
+                rentForDelete.setPaid(-1.0);
                 period.setRentPayment(rentForDelete);
             }
             if (isFilled(fineField)) {
                 if (fine == null)
                     fine = new Fine();
                 fine.setFine(parseField(fineField));
+                
+                fine.setPaid(parseField(paymentFineField));
                 period.setFinePayment(fine);
             } else if (isExist(fine)) {
                 Fine fineForDelete = new Fine();
                 fineForDelete.setId(fine.getId());
-                fineForDelete.setPaid(-1);
+                fineForDelete.setPaid(-1.0);
                 period.setFinePayment(fineForDelete);
             }
             if (isFilled(taxLandField)) {
                 if (taxLand == null)
                     taxLand = new TaxLand();
                 taxLand.setTaxLand(parseField(taxLandField));
+                
+                taxLand.setPaid(parseField(paymentTaxLandField));
                 period.setTaxLandPayment(taxLand);
             } else if (isExist(taxLand)) {
                 TaxLand taxLandForDelete = new TaxLand();
                 taxLandForDelete.setId(taxLand.getId());
-                taxLandForDelete.setPaid(-1);
+                taxLandForDelete.setPaid(-1.0);
                 period.setTaxLandPayment(taxLandForDelete);
             }
             if (isFilled(countWaterField, tariffWaterField, countElectricityField,
@@ -330,22 +350,26 @@ public class PeriodFormController {
                 services.setCostGarbage(parseField(costGarbageField));
                 services.setCostInternet(parseField(costInternetField));
                 services.setCostTelephone(parseField(costTelephoneField));
+                
+                services.setPaid(parseField(paymentServicesField));
                 period.setServicesPayment(services);
             } else if (isExist(services)) {
                 Services servicesForDelete = new Services();
                 servicesForDelete.setId(services.getId());
-                servicesForDelete.setPaid(-1);
+                servicesForDelete.setPaid(-1.0);
                 period.setServicesPayment(servicesForDelete);
             }
             if (isFilled(costEquipmentField)) {
                 if (equipment == null)
                     equipment = new Equipment();
                 equipment.setCostEquipment(parseField(costEquipmentField));
+                
+                equipment.setPaid(parseField(paymentEquipmentField));
                 period.setEquipmentPayment(equipment);
             } else if (isExist(equipment)) {
                 Equipment equipmentForDelete = new Equipment();
                 equipmentForDelete.setId(equipment.getId());
-                equipmentForDelete.setPaid(-1);
+                equipmentForDelete.setPaid(-1.0);
                 period.setEquipmentPayment(equipmentForDelete);
             }
             
