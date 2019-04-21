@@ -8,7 +8,10 @@ package economistworkstation.Util;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Locale;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
@@ -64,6 +67,18 @@ public class Util {
             label.setText("Нет");
         }
     }
+    public static void setText(DatePicker dp, String text) {
+        try {
+            LocalDate date = LocalDate.parse(text);
+            dp.setValue(date);
+        } catch (NullPointerException | DateTimeParseException e) {
+            System.err.println(String.format(
+                    "%s: value for %s from db is %s", 
+                    calledClass.getClass().getSimpleName(),
+                    dp.getId(),
+                    text));
+        }
+    }
     
     public static Double parseField(TextField field) {
         String fieldString = field.getText();
@@ -80,6 +95,21 @@ public class Util {
                     calledClass.getClass().getSimpleName(),
                     field.getId(),
                     fieldString));
+            return null;
+        }
+    }
+    public static String parseField(DatePicker field) {
+        LocalDate date = field.getValue();
+        try {
+            String dateString = date.toString();
+
+            return dateString;
+        } catch(NumberFormatException e) {
+            System.err.println(String.format(
+                    "%s: %s value '%s' is not correct",
+                    calledClass.getClass().getSimpleName(),
+                    field.getId(),
+                    date));
             return null;
         }
     }
