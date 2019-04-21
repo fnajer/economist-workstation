@@ -34,6 +34,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
@@ -76,7 +77,7 @@ public class PeriodFormController {
     @FXML
     private TextField paymentRentField;
     @FXML
-    private TextField datePaidRentField;
+    private DatePicker datePaidRentField;
     @FXML
     private Label statePaymentRentLabel;
     @FXML
@@ -97,7 +98,7 @@ public class PeriodFormController {
     @FXML
     private TextField paymentFineField;
     @FXML
-    private TextField datePaidFineField;
+    private DatePicker datePaidFineField;
     @FXML
     private Label statePaymentFineLabel;
     @FXML
@@ -116,7 +117,7 @@ public class PeriodFormController {
     @FXML
     private TextField paymentTaxLandField;
     @FXML
-    private TextField datePaidTaxLandField;
+    private DatePicker datePaidTaxLandField;
     @FXML
     private Label statePaymentTaxLandLabel;
     @FXML
@@ -163,7 +164,7 @@ public class PeriodFormController {
     @FXML
     private TextField paymentServicesField;
     @FXML
-    private TextField datePaidServicesField;
+    private DatePicker datePaidServicesField;
     @FXML
     private Label statePaymentServicesLabel;
     @FXML
@@ -182,7 +183,7 @@ public class PeriodFormController {
     @FXML
     private TextField paymentEquipmentField;
     @FXML
-    private TextField datePaidEquipmentField;
+    private DatePicker datePaidEquipmentField;
     @FXML
     private Label statePaymentEquipmentLabel;
     @FXML
@@ -233,15 +234,18 @@ public class PeriodFormController {
             setText(costRentField, rent.getCost());
             setText(indexCostRentField, rent.getIndexCost());
             setText(paymentRentField, rent.getPaid());
+            setText(datePaidRentField, rent.getDatePaid());
             //setText(statePaymentRentLabel.setText(Util.boolToString(period.getPaidRent()));
         }
         if (isExist(fine)) {
             setText(fineField, fine.getFine());
             setText(paymentFineField, fine.getPaid());
+            setText(datePaidFineField, fine.getDatePaid());
         }
         if (isExist(taxLand)) {
             setText(taxLandField, taxLand.getTaxLand());
             setText(paymentTaxLandField, taxLand.getPaid());
+            setText(datePaidTaxLandField, taxLand.getDatePaid());
         }
         if (isExist(services)) {
             setText(countWaterField, services.getCountWater());
@@ -253,10 +257,12 @@ public class PeriodFormController {
             setText(costInternetField, services.getCostInternet());
             setText(costTelephoneField, services.getCostTelephone());
             setText(paymentServicesField, services.getPaid());
+            setText(datePaidServicesField, services.getDatePaid());
         }
         if (isExist(equipment)) {
             setText(costEquipmentField, equipment.getCostEquipment());
             setText(paymentEquipmentField, equipment.getPaid());
+            setText(datePaidEquipmentField, equipment.getDatePaid());
         }
         
         refreshExtraCost();
@@ -304,6 +310,7 @@ public class PeriodFormController {
                 rent.setIndexCost(parseField(indexCostRentField));
                 
                 rent.setPaid(parseField(paymentRentField));
+                rent.setDatePaid(parseField(datePaidRentField));
                 period.setRentPayment(rent);
             } else if (isExist(rent)) {
                 Rent rentForDelete = new Rent();
@@ -317,6 +324,7 @@ public class PeriodFormController {
                 fine.setFine(parseField(fineField));
                 
                 fine.setPaid(parseField(paymentFineField));
+                fine.setDatePaid(parseField(datePaidFineField));
                 period.setFinePayment(fine);
             } else if (isExist(fine)) {
                 Fine fineForDelete = new Fine();
@@ -330,6 +338,7 @@ public class PeriodFormController {
                 taxLand.setTaxLand(parseField(taxLandField));
                 
                 taxLand.setPaid(parseField(paymentTaxLandField));
+                taxLand.setDatePaid(parseField(datePaidTaxLandField));
                 period.setTaxLandPayment(taxLand);
             } else if (isExist(taxLand)) {
                 TaxLand taxLandForDelete = new TaxLand();
@@ -352,6 +361,7 @@ public class PeriodFormController {
                 services.setCostTelephone(parseField(costTelephoneField));
                 
                 services.setPaid(parseField(paymentServicesField));
+                services.setDatePaid(parseField(datePaidServicesField));
                 period.setServicesPayment(services);
             } else if (isExist(services)) {
                 Services servicesForDelete = new Services();
@@ -365,6 +375,7 @@ public class PeriodFormController {
                 equipment.setCostEquipment(parseField(costEquipmentField));
                 
                 equipment.setPaid(parseField(paymentEquipmentField));
+                equipment.setDatePaid(parseField(datePaidEquipmentField));
                 period.setEquipmentPayment(equipment);
             } else if (isExist(equipment)) {
                 Equipment equipmentForDelete = new Equipment();

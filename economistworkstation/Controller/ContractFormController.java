@@ -62,7 +62,7 @@ public class ContractFormController {
         } else {
             dateStartField.setValue(LocalDate.now());
             dateEndField.setValue(LocalDate.now().plusMonths(6));
-        }
+        }  
     }
     
     public boolean isOkClicked() {
