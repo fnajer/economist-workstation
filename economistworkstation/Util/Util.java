@@ -98,6 +98,24 @@ public class Util {
             return null;
         }
     }
+    public static Double parseField(Label lbl) {
+        String lblString = lbl.getText();
+        try {
+            double value = Double.parseDouble(lblString);
+            DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.US);
+            DecimalFormat df = new DecimalFormat("#.##", otherSymbols);
+            df.setRoundingMode(RoundingMode.HALF_UP);
+
+            return Double.parseDouble(df.format(value));
+        } catch(NumberFormatException e) {
+            System.err.println(String.format(
+                    "%s: %s value '%s' is not correct. Replaced by null",
+                    calledClass.getClass().getSimpleName(),
+                    lbl.getId(),
+                    lblString));
+            return null;
+        }
+    }
     public static String parseField(DatePicker field) {
         LocalDate date = field.getValue();
         try {
@@ -121,6 +139,13 @@ public class Util {
     public static boolean isFilled(TextField ...tfs) {
         for (TextField tf : tfs) {
             if (tf.getText().length() != 0)
+                return true;
+        }
+        return false;
+    }
+    public static boolean isFilled(Label ...lbls) {
+        for (Label lbl : lbls) {
+            if (lbl.getText().length() != 0)
                 return true;
         }
         return false;
