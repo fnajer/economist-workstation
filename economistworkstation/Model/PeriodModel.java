@@ -8,6 +8,7 @@ package economistworkstation.Model;
 import economistworkstation.ContractData;
 import economistworkstation.Database;
 import economistworkstation.EconomistWorkstation;
+import economistworkstation.Entity.Balance;
 import economistworkstation.Entity.ExtraCost;
 import economistworkstation.Entity.Fine;
 import economistworkstation.Entity.Payment;
@@ -99,6 +100,8 @@ public class PeriodModel {
             if (idServices == null) period.setServicesPayment(null);
             Integer idEquipment = addPayment(period.getEquipmentPayment(), id);
             if (idEquipment == null) period.setEquipmentPayment(null);
+            
+            updateBalancePeriod(id, period);
 
             PreparedStatement ps = db.conn.prepareStatement("UPDATE PERIOD "
                     + "SET number=?, date_end=?, id_contract=? "
@@ -173,6 +176,7 @@ public class PeriodModel {
                     + "LEFT JOIN EQUIPMENT ON PERIOD.id=EQUIPMENT.id_equipment "
                     + "LEFT JOIN SERVICES ON PERIOD.id=SERVICES.id_services "
                     + "LEFT JOIN EXTRACOST ON PERIOD.id=EXTRACOST.id_extra_cost "
+                    + "LEFT JOIN BALANCE ON PERIOD.id=BALANCE.id_balance "
                     + "WHERE id_contract='"
                     + id + "' ORDER BY number");
             
@@ -200,6 +204,7 @@ public class PeriodModel {
                     + "LEFT JOIN EQUIPMENT ON PERIOD.id=EQUIPMENT.id_equipment "
                     + "LEFT JOIN SERVICES ON PERIOD.id=SERVICES.id_services "
                     + "LEFT JOIN EXTRACOST ON PERIOD.id=EXTRACOST.id_extra_cost "
+                    + "LEFT JOIN BALANCE ON PERIOD.id=BALANCE.id_balance "
                     + "LEFT JOIN CONTRACT ON PERIOD.ID_CONTRACT=CONTRACT.id "
                     + "LEFT JOIN RENTER ON CONTRACT.ID_RENTER=RENTER.id "
                     + "LEFT JOIN BUILDING ON CONTRACT.ID_BUILDING=BUILDING.id "
@@ -366,6 +371,23 @@ public class PeriodModel {
         }
         return null;
     }
+    private static Balance createObjectBalance(ResultSet rs) throws SQLException {
+        if(rs.getInt("id_balance") != 0) {
+            Balance balance = new Balance(rs.getObject("credit_rent"), 
+                    rs.getObject("debit_rent"),
+                    rs.getObject("credit_fine"),
+                    rs.getObject("debit_fine"), 
+                    rs.getObject("credit_tax_land"),
+                    rs.getObject("debit_tax_land"),
+                    rs.getObject("credit_equipment"),
+                    rs.getObject("debit_equipment"), 
+                    rs.getObject("credit_services"),
+                    rs.getObject("debit_services"));
+            balance.setId(rs.getInt("id_balance"));
+            return balance;
+        }
+        return null;
+    }
     
     private static Period createObjectPeriod(ResultSet rs) throws SQLException {
         Period period = new Period(rs.getInt("number"), 
@@ -378,7 +400,8 @@ public class PeriodModel {
                     createObjectTaxLand(rs),
                     createObjectServices(rs),
                     createObjectEquipment(rs),
-                    createObjectExtraCost(rs));
+                    createObjectExtraCost(rs),
+                    createObjectBalance(rs));
         period.setId(rs.getInt("id"));
         
         return period;
