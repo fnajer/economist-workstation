@@ -301,6 +301,49 @@ public class PeriodModel {
         return extraCost.getId();
     }
     
+    public static void updateBalancePeriod(int id, Period period) {
+        Integer idBalance = addBalance(period.getBalance(), id);
+        if (idBalance == null) period.setBalance(null);
+    }
+            
+    public static Integer addBalance(Balance balance, int id) {
+        if (balance == null) return null;
+        
+        PreparedStatement ps;
+        String state;
+        try {
+            if (balance.getCreditRent()!= null && balance.getCreditRent() == -1.0) {
+                balance.setId(id);
+                ps = balance.getDeleteStatement(db);
+                state = "Delete";
+                ps.executeUpdate();
+                System.out.println(String.format("%s: %s", state, balance));
+                return null;
+            } else if (balance.getId() == 0) {
+                balance.setId(id);
+                ps = balance.getInsertStatement(db);
+                state = "Insert";
+            } else {
+                ps = balance.getUpdateStatement(db);
+                state = "Update";
+            }
+     
+            ps.executeUpdate();
+            
+            ResultSet rs = ps.getGeneratedKeys();
+            
+            if (rs.next()) {
+                balance.setId(rs.getInt(1));
+            }
+            
+            System.out.println(String.format("%s: %s", state, balance));
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(PeriodModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return balance.getId();
+    }
+    
     private static Payment createObjectRent(ResultSet rs) throws SQLException {
         if(rs.getInt("id_rent") != 0) {
             Payment rent = new Rent(rs.getObject("paid_rent"), 
