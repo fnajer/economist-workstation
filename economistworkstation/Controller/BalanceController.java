@@ -64,6 +64,17 @@ public class BalanceController {
             setText(debitServiceLabel, balance.getDebitService());
             setText(creditEquipmentLabel, balance.getCreditEquipment());
             setText(debitEquipmentLabel, balance.getDebitEquipment());
+        } else {
+            creditRentLabel.setText("Нет");
+            debitRentLabel.setText("Нет");
+            creditFineLabel.setText("Нет");
+            debitFineLabel.setText("Нет");
+            creditTaxLandLabel.setText("Нет");
+            debitTaxLandLabel.setText("Нет");
+            creditServiceLabel.setText("Нет");
+            debitServiceLabel.setText("Нет");
+            creditEquipmentLabel.setText("Нет");
+            debitEquipmentLabel.setText("Нет");
         }
     }
     
