@@ -99,13 +99,13 @@
                                  <children>
                                     <GridPane AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                                        <columnConstraints>
-                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="179.0" minWidth="10.0" prefWidth="174.0" />
-                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="269.0" minWidth="10.0" prefWidth="68.0" />
-                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="269.0" minWidth="10.0" prefWidth="63.0" />
-                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="269.0" minWidth="10.0" prefWidth="62.0" />
-                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="269.0" minWidth="10.0" prefWidth="21.0" />
-                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="297.0" minWidth="10.0" prefWidth="113.99996948242188" />
-                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="269.0" minWidth="10.0" prefWidth="97.00003051757812" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="179.0" minWidth="10.0" prefWidth="111.00000762939453" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="269.0" minWidth="10.0" prefWidth="79.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="269.0" minWidth="10.0" prefWidth="59.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="269.0" minWidth="10.0" prefWidth="56.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="269.0" minWidth="10.0" prefWidth="41.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="297.0" minWidth="10.0" prefWidth="145.0" />
+                                          <ColumnConstraints hgrow="SOMETIMES" maxWidth="269.0" minWidth="10.0" prefWidth="107.0" />
                                        </columnConstraints>
                                        <rowConstraints>
                                           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
@@ -151,8 +151,8 @@
                                           <Label fx:id="balancePaymentFineLabel" text="с учетом кредита" GridPane.columnIndex="5" GridPane.rowIndex="10" />
                                           <Label fx:id="statePaymentFineLabel" text="Label" GridPane.columnIndex="6" GridPane.rowIndex="9" />
                                           <Label text="Состояние:" GridPane.columnIndex="5" GridPane.rowIndex="9" />
-                                          <Label text="Дополнительная стоимость:" GridPane.rowIndex="3" />
-                                          <Label text="Дополнительная стоимость:" GridPane.rowIndex="8" />
+                                          <Label text="Доп. стоимость:" GridPane.rowIndex="3" />
+                                          <Label text="Доп. стоимость:" GridPane.rowIndex="8" />
                                           <Label fx:id="extraCostFineLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="8" />
                                           <TextField fx:id="paymentRentField" GridPane.columnIndex="6" GridPane.rowIndex="2">
                                              <GridPane.margin>
@@ -458,7 +458,7 @@
                   </ButtonBar>
                   <ButtonBar layoutX="-13.0" layoutY="430.0" nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="317.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="560.0">
                     <buttons>
-                        <Button maxWidth="150.0" mnemonicParsing="false" prefHeight="25.0" text="Кредит и дебет" />
+                        <Button maxWidth="150.0" mnemonicParsing="false" onAction="#handleBalance" prefHeight="25.0" text="Кредит и дебет" />
                         <Button mnemonicParsing="false" onAction="#handleExtraCost" prefHeight="25.0" prefWidth="200.0" text="Дополнительная стоимость" />
                     </buttons>
                   </ButtonBar>

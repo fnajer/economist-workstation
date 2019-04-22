@@ -30,15 +30,16 @@ public class Period {
     private final ObjectProperty<Payment> servicesPayment;
     private final ObjectProperty<Payment> equipmentPayment;
     private final ObjectProperty<ExtraCost> extraCost;
+    private final ObjectProperty<Balance> balance;
      
     public Period() {
-        this(0, 0, 0, null, 0, null, null, null, null, null, null);
+        this(0, 0, 0, null, 0, null, null, null, null, null, null, null);
     }
     
     public Period(int number, int numberRentAcc, int numberServicesAcc, 
             String endPeriod, int idContract, Payment rentPayment,
             Payment finePayment, Payment taxLandPayment, Payment servicesPayment,
-            Payment equipmentPayment, ExtraCost extraCost) {
+            Payment equipmentPayment, ExtraCost extraCost, Balance balance) {
        this.id = new SimpleIntegerProperty(0);
        this.number = new SimpleIntegerProperty(number);
        this.numberRentAcc = new SimpleIntegerProperty(numberRentAcc);
@@ -53,6 +54,7 @@ public class Period {
        this.equipmentPayment = new SimpleObjectProperty(equipmentPayment);
        
        this.extraCost = new SimpleObjectProperty(extraCost);
+       this.balance = new SimpleObjectProperty(balance);
     }
     
       
@@ -144,6 +146,13 @@ public class Period {
     }
     public void setExtraCost(ExtraCost extraCost) {
         this.extraCost.set(extraCost);
+    }
+            
+    public Balance getBalance() {
+        return balance.get();
+    }
+    public void setBalance(Balance balance) {
+        this.balance.set(balance);
     }
    
     public String getMonthName(int monthNum, boolean genitive) {
