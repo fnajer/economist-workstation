@@ -132,20 +132,21 @@ public class Balance {
     
     public PreparedStatement getInsertStatement(Database db) throws SQLException {
         PreparedStatement ps = db.conn.prepareStatement("INSERT INTO BALANCE "
-                + "(id, credit_rent, debit_rent, credit_fine, debit_fine, "
+                + "(id_balance, credit_rent, debit_rent, credit_fine, debit_fine, "
                 + "credit_tax_land, debit_tax_land, credit_services, debit_services,"
                 + "credit_equipment, debit_equipment) "
-                + "VALUES(NULL,?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-        ps.setObject(1, getCreditRent(), java.sql.Types.DOUBLE);
-        ps.setObject(2, getDebitRent(), java.sql.Types.DOUBLE);
-        ps.setObject(3, getCreditFine(), java.sql.Types.DOUBLE);
-        ps.setObject(4, getDebitFine(), java.sql.Types.DOUBLE);
-        ps.setObject(5, getCreditTaxLand(), java.sql.Types.DOUBLE);
-        ps.setObject(6, getDebitTaxLand(), java.sql.Types.DOUBLE);
-        ps.setObject(7, getCreditService(), java.sql.Types.DOUBLE);
-        ps.setObject(8, getDebitService(), java.sql.Types.DOUBLE);
-        ps.setObject(9, getCreditEquipment(), java.sql.Types.DOUBLE);
-        ps.setObject(10, getDebitEquipment(), java.sql.Types.DOUBLE);
+                + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+        ps.setInt(1, getId());
+        ps.setObject(2, getCreditRent(), java.sql.Types.DOUBLE);
+        ps.setObject(3, getDebitRent(), java.sql.Types.DOUBLE);
+        ps.setObject(4, getCreditFine(), java.sql.Types.DOUBLE);
+        ps.setObject(5, getDebitFine(), java.sql.Types.DOUBLE);
+        ps.setObject(6, getCreditTaxLand(), java.sql.Types.DOUBLE);
+        ps.setObject(7, getDebitTaxLand(), java.sql.Types.DOUBLE);
+        ps.setObject(8, getCreditService(), java.sql.Types.DOUBLE);
+        ps.setObject(9, getDebitService(), java.sql.Types.DOUBLE);
+        ps.setObject(10, getCreditEquipment(), java.sql.Types.DOUBLE);
+        ps.setObject(11, getDebitEquipment(), java.sql.Types.DOUBLE);
         
         return ps;
     }
@@ -154,7 +155,7 @@ public class Balance {
                 + "SET credit_rent=?, debit_rent=?, credit_fine=?, debit_fine=?, "
                 + "credit_tax_land=?, debit_tax_land=?, credit_services=?, "
                 + "debit_services=?, credit_equipment=?, debit_equipment=? "
-                + "WHERE id=?", Statement.RETURN_GENERATED_KEYS);
+                + "WHERE id_balance=?", Statement.RETURN_GENERATED_KEYS);
         ps.setObject(1, getCreditRent(), java.sql.Types.DOUBLE);
         ps.setObject(2, getDebitRent(), java.sql.Types.DOUBLE);
         ps.setObject(3, getCreditFine(), java.sql.Types.DOUBLE);
@@ -171,7 +172,7 @@ public class Balance {
     }
     public PreparedStatement getDeleteStatement(Database db) throws SQLException {
         PreparedStatement ps = db.conn.prepareStatement("DELETE FROM BALANCE "
-                + "WHERE id=?", Statement.RETURN_GENERATED_KEYS);
+                + "WHERE id_balance=?", Statement.RETURN_GENERATED_KEYS);
         ps.setInt(1, getId());
         
         return ps;
