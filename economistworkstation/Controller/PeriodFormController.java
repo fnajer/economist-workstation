@@ -6,6 +6,7 @@
 package economistworkstation.Controller;
 
 import economistworkstation.EconomistWorkstation;
+import economistworkstation.Entity.Balance;
 import economistworkstation.Entity.ExtraCost;
 import economistworkstation.Entity.Contract;
 import economistworkstation.Entity.Fine;
@@ -25,6 +26,7 @@ import static economistworkstation.Util.Util.isFilled;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
@@ -207,14 +209,16 @@ public class PeriodFormController {
 
     private Stage dialogStage;
     private Period period;
+    private Period prevPeriod;
     private boolean okClicked = false;
     
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }
     
-    public void setPeriod(Period period, Contract contract) {
+    public void setPeriod(Period period, Contract contract, Period prevPeriod) {
         this.period = period;
+        this.prevPeriod = prevPeriod;
         
         Util.setCalledClass(this);
         
@@ -271,6 +275,8 @@ public class PeriodFormController {
         setColorLabels(textFields);
         
         initCalc();
+        
+        setPaymentState();
     }
     
     private void refreshExtraCost() {
@@ -378,7 +384,7 @@ public class PeriodFormController {
                 equipmentForDelete.setPaid(-1.0);
                 period.setEquipmentPayment(equipmentForDelete);
             }
-            
+               
             okClicked = true;
             dialogStage.close();
         }
@@ -617,6 +623,12 @@ public class PeriodFormController {
         sumExtraCostFineLabel.textProperty().addListener((observable, oldValue, newValue) -> {
             printSum("rentFineExtra");
         });
+        sumRentWithFineLabel.textProperty().addListener((observable, oldValue, newValue) -> {
+            setPaymentState();
+        });
+        paymentRentField.textProperty().addListener((observable, oldValue, newValue) -> {
+            setPaymentState();
+        });
         
         taxLandField.textProperty().addListener((observable, oldValue, newValue) -> {
             printSum("taxLandExtra");
@@ -675,4 +687,39 @@ public class PeriodFormController {
         }
     }
     
+    @FXML
+    void handleBalance(ActionEvent event) {
+        showBalance(prevPeriod);
+    }
+    
+    public boolean showBalance(Period period) {
+        try {
+            // Загружаем fxml-файл и создаём новую сцену
+            // для всплывающего диалогового окна.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(EconomistWorkstation.class.getResource("View/Period/Balance.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            
+            // Создаём диалоговое окно Stage.
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Просмотр сальдо");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(this.dialogStage);
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+            
+            // Передаём адресата в контроллер.
+            BalanceController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setBalance(period.getBalance());
+            
+            // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
+            dialogStage.showAndWait();
+            
+            return controller.isOkClicked();
+        } catch (IOException ex) {
+            Logger.getLogger(PeriodFormController.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
 }
