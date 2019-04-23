@@ -290,6 +290,108 @@ public class PeriodFormController {
         }
     }
     
+    private void handleBalanceFields(TextField paymentTf, Label paidLbl,
+            Label statePaymentLbl, Label balancePaymentLbl) {
+        Balance balance = (Balance) period.getBalance();
+        Balance prevBalance = (Balance) prevPeriod.getBalance();
+        Double credit = null;
+        Double debit = null;
+        String text;
+        
+        if (balance == null)
+            balance = new Balance();
+
+        Double diff = getDiff(paymentTf, paidLbl);
+        if (diff != null) {
+            
+            if (diff == 0.0) {
+                statePaymentLbl.setText("Оплачено");
+                balancePaymentLbl.setText("");
+//                if (isExist(prevBalance)) 
+//                    credit = prevBalance.getCreditRent();
+//                if (isExist(prevBalance)) 
+//                    debit = prevBalance.getDebitRent();
+//                
+//                statePaymentLbl.setText("Оплачено -");
+//                if (isExist(credit)) {
+//                    text = balance.calcWithCredit(credit, diff);
+//                    balancePaymentLbl.setText(text);
+//                    period.setBalance(balance);
+//                } else if (isExist(debit)) {
+//                    balancePaymentLbl.setText(
+//                            String.format("уйдет в дебет: %.2f + %.2f", diff, debit));
+//                    System.out.println(String.format("уйдет в дебет: %.2f + %.2f", diff, debit));
+//                    balance.setDebitRent(diff + debit);
+//                    balance.setCreditRent(null);
+//                    period.setBalance(balance);
+//                } else {
+//                    balancePaymentLbl.setText(
+//                            String.format("уйдет в дебет: %.2f", diff));
+//                    System.out.println(String.format("уйдет в дебет: %.2f", diff));
+//                    balance.setDebitRent(diff);
+//                    balance.setCreditRent(null);
+//                    period.setBalance(balance);
+//                }
+            } else if (diff > 0) {
+                if (isExist(prevBalance)) 
+                    credit = prevBalance.getCreditRent();
+                if (isExist(prevBalance)) 
+                    debit = prevBalance.getDebitRent();
+                
+                statePaymentLbl.setText("Оплачено -");
+                if (isExist(credit)) {
+                    text = balance.calcWithCredit(credit, diff);
+                    balancePaymentLbl.setText(text);
+                    period.setBalance(balance);
+                } else if (isExist(debit)) {
+                    balancePaymentLbl.setText(
+                            String.format("уйдет в дебет: %.2f + %.2f", diff, debit));
+                    System.out.println(String.format("уйдет в дебет: %.2f + %.2f", diff, debit));
+                    balance.setDebitRent(diff + debit);
+                    balance.setCreditRent(null);
+                    period.setBalance(balance);
+                } else {
+                    balancePaymentLbl.setText(
+                            String.format("уйдет в дебет: %.2f", diff));
+                    System.out.println(String.format("уйдет в дебет: %.2f", diff));
+                    balance.setDebitRent(diff);
+                    balance.setCreditRent(null);
+                    period.setBalance(balance);
+                }
+            } else {
+                if (isExist(prevBalance)) 
+                    debit = prevBalance.getDebitRent();
+                if (isExist(prevBalance)) 
+                    credit = prevBalance.getCreditRent();
+                
+                statePaymentLbl.setText("Оплачено +");
+                diff = Math.abs(diff);
+                if (isExist(debit)) {
+                    text = balance.calcWithDebit(debit, diff);
+                    balancePaymentLbl.setText(text);
+                    period.setBalance(balance);
+                } else if (isExist(credit)) {
+                    balancePaymentLbl.setText(
+                            String.format("уйдет в кредит: %.2f + %.2f", diff, credit));
+                    System.out.println(String.format("уйдет в кредит: %.2f + %.2f", diff, credit));
+                    balance.setDebitRent(null);
+                    balance.setCreditRent(diff + credit);//
+                    period.setBalance(balance);
+                } else {
+                    balancePaymentLbl.setText(
+                            String.format("уйдет в кредит: %.2f", diff));
+                    System.out.println(String.format("уйдет в кредит: %.2f", diff));
+                    balance.setCreditRent(diff);
+                    balance.setDebitRent(null);
+                    period.setBalance(balance);
+                }
+            }
+        } else {
+            statePaymentLbl.setText("");
+            balancePaymentLbl.setText("");
+        }
+    }
+    
     private Double getDecDouble(Double diff) {
         if (diff == null) return null;
         
