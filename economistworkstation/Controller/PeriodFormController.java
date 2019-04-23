@@ -279,6 +279,43 @@ public class PeriodFormController {
         setPaymentState();
     }
     
+    private void setPaymentState() {
+        if (isFilled(paymentRentField) && isFilled(sumRentWithFineLabel)) {
+            handleBalanceFields(paymentRentField, sumRentWithFineLabel, 
+                    statePaymentRentLabel, balancePaymentRentLabel);
+        } else if (isExist(period.getBalance())) {
+            Balance balanceForDelete = new Balance();
+            balanceForDelete.setCreditRent(-1.0);
+            period.setBalance(balanceForDelete);
+        }
+    }
+    
+    private Double getDecDouble(Double diff) {
+        if (diff == null) return null;
+        
+        try {
+            String doubleString = String.format("%.2f", diff);
+            return Double.parseDouble(doubleString);
+        } catch(IllegalArgumentException e) {
+            
+            return null;
+        }
+    }
+    
+    private Double getDiff(TextField tf, Label lbl) {
+        try {
+            double paid = parseField(tf);
+            double needPay = parseField(lbl);
+            return needPay - paid;
+        } catch(NullPointerException e) {
+            System.err.println(String.format(
+                    "%s: %s balance dont calculate",
+                    this.getClass().getSimpleName(),
+                    lbl.getId()));
+            return null;
+        }
+    }
+    
     private void refreshExtraCost() {
         ExtraCost extraCost = period.getExtraCost();
         if (isExist(extraCost)) {
