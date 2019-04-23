@@ -334,6 +334,21 @@ public class ContractController implements Initializable, BaseController {
         periodTable.getSelectionModel().selectedItemProperty().addListener(listener);
     }
     
+    public void recalculateBalance() {
+        Balance balance;
+        Balance prevBalance = null;
+        for (Period period : periods) {
+            balance = period.getBalance();
+            if (period.getNumber() == 1) {
+                prevBalance = balance;
+                continue;
+            }
+            if (isExist(prevBalance)) {
+                balance.recalculate(prevBalance, period);
+            }
+            prevBalance = balance;
+        }
+    }
     
     private boolean isExist(Object payment) {
         return payment != null;
