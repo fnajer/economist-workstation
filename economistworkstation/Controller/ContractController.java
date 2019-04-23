@@ -6,6 +6,7 @@
 package economistworkstation.Controller;
 
 import economistworkstation.EconomistWorkstation;
+import economistworkstation.Entity.Balance;
 import economistworkstation.Entity.Building;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -142,13 +143,22 @@ public class ContractController implements Initializable, BaseController {
             alert.showAndWait();
         }
     }
+    
+    private Period getPrevPeriod() {
+        int index = periodTable.getSelectionModel().getSelectedIndex();
+        if (index > 0)
+            return periodTable.getItems().get(index - 1);
+        else
+            return null;
+    }
 
     @FXML
     void handleEditPeriod(ActionEvent event) {
         Period selectedPeriod = periodTable.getSelectionModel().getSelectedItem();
+        Period prevPeriod = getPrevPeriod();
         
         if (selectedPeriod != null) {
-            boolean okClicked = showPeriodForm(selectedPeriod);
+            boolean okClicked = showPeriodForm(selectedPeriod, prevPeriod);
             if (okClicked) {
                 PeriodModel.updatePeriod(selectedPeriod.getId(), selectedPeriod);
                 showPeriodDetails(selectedPeriod);
@@ -167,7 +177,7 @@ public class ContractController implements Initializable, BaseController {
     }
  
     
-    public boolean showPeriodForm(Period period) {
+    public boolean showPeriodForm(Period period, Period prevPeriod) {
         try {
             // Загружаем fxml-файл и создаём новую сцену
             // для всплывающего диалогового окна.
@@ -186,7 +196,7 @@ public class ContractController implements Initializable, BaseController {
             // Передаём адресата в контроллер.
             PeriodFormController controller = loader.getController();
             controller.setDialogStage(dialogStage);
-            controller.setPeriod(period, contract);
+            controller.setPeriod(period, contract, prevPeriod);
             
             // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
             dialogStage.showAndWait();
@@ -318,12 +328,14 @@ public class ContractController implements Initializable, BaseController {
         // Очистка дополнительной информации об адресате.
         showPeriodDetails(null);
 
+        recalculateBalance();
         // Слушаем изменения выбора, и при изменении отображаем
         // дополнительную информацию об адресате.
         periodTable.getSelectionModel().selectedItemProperty().addListener(listener);
     }
     
-    private boolean isExist(Payment payment) {
+    
+    private boolean isExist(Object payment) {
         return payment != null;
     }
     
