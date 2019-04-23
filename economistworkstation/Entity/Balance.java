@@ -6,6 +6,7 @@
 package economistworkstation.Entity;
 
 import economistworkstation.Database;
+import static economistworkstation.Util.Util.isExist;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -13,6 +14,8 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 
 /**
  *
@@ -177,6 +180,48 @@ public class Balance {
         
         return ps;
     }
+    
+    public String calcWithCredit(double credit, double diff) {
+        String text = "";
+        if (credit == diff) {
+            text = String.format("взято с кредита: %.2f, без остатка", diff);
+            setCreditRent(null);
+            setDebitRent(null);
+        } else if (credit > diff) {
+            credit -= diff;
+            text = String.format("взято с кредита: %.2f, остаток кредита: %.2f", diff, credit);
+            setCreditRent(credit);
+            setDebitRent(null);
+        } else if (credit < diff) {
+            diff -= credit;
+            text = String.format("взято с кредита %.2f, уйдет в дебет: %.2f", credit, diff);
+            setDebitRent(diff);
+            setCreditRent(null);
+        }
+        System.out.println(text);
+        return text;
+    }
+    public String calcWithDebit(double debit, double diff) {
+        String text = "";
+        if (debit == diff) {
+            text = String.format("оплачен дебет: %.2f, без остатка", debit);
+            setCreditRent(null);
+            setDebitRent(null);
+        } else if (debit > diff) {
+            debit -= diff;
+            text = String.format("оплачен дебет: %.2f, остаток дебета %.2f", diff, debit);
+            setCreditRent(null);
+            setDebitRent(debit);
+        } else if (debit < diff) {
+            diff -= debit;
+            text = String.format("оплачено дебета %.2f, уйдет в кредит: %.2f", debit, diff);
+            setDebitRent(null);
+            setCreditRent(diff);
+        }
+        System.out.println(text);
+        return text;
+    }
+    
     
     @Override
     public String toString() {
