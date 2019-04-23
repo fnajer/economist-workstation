@@ -222,6 +222,111 @@ public class Balance {
         return text;
     }
     
+    private void calc(Balance prevBalance, Double diff, Period period) {
+        Double credit = prevBalance.getCreditRent();
+        Double debit = prevBalance.getDebitRent();
+    
+        if (diff != null) {
+            
+            if (diff == 0.0) {
+//                if (isExist(credit)) {
+//                    setDebitRent(null);
+//                    setCreditRent(credit);
+//                    period.setBalance(this);
+//                } else if (isExist(debit)) {
+//                    setDebitRent(debit);
+//                    setCreditRent(null);
+//                    period.setBalance(this);
+//                } else {
+//                    setDebitRent(null);
+//                    setCreditRent(null);
+//                    period.setBalance(this);
+//                }
+            } else if (diff > 0) {
+                if (isExist(credit)) {
+                    String st = calcWithCredit(credit, diff);
+                    period.setBalance(this);
+                } else if (isExist(debit)) {
+                    setDebitRent(diff + debit);
+                    setCreditRent(null);
+                    period.setBalance(this);
+                } else {
+                    setDebitRent(diff);
+                    setCreditRent(null);
+                    period.setBalance(this);
+                }
+            } else {
+                diff = Math.abs(diff);
+                if (isExist(debit)) {
+                    String st = calcWithDebit(debit, diff);
+                    period.setBalance(this);
+                } else if (isExist(credit)) {
+                    setDebitRent(null);
+                    setCreditRent(diff + credit);//
+                    period.setBalance(this);
+                } else {
+                    setCreditRent(diff);
+                    setDebitRent(null);
+                    period.setBalance(this);
+                }
+            }
+        } else {
+            //
+        }
+    }
+    
+    public void recalculate(Balance prevBalance, Period period) {
+        Rent rent = (Rent) period.getRentPayment();
+        Fine fine = (Fine) period.getFinePayment();
+        if (fine == null) {
+            fine = new Fine();
+            fine.setFine(0.0);
+        }
+        try {
+            Double paid = rent.getPaid();
+            Double needPay = rent.calcSumRent() + fine.getFine();
+            Double diff = needPay - paid;
+            calc(prevBalance, diff, period);
+        } catch(NullPointerException e) {
+            System.err.println(String.format(
+                    "%s: null recalculation",
+                    this.getClass().getSimpleName()));
+        }
+        
+                
+//        setCreditRent(
+//                sum(getCreditRent(), prevBalance.getCreditRent()));
+//        setDebitRent(
+//                sum(getDebitRent(), prevBalance.getDebitRent()));
+//        setCreditFine(
+//                sum(getCreditFine(), prevBalance.getCreditFine()));
+//        setDebitFine(
+//                sum(getDebitFine(), prevBalance.getDebitFine()));
+//        setCreditTaxLand(
+//                sum(getCreditTaxLand(), prevBalance.getCreditTaxLand()));
+//        setDebitTaxLand(
+//                sum(getDebitTaxLand(), prevBalance.getDebitTaxLand()));
+//        setCreditService(
+//                sum(getCreditService(), prevBalance.getCreditService()));
+//        setDebitService(
+//                sum(getDebitService(), prevBalance.getDebitService()));
+//        setCreditEquipment(
+//                sum(getCreditEquipment(), prevBalance.getCreditEquipment()));
+//        setDebitEquipment(
+//                sum(getDebitEquipment(), prevBalance.getDebitEquipment()));
+    }
+    
+    public Double sum(Double value, Double prevValue) {
+        Double sum = null;        
+        try {
+            sum = value + prevValue;
+        } catch(NullPointerException e) {
+            if (value == null) return prevValue;
+            if (prevValue == null) return value;
+        }
+        
+        return sum;
+    }
     
     @Override
     public String toString() {
