@@ -216,6 +216,39 @@ public class BalanceTable {
         return sum;
     }
     
+    public void buildTable(Period period) {
+        Payment rent = period.getRentPayment();
+        Payment fine = period.getFinePayment();
+        Payment taxLand = period.getTaxLandPayment();
+        Payment services = period.getServicesPayment();
+        Payment equipment = period.getEquipmentPayment();
+        
+        if (isExist(rent)) {
+            Balance rentBalance = rent.getBalance();
+            setCreditRent(rentBalance.getCredit());
+            setDebitRent(rentBalance.getDebit());
+        }
+        if (isExist(fine)) {
+            Balance fineBalance = fine.getBalance();
+            setCreditFine(fineBalance.getCredit());
+            setDebitFine(fineBalance.getDebit());
+        }
+        if (isExist(taxLand)) {
+            Balance taxLandBalance = taxLand.getBalance();
+            setCreditTaxLand(taxLandBalance.getCredit());
+            setDebitTaxLand(taxLandBalance.getDebit());
+        }
+        if (isExist(services)) {
+            Balance servicesBalance = services.getBalance();
+            setCreditService(servicesBalance.getCredit());
+            setDebitService(servicesBalance.getDebit());
+        }
+        if (isExist(equipment)) {
+            Balance equipmentBalance = equipment.getBalance();
+            setCreditEquipment(equipmentBalance.getCredit());
+            setDebitEquipment(equipmentBalance.getDebit());
+        }
+    }
     
     @Override
     public String toString() {
