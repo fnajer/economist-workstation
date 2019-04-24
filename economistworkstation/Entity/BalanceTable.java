@@ -182,7 +182,27 @@ public class BalanceTable {
         return ps;
     }
     
-    
+    public void recalculate(Period prevPeriod, Period period) {
+        Rent prevRent = (Rent) prevPeriod.getRentPayment();
+        Balance prevBalance = prevRent.getBalance();
+        Rent rent = (Rent) period.getRentPayment();
+        Balance balance = rent.getBalance();
+        Fine fine = (Fine) period.getFinePayment();
+        if (fine == null) {
+            fine = new Fine();
+            fine.setFine(0.0);
+        }
+        try {
+            Double paid = rent.getPaid();
+            Double needPay = rent.calcSumRent() + fine.getFine();
+            Double diff = needPay - paid;
+            balance.calc(prevBalance, diff, period);
+        } catch(NullPointerException e) {
+            System.err.println(String.format(
+                    "%s: null recalculation",
+                    this.getClass().getSimpleName()));
+        }
+    }
     
     @Override
     public String toString() {
