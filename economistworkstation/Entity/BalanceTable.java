@@ -204,6 +204,19 @@ public class BalanceTable {
         }
     }
     
+    public Double sum(Double value, Double prevValue) {
+        Double sum = null;        
+        try {
+            sum = value + prevValue;
+        } catch(NullPointerException e) {
+            if (value == null) return prevValue;
+            if (prevValue == null) return value;
+        }
+        
+        return sum;
+    }
+    
+    
     @Override
     public String toString() {
         return String.format("Сальдо. id = %d", getId());
