@@ -25,15 +25,17 @@ public abstract class Payment {
     private final IntegerProperty id;
     private final ObjectProperty paid;
     private final StringProperty datePaid;
+    private final ObjectProperty<Balance> balance;
     
     public Payment() {
-        this(null, null);
+        this(null, null, null);
     }
     
-    public Payment(Object paid, String datePaid) {
+    public Payment(Object paid, String datePaid, Balance balance) {
         this.id = new SimpleIntegerProperty(0);
         this.paid = new SimpleObjectProperty(paid);
         this.datePaid = new SimpleStringProperty(datePaid);
+        this.balance = new SimpleObjectProperty(balance);
     }
     
     public abstract PreparedStatement getInsertStatement(Database db) throws SQLException;
@@ -59,5 +61,14 @@ public abstract class Payment {
     }
     public void setDatePaid(String datePaid) {
         this.datePaid.set(datePaid);
+    }
+    
+    public Balance getBalance() {
+        if (balance.get() == null)
+            return new Balance();
+        return balance.get();
+    }
+    public void setBalance(Balance balance) {
+        this.balance.set(balance);
     }
 }

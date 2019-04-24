@@ -21,11 +21,11 @@ public class TaxLand extends Payment {
     private final ObjectProperty taxLand;
     
     public TaxLand() {
-        this(null, null, null);
+        this(null, null, null, null);
     }
     
-    public TaxLand(Object paid, String datePaid, Object taxLand) {
-        super(paid, datePaid);
+    public TaxLand(Object paid, String datePaid, Object taxLand, Balance balance) {
+        super(paid, datePaid, balance);
         this.taxLand = new SimpleObjectProperty(taxLand);
     }
     

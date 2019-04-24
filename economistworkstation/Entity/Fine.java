@@ -21,11 +21,11 @@ public class Fine extends Payment {
     private final ObjectProperty fine;
     
     public Fine() {
-        this(null, null, null);
+        this(null, null, null, null);
     }
     
-    public Fine(Object paid, String datePaid, Object fine) {
-        super(paid, datePaid);
+    public Fine(Object paid, String datePaid, Object fine, Balance balance) {
+        super(paid, datePaid, balance);
         this.fine = new SimpleObjectProperty(fine);
     }
     

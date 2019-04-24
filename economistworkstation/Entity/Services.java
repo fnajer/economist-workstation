@@ -28,14 +28,14 @@ public class Services extends Payment {
     private final ObjectProperty tariffElectricity;
     
     public Services() {
-        this(null, null, null, null, null, null, null, null, null, null);
+        this(null, null, null, null, null, null, null, null, null, null, null);
     }
     
     public Services(Object paid, String datePaid, Object countWater, 
             Object countElectricity, Object costHeading, Object costGarbage,
             Object costInternet, Object costTelephone, Object tariffWater, 
-            Object tariffElectricity) {
-        super(paid, datePaid);
+            Object tariffElectricity, Balance balance) {
+        super(paid, datePaid, balance);
         this.countWater = new SimpleObjectProperty(countWater);
         this.countElectricity = new SimpleObjectProperty(countElectricity);
         this.costHeading = new SimpleObjectProperty(costHeading);

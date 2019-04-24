@@ -22,11 +22,12 @@ public class Rent extends Payment {
     private final ObjectProperty indexCost;
     
     public Rent() {
-        this(null, null, null, null);
+        this(null, null, null, null, null);
     }
     
-    public Rent(Object paid, String datePaid, Object cost, Object indexCost) {
-        super(paid, datePaid);
+    public Rent(Object paid, String datePaid, Object cost, Object indexCost,
+            Balance balance) {
+        super(paid, datePaid, balance);
         this.cost = new SimpleObjectProperty(cost);
         this.indexCost = new SimpleObjectProperty(indexCost);
     }

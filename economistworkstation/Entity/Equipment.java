@@ -21,11 +21,11 @@ public class Equipment extends Payment {
     private final ObjectProperty costEquipment;
     
     public Equipment() {
-        this(null, null, null);
+        this(null, null, null, null);
     }
     
-    public Equipment(Object paid, String datePaid, Object costEquipment) {
-        super(paid, datePaid);
+    public Equipment(Object paid, String datePaid, Object costEquipment, Balance balance) {
+        super(paid, datePaid, balance);
         this.costEquipment = new SimpleObjectProperty(costEquipment);
     }
     
