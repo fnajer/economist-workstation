@@ -9,6 +9,7 @@ import economistworkstation.ContractData;
 import economistworkstation.Database;
 import economistworkstation.EconomistWorkstation;
 import economistworkstation.Entity.Balance;
+import economistworkstation.Entity.BalanceTable;
 import economistworkstation.Entity.ExtraCost;
 import economistworkstation.Entity.Fine;
 import economistworkstation.Entity.Payment;
@@ -26,6 +27,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javax.management.ObjectName;
         
 /**
  *
@@ -302,17 +304,21 @@ public class PeriodModel {
     }
     
     public static void updateBalancePeriod(int id, Period period) {
-        Integer idBalance = addBalance(period.getBalance(), id);
+        Integer idBalance = addBalance(period, id);
         if (idBalance == null) period.setBalance(null);
     }
             
-    public static Integer addBalance(Balance balance, int id) {
+    public static Integer addBalance(Period period, int id) {
+        BalanceTable balance = period.getBalance();
+        
         if (balance == null) return null;
+        
+        balance.buildTable(period);
         
         PreparedStatement ps;
         String state;
         try {
-            if (balance.getCreditRent()!= null && balance.getCreditRent() == -1.0) {
+            if (balance.getCreditRent() != null && balance.getCreditRent() == -1.0) {
                 balance.setId(id);
                 ps = balance.getDeleteStatement(db);
                 state = "Delete";
@@ -349,7 +355,11 @@ public class PeriodModel {
             Payment rent = new Rent(rs.getObject("paid_rent"), 
                     rs.getString("date_paid_rent"),
                     rs.getObject("cost"), 
-                    rs.getObject("index_cost"));
+                    rs.getObject("index_cost"),
+                    createObjectBalance(
+                            rs.getObject("credit_rent"), 
+                            rs.getObject("debit_rent"),
+                            rs.getInt("id_balance")));
             rent.setId(rs.getInt("id_rent"));
             return rent;
         }
@@ -359,7 +369,11 @@ public class PeriodModel {
         if(rs.getInt("id_fine") != 0) {
             Payment fine = new Fine(rs.getObject("paid_fine"), 
                     rs.getString("date_paid_tax_land"),
-                    rs.getObject("fine"));
+                    rs.getObject("fine"),
+                    createObjectBalance(
+                            rs.getObject("credit_fine"), 
+                            rs.getObject("debit_fine"),
+                            rs.getInt("id_balance")));
             fine.setId(rs.getInt("id_fine"));
             return fine;
         }
@@ -369,7 +383,11 @@ public class PeriodModel {
         if(rs.getInt("id_tax_land") != 0) {
             Payment fine = new TaxLand(rs.getObject("paid_tax_land"), 
                     rs.getString("date_paid_tax_land"),
-                    rs.getObject("tax_land"));
+                    rs.getObject("tax_land"),
+                    createObjectBalance(
+                            rs.getObject("credit_tax_land"), 
+                            rs.getObject("debit_tax_land"),
+                            rs.getInt("id_balance")));
             fine.setId(rs.getInt("id_tax_land"));
             return fine;
         }
@@ -379,7 +397,11 @@ public class PeriodModel {
         if(rs.getInt("id_equipment") != 0) {
             Payment fine = new Equipment(rs.getObject("paid_equipment"), 
                     rs.getString("date_paid_equipment"),
-                    rs.getObject("cost_equipment"));
+                    rs.getObject("cost_equipment"),
+                    createObjectBalance(
+                            rs.getObject("credit_equipment"), 
+                            rs.getObject("debit_equipment"),
+                            rs.getInt("id_balance")));
             fine.setId(rs.getInt("id_equipment"));
             return fine;
         }
@@ -396,7 +418,11 @@ public class PeriodModel {
                     rs.getObject("cost_internet"), 
                     rs.getObject("cost_telephone"),
                     rs.getObject("tariff_water"),
-                    rs.getObject("tariff_electricity"));
+                    rs.getObject("tariff_electricity"),
+                    createObjectBalance(
+                            rs.getObject("credit_services"), 
+                            rs.getObject("debit_services"),
+                            rs.getInt("id_balance")));
             services.setId(rs.getInt("id_services"));
             return services;
         }
@@ -414,20 +440,21 @@ public class PeriodModel {
         }
         return null;
     }
-    private static Balance createObjectBalance(ResultSet rs) throws SQLException {
-        if(rs.getInt("id_balance") != 0) {
-            Balance balance = new Balance(rs.getObject("credit_rent"), 
-                    rs.getObject("debit_rent"),
-                    rs.getObject("credit_fine"),
-                    rs.getObject("debit_fine"), 
-                    rs.getObject("credit_tax_land"),
-                    rs.getObject("debit_tax_land"),
-                    rs.getObject("credit_equipment"),
-                    rs.getObject("debit_equipment"), 
-                    rs.getObject("credit_services"),
-                    rs.getObject("debit_services"));
-            balance.setId(rs.getInt("id_balance"));
+    private static Balance createObjectBalance(Object credit, Object debit, int idBalance) throws SQLException {
+        if (idBalance != 0) {
+            Balance balance = new Balance(
+                    credit, 
+                    debit);
+            balance.setId(idBalance);
             return balance;
+        }
+        return null;
+    }
+    private static BalanceTable createEntityBalance(ResultSet rs) throws SQLException {
+        if (rs.getInt("id_balance") != 0) {
+            BalanceTable balanceTable = new BalanceTable();
+            balanceTable.setId(rs.getInt("id_balance"));
+            return balanceTable;
         }
         return null;
     }
@@ -444,7 +471,7 @@ public class PeriodModel {
                     createObjectServices(rs),
                     createObjectEquipment(rs),
                     createObjectExtraCost(rs),
-                    createObjectBalance(rs));
+                    createEntityBalance(rs));
         period.setId(rs.getInt("id"));
         
         return period;
