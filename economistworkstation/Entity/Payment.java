@@ -74,4 +74,23 @@ public abstract class Payment {
         this.balance.set(balance);
     }
     
+    public Double getDiff() {
+        Double needPay = sumToPay();
+        Double diff = needPay - getPaid();
+        return diff;
+    }
+    
+    protected Double safeGetSum(Double value) {
+        if (value == null)
+            return 0.0;
+        else
+            return value;
+    }
+    protected Double safeGetSum(Double value1, Double value2) {
+        try {
+            return value1 * value2;
+        } catch(NullPointerException e) {
+            return 0.0;
+        }
+    }
 }
