@@ -18,7 +18,7 @@ import javafx.beans.property.SimpleObjectProperty;
  */
 
 public class TaxLand extends Payment {
-    private final ObjectProperty taxLand;
+    private final ObjectProperty<Double> taxLand;
     
     public TaxLand() {
         this(null, null, null, null);
@@ -30,7 +30,7 @@ public class TaxLand extends Payment {
     }
     
     public Double getTaxLand() {
-        return (Double) taxLand.get();
+        return taxLand.get();
     }
     public void setTaxLand(Double taxLand) {
         this.taxLand.set(taxLand);
@@ -42,9 +42,9 @@ public class TaxLand extends Payment {
                 + "(id_tax_land, paid_tax_land, date_paid_tax_land, tax_land) "
                 + "VALUES(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         ps.setInt(1, getId());
-        ps.setObject(2, getPaid(), java.sql.Types.DOUBLE);
+        ps.setObject(2, getPaid());
         ps.setString(3, getDatePaid());
-        ps.setObject(4, getTaxLand(), java.sql.Types.DOUBLE);
+        ps.setObject(4, getTaxLand());
 
         return ps;
     }
@@ -53,9 +53,9 @@ public class TaxLand extends Payment {
         PreparedStatement ps = db.conn.prepareStatement("UPDATE TAXLAND "
                 + "SET paid_tax_land=?, date_paid_tax_land=?, tax_land=? "
                 + "WHERE id_tax_land=?", Statement.RETURN_GENERATED_KEYS);
-        ps.setObject(1, getPaid(), java.sql.Types.DOUBLE);
+        ps.setObject(1, getPaid());
         ps.setString(2, getDatePaid());
-        ps.setObject(3, getTaxLand(), java.sql.Types.DOUBLE);
+        ps.setObject(3, getTaxLand());
         ps.setInt(4, getId());
         
         return ps;
@@ -63,10 +63,15 @@ public class TaxLand extends Payment {
     @Override
     public PreparedStatement getDeleteStatement(Database db) throws SQLException {
         PreparedStatement ps = db.conn.prepareStatement("DELETE FROM TAXLAND "
-                + "WHERE id_tax_land=?", Statement.RETURN_GENERATED_KEYS);
+                + "WHERE id_tax_land=?");
         ps.setInt(1, getId());
         
         return ps;
+    }
+    
+    @Override
+    public Double sumToPay() {
+        return safeGetSum(getTaxLand());
     }
     
     @Override

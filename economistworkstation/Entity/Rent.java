@@ -18,8 +18,8 @@ import javafx.beans.property.SimpleObjectProperty;
  */
 
 public class Rent extends Payment {
-    private final ObjectProperty cost;
-    private final ObjectProperty indexCost;
+    private final ObjectProperty<Double> cost;
+    private final ObjectProperty<Double> indexCost;
     
     public Rent() {
         this(null, null, null, null, null);
@@ -33,25 +33,17 @@ public class Rent extends Payment {
     }
     
     public Double getCost() {
-        return (Double) cost.get();
+        return cost.get();
     }
     public void setCost(Double cost) {
         this.cost.set(cost);
     }
     
     public Double getIndexCost() {
-        return (Double) indexCost.get();
+        return indexCost.get();
     }
     public void setIndexCost(Double indexCost) {
         this.indexCost.set(indexCost);
-    }
-    
-    public Double calcSumRent() {
-        try {
-            return getCost() * getIndexCost();
-        } catch(NullPointerException e) {
-            return 0.0;
-        }
     }
     
     @Override
@@ -60,10 +52,10 @@ public class Rent extends Payment {
                 + "(id_rent, paid_rent, date_paid_rent, cost, index_cost) "
                 + "VALUES(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         ps.setInt(1, getId());
-        ps.setObject(2, getPaid(), java.sql.Types.DOUBLE);
+        ps.setObject(2, getPaid());
         ps.setString(3, getDatePaid());
-        ps.setObject(4, getCost(), java.sql.Types.DOUBLE);
-        ps.setObject(5, getIndexCost(), java.sql.Types.DOUBLE);
+        ps.setObject(4, getCost());
+        ps.setObject(5, getIndexCost());
         
         return ps;
     }
@@ -72,21 +64,26 @@ public class Rent extends Payment {
         PreparedStatement ps = db.conn.prepareStatement("UPDATE RENT "
                 + "SET paid_rent=?, date_paid_rent=?, cost=?, index_cost=? "
                 + "WHERE id_rent=?", Statement.RETURN_GENERATED_KEYS);
-        ps.setObject(1, getPaid(), java.sql.Types.DOUBLE);
+        ps.setObject(1, getPaid());
         ps.setString(2, getDatePaid());
-        ps.setObject(3, getCost(), java.sql.Types.DOUBLE);
-        ps.setObject(4, getIndexCost(), java.sql.Types.DOUBLE);
+        ps.setObject(3, getCost());
+        ps.setObject(4, getIndexCost());
         ps.setInt(5, getId());
         
         return ps;
     }
     @Override
     public PreparedStatement getDeleteStatement(Database db) throws SQLException {
-        PreparedStatement ps = db.conn.prepareStatement("DELETE FROM FINE "
-                + "WHERE id_rent=?", Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement ps = db.conn.prepareStatement("DELETE FROM RENT "
+                + "WHERE id_rent=?");
         ps.setInt(1, getId());
         
         return ps;
+    }
+    
+    @Override
+    public Double sumToPay() {
+        return safeGetSum(getCost(), getIndexCost());
     }
     
     @Override

@@ -18,7 +18,7 @@ import javafx.beans.property.SimpleObjectProperty;
  */
 
 public class Equipment extends Payment {
-    private final ObjectProperty costEquipment;
+    private final ObjectProperty<Double> costEquipment;
     
     public Equipment() {
         this(null, null, null, null);
@@ -30,7 +30,7 @@ public class Equipment extends Payment {
     }
     
     public Double getCostEquipment() {
-        return (Double) costEquipment.get();
+        return costEquipment.get();
     }
     public void setCostEquipment(Double costEquipment) {
         this.costEquipment.set(costEquipment);
@@ -42,9 +42,9 @@ public class Equipment extends Payment {
                 + "(id_equipment, paid_equipment, date_paid_equipment, cost_equipment) "
                 + "VALUES(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         ps.setInt(1, getId());
-        ps.setObject(2, getPaid(), java.sql.Types.DOUBLE);
+        ps.setObject(2, getPaid());
         ps.setString(3, getDatePaid());
-        ps.setObject(4, getCostEquipment(), java.sql.Types.DOUBLE);
+        ps.setObject(4, getCostEquipment());
 
         return ps;
     }
@@ -53,9 +53,9 @@ public class Equipment extends Payment {
         PreparedStatement ps = db.conn.prepareStatement("UPDATE EQUIPMENT "
                 + "SET paid_equipment=?, date_paid_equipment=?, cost_equipment=? "
                 + "WHERE id_equipment=?", Statement.RETURN_GENERATED_KEYS);
-        ps.setObject(1, getPaid(), java.sql.Types.DOUBLE);
+        ps.setObject(1, getPaid());
         ps.setString(2, getDatePaid());
-        ps.setObject(3, getCostEquipment(), java.sql.Types.DOUBLE);
+        ps.setObject(3, getCostEquipment());
         ps.setInt(4, getId());
         
         return ps;
@@ -63,10 +63,15 @@ public class Equipment extends Payment {
     @Override
     public PreparedStatement getDeleteStatement(Database db) throws SQLException {
         PreparedStatement ps = db.conn.prepareStatement("DELETE FROM EQUIPMENT "
-                + "WHERE id_equipment=?", Statement.RETURN_GENERATED_KEYS);
+                + "WHERE id_equipment=?");
         ps.setInt(1, getId());
         
         return ps;
+    }
+    
+    @Override
+    public Double sumToPay() {
+        return safeGetSum(getCostEquipment());
     }
     
     @Override

@@ -23,7 +23,7 @@ import javafx.beans.property.StringProperty;
  */
 public abstract class Payment {
     private final IntegerProperty id;
-    private final ObjectProperty paid;
+    private final ObjectProperty<Double> paid;
     private final StringProperty datePaid;
     private final ObjectProperty<Balance> balance;
     
@@ -42,6 +42,8 @@ public abstract class Payment {
     public abstract PreparedStatement getUpdateStatement(Database db) throws SQLException;
     public abstract PreparedStatement getDeleteStatement(Database db) throws SQLException;
     
+    public abstract Double sumToPay();
+    
     public int getId() {
         return id.get();
     }
@@ -50,7 +52,7 @@ public abstract class Payment {
     }
     
     public Double getPaid() {
-        return (Double) paid.get();
+        return paid.get();
     }
     public void setPaid(Double paid) {
         this.paid.set(paid);
@@ -71,4 +73,5 @@ public abstract class Payment {
     public void setBalance(Balance balance) {
         this.balance.set(balance);
     }
+    
 }
