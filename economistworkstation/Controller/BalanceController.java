@@ -6,6 +6,7 @@
 package economistworkstation.Controller;
 
 import economistworkstation.Entity.Balance;
+import economistworkstation.Entity.Period;
 import economistworkstation.Util.Util;
 import static economistworkstation.Util.Util.setText;
 import static economistworkstation.Util.Util.isExist;
@@ -41,29 +42,35 @@ public class BalanceController {
     private Label debitEquipmentLabel;
 
     private Stage dialogStage;
-    private Balance balance;
+    private Period period;
     private boolean okClicked = false;
     
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }
     
-    public void setBalance(Balance balance) {
-        this.balance = balance;
-
+    public void setBalance(Period period) {
+        this.period = period;
+        
         Util.setCalledClass(this);
                 
-        if (isExist(balance)) {
-            setText(creditRentLabel, balance.getCreditRent());
-            setText(debitRentLabel, balance.getDebitRent());
-            setText(creditFineLabel, balance.getCreditFine());
-            setText(debitFineLabel, balance.getDebitFine());
-            setText(creditTaxLandLabel, balance.getCreditTaxLand());
-            setText(debitTaxLandLabel, balance.getDebitTaxLand());
-            setText(creditServiceLabel, balance.getCreditService());
-            setText(debitServiceLabel, balance.getDebitService());
-            setText(creditEquipmentLabel, balance.getCreditEquipment());
-            setText(debitEquipmentLabel, balance.getDebitEquipment());
+        if (isExist(period.getBalance())) {
+            Balance balanceRent = period.getRentPayment().getBalance();
+            Balance balanceFine = period.getFinePayment().getBalance();
+            Balance balanceTaxLand = period.getTaxLandPayment().getBalance();
+            Balance balanceServices = period.getServicesPayment().getBalance();
+            Balance balanceEquipment = period.getEquipmentPayment().getBalance();
+        
+            setText(creditRentLabel, balanceRent.getCredit());
+            setText(debitRentLabel, balanceRent.getDebit());
+            setText(creditFineLabel, balanceFine.getCredit());
+            setText(debitFineLabel, balanceFine.getDebit());
+            setText(creditTaxLandLabel, balanceTaxLand.getCredit());
+            setText(debitTaxLandLabel, balanceTaxLand.getDebit());
+            setText(creditServiceLabel, balanceServices.getCredit());
+            setText(debitServiceLabel, balanceServices.getDebit());
+            setText(creditEquipmentLabel, balanceEquipment.getCredit());
+            setText(debitEquipmentLabel, balanceEquipment.getDebit());
         } else {
             creditRentLabel.setText("Нет");
             debitRentLabel.setText("Нет");
