@@ -11,12 +11,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 
 /**
  *
@@ -25,25 +25,25 @@ import javafx.scene.control.TextField;
 
 public class BalanceTable {
     private final IntegerProperty id;
-    private final ObjectProperty creditRent;
-    private final ObjectProperty debitRent;
-    private final ObjectProperty creditFine;
-    private final ObjectProperty debitFine;
-    private final ObjectProperty creditTaxLand;
-    private final ObjectProperty debitTaxLand;
-    private final ObjectProperty creditService;
-    private final ObjectProperty debitService;
-    private final ObjectProperty creditEquipment;
-    private final ObjectProperty debitEquipment;
+    private final ObjectProperty<Double> creditRent;
+    private final ObjectProperty<Double> debitRent;
+    private final ObjectProperty<Double> creditFine;
+    private final ObjectProperty<Double> debitFine;
+    private final ObjectProperty<Double> creditTaxLand;
+    private final ObjectProperty<Double> debitTaxLand;
+    private final ObjectProperty<Double> creditService;
+    private final ObjectProperty<Double> debitService;
+    private final ObjectProperty<Double> creditEquipment;
+    private final ObjectProperty<Double> debitEquipment;
     
     public BalanceTable() {
         this(null, null, null, null, null, null, null, null, null, null);
     }
     
-    public BalanceTable(Object creditRent, Object debitRent, Object creditFine, 
-            Object debitFine, Object creditTaxLand, Object debitTaxLand,
-            Object creditService, Object debitService, Object creditEquipment,
-            Object debitEquipment) {
+    public BalanceTable(Double creditRent, Double debitRent, Double creditFine, 
+            Double debitFine, Double creditTaxLand, Double debitTaxLand,
+            Double creditService, Double debitService, Double creditEquipment,
+            Double debitEquipment) {
         this.id = new SimpleIntegerProperty(0);
         this.creditRent = new SimpleObjectProperty(creditRent);
         this.debitRent = new SimpleObjectProperty(debitRent);
@@ -65,70 +65,70 @@ public class BalanceTable {
     }
     
     public Double getCreditRent() {
-        return (Double) creditRent.get();
+        return creditRent.get();
     }
     public void setCreditRent(Double creditRent) {
         this.creditRent.set(creditRent);
     }
     
     public Double getDebitRent() {
-        return (Double) debitRent.get();
+        return debitRent.get();
     }
     public void setDebitRent(Double debitRent) {
         this.debitRent.set(debitRent);
     }
     
     public Double getCreditFine() {
-        return (Double) creditFine.get();
+        return creditFine.get();
     }
     public void setCreditFine(Double creditFine) {
         this.creditFine.set(creditFine);
     }
     
     public Double getDebitFine() {
-        return (Double) debitFine.get();
+        return debitFine.get();
     }
     public void setDebitFine(Double debitFine) {
         this.debitFine.set(debitFine);
     }
     
     public Double getCreditTaxLand() {
-        return (Double) creditTaxLand.get();
+        return creditTaxLand.get();
     }
     public void setCreditTaxLand(Double creditTaxLand) {
         this.creditTaxLand.set(creditTaxLand);
     }
     
     public Double getDebitTaxLand() {
-        return (Double) debitTaxLand.get();
+        return debitTaxLand.get();
     }
     public void setDebitTaxLand(Double debitTaxLand) {
         this.debitTaxLand.set(debitTaxLand);
     }
     
     public Double getCreditService() {
-        return (Double) creditService.get();
+        return creditService.get();
     }
     public void setCreditService(Double creditService) {
         this.creditService.set(creditService);
     }
     
     public Double getDebitService() {
-        return (Double) debitService.get();
+        return debitService.get();
     }
     public void setDebitService(Double debitService) {
         this.debitService.set(debitService);
     }
     
     public Double getCreditEquipment() {
-        return (Double) creditEquipment.get();
+        return creditEquipment.get();
     }
     public void setCreditEquipment(Double creditEquipment) {
         this.creditEquipment.set(creditEquipment);
     }
     
     public Double getDebitEquipment() {
-        return (Double) debitEquipment.get();
+        return debitEquipment.get();
     }
     public void setDebitEquipment(Double debitEquipment) {
         this.debitEquipment.set(debitEquipment);
@@ -141,16 +141,16 @@ public class BalanceTable {
                 + "credit_equipment, debit_equipment) "
                 + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         ps.setInt(1, getId());
-        ps.setObject(2, getCreditRent(), java.sql.Types.DOUBLE);
-        ps.setObject(3, getDebitRent(), java.sql.Types.DOUBLE);
-        ps.setObject(4, getCreditFine(), java.sql.Types.DOUBLE);
-        ps.setObject(5, getDebitFine(), java.sql.Types.DOUBLE);
-        ps.setObject(6, getCreditTaxLand(), java.sql.Types.DOUBLE);
-        ps.setObject(7, getDebitTaxLand(), java.sql.Types.DOUBLE);
-        ps.setObject(8, getCreditService(), java.sql.Types.DOUBLE);
-        ps.setObject(9, getDebitService(), java.sql.Types.DOUBLE);
-        ps.setObject(10, getCreditEquipment(), java.sql.Types.DOUBLE);
-        ps.setObject(11, getDebitEquipment(), java.sql.Types.DOUBLE);
+        ps.setObject(2, getCreditRent());
+        ps.setObject(3, getDebitRent());
+        ps.setObject(4, getCreditFine());
+        ps.setObject(5, getDebitFine());
+        ps.setObject(6, getCreditTaxLand());
+        ps.setObject(7, getDebitTaxLand());
+        ps.setObject(8, getCreditService());
+        ps.setObject(9, getDebitService());
+        ps.setObject(10, getCreditEquipment());
+        ps.setObject(11, getDebitEquipment());
         
         return ps;
     }
@@ -160,60 +160,56 @@ public class BalanceTable {
                 + "credit_tax_land=?, debit_tax_land=?, credit_services=?, "
                 + "debit_services=?, credit_equipment=?, debit_equipment=? "
                 + "WHERE id_balance=?", Statement.RETURN_GENERATED_KEYS);
-        ps.setObject(1, getCreditRent(), java.sql.Types.DOUBLE);
-        ps.setObject(2, getDebitRent(), java.sql.Types.DOUBLE);
-        ps.setObject(3, getCreditFine(), java.sql.Types.DOUBLE);
-        ps.setObject(4, getDebitFine(), java.sql.Types.DOUBLE);
-        ps.setObject(5, getCreditTaxLand(), java.sql.Types.DOUBLE);
-        ps.setObject(6, getDebitTaxLand(), java.sql.Types.DOUBLE);
-        ps.setObject(7, getCreditService(), java.sql.Types.DOUBLE);
-        ps.setObject(8, getDebitService(), java.sql.Types.DOUBLE);
-        ps.setObject(9, getCreditEquipment(), java.sql.Types.DOUBLE);
-        ps.setObject(10, getDebitEquipment(), java.sql.Types.DOUBLE);
+        System.out.println(getDebitRent());
+        ps.setObject(1, getCreditRent());
+        ps.setObject(2, getDebitRent());
+        ps.setObject(3, getCreditFine());
+        ps.setObject(4, getDebitFine());
+        ps.setObject(5, getCreditTaxLand());
+        ps.setObject(6, getDebitTaxLand());
+        ps.setObject(7, getCreditService());
+        ps.setObject(8, getDebitService());
+        ps.setObject(9, getCreditEquipment());
+        ps.setObject(10, getDebitEquipment());
         ps.setInt(11, getId());
         
         return ps;
     }
     public PreparedStatement getDeleteStatement(Database db) throws SQLException {
         PreparedStatement ps = db.conn.prepareStatement("DELETE FROM BALANCE "
-                + "WHERE id_balance=?", Statement.RETURN_GENERATED_KEYS);
+                + "WHERE id_balance=?");
         ps.setInt(1, getId());
         
         return ps;
     }
     
     public void recalculate(Period prevPeriod, Period period) {
-        Rent prevRent = (Rent) prevPeriod.getRentPayment();
-        Balance prevBalance = prevRent.getBalance();
-        Rent rent = (Rent) period.getRentPayment();
-        Balance balance = rent.getBalance();
-        Fine fine = (Fine) period.getFinePayment();
-        if (fine == null) {
-            fine = new Fine();
-            fine.setFine(0.0);
-        }
-        try {
-            Double paid = rent.getPaid();
-            Double needPay = rent.calcSumRent() + fine.getFine();
-            Double diff = needPay - paid;
-            balance.calc(prevBalance, diff, period);
-        } catch(NullPointerException e) {
-            System.err.println(String.format(
-                    "%s: null recalculation",
-                    this.getClass().getSimpleName()));
-        }
-    }
-    
-    public Double sum(Double value, Double prevValue) {
-        Double sum = null;        
-        try {
-            sum = value + prevValue;
-        } catch(NullPointerException e) {
-            if (value == null) return prevValue;
-            if (prevValue == null) return value;
-        }
+        Balance balance, prevBalance;
+        Payment payment, prevPayment;
+        ArrayList<Payment> payments = period.getListPayments();
+        ArrayList<Payment> prevPayments = prevPeriod.getListPayments();
         
-        return sum;
+        for (int i = 0; i < payments.size(); i++) {
+            payment = payments.get(i);
+            prevPayment = prevPayments.get(i);
+            if (payment == null || prevPayment == null) continue;
+            balance = payment.getBalance();
+            prevBalance = prevPayment.getBalance();
+            if (balance == null) continue;
+            try {
+                
+                
+                double diff = payment.getDiff();
+                System.out.println(diff);
+                balance.calc(prevBalance, diff);
+            } catch(NullPointerException e) {
+                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
+                System.err.println(String.format(
+                        "%s: recalculation %s",
+                        this.getClass().getSimpleName(),
+                        payment));
+            }
+        }
     }
     
     public void buildTable(Period period) {
@@ -252,6 +248,6 @@ public class BalanceTable {
     
     @Override
     public String toString() {
-        return String.format("Сальдо. id = %d", getId());
+        return String.format("Таблица баланса. id = %d", getId());
     }
 }
