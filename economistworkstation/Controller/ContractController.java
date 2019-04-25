@@ -7,6 +7,7 @@ package economistworkstation.Controller;
 
 import economistworkstation.EconomistWorkstation;
 import economistworkstation.Entity.Balance;
+import economistworkstation.Entity.BalanceTable;
 import economistworkstation.Entity.Building;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -335,18 +336,21 @@ public class ContractController implements Initializable, BaseController {
     }
     
     public void recalculateBalance() {
-        Balance balance;
-        Balance prevBalance = null;
+        BalanceTable currBalanceTable;
+        BalanceTable prevBalanceTable = null;
+        Period prevPeriod = null;
         for (Period period : periods) {
-            balance = period.getBalance();
+            currBalanceTable = period.getBalance();
             if (period.getNumber() == 1) {
-                prevBalance = balance;
+                prevBalanceTable = currBalanceTable;
+                prevPeriod = period;
                 continue;
             }
-            if (isExist(prevBalance)) {
-                balance.recalculate(prevBalance, period);
+            if (isExist(currBalanceTable)) {
+                currBalanceTable.recalculate(prevPeriod, period);
             }
-            prevBalance = balance;
+            prevBalanceTable = currBalanceTable;
+            prevPeriod = period;
         }
     }
     
