@@ -28,6 +28,7 @@ import economistworkstation.Model.ContractModel;
 import economistworkstation.Model.PeriodModel;
 import economistworkstation.Model.RenterModel;
 import economistworkstation.Util.Util;
+import static economistworkstation.Util.Util.isExist;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Collections;
@@ -152,7 +153,20 @@ public class ContractController implements Initializable, BaseController {
         else
             return null;
     }
-
+    
+    public void recalculateBalance(Period period) {
+        Period prevPeriod = null;
+        
+        int i = periods.indexOf(period);
+        if (i != 0) prevPeriod = periods.get(i - 1);
+        
+        for (; i < periods.size(); i++) {
+            period = periods.get(i);
+            period.calculateBalance(prevPeriod);
+            prevPeriod = period;
+        }
+    }
+    
     @FXML
     void handleEditPeriod(ActionEvent event) {
         Period selectedPeriod = periodTable.getSelectionModel().getSelectedItem();
@@ -162,6 +176,7 @@ public class ContractController implements Initializable, BaseController {
             boolean okClicked = showPeriodForm(selectedPeriod, prevPeriod);
             if (okClicked) {
                 PeriodModel.updatePeriod(selectedPeriod.getId(), selectedPeriod);
+                recalculateBalance(selectedPeriod);
                 showPeriodDetails(selectedPeriod);
             }
 
@@ -329,33 +344,10 @@ public class ContractController implements Initializable, BaseController {
         // Очистка дополнительной информации об адресате.
         showPeriodDetails(null);
 
-        recalculateBalance();
+        recalculateBalance(periods.get(0));
         // Слушаем изменения выбора, и при изменении отображаем
         // дополнительную информацию об адресате.
         periodTable.getSelectionModel().selectedItemProperty().addListener(listener);
-    }
-    
-    public void recalculateBalance() {
-        BalanceTable currBalanceTable;
-        BalanceTable prevBalanceTable = null;
-        Period prevPeriod = null;
-        for (Period period : periods) {
-            currBalanceTable = period.getBalance();
-            if (period.getNumber() == 1) {
-                prevBalanceTable = currBalanceTable;
-                prevPeriod = period;
-                continue;
-            }
-            if (isExist(currBalanceTable)) {
-                currBalanceTable.recalculate(prevPeriod, period);
-            }
-            prevBalanceTable = currBalanceTable;
-            prevPeriod = period;
-        }
-    }
-    
-    private boolean isExist(Object payment) {
-        return payment != null;
     }
     
     public void showPeriodDetails(Period period) {
@@ -389,10 +381,10 @@ public class ContractController implements Initializable, BaseController {
             String text = Double.toString(value);
             label.setText(text);
         } catch (NullPointerException e) {
-            System.err.println(String.format(
-                    "%s: value for %s from db is null", 
-                    this.getClass().getSimpleName(),
-                    label.getId()));
+//            System.err.println(String.format(
+//                    "%s: value for %s from db is null", 
+//                    this.getClass().getSimpleName(),
+//                    label.getId()));
             label.setText("");
         }
     }
