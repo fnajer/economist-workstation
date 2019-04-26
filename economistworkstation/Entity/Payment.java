@@ -102,4 +102,13 @@ public abstract class Payment {
             return 0.0;
         }
     }
+    
+    public void calculate(Payment prevPayment) {
+            Balance prevBalance = isExist(prevPayment) 
+                    ? prevPayment.getBalance()
+                    : new Balance();
+            
+            double diff = getDiff();
+            getBalance().calc(prevBalance, diff);
+    }
 }
