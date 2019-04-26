@@ -48,10 +48,10 @@ public class Util {
             String text = Double.toString(value);
             tf.setText(text);
         } catch (NullPointerException e) {
-            System.err.println(String.format(
-                    "%s: value for %s from db is null", 
-                    calledClass.getClass().getSimpleName(),
-                    tf.getId()));
+//            System.err.println(String.format(
+//                    "%s: value for %s from db is null", 
+//                    calledClass.getClass().getSimpleName(),
+//                    tf.getId()));
             tf.clear();
         }
     }
@@ -60,10 +60,10 @@ public class Util {
             String text = Double.toString(value);
             label.setText(text);
         } catch (NullPointerException e) {
-            System.err.println(String.format(
-                    "%s: value for %s from db is null", 
-                    calledClass.getClass().getSimpleName(),
-                    label.getId()));
+//            System.err.println(String.format(
+//                    "%s: value for %s from db is null", 
+//                    calledClass.getClass().getSimpleName(),
+//                    label.getId()));
             label.setText("Нет");
         }
     }
@@ -72,11 +72,11 @@ public class Util {
             LocalDate date = LocalDate.parse(text);
             dp.setValue(date);
         } catch (NullPointerException | DateTimeParseException e) {
-            System.err.println(String.format(
-                    "%s: value for %s from db is %s", 
-                    calledClass.getClass().getSimpleName(),
-                    dp.getId(),
-                    text));
+//            System.err.println(String.format(
+//                    "%s: value for %s from db is %s", 
+//                    calledClass.getClass().getSimpleName(),
+//                    dp.getId(),
+//                    text));
         }
     }
     
@@ -132,22 +132,19 @@ public class Util {
         }
     }
     
-    public static boolean isExist(Object payment) {
-        return payment != null;
+    public static boolean isExist(Object obj) {
+        return obj != null;
     }
     
-    public static boolean isFilled(TextField ...tfs) {
-        for (TextField tf : tfs) {
-            if (tf.getText().length() != 0)
-                return true;
+    public Double getDecDouble(Double diff) {
+        if (diff == null) return null;
+        
+        try {
+            String doubleString = String.format("%.2f", diff);
+            return Double.parseDouble(doubleString);
+        } catch(IllegalArgumentException e) {
+            
+            return null;
         }
-        return false;
-    }
-    public static boolean isFilled(Label ...lbls) {
-        for (Label lbl : lbls) {
-            if (lbl.getText().length() != 0)
-                return true;
-        }
-        return false;
     }
 }
