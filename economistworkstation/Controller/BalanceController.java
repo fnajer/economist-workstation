@@ -6,7 +6,12 @@
 package economistworkstation.Controller;
 
 import economistworkstation.Entity.Balance;
+import economistworkstation.Entity.Equipment;
+import economistworkstation.Entity.Fine;
 import economistworkstation.Entity.Period;
+import economistworkstation.Entity.Rent;
+import economistworkstation.Entity.Services;
+import economistworkstation.Entity.TaxLand;
 import economistworkstation.Util.Util;
 import static economistworkstation.Util.Util.setText;
 import static economistworkstation.Util.Util.isExist;
@@ -42,33 +47,60 @@ public class BalanceController {
     private Label debitEquipmentLabel;
 
     private Stage dialogStage;
-    private Period period;
-    private boolean okClicked = false;
+    private final boolean okClicked = false;
     
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;
     }
     
     public void setBalance(Period period) {
-        this.period = period;
-        
         Util.setCalledClass(this);
                 
         if (isExist(period.getBalance())) {
-            Balance balanceRent = period.getRentPayment().getBalance();
-            Balance balanceFine = period.getFinePayment().getBalance();
-            Balance balanceTaxLand = period.getTaxLandPayment().getBalance();
-            Balance balanceServices = period.getServicesPayment().getBalance();
-            Balance balanceEquipment = period.getEquipmentPayment().getBalance();
-        
+            Balance balanceRent, 
+                    balanceFine, 
+                    balanceTaxLand, 
+                    balanceServices,
+                    balanceEquipment;
+            
+            Rent rent = (Rent) period.getRentPayment();
+            Fine fine = (Fine) period.getFinePayment();
+            TaxLand taxLand = (TaxLand) period.getTaxLandPayment();
+            Services services = (Services) period.getServicesPayment();
+            Equipment equipment = (Equipment) period.getEquipmentPayment();
+ 
+            if (isExist(rent)) 
+                balanceRent = period.getRentPayment().getBalance();
+            else 
+                balanceRent = new Balance();
             setText(creditRentLabel, balanceRent.getCredit());
             setText(debitRentLabel, balanceRent.getDebit());
+            
+            if (isExist(fine))
+                balanceFine = period.getFinePayment().getBalance();
+            else 
+                balanceFine = new Balance();
             setText(creditFineLabel, balanceFine.getCredit());
             setText(debitFineLabel, balanceFine.getDebit());
+
+            if (isExist(taxLand))
+                balanceTaxLand = period.getTaxLandPayment().getBalance();
+            else 
+                balanceTaxLand = new Balance();
             setText(creditTaxLandLabel, balanceTaxLand.getCredit());
             setText(debitTaxLandLabel, balanceTaxLand.getDebit());
+            
+            if (isExist(services))
+                balanceServices = period.getServicesPayment().getBalance();
+            else 
+                balanceServices = new Balance();
             setText(creditServiceLabel, balanceServices.getCredit());
             setText(debitServiceLabel, balanceServices.getDebit());
+            
+            if (isExist(equipment))
+                balanceEquipment = period.getEquipmentPayment().getBalance();
+            else 
+                balanceEquipment = new Balance();
             setText(creditEquipmentLabel, balanceEquipment.getCredit());
             setText(debitEquipmentLabel, balanceEquipment.getDebit());
         } else {
