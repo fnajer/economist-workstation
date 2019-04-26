@@ -75,6 +75,13 @@ public class TaxLand extends Payment {
     }
     
     @Override
+    public boolean isEmpty() {
+        return getTaxLand() == null
+                && getPaid() == null
+                && getDatePaid() == null;
+    }
+    
+    @Override
     public String toString() {
         return String.format("Платеж на земельный налог. id = %d", this.getId());
     }

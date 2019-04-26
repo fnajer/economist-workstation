@@ -42,9 +42,9 @@ public class Fine extends Payment {
                 + "(id_fine, paid_fine, date_paid_fine, fine) "
                 + "VALUES(?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         ps.setInt(1, getId());
-        ps.setDouble(2, getPaid());
+        ps.setObject(2, getPaid());
         ps.setString(3, getDatePaid());
-        ps.setDouble(4, getFine());
+        ps.setObject(4, getFine());
 
         return ps;
     }
@@ -53,9 +53,9 @@ public class Fine extends Payment {
         PreparedStatement ps = db.conn.prepareStatement("UPDATE FINE "
                 + "SET paid_fine=?, date_paid_fine=?, fine=? "
                 + "WHERE id_fine=?", Statement.RETURN_GENERATED_KEYS);
-        ps.setDouble(1, getPaid());
+        ps.setObject(1, getPaid());
         ps.setString(2, getDatePaid());
-        ps.setDouble(3, getFine());
+        ps.setObject(3, getFine());
         ps.setInt(4, getId());
         
         return ps;
@@ -72,6 +72,13 @@ public class Fine extends Payment {
     @Override
     public Double sumToPay() {
         return safeGetSum(getFine());
+    }
+    
+    @Override
+    public boolean isEmpty() {
+        return getFine() == null
+                && getPaid() == null
+                && getDatePaid() == null;
     }
     
     @Override

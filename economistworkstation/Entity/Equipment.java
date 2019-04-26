@@ -75,6 +75,13 @@ public class Equipment extends Payment {
     }
     
     @Override
+    public boolean isEmpty() {
+        return getCostEquipment() == null
+                && getPaid() == null
+                && getDatePaid() == null;
+    }
+    
+    @Override
     public String toString() {
         return String.format("Платеж на аренду за оборудование. id = %d", this.getId());
     }

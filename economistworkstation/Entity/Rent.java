@@ -6,6 +6,7 @@
 package economistworkstation.Entity;
 
 import economistworkstation.Database;
+import static economistworkstation.Util.Util.parseField;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -86,6 +87,14 @@ public class Rent extends Payment {
         return safeGetSum(getCost(), getIndexCost());
     }
     
+    @Override
+    public boolean isEmpty() {
+        return getCost() == null 
+                && getIndexCost() == null 
+                && getPaid() == null
+                && getDatePaid() == null;
+    }
+                
     @Override
     public String toString() {
         return String.format("Платеж на аренду помещения. id = %d", getId());

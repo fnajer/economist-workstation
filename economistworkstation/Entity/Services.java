@@ -193,6 +193,20 @@ public class Services extends Payment {
         }
         return sum; 
     }
+    
+    @Override
+    public boolean isEmpty() {
+        return getCountWater() == null 
+                && getTariffWater() == null 
+                && getCountElectricity()== null 
+                && getTariffElectricity()== null
+                && getCostHeading()== null 
+                && getCostGarbage()== null
+                && getCostInternet()== null 
+                && getCostTelephone()== null
+                && getPaid() == null
+                && getDatePaid() == null;
+    }
    
     @Override
     public String toString() {
