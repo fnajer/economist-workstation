@@ -11,6 +11,8 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 
 /**
  *
@@ -21,6 +23,8 @@ public class Balance {
     private final IntegerProperty id;
     private final ObjectProperty<Double> credit;
     private final ObjectProperty<Double> debit;
+    private final StringProperty state;
+    private final StringProperty info;
     
     public Balance() {
         this(null, null);
@@ -30,6 +34,8 @@ public class Balance {
         this.id = new SimpleIntegerProperty(0);
         this.credit = new SimpleObjectProperty(credit);
         this.debit = new SimpleObjectProperty(debit);
+        this.state = new SimpleStringProperty();
+        this.info = new SimpleStringProperty();
     }
     
     public int getId() {
@@ -52,49 +58,80 @@ public class Balance {
     public void setDebit(Double debit) {
         this.debit.set(debit);
     }
+    
+    public String getState() {
+        return state.get();
+    }
+    public void setState(String state) {
+        this.state.set(state);
+    }
+    
+    public String getInfo() {
+        return info.get();
+    }
+    public void setInfo(String info) {
+        this.info.set(info);
+    }
 
     private void log(String text) {
         System.out.println(text);
     }
-    private void log(String text, double value) {
-        System.out.println(String.format(text, value));
+    private String format(String text) {
+        String formatString = text;
+        return formatString;
     }
-    private void log(String text, double value1, double value2) {
-        System.out.println(String.format(text, value1, value2));
+    private String format(String text, double value) {
+        String formatString = String.format(text, value);
+        return formatString;
+    }
+    private String format(String text, double value1, double value2) {
+        String formatString = String.format(text, value1, value2);
+        return formatString;
+    }
+    private void saveResult(String state, String info) {
+        setState(state);
+        setInfo(info);
+        log(info);
     }
     
     public void calcWithCredit(Double credit, Double diff) {
         if (Objects.equals(credit, diff)) {
             setCredit(null);
             setDebit(null);
-            log("взято с кредита: %.2f, без остатка", diff);
+            saveResult("Недооплачено",
+                    format("взято с кредита: %.2f, без остатка", diff));
         } else if (credit > diff) {
             credit -= diff;
             setCredit(credit);
             setDebit(null);
-            log("взято с кредита: %.2f, остаток кредита: %.2f", diff, credit);
-        } else if (credit < diff) {
+            saveResult("Недооплачено",
+                    format("взято с кредита: %.2f, остаток кредита: %.2f", diff, credit));
+        } else { //if (credit < diff)
             diff -= credit;
             setCredit(null);
             setDebit(diff);
-            log("взято с кредита %.2f, уйдет в дебет: %.2f", credit, diff);
+            saveResult("Недооплачено",
+                    format("взято с кредита %.2f, уйдет в дебет: %.2f", credit, diff));
         }
     }
     public void calcWithDebit(Double debit, Double diff) {
         if (Objects.equals(debit, diff)) {
             setCredit(null);
             setDebit(null);
-            log("оплачен дебет: %.2f, без остатка", debit);
+            saveResult("Переоплачено",
+                    format("оплачен дебет: %.2f, без остатка", debit));
         } else if (debit > diff) {
             debit -= diff;
             setCredit(null);
             setDebit(debit);
-            log("оплачен дебет: %.2f, остаток дебета %.2f", diff, debit);
-        } else if (debit < diff) {
+            saveResult("Переоплачено",
+                    format("оплачен дебет: %.2f, остаток дебета %.2f", diff, debit));
+        } else { //if (debit < diff)
             diff -= debit;
             setCredit(diff);
             setDebit(null);
-            log("оплачено дебета %.2f, уйдет в кредит: %.2f", debit, diff);
+            saveResult("Переоплачено",
+                    format("оплачено дебета %.2f, уйдет в кредит: %.2f", debit, diff));
         }
     }
     
@@ -102,15 +139,18 @@ public class Balance {
         if (isExist(credit)) {
             setDebit(null);
             setCredit(credit);
-            log("остается кредит: %.2f", credit);
+            saveResult("-",
+                    format("остается кредит: %.2f", credit));
         } else if (isExist(debit)) {
             setDebit(debit);
             setCredit(null);
-            log("остается дебет: %.2f", debit);
+            saveResult("-",
+                    format("остается дебет: %.2f", debit));
         } else {
             setDebit(null);
             setCredit(null);
-            log("долгов нет");
+            saveResult("Оплачено",
+                    format("долгов нет"));
         }
     }
     
@@ -120,11 +160,13 @@ public class Balance {
         } else if (isExist(debit)) {
             setDebit(diff + debit);
             setCredit(null);
-            log("текущий дебет: %.2f + новый %.2f", debit, diff);
+            saveResult("Недооплачено",
+                    format("текущий дебет: %.2f + новый %.2f", debit, diff));
         } else {
             setDebit(diff);
             setCredit(null);
-            log("уйдет в дебет %.2f", diff);
+            saveResult("-",
+                    format("уйдет в дебет %.2f", diff));
         }
     }
     
@@ -135,11 +177,13 @@ public class Balance {
         } else if (isExist(credit)) {
             setDebit(null);
             setCredit(diff + credit);
-            log("текущий кредит: %.2f + новый %.2f", credit, diff);
+            saveResult("Переоплачено",
+                    format("текущий кредит: %.2f + новый %.2f", credit, diff));
         } else {
             setCredit(diff);
             setDebit(null);
-            log("уйдет в кредит %.2f", diff);
+            saveResult("Нет платежа",
+                    format("уйдет в кредит %.2f", diff));
         }
     }
     
@@ -159,7 +203,6 @@ public class Balance {
     public boolean containValues() {
         return getCredit() != null || getDebit() != null;
     }
-    
     
     @Override
     public String toString() {
