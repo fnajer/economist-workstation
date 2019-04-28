@@ -204,6 +204,12 @@ public class Balance {
         return getCredit() != null || getDebit() != null;
     }
     
+    public Balance copy() {
+        Balance balance = new Balance(getCredit(), getDebit());
+        balance.setId(getId());
+        return balance;
+    }
+    
     @Override
     public String toString() {
         return String.format("Сальдо. id = %d", getId());
