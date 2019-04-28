@@ -81,6 +81,49 @@ public class Period {
         return false;
     }
     
+    public void calculateBalance(Period prevPeriod) {
+        if (!isValid(prevPeriod)) return;
+        
+        if (!isExist(prevPeriod)) {
+            prevPeriod = new Period();
+        }
+        Payment payment, prevPayment;
+        ArrayList<Payment> payments = this.getListPayments();
+        ArrayList<Payment> prevPayments = prevPeriod.getListPayments();
+        
+        for (int i = 0; i < payments.size(); i++) {
+            payment = payments.get(i);
+            prevPayment = prevPayments.get(i);
+//            if ((!isExist(payment) && !isExist(prevPayment))
+//                    || !isExist(payment.getBalance())
+//                    || payment.isEmpty())
+//                        continue;
+            if ((isExist(payment) && isExist(payment.getBalance()))
+                || (isExist(prevPayment) && isExist(prevPayment.getBalance())))
+            {
+                if (i == 0 && !isExist(payment)) {
+                    payment = new Rent();
+                    payment.setBalance(new Balance());
+                }
+                if (!isExist(payment.getBalance()))
+                        payment.setBalance(new Balance());
+               
+                payment.calculate(prevPayment);
+            
+                if (i == 0) {
+                    setRentPayment((Rent) payment);
+                }
+            }
+        }
+        if (getBalance().isEmpty())
+            setBalance(null);
+    }
+    
+//    public String calculateBalance(Payment payment, Payment prevPayment) {
+//                payment.calculate(prevPayment);
+//        }
+//    }
+    
     public boolean balanceIsNull() {
         Payment rent = getRentPayment();
         Payment fine = getFinePayment();
