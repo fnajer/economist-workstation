@@ -6,6 +6,7 @@
 package economistworkstation.Entity;
 
 import economistworkstation.Database;
+import static economistworkstation.Util.Util.isExist;
 import static economistworkstation.Util.Util.parseField;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -94,7 +95,17 @@ public class Rent extends Payment {
                 && getPaid() == null
                 && getDatePaid() == null;
     }
-                
+    
+    public void saveValuesOf(Field field, Period period) {
+        setCost(parseField(field.getCostRent()));
+        setIndexCost(parseField(field.getIndexCostRent()));
+
+        setPaid(parseField(field.getPaymentRent()));
+        setDatePaid(parseField(field.getDatePaidRent()));
+        if (isExist(period.getRentPayment()) && isExist(period.getRentPayment().getBalance()))
+            setBalance(period.getRentPayment().getBalance().copy());
+    }
+    
     @Override
     public String toString() {
         return String.format("Платеж на аренду помещения. id = %d", getId());
