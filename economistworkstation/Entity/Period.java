@@ -5,7 +5,9 @@
  */
 package economistworkstation.Entity;
 
+import static economistworkstation.Util.Util.isExist;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -24,14 +26,14 @@ public class Period {
     private final IntegerProperty numberServicesAcc;
     private final StringProperty endPeriod;
     private final IntegerProperty idContract;
-    private final ObjectProperty<Payment> rentPayment;
-    private final ObjectProperty<Payment> finePayment;
-    private final ObjectProperty<Payment> taxLandPayment;
-    private final ObjectProperty<Payment> servicesPayment;
-    private final ObjectProperty<Payment> equipmentPayment;
+    private final ObjectProperty<Rent> rentPayment;
+    private final ObjectProperty<Fine> finePayment;
+    private final ObjectProperty<TaxLand> taxLandPayment;
+    private final ObjectProperty<Services> servicesPayment;
+    private final ObjectProperty<Equipment> equipmentPayment;
     private final ObjectProperty<ExtraCost> extraCost;
-    private final ObjectProperty<Balance> balance;
-     
+    private final ObjectProperty<BalanceTable> balance;
+    
     public Period() {
         this(0, 0, 0, null, 0, null, null, null, null, null, null, null);
     }
@@ -39,7 +41,7 @@ public class Period {
     public Period(int number, int numberRentAcc, int numberServicesAcc, 
             String endPeriod, int idContract, Payment rentPayment,
             Payment finePayment, Payment taxLandPayment, Payment servicesPayment,
-            Payment equipmentPayment, ExtraCost extraCost, Balance balance) {
+            Payment equipmentPayment, ExtraCost extraCost, BalanceTable balance) {
        this.id = new SimpleIntegerProperty(0);
        this.number = new SimpleIntegerProperty(number);
        this.numberRentAcc = new SimpleIntegerProperty(numberRentAcc);
@@ -57,7 +59,18 @@ public class Period {
        this.balance = new SimpleObjectProperty(balance);
     }
     
-      
+    public ArrayList<Payment> getListPayments() {
+        ArrayList<Payment> list = new ArrayList();
+        list.add(getRentPayment());
+        list.add(getFinePayment());
+        list.add(getTaxLandPayment());
+        list.add(getServicesPayment());
+        list.add(getEquipmentPayment());
+        
+        return list;
+    }
+    
+    
     public int getId() {
         return id.get();
     }
@@ -106,38 +119,38 @@ public class Period {
         this.idContract.set(idContract);
     }
     
-    public Payment getRentPayment() {
+    public Rent getRentPayment() {
         return rentPayment.get();  
     }
-    public void setRentPayment(Payment rentPayment) {
+    public void setRentPayment(Rent rentPayment) {
         this.rentPayment.set(rentPayment);
     }
     
-    public Payment getFinePayment() {
+    public Fine getFinePayment() {
         return finePayment.get();
     }
-    public void setFinePayment(Payment finePayment) {
+    public void setFinePayment(Fine finePayment) {
         this.finePayment.set(finePayment);
     }
     
-    public Payment getTaxLandPayment() {
+    public TaxLand getTaxLandPayment() {
         return taxLandPayment.get();
     }
-    public void setTaxLandPayment(Payment taxLandPayment) {
+    public void setTaxLandPayment(TaxLand taxLandPayment) {
         this.taxLandPayment.set(taxLandPayment);
     }
     
-    public Payment getServicesPayment() {
+    public Services getServicesPayment() {
         return servicesPayment.get();
     }
-    public void setServicesPayment(Payment servicesPayment) {
+    public void setServicesPayment(Services servicesPayment) {
         this.servicesPayment.set(servicesPayment);
     }
     
-    public Payment getEquipmentPayment() {
+    public Equipment getEquipmentPayment() {
         return equipmentPayment.get();
     }
-    public void setEquipmentPayment(Payment equipmentPayment) {
+    public void setEquipmentPayment(Equipment equipmentPayment) {
         this.equipmentPayment.set(equipmentPayment);
     }
     
@@ -148,13 +161,13 @@ public class Period {
         this.extraCost.set(extraCost);
     }
             
-    public Balance getBalance() {
+    public BalanceTable getBalance() {
         return balance.get();
     }
-    public void setBalance(Balance balance) {
+    public void setBalance(BalanceTable balance) {
         this.balance.set(balance);
     }
-   
+
     public String getMonthName(int monthNum, boolean genitive) {
         String monthName = "";
         switch(monthNum) {
