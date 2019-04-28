@@ -81,6 +81,40 @@ public class Period {
         return false;
     }
     
+    public boolean balanceIsNull() {
+        Payment rent = getRentPayment();
+        Payment fine = getFinePayment();
+        Payment taxLand = getTaxLandPayment();
+        Payment services = getServicesPayment();
+        Payment equipment = getEquipmentPayment();
+
+        if (isExist(rent)) {
+            Balance rentBalance = rent.getBalance();
+            if (rentBalance.containValues())
+                return false;
+        }
+        if (isExist(fine)) {
+            Balance fineBalance = fine.getBalance();
+            if (fineBalance.containValues())
+                return false;
+        }
+        if (isExist(taxLand)) {
+            Balance taxLandBalance = taxLand.getBalance();
+            if (taxLandBalance.containValues())
+                return false;
+        }
+        if (isExist(services)) {
+            Balance servicesBalance = services.getBalance();
+            if (servicesBalance.containValues())
+                return false;
+        }
+        if (isExist(equipment)) {
+            Balance equipmentBalance = equipment.getBalance();
+            if (equipmentBalance.containValues())
+                return false;
+        }
+        return true;
+    }
     
     public int getId() {
         return id.get();
