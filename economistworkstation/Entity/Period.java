@@ -70,6 +70,17 @@ public class Period {
         return list;
     }
     
+    public boolean isValid(Period prevPeriod) {
+        if ((isExist(prevPeriod) && isExist(prevPeriod.getBalance()))
+                || isExist(getBalance())) {
+            if (!isExist(getBalance())) {
+                setBalance(new BalanceTable());
+            }
+            return true;
+        }
+        return false;
+    }
+    
     
     public int getId() {
         return id.get();
