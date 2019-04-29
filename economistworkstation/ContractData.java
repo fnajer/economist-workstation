@@ -7,7 +7,6 @@ package economistworkstation;
 
 import economistworkstation.Entity.Building;
 import economistworkstation.Entity.Contract;
-import economistworkstation.Entity.Month;
 import economistworkstation.Entity.Period;
 import economistworkstation.Entity.Renter;
 import javafx.beans.property.ObjectProperty;

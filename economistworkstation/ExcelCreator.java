@@ -7,14 +7,11 @@ package economistworkstation;
 
 import economistworkstation.Entity.Building;
 import economistworkstation.Entity.Contract;
-import economistworkstation.Entity.Month;
 import economistworkstation.Entity.Period;
 import economistworkstation.Entity.Renter;
 import economistworkstation.Model.BuildingModel;
-import economistworkstation.Model.ContractModel;
 import economistworkstation.Model.PeriodModel;
 import economistworkstation.Model.RenterModel;
-import economistworkstation.Util.Money;
 import economistworkstation.Util.TagParser;
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,17 +19,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javafx.collections.ObservableList;
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -242,7 +230,7 @@ public class ExcelCreator {
         try (FileInputStream inputStream = new FileInputStream(file)) {
             workbook = new HSSFWorkbook(inputStream);
             
-            LocalDate data = LocalDate.parse("2019-05-01");
+            LocalDate data = LocalDate.parse("2019-09-01");
             fullContracts = PeriodModel.getContractData(data);
             
             TagParser.typeDoc = "acrual";

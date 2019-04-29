@@ -139,12 +139,12 @@ public class Balance {
         if (isExist(credit)) {
             setDebit(null);
             setCredit(credit);
-            saveResult("-",
+            saveResult("Оплачено",
                     format("остается кредит: %.2f", credit));
         } else if (isExist(debit)) {
             setDebit(debit);
             setCredit(null);
-            saveResult("-",
+            saveResult("Оплачено",
                     format("остается дебет: %.2f", debit));
         } else {
             setDebit(null);
@@ -165,7 +165,7 @@ public class Balance {
         } else {
             setDebit(diff);
             setCredit(null);
-            saveResult("-",
+            saveResult("Недооплачено",
                     format("уйдет в дебет %.2f", diff));
         }
     }
@@ -182,7 +182,7 @@ public class Balance {
         } else {
             setCredit(diff);
             setDebit(null);
-            saveResult("Нет платежа",
+            saveResult("Переоплачено",
                     format("уйдет в кредит %.2f", diff));
         }
     }

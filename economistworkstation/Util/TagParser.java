@@ -16,7 +16,6 @@ import economistworkstation.Entity.Renter;
 import economistworkstation.Entity.Services;
 import economistworkstation.Entity.TaxLand;
 import economistworkstation.Entity.User;
-import economistworkstation.ExcelCreator;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -120,7 +119,7 @@ public class TagParser {
                 newValue = monthName + ' ' + Integer.toString(monthYear);
             }
             if ("<sumRent>".equals(foundedTag)) {
-                String sumRent = parseProperty(rent.calcSumRent(), Locale.US);
+                String sumRent = parseProperty(rent.sumToPay(), Locale.US);
                 newValue = sumRent;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);

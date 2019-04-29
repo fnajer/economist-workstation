@@ -11,7 +11,7 @@ import economistworkstation.Util.Util;
 import static economistworkstation.Util.Util.setText;
 import static economistworkstation.Util.Util.parseField;
 import static economistworkstation.Util.Util.isExist;
-import static economistworkstation.Util.Util.isFilled;
+import static economistworkstation.Entity.Field.isFilled;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
