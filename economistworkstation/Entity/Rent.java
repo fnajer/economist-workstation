@@ -103,6 +103,17 @@ public class Rent extends Payment {
         rent.setId(getId());
         return rent;
     }
+
+    @Override
+    public void saveValuesOf(Field field, Period period) {
+        setCost(parseField(field.getCostRent()));
+        setIndexCost(parseField(field.getIndexCostRent()));
+
+        setPaid(parseField(field.getPaymentRent()));
+        setDatePaid(parseField(field.getDatePaidRent()));
+        if (isExist(period.getRentPayment()) && isExist(period.getRentPayment().getBalance()))
+            setBalance(period.getRentPayment().getBalance().copy());
+    }
                 
     @Override
     public String toString() {

@@ -220,6 +220,23 @@ public class Services extends Payment {
         return services;
     }
     
+    @Override
+    public void saveValuesOf(Field field, Period period) {
+        setCountWater(parseField(field.getCountWater()));
+        setTariffWater(parseField(field.getTariffWater()));
+        setCountElectricity(parseField(field.getCountElectricity()));
+        setTariffElectricity(parseField(field.getTariffElectricity()));
+        setCostHeading(parseField(field.getCostHeading()));
+        setCostGarbage(parseField(field.getCostGarbage()));
+        setCostInternet(parseField(field.getCostInternet()));
+        setCostTelephone(parseField(field.getCostTelephone()));
+
+        setPaid(parseField(field.getPaymentServices()));
+        setDatePaid(parseField(field.getDatePaidServices()));
+        if (isExist(period.getServicesPayment()) && isExist(period.getServicesPayment().getBalance()))
+            setBalance(period.getServicesPayment().getBalance().copy());
+    }
+    
    
     @Override
     public String toString() {

@@ -90,7 +90,17 @@ public class TaxLand extends Payment {
         taxLand.setId(getId());
         return taxLand;
     }
-   
+    
+    @Override
+    public void saveValuesOf(Field field, Period period) {
+        setTaxLand(parseField(field.getCostTaxLand()));
+
+        setPaid(parseField(field.getPaymentTaxLand()));
+        setDatePaid(parseField(field.getDatePaidTaxLand()));
+        if (isExist(period.getTaxLandPayment()) && isExist(period.getTaxLandPayment().getBalance()))
+            setBalance(period.getTaxLandPayment().getBalance().copy());
+    }
+    
     @Override
     public String toString() {
         return String.format("Платеж на земельный налог. id = %d", this.getId());

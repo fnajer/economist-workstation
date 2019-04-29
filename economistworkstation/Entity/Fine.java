@@ -92,6 +92,16 @@ public class Fine extends Payment {
     }
     
     @Override
+    public void saveValuesOf(Field field, Period period) {
+        setFine(parseField(field.getCostFine()));
+
+        setPaid(parseField(field.getPaymentFine()));
+        setDatePaid(parseField(field.getDatePaidFine()));
+        if (isExist(period.getFinePayment()) && isExist(period.getFinePayment().getBalance()))
+            setBalance(period.getFinePayment().getBalance().copy());
+    }
+    
+    @Override
     public String toString() {
         return String.format("Платеж на пени. id = %d", this.getId());
     }

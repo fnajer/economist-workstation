@@ -92,6 +92,16 @@ public class Equipment extends Payment {
     }
     
     @Override
+    public void saveValuesOf(Field field, Period period) {
+        setCostEquipment(parseField(field.getCostEquipment()));
+
+        setPaid(parseField(field.getPaymentEquipment()));
+        setDatePaid(parseField(field.getDatePaidEquipment()));
+        if (isExist(period.getEquipmentPayment()) && isExist(period.getEquipmentPayment().getBalance()))
+            setBalance(period.getEquipmentPayment().getBalance().copy());
+    }
+    
+    @Override
     public String toString() {
         return String.format("Платеж на аренду за оборудование. id = %d", this.getId());
     }
