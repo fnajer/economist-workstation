@@ -6,6 +6,8 @@
 package economistworkstation.Entity;
 
 import economistworkstation.Database;
+import static economistworkstation.Util.Util.isExist;
+import static economistworkstation.Util.Util.parseField;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -207,6 +209,17 @@ public class Services extends Payment {
                 && getPaid() == null
                 && getDatePaid() == null;
     }
+    
+    @Override
+    public Services copy() {
+        Services services = new Services(getPaid(), getDatePaid(), 
+            getCountWater(), getTariffWater(), getCountElectricity(),
+            getTariffElectricity(), getCostHeading(), getCostGarbage(),
+            getCostInternet(), getCostTelephone(), getBalance().copy());
+        services.setId(getId());
+        return services;
+    }
+    
    
     @Override
     public String toString() {

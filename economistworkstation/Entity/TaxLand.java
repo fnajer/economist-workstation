@@ -6,6 +6,8 @@
 package economistworkstation.Entity;
 
 import economistworkstation.Database;
+import static economistworkstation.Util.Util.isExist;
+import static economistworkstation.Util.Util.parseField;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -18,22 +20,22 @@ import javafx.beans.property.SimpleObjectProperty;
  */
 
 public class TaxLand extends Payment {
-    private final ObjectProperty<Double> taxLand;
+    private final ObjectProperty<Double> costTaxLand;
     
     public TaxLand() {
         this(null, null, null, null);
     }
     
-    public TaxLand(Object paid, String datePaid, Object taxLand, Balance balance) {
+    public TaxLand(Object paid, String datePaid, Object costTaxLand, Balance balance) {
         super(paid, datePaid, balance);
-        this.taxLand = new SimpleObjectProperty(taxLand);
+        this.costTaxLand = new SimpleObjectProperty(costTaxLand);
     }
     
     public Double getTaxLand() {
-        return taxLand.get();
+        return costTaxLand.get();
     }
-    public void setTaxLand(Double taxLand) {
-        this.taxLand.set(taxLand);
+    public void setTaxLand(Double costTaxLand) {
+        this.costTaxLand.set(costTaxLand);
     }
     
     @Override
@@ -81,6 +83,14 @@ public class TaxLand extends Payment {
                 && getDatePaid() == null;
     }
     
+    @Override
+    public TaxLand copy() {
+        TaxLand taxLand = new TaxLand(getPaid(), getDatePaid(), getTaxLand(),
+            getBalance().copy());
+        taxLand.setId(getId());
+        return taxLand;
+    }
+   
     @Override
     public String toString() {
         return String.format("Платеж на земельный налог. id = %d", this.getId());

@@ -43,7 +43,21 @@ public abstract class Payment {
     
     public abstract Double sumToPay();
     public abstract boolean isEmpty();
-//    public abstract void fill();
+    public abstract Payment copy();
+    /**
+     * @param prevPeriod
+     * @return existing Payment or new Payment
+     */
+    public abstract Payment getPrevPayment(Period prevPeriod);
+    public abstract void bindPayment(Period period);
+    /**
+     *
+     * @param field
+     * @param period
+     */
+    public abstract void saveValuesOf(Field field, Period period);
+    public abstract boolean fieldsIsFilled(Field field);
+//    public abstract void fill();fieldsIsFilled
     
     public int getId() {
         return id.get();
@@ -68,7 +82,8 @@ public abstract class Payment {
     
     public Balance getBalance() {
         if (balance.get() == null)
-            return new Balance();
+            this.balance.set(new Balance());
+
         return balance.get();
     }
     public void setBalance(Balance balance) {
@@ -103,12 +118,21 @@ public abstract class Payment {
         }
     }
     
+    /**
+     * @param prevPayment
+     */
     public void calculate(Payment prevPayment) {
+            double diff = getDiff();
+            if (!isExist(prevPayment) && fieldsIsEmpty()) {
+                setEmptyBalance();
+                return;
+            }
+                
             Balance prevBalance = isExist(prevPayment) 
                     ? prevPayment.getBalance()
                     : new Balance();
             
-            double diff = getDiff();
+            
             getBalance().calc(prevBalance, diff);
     }
 }

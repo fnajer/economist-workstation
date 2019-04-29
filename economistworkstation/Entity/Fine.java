@@ -6,6 +6,8 @@
 package economistworkstation.Entity;
 
 import economistworkstation.Database;
+import static economistworkstation.Util.Util.isExist;
+import static economistworkstation.Util.Util.parseField;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -18,22 +20,22 @@ import javafx.beans.property.SimpleObjectProperty;
  */
 
 public class Fine extends Payment {
-    private final ObjectProperty<Double> fine;
+    private final ObjectProperty<Double> costFine;
     
     public Fine() {
         this(null, null, null, null);
     }
     
-    public Fine(Object paid, String datePaid, Object fine, Balance balance) {
+    public Fine(Object paid, String datePaid, Object costFine, Balance balance) {
         super(paid, datePaid, balance);
-        this.fine = new SimpleObjectProperty(fine);
+        this.costFine = new SimpleObjectProperty(costFine);
     }
     
     public Double getFine() {
-        return fine.get();
+        return costFine.get();
     }
-    public void setFine(Double fine) {
-        this.fine.set(fine);
+    public void setFine(Double costFine) {
+        this.costFine.set(costFine);
     }
     
     @Override
@@ -79,6 +81,14 @@ public class Fine extends Payment {
         return getFine() == null
                 && getPaid() == null
                 && getDatePaid() == null;
+    }
+    
+    @Override
+    public Fine copy() {
+        Fine fine = new Fine(getPaid(), getDatePaid(), getFine(),
+            getBalance().copy());
+        fine.setId(getId());
+        return fine;
     }
     
     @Override

@@ -6,6 +6,8 @@
 package economistworkstation.Entity;
 
 import economistworkstation.Database;
+import static economistworkstation.Util.Util.isExist;
+import static economistworkstation.Util.Util.parseField;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -79,6 +81,14 @@ public class Equipment extends Payment {
         return getCostEquipment() == null
                 && getPaid() == null
                 && getDatePaid() == null;
+    }
+    
+    @Override
+    public Equipment copy() {
+        Equipment equipment = new Equipment(getPaid(), getDatePaid(), 
+            getCostEquipment(), getBalance().copy());
+        equipment.setId(getId());
+        return equipment;
     }
     
     @Override
