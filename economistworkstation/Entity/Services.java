@@ -237,6 +237,16 @@ public class Services extends Payment {
             setBalance(period.getServicesPayment().getBalance().copy());
     }
     
+    @Override
+    public void bindPayment(Period period) {
+        period.setServicesPayment(this);
+    }
+    
+    @Override
+    public boolean fieldsIsFilled(Field fields) {
+        return fields.servicesIsFilled();
+    }
+    
    
     @Override
     public String toString() {

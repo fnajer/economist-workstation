@@ -102,6 +102,16 @@ public class Fine extends Payment {
     }
     
     @Override
+    public void bindPayment(Period period) {
+        period.setFinePayment(this);
+    }
+    
+    @Override
+    public boolean fieldsIsFilled(Field fields) {
+        return fields.fineIsFilled();
+    }
+    
+    @Override
     public String toString() {
         return String.format("Платеж на пени. id = %d", this.getId());
     }

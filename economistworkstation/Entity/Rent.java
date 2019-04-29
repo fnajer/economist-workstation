@@ -114,6 +114,17 @@ public class Rent extends Payment {
         if (isExist(period.getRentPayment()) && isExist(period.getRentPayment().getBalance()))
             setBalance(period.getRentPayment().getBalance().copy());
     }
+    
+    @Override
+    public void bindPayment(Period period) {
+        period.setRentPayment(this);
+    }
+    
+    @Override
+    public boolean fieldsIsFilled(Field fields) {
+        return fields.rentIsFilled();
+    }
+    
                 
     @Override
     public String toString() {

@@ -102,6 +102,16 @@ public class Equipment extends Payment {
     }
     
     @Override
+    public void bindPayment(Period period) {
+        period.setEquipmentPayment(this);
+    }
+    
+    @Override
+    public boolean fieldsIsFilled(Field fields) {
+        return fields.equipmentIsFilled();
+    }
+    
+    @Override
     public String toString() {
         return String.format("Платеж на аренду за оборудование. id = %d", this.getId());
     }

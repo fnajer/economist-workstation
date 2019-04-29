@@ -102,6 +102,16 @@ public class TaxLand extends Payment {
     }
     
     @Override
+    public void bindPayment(Period period) {
+        period.setTaxLandPayment(this);
+    }
+    
+    @Override
+    public boolean fieldsIsFilled(Field fields) {
+        return fields.taxLandIsFilled();
+    }
+
+    @Override
     public String toString() {
         return String.format("Платеж на земельный налог. id = %d", this.getId());
     }
