@@ -211,6 +211,61 @@ public class PeriodFormController {
             costTelephoneField, costEquipmentField};
     }
     
+    private Field fields;
+    private void initField() {
+        this.fields = new Field();
+        fields.bindRent(costRentField, indexCostRentField,
+                        paymentRentField, datePaidRentField);
+        fields.bindFine(fineField, paymentFineField, 
+                        datePaidFineField);
+        fields.bindTaxLand(taxLandField, paymentTaxLandField, 
+                        datePaidTaxLandField);
+        fields.bindServices(countWaterField, countElectricityField,
+                        costHeadingField, costGarbageField, costInternetField,
+                        costTelephoneField, tariffWaterField, tariffElectricityField,
+                        paymentServicesField, datePaidServicesField);
+        fields.bindEquipment(costEquipmentField, paymentEquipmentField, 
+                        datePaidEquipmentField);
+    }
+    
+    private ArrayList<Payment> payments;
+    private void copyPayments() {
+        payments = new ArrayList(10);
+        
+        Rent rentSrc = period.getRentPayment();
+        Fine fineSrc = period.getFinePayment();
+        TaxLand taxLandSrc = period.getTaxLandPayment();
+        Services servicesSrc = period.getServicesPayment();
+        Equipment equipmentSrc = period.getEquipmentPayment();
+        
+        if (isExist(rentSrc))
+            rent = rentSrc.copy();
+        else rent = new Rent();
+        if (isExist(fineSrc))
+            fine = fineSrc.copy();
+        else fine = new Fine();
+        if (isExist(taxLandSrc))
+            taxLand = taxLandSrc.copy();
+        else taxLand = new TaxLand();
+        if (isExist(servicesSrc))
+            services = servicesSrc.copy();
+        else services = new Services();
+        if (isExist(equipmentSrc))
+            equipment = equipmentSrc.copy();
+        else equipment = new Equipment();
+        
+        payments.add(rent);
+        payments.add(rentSrc);
+        payments.add(fine);
+        payments.add(fineSrc);
+        payments.add(taxLand);
+        payments.add(taxLandSrc);
+        payments.add(services);
+        payments.add(servicesSrc);
+        payments.add(equipment);
+        payments.add(equipmentSrc);
+    }
+
     private Stage dialogStage;
     private Period period;
     private Period prevPeriod;
@@ -239,40 +294,35 @@ public class PeriodFormController {
         startPeriodLabel.setText(period.getStartPeriod(contract.getDateStart()));
         endPeriodLabel.setText(period.getEndPeriod());
         
-     
-        if (isExist(rent)) {
-            setText(costRentField, rent.getCost());
-            setText(indexCostRentField, rent.getIndexCost());
-            setText(paymentRentField, rent.getPaid());
-            setText(datePaidRentField, rent.getDatePaid());
-        } else rent = new Rent();
-        if (isExist(fine)) {
-            setText(fineField, fine.getFine());
-            setText(paymentFineField, fine.getPaid());
-            setText(datePaidFineField, fine.getDatePaid());
-        } else fine = new Fine();
-        if (isExist(taxLand)) {
-            setText(taxLandField, taxLand.getTaxLand());
-            setText(paymentTaxLandField, taxLand.getPaid());
-            setText(datePaidTaxLandField, taxLand.getDatePaid());
-        } else taxLand = new TaxLand();
-        if (isExist(services)) {
-            setText(countWaterField, services.getCountWater());
-            setText(tariffWaterField, services.getTariffWater());
-            setText(countElectricityField, services.getCountElectricity());
-            setText(tariffElectricityField, services.getTariffElectricity());
-            setText(costHeadingField, services.getCostHeading());
-            setText(costGarbageField, services.getCostGarbage());
-            setText(costInternetField, services.getCostInternet());
-            setText(costTelephoneField, services.getCostTelephone());
-            setText(paymentServicesField, services.getPaid());
-            setText(datePaidServicesField, services.getDatePaid());
-        } else services = new Services();
-        if (isExist(equipment)) {
-            setText(costEquipmentField, equipment.getCostEquipment());
-            setText(paymentEquipmentField, equipment.getPaid());
-            setText(datePaidEquipmentField, equipment.getDatePaid());
-        } else equipment = new Equipment();
+        copyPayments();
+        
+        setText(costRentField, rent.getCost());
+        setText(indexCostRentField, rent.getIndexCost());
+        setText(paymentRentField, rent.getPaid());
+        setText(datePaidRentField, rent.getDatePaid());
+        
+        setText(fineField, fine.getFine());
+        setText(paymentFineField, fine.getPaid());
+        setText(datePaidFineField, fine.getDatePaid());
+        
+        setText(taxLandField, taxLand.getTaxLand());
+        setText(paymentTaxLandField, taxLand.getPaid());
+        setText(datePaidTaxLandField, taxLand.getDatePaid());
+        
+        setText(countWaterField, services.getCountWater());
+        setText(tariffWaterField, services.getTariffWater());
+        setText(countElectricityField, services.getCountElectricity());
+        setText(tariffElectricityField, services.getTariffElectricity());
+        setText(costHeadingField, services.getCostHeading());
+        setText(costGarbageField, services.getCostGarbage());
+        setText(costInternetField, services.getCostInternet());
+        setText(costTelephoneField, services.getCostTelephone());
+        setText(paymentServicesField, services.getPaid());
+        setText(datePaidServicesField, services.getDatePaid());
+       
+        setText(costEquipmentField, equipment.getCostEquipment());
+        setText(paymentEquipmentField, equipment.getPaid());
+        setText(datePaidEquipmentField, equipment.getDatePaid());
         
         refreshExtraCost();
         
@@ -282,28 +332,23 @@ public class PeriodFormController {
         initCalc();
         
         setPaymentState();
-        System.out.println(period.getBalance() + "gg3");
     }
     
-    private boolean balanceIsFilled() {
-        return isFilled(paymentRentField) || isFilled(sumExtraCostRentLabel);
-//                || isFilled(paymentFineField) || isFilled(sumExtraCostFineLabel)
-//                || isFilled(paymentTaxLandField) || isFilled(sumExtraCostTaxLandLabel)
-//                || isFilled(paymentServicesField) || isFilled(sumServicesLabel)
-//                || isFilled(paymentEquipmentField) || isFilled(sumExtraCostEquipmentLabel);
+    private boolean balanceFieldsIsFilled() {
+        return isFilled(paymentRentField) || isFilled(sumExtraCostRentLabel)
+                || isFilled(paymentFineField) || isFilled(sumExtraCostFineLabel)
+                || isFilled(paymentTaxLandField) || isFilled(sumExtraCostTaxLandLabel)
+                || isFilled(paymentServicesField) || isFilled(sumServicesLabel)
+                || isFilled(paymentEquipmentField) || isFilled(sumExtraCostEquipmentLabel);
     }
-    
+
     private void setBalanceTable() {
         BalanceTable balanceTable = period.getBalance();
-        if (balanceIsFilled()) {
-            if (balanceTable == null) 
-                balanceTable = new BalanceTable();
-                
-            period.setBalance(balanceTable);
+        if (balanceFieldsIsFilled()) { 
+            period.bindTable(); //safeGetTable()
         } else if (isExist(balanceTable) && period.balanceIsNull()) {
-            BalanceTable balanceForDelete = new BalanceTable();
-            balanceForDelete.setCreditRent(-1.0);
-            period.setBalance(balanceForDelete);
+            balanceTable.prepareToDelete();
+            balanceTable.bindPeriod(period);
         }
     }
     
@@ -358,49 +403,12 @@ public class PeriodFormController {
                 
                 if (payment.fieldsIsFilled(fields)) {
                     payment.saveValuesOf(fields, period);
-                    payment.bindPayment(period);
+                    payment.bindPeriod(period);
                 } else if (isExist(paymentSrc) && payment.isEmpty()) {
                     payment.prepareToDelete();
-                    payment.bindPayment(period);
+                    payment.bindPeriod(period);
                 }
             }
-            
-//            if (fields.rentIsFilled()) {
-//                rent.saveValuesOf(fields, period);
-//                rent.bindPayment(period);
-//            } else if (isExist(rentSrc) && rent.isEmpty()) {
-//                rent.prepareToDelete();
-//                rent.bindPayment(period);
-//            }
-//
-//            if (fields.fineIsFilled()) {
-//                fine.saveValuesOf(fields, period);
-//                fine.bindPayment(period);
-//            } else if (isExist(fineSrc) && fine.isEmpty()) {
-//                fine.prepareToDelete();
-//                fine.bindPayment(period);
-//            }
-//            if (fields.taxLandIsFilled()) {
-//                taxLand.saveValuesOf(fields, period);
-//                taxLand.bindPayment(period);
-//            } else if (isExist(taxLandSrc) && taxLand.isEmpty()) {
-//                taxLand.prepareToDelete();
-//                taxLand.bindPayment(period);
-//            }
-//            if (fields.servicesIsFilled()) {
-//                services.saveValuesOf(fields, period);
-//                services.bindPayment(period);
-//            } else if (isExist(servicesSrc) && services.isEmpty()) {
-//                services.prepareToDelete();
-//                services.bindPayment(period);
-//            }
-//            if (fields.equipmentIsFilled()) {
-//                equipment.saveValuesOf(fields, period);
-//                equipment.bindPayment(period);
-//            } else if (isExist(equipmentSrc) && equipment.isEmpty()) {
-//                equipment.prepareToDelete();
-//                equipment.bindPayment(period);
-//            }
             
             setBalanceTable();
                

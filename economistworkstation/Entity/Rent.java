@@ -116,7 +116,7 @@ public class Rent extends Payment {
     }
     
     @Override
-    public void bindPayment(Period period) {
+    public void bindPeriod(Period period) {
         period.setRentPayment(this);
     }
     

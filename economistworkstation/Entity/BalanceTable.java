@@ -217,6 +217,14 @@ public class BalanceTable {
         }
     }
     
+    public void prepareToDelete() {
+        setCreditRent(-1.0);
+    }
+    
+    public void bindPeriod(Period period) {
+        period.setBalance(this);
+    }
+    
     public boolean isEmpty() { //проверять надо каждый конкретный баланс платежа в цикле, а не это все
         return getCreditRent()== null 
                 && getDebitRent()== null 

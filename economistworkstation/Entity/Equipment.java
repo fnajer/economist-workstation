@@ -102,7 +102,7 @@ public class Equipment extends Payment {
     }
     
     @Override
-    public void bindPayment(Period period) {
+    public void bindPeriod(Period period) {
         period.setEquipmentPayment(this);
     }
     

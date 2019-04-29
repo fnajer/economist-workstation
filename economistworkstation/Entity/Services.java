@@ -238,7 +238,7 @@ public class Services extends Payment {
     }
     
     @Override
-    public void bindPayment(Period period) {
+    public void bindPeriod(Period period) {
         period.setServicesPayment(this);
     }
     

@@ -287,6 +287,14 @@ public class Period {
     public void setBalance(BalanceTable balance) {
         this.balance.set(balance);
     }
+    
+    public void bindTable() {
+        BalanceTable balanceTable;
+        if (getBalance() == null) {
+            balanceTable = new BalanceTable();
+            this.setBalance(balanceTable);
+        }
+    }
 
     public String getMonthName(int monthNum, boolean genitive) {
         String monthName = "";

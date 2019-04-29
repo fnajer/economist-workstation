@@ -49,7 +49,7 @@ public abstract class Payment {
      * @return existing Payment or new Payment
      */
     public abstract Payment getPrevPayment(Period prevPeriod);
-    public abstract void bindPayment(Period period);
+    public abstract void bindPeriod(Period period);
     /**
      *
      * @param field
