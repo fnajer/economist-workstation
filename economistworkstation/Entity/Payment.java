@@ -118,6 +118,28 @@ public abstract class Payment {
         }
     }
     
+    private void setEmptyBalance() {
+        Balance balance = getBalance();
+        balance.setState("Нет платежа");
+        balance.setInfo("");
+    }
+    
+    protected boolean fieldsIsEmpty() {
+        try {
+            Double needPay = sumToPay();
+            Double paid = safeGetSum(getPaid());
+
+            return needPay == 0.0 && paid == 0.0;
+        } catch(NullPointerException e) {
+            return true;
+        }
+    }
+    
+    public void prepareToDelete() {
+        setPaid(-1.0);
+        setBalance(null);
+    }
+    
     /**
      * @param prevPayment
      */
