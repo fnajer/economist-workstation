@@ -211,6 +211,56 @@ public class PeriodFormController {
             costTelephoneField, costEquipmentField};
     }
     
+    private Field fields;
+    private void initField() {
+        this.fields = new Field();
+        fields.bindRent(costRentField, indexCostRentField,
+                        paymentRentField, datePaidRentField);
+        fields.bindFine(fineField, paymentFineField, 
+                        datePaidFineField);
+        fields.bindTaxLand(taxLandField, paymentTaxLandField, 
+                        datePaidTaxLandField);
+        fields.bindServices(countWaterField, countElectricityField,
+                        costHeadingField, costGarbageField, costInternetField,
+                        costTelephoneField, tariffWaterField, tariffElectricityField,
+                        paymentServicesField, datePaidServicesField);
+        fields.bindEquipment(costEquipmentField, paymentEquipmentField, 
+                        datePaidEquipmentField);
+    }
+    
+    private ArrayList<Payment> payments;
+    private void copyPayments() {
+        payments = new ArrayList(10);
+        
+        Rent rentSrc = period.getRentPayment();
+        Fine fineSrc = period.getFinePayment();
+        TaxLand taxLandSrc = period.getTaxLandPayment();
+        Services servicesSrc = period.getServicesPayment();
+        Equipment equipmentSrc = period.getEquipmentPayment();
+        
+        if (isExist(rentSrc))
+            rent = rentSrc.copy();//else new
+        if (isExist(fineSrc))
+            fine = fineSrc.copy();
+        if (isExist(taxLandSrc))
+            taxLand = taxLandSrc.copy();
+        if (isExist(servicesSrc))
+            services = servicesSrc.copy();
+        if (isExist(equipmentSrc))
+            equipment = equipmentSrc.copy();
+        
+        payments.add(rent);
+        payments.add(rentSrc);
+        payments.add(fine);
+        payments.add(fineSrc);
+        payments.add(taxLand);
+        payments.add(taxLandSrc);
+        payments.add(services);
+        payments.add(servicesSrc);
+        payments.add(equipment);
+        payments.add(equipmentSrc);
+    }
+
     private Stage dialogStage;
     private Period period;
     private Period prevPeriod;
@@ -232,14 +282,16 @@ public class PeriodFormController {
         
         Util.setCalledClass(this);
         
-      
+        initField();
+        
         numberLabel.setText(Integer.toString(period.getNumber()));
         numberRentAccLabel.setText(Integer.toString(period.getNumberRentAcc()));
         numberServicesAccLabel.setText(Integer.toString(period.getNumberServicesAcc()));
         startPeriodLabel.setText(period.getStartPeriod(contract.getDateStart()));
         endPeriodLabel.setText(period.getEndPeriod());
         
-     
+        copyPayments();
+        
         if (isExist(rent)) {
             setText(costRentField, rent.getCost());
             setText(indexCostRentField, rent.getIndexCost());
