@@ -112,6 +112,18 @@ public class Equipment extends Payment {
     }
     
     @Override
+    public Payment getPrevPayment(Period prevPeriod) {
+        Payment prevPayment = null;
+        if (isExist(prevPeriod))
+            prevPayment = prevPeriod.getEquipmentPayment();
+        
+        if (isExist(prevPayment))
+            return prevPayment;
+        
+        return prevPayment;
+    }
+    
+    @Override
     public String toString() {
         return String.format("Платеж на аренду за оборудование. id = %d", this.getId());
     }

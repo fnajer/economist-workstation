@@ -112,6 +112,18 @@ public class Fine extends Payment {
     }
     
     @Override
+    public Payment getPrevPayment(Period prevPeriod) {
+        Payment prevPayment = null;
+        if (isExist(prevPeriod))
+            prevPayment = prevPeriod.getFinePayment();
+        
+        if (isExist(prevPayment))
+            return prevPayment;
+        
+        return prevPayment;
+    }
+    
+    @Override
     public String toString() {
         return String.format("Платеж на пени. id = %d", this.getId());
     }

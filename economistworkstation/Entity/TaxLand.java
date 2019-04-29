@@ -112,6 +112,18 @@ public class TaxLand extends Payment {
     }
 
     @Override
+    public Payment getPrevPayment(Period prevPeriod) {
+        Payment prevPayment = null;
+        if (isExist(prevPeriod))
+            prevPayment = prevPeriod.getTaxLandPayment();
+        
+        if (isExist(prevPayment))
+            return prevPayment;
+        
+        return prevPayment;
+    }
+    
+    @Override
     public String toString() {
         return String.format("Платеж на земельный налог. id = %d", this.getId());
     }

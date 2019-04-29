@@ -125,6 +125,17 @@ public class Rent extends Payment {
         return fields.rentIsFilled();
     }
     
+    @Override
+    public Payment getPrevPayment(Period prevPeriod) {
+        Payment prevPayment = null;
+        if (isExist(prevPeriod))
+            prevPayment = prevPeriod.getRentPayment();
+        
+        if (isExist(prevPayment))
+            return prevPayment;
+        
+        return prevPayment;
+    }
                 
     @Override
     public String toString() {
