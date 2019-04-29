@@ -243,4 +243,57 @@ public class Field {
         this.datePaidServices.set(datePaidServices);
     }
 
+    public void bindRent(TextField costRentField, TextField indexCostRentField,
+        TextField paymentRentField, DatePicker datePaidRentField) 
+    {
+        setCostRent(costRentField);
+        setIndexCostRent(indexCostRentField);
+        setPaymentRent(paymentRentField);
+        setDatePaidRent(datePaidRentField);
+    }
+ 
+    
+    public void bindFine(TextField costFineField, TextField paymentFineField,
+            DatePicker datePaidFineField) 
+    {
+        setCostFine(costFineField);
+        setPaymentFine(paymentFineField);
+        setDatePaidFine(datePaidFineField);
+    }
+
+    public void bindTaxLand(TextField costTaxLandField, TextField paymentTaxLandField,
+            DatePicker datePaidTaxLandField) 
+    {
+        setCostTaxLand(costTaxLandField);
+        setPaymentTaxLand(paymentTaxLandField);
+        setDatePaidTaxLand(datePaidTaxLandField);
+    }
+
+    
+    public void bindEquipment(TextField costEquipmentField, TextField paymentEquipmentField,
+            DatePicker datePaidEquipmentField) 
+    {
+        setCostEquipment(costEquipmentField);
+        setPaymentEquipment(paymentEquipmentField);
+        setDatePaidEquipment(datePaidEquipmentField);
+    }
+
+    
+    public void bindServices(TextField countWaterField, TextField countElectricityField,
+            TextField costHeadingField, TextField costGarbageField, 
+            TextField costInternetField, TextField costTelephoneField, 
+            TextField tariffWaterField, TextField tariffElectricityField,
+            TextField paymentServicesField, DatePicker datePaidServicesField) 
+    {
+        setCountWater(countWaterField);
+        setCountElectricity(countElectricityField);
+        setCostHeading(costHeadingField);
+        setCostGarbage(costGarbageField);
+        setCostInternet(costInternetField);
+        setCostTelephone(costTelephoneField);
+        setTariffWater(tariffWaterField);
+        setTariffElectricity(tariffElectricityField);
+        setPaymentServices(paymentServicesField);
+        setDatePaidServices(datePaidServicesField);
+    }
 }
