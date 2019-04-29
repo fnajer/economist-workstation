@@ -70,7 +70,7 @@ public class Period {
         return list;
     }
     
-    public boolean isValid(Period prevPeriod) {
+    public boolean isValid(Period prevPeriod) {    
         if ((isExist(prevPeriod) && isExist(prevPeriod.getBalance()))
                 || isExist(getBalance())) {
             if (!isExist(getBalance())) {
@@ -81,8 +81,50 @@ public class Period {
         return false;
     }
     
+    private boolean balanceIsEmpty(Period prevPeriod) {
+        if (!isExist(prevPeriod)) {
+            prevPeriod = new Period();
+        }
+        Payment payment, prevPayment;
+        ArrayList<Payment> payments = this.getListPayments();
+        ArrayList<Payment> prevPayments = prevPeriod.getListPayments();
+        
+        
+        for (int i = 0; i < payments.size(); i++) {
+            payment = payments.get(i);
+            prevPayment = prevPayments.get(i);
+            
+            if (isExist(payment) && payment.fieldsIsEmpty() && isExist(prevPayment) && prevPayment.fieldsIsEmpty()
+                && !prevPayment.getBalance().containValues())
+                    continue;
+            
+            if (isExist(payment) && payment.fieldsIsEmpty() && !isExist(prevPayment))
+                    continue;
+            if (!isExist(payment) && isExist(prevPayment) && prevPayment.fieldsIsEmpty()
+                    && !prevPayment.getBalance().containValues())
+                    continue;
+            if (!isExist(payment) && !isExist(prevPayment))
+                continue;
+            
+            return false;
+        }
+        
+        return true;
+    }
+    
     public void calculateBalance(Period prevPeriod) {
         if (!isValid(prevPeriod)) return;
+        
+        if (balanceIsEmpty(prevPeriod)) {
+            setRentPayment(null);
+            setFinePayment(null);
+            setTaxLandPayment(null);
+            setServicesPayment(null);
+            setEquipmentPayment(null);
+            setExtraCost(null);
+            setBalance(null);
+            return;
+        }
         
         if (!isExist(prevPeriod)) {
             prevPeriod = new Period();
@@ -94,10 +136,7 @@ public class Period {
         for (int i = 0; i < payments.size(); i++) {
             payment = payments.get(i);
             prevPayment = prevPayments.get(i);
-//            if ((!isExist(payment) && !isExist(prevPayment))
-//                    || !isExist(payment.getBalance())
-//                    || payment.isEmpty())
-//                        continue;
+            
             if ((isExist(payment) && isExist(payment.getBalance()))
                 || (isExist(prevPayment) && isExist(prevPayment.getBalance())))
             {
@@ -115,14 +154,7 @@ public class Period {
                 }
             }
         }
-        if (getBalance().isEmpty())
-            setBalance(null);
     }
-    
-//    public String calculateBalance(Payment payment, Payment prevPayment) {
-//                payment.calculate(prevPayment);
-//        }
-//    }
     
     public boolean balanceIsNull() {
         Payment rent = getRentPayment();
