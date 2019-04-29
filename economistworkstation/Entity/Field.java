@@ -251,7 +251,11 @@ public class Field {
         setPaymentRent(paymentRentField);
         setDatePaidRent(datePaidRentField);
     }
- 
+    public boolean rentIsFilled() {
+        return isFilled(getCostRent(), 
+                getIndexCostRent(), 
+                getPaymentRent());
+    }
     
     public void bindFine(TextField costFineField, TextField paymentFineField,
             DatePicker datePaidFineField) 
@@ -260,7 +264,11 @@ public class Field {
         setPaymentFine(paymentFineField);
         setDatePaidFine(datePaidFineField);
     }
-
+    public boolean fineIsFilled() {
+        return isFilled(getCostFine(),
+                getPaymentFine());
+    }
+    
     public void bindTaxLand(TextField costTaxLandField, TextField paymentTaxLandField,
             DatePicker datePaidTaxLandField) 
     {
@@ -268,7 +276,10 @@ public class Field {
         setPaymentTaxLand(paymentTaxLandField);
         setDatePaidTaxLand(datePaidTaxLandField);
     }
-
+    public boolean taxLandIsFilled() {
+        return isFilled(getCostTaxLand(),
+                getPaymentTaxLand());
+    }
     
     public void bindEquipment(TextField costEquipmentField, TextField paymentEquipmentField,
             DatePicker datePaidEquipmentField) 
@@ -277,7 +288,10 @@ public class Field {
         setPaymentEquipment(paymentEquipmentField);
         setDatePaidEquipment(datePaidEquipmentField);
     }
-
+    public boolean equipmentIsFilled() {
+        return isFilled(getCostEquipment(),
+                getPaymentEquipment());
+    }
     
     public void bindServices(TextField countWaterField, TextField countElectricityField,
             TextField costHeadingField, TextField costGarbageField, 
@@ -295,5 +309,26 @@ public class Field {
         setTariffElectricity(tariffElectricityField);
         setPaymentServices(paymentServicesField);
         setDatePaidServices(datePaidServicesField);
+    }
+    public boolean servicesIsFilled() {
+        return isFilled(getCostEquipment(), getCountElectricity(), getCostHeading(),
+                getCostGarbage(), getCostInternet(), getCostTelephone(), getTariffWater(),
+                getTariffElectricity(), getPaymentServices());
+    }
+    
+    public static boolean isFilled(TextField ...tfs) {
+        for (TextField tf : tfs) {
+            if (tf.getText().length() != 0)
+                return true;
+        }
+        return false;
+    }
+    public static boolean isFilled(Label ...lbls) {
+        for (Label lbl : lbls) {
+            String text = lbl.getText();
+            if (text.length() != 0 && !text.equals("...") && !text.equals("0"))
+                return true;
+        }
+        return false;
     }
 }
