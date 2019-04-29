@@ -10,9 +10,7 @@ import static economistworkstation.Util.Util.isExist;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Objects;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -160,7 +158,7 @@ public class BalanceTable {
                 + "credit_tax_land=?, debit_tax_land=?, credit_services=?, "
                 + "debit_services=?, credit_equipment=?, debit_equipment=? "
                 + "WHERE id_balance=?", Statement.RETURN_GENERATED_KEYS);
-        System.out.println(getDebitRent());
+        System.out.println(getCreditRent());
         ps.setObject(1, getCreditRent());
         ps.setObject(2, getDebitRent());
         ps.setObject(3, getCreditFine());
@@ -183,41 +181,14 @@ public class BalanceTable {
         return ps;
     }
     
-    public void recalculate(Period prevPeriod, Period period) {
-        Balance balance, prevBalance;
-        Payment payment, prevPayment;
-        ArrayList<Payment> payments = period.getListPayments();
-        ArrayList<Payment> prevPayments = prevPeriod.getListPayments();
-        
-        for (int i = 0; i < payments.size(); i++) {
-            payment = payments.get(i);
-            prevPayment = prevPayments.get(i);
-            if (payment == null || prevPayment == null) continue;
-            balance = payment.getBalance();
-            prevBalance = prevPayment.getBalance();
-            if (balance == null) continue;
-            try {
-                
-                
-                double diff = payment.getDiff();
-                System.out.println(diff);
-                balance.calc(prevBalance, diff);
-            } catch(NullPointerException e) {
-                Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, e);
-                System.err.println(String.format(
-                        "%s: recalculation %s",
-                        this.getClass().getSimpleName(),
-                        payment));
-            }
-        }
-    }
-    
     public void buildTable(Period period) {
         Payment rent = period.getRentPayment();
         Payment fine = period.getFinePayment();
         Payment taxLand = period.getTaxLandPayment();
         Payment services = period.getServicesPayment();
         Payment equipment = period.getEquipmentPayment();
+        
+        if (Objects.equals(getCreditRent(), -1.0)) return;
         
         if (isExist(rent)) {
             Balance rentBalance = rent.getBalance();
@@ -244,6 +215,19 @@ public class BalanceTable {
             setCreditEquipment(equipmentBalance.getCredit());
             setDebitEquipment(equipmentBalance.getDebit());
         }
+    }
+    
+    public boolean isEmpty() { //проверять надо каждый конкретный баланс платежа в цикле, а не это все
+        return getCreditRent()== null 
+                && getDebitRent()== null 
+                && getCreditFine()== null 
+                && getDebitFine()== null
+                && getCreditTaxLand()== null
+                && getDebitTaxLand()== null 
+                && getCreditService()== null
+                && getDebitService()== null
+                && getCreditEquipment()== null 
+                && getDebitEquipment()== null;
     }
     
     @Override
