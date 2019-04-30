@@ -248,6 +248,11 @@ public class Services extends Payment {
     }
     
     @Override
+    public void fill(Field field) {
+        field.fillServices(this);
+    }
+    
+    @Override
     public Payment getPrevPayment(Period prevPeriod) {
         Payment prevPayment = null;
         if (isExist(prevPeriod))

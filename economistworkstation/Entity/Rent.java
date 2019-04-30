@@ -126,6 +126,11 @@ public class Rent extends Payment {
     }
     
     @Override
+    public void fill(Field field) {
+        field.fillRent(this);
+    }
+    
+    @Override
     public Payment getPrevPayment(Period prevPeriod) {
         Payment prevPayment = null;
         if (isExist(prevPeriod))

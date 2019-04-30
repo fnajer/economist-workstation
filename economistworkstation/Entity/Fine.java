@@ -112,6 +112,11 @@ public class Fine extends Payment {
     }
     
     @Override
+    public void fill(Field field) {
+        field.fillFine(this);
+    }
+    
+    @Override
     public Payment getPrevPayment(Period prevPeriod) {
         Payment prevPayment = null;
         if (isExist(prevPeriod))

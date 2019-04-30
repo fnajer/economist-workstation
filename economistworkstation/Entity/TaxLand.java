@@ -110,6 +110,11 @@ public class TaxLand extends Payment {
     public boolean fieldsIsFilled(Field fields) {
         return fields.taxLandIsFilled();
     }
+    
+    @Override
+    public void fill(Field field) {
+        field.fillTaxLand(this);
+    }
 
     @Override
     public Payment getPrevPayment(Period prevPeriod) {

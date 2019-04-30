@@ -112,6 +112,11 @@ public class Equipment extends Payment {
     }
     
     @Override
+    public void fill(Field field) {
+        field.fillEquipment(this);
+    }
+    
+    @Override
     public Payment getPrevPayment(Period prevPeriod) {
         Payment prevPayment = null;
         if (isExist(prevPeriod))

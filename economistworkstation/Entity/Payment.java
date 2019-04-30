@@ -57,7 +57,7 @@ public abstract class Payment {
      */
     public abstract void saveValuesOf(Field field, Period period);
     public abstract boolean fieldsIsFilled(Field field);
-//    public abstract void fill();fieldsIsFilled
+    public abstract void fill(Field field);
     
     public int getId() {
         return id.get();
