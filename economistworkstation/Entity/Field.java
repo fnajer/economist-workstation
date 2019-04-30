@@ -5,6 +5,7 @@
  */
 package economistworkstation.Entity;
 
+import static economistworkstation.Util.Util.setText;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.DatePicker;
@@ -256,6 +257,12 @@ public class Field {
                 getIndexCostRent(), 
                 getPaymentRent());
     }
+    public void fillRent(Rent rent) {
+        setText(getCostRent(), rent.getCost());
+        setText(getIndexCostRent(), rent.getIndexCost());
+        setText(getPaymentRent(), rent.getPaid());
+        setText(getDatePaidRent(), rent.getDatePaid());
+    }
     
     public void bindFine(TextField costFineField, TextField paymentFineField,
             DatePicker datePaidFineField) 
@@ -267,6 +274,11 @@ public class Field {
     public boolean fineIsFilled() {
         return isFilled(getCostFine(),
                 getPaymentFine());
+    }
+    public void fillFine(Fine fine) {
+        setText(getCostFine(), fine.getFine());
+        setText(getPaymentFine(), fine.getPaid());
+        setText(getDatePaidFine(), fine.getDatePaid());
     }
     
     public void bindTaxLand(TextField costTaxLandField, TextField paymentTaxLandField,
@@ -280,6 +292,11 @@ public class Field {
         return isFilled(getCostTaxLand(),
                 getPaymentTaxLand());
     }
+    public void fillTaxLand(TaxLand taxLand) {
+        setText(getCostTaxLand(), taxLand.getTaxLand());
+        setText(getPaymentTaxLand(), taxLand.getPaid());
+        setText(getDatePaidTaxLand(), taxLand.getDatePaid());
+    }
     
     public void bindEquipment(TextField costEquipmentField, TextField paymentEquipmentField,
             DatePicker datePaidEquipmentField) 
@@ -291,6 +308,11 @@ public class Field {
     public boolean equipmentIsFilled() {
         return isFilled(getCostEquipment(),
                 getPaymentEquipment());
+    }
+    public void fillEquipment(Equipment equipment) {
+        setText(getCostEquipment(), equipment.getCostEquipment());
+        setText(getPaymentEquipment(), equipment.getPaid());
+        setText(getDatePaidEquipment(), equipment.getDatePaid());
     }
     
     public void bindServices(TextField countWaterField, TextField countElectricityField,
@@ -314,6 +336,18 @@ public class Field {
         return isFilled(getCostEquipment(), getCountElectricity(), getCostHeading(),
                 getCostGarbage(), getCostInternet(), getCostTelephone(), getTariffWater(),
                 getTariffElectricity(), getPaymentServices());
+    }
+    public void fillServices(Services services) {
+        setText(getCountWater(), services.getCountWater());
+        setText(getTariffWater(), services.getTariffWater());
+        setText(getCountElectricity(), services.getCountElectricity());
+        setText(getTariffElectricity(), services.getTariffElectricity());
+        setText(getCostHeading(), services.getCostHeading());
+        setText(getCostGarbage(), services.getCostGarbage());
+        setText(getCostInternet(), services.getCostInternet());
+        setText(getCostTelephone(), services.getCostTelephone());
+        setText(getPaymentEquipment(), services.getPaid());
+        setText(getDatePaidEquipment(), services.getDatePaid());
     }
     
     public static boolean isFilled(TextField ...tfs) {
