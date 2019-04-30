@@ -45,6 +45,12 @@ public class Field {
     private final ObjectProperty<TextField> costEquipment;
     private final ObjectProperty<TextField> paymentEquipment;
     private final ObjectProperty<DatePicker> datePaidEquipment;
+    
+    private final ObjectProperty<Label> extraCostRent;
+    private final ObjectProperty<Label> extraCostFine;
+    private final ObjectProperty<Label> extraCostTaxLand;
+    private final ObjectProperty<Label> extraCostServices;
+    private final ObjectProperty<Label> extraCostEquipment;
 
     public Field() {
         this.costRent = new SimpleObjectProperty(null);
@@ -74,6 +80,12 @@ public class Field {
         this.costEquipment = new SimpleObjectProperty(null);
         this.paymentEquipment = new SimpleObjectProperty(null);
         this.datePaidEquipment = new SimpleObjectProperty(null);
+        
+        this.extraCostRent = new SimpleObjectProperty(null);
+        this.extraCostFine = new SimpleObjectProperty(null);
+        this.extraCostTaxLand = new SimpleObjectProperty(null);
+        this.extraCostServices = new SimpleObjectProperty(null);
+        this.extraCostEquipment = new SimpleObjectProperty(null);
     }
     
 //    public Field(Object credit, Object debit) {
@@ -243,7 +255,42 @@ public class Field {
     public void setDatePaidServices(DatePicker datePaidServices) {
         this.datePaidServices.set(datePaidServices);
     }
-
+    
+    public Label getExtraCostRent() {
+        return extraCostRent.get();
+    }
+    public void setExtraCostRent(Label extraCostRent) {
+        this.extraCostRent.set(extraCostRent);
+    }
+    
+    public Label getExtraCostFine() {
+        return extraCostFine.get();
+    }
+    public void setExtraCostFine(Label extraCostFine) {
+        this.extraCostFine.set(extraCostFine);
+    }
+    
+    public Label getExtraCostTaxLand() {
+        return extraCostTaxLand.get();
+    }
+    public void setExtraCostTaxLand(Label extraCostTaxLand) {
+        this.extraCostTaxLand.set(extraCostTaxLand);
+    }
+    
+    public Label getExtraCostServices() {
+        return extraCostServices.get();
+    }
+    public void setExtraCostServices(Label extraCostServices) {
+        this.extraCostServices.set(extraCostServices);
+    }
+    
+    public Label getExtraCostEquipment() {
+        return extraCostEquipment.get();
+    }
+    public void setExtraCostEquipment(Label extraCostEquipment) {
+        this.extraCostEquipment.set(extraCostEquipment);
+    }
+    
     public void bindRent(TextField costRentField, TextField indexCostRentField,
         TextField paymentRentField, DatePicker datePaidRentField) 
     {
@@ -348,6 +395,21 @@ public class Field {
         setText(getCostTelephone(), services.getCostTelephone());
         setText(getPaymentEquipment(), services.getPaid());
         setText(getDatePaidEquipment(), services.getDatePaid());
+    }
+    
+    public void fillExtraCost(ExtraCost extraCost) {
+        setText(getExtraCostRent(), extraCost.getCostRent());
+        setText(getExtraCostFine(), extraCost.getCostFine());
+        setText(getExtraCostTaxLand(), extraCost.getCostTaxLand());
+        setText(getExtraCostServices(), extraCost.getCostServices());
+        setText(getExtraCostEquipment(), extraCost.getCostEquipment());
+    }
+    public void fillExtraCostInitial() {
+        getExtraCostRent().setText("Нет");
+        getExtraCostFine().setText("Нет");
+        getExtraCostTaxLand().setText("Нет");
+        getExtraCostServices().setText("Нет");
+        getExtraCostEquipment().setText("Нет");
     }
     
     public static boolean isFilled(TextField ...tfs) {
