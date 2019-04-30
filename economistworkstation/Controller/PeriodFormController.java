@@ -296,33 +296,7 @@ public class PeriodFormController {
         
         copyPayments();
         
-        setText(costRentField, rent.getCost());
-        setText(indexCostRentField, rent.getIndexCost());
-        setText(paymentRentField, rent.getPaid());
-        setText(datePaidRentField, rent.getDatePaid());
-        
-        setText(fineField, fine.getFine());
-        setText(paymentFineField, fine.getPaid());
-        setText(datePaidFineField, fine.getDatePaid());
-        
-        setText(taxLandField, taxLand.getTaxLand());
-        setText(paymentTaxLandField, taxLand.getPaid());
-        setText(datePaidTaxLandField, taxLand.getDatePaid());
-        
-        setText(countWaterField, services.getCountWater());
-        setText(tariffWaterField, services.getTariffWater());
-        setText(countElectricityField, services.getCountElectricity());
-        setText(tariffElectricityField, services.getTariffElectricity());
-        setText(costHeadingField, services.getCostHeading());
-        setText(costGarbageField, services.getCostGarbage());
-        setText(costInternetField, services.getCostInternet());
-        setText(costTelephoneField, services.getCostTelephone());
-        setText(paymentServicesField, services.getPaid());
-        setText(datePaidServicesField, services.getDatePaid());
-       
-        setText(costEquipmentField, equipment.getCostEquipment());
-        setText(paymentEquipmentField, equipment.getPaid());
-        setText(datePaidEquipmentField, equipment.getDatePaid());
+        fillPayments();
         
         refreshExtraCost();
         
@@ -332,6 +306,14 @@ public class PeriodFormController {
         initCalc();
         
         setPaymentState();
+    }
+    
+    private void fillPayments() {
+        Payment payment;
+        for (int i = 0; i < payments.size(); i += 2) {
+            payment = payments.get(i);
+            payment.fill(fields);
+        }
     }
     
     private boolean balanceFieldsIsFilled() {
