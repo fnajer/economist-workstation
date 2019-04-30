@@ -12,20 +12,19 @@ import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 
 import economistworkstation.Entity.Contract;
-import economistworkstation.Entity.Fine;
+import economistworkstation.Entity.Field;
 import economistworkstation.Entity.Period;
-import economistworkstation.Entity.Rent;
 import economistworkstation.Entity.Renter;
-import economistworkstation.Entity.Services;
 import economistworkstation.ExcelCreator;
 import economistworkstation.Model.BuildingModel;
 import economistworkstation.Model.ContractModel;
 import economistworkstation.Model.PeriodModel;
 import economistworkstation.Model.RenterModel;
-import static economistworkstation.Util.Util.isExist;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
@@ -52,25 +51,19 @@ public class ContractController implements Initializable, BaseController {
     
     @FXML
     private TableView<Contract> contractTable;
-
     @FXML
     private TableColumn<Contract, String> numberContractColumn;
-
     @FXML
     private TableColumn<Contract, String> idRenterColumn;
 
     @FXML
     private Label firstNameLabel;
-
     @FXML
     private Label lastNameLabel;
-
     @FXML
     private Label patronymicLabel;
-
     @FXML
     private Label typeLabel;
-
     @FXML
     private Label squareLabel;
 
@@ -79,39 +72,37 @@ public class ContractController implements Initializable, BaseController {
 
     @FXML
     private TableView<Period> periodTable;
-
     @FXML
     private TableColumn<Period, String> numberPeriodColumn;
-
     @FXML
     private TableColumn<Period, String> datePeriodColumn;
 
     @FXML
     private Label costLabel;
-
     @FXML
     private Label indexCostLabel;
-
     @FXML
     private Label fineLabel;
-
+    @FXML
+    private Label taxLandLabel;
+    @FXML
+    private Label equipmentLabel;
     @FXML
     private Label countWaterLabel;
-
     @FXML
     private Label tariffWaterLabel;
-
     @FXML
     private Label countElectricityLabel;
-
     @FXML
     private Label tariffElectricityLabel;
-
     @FXML
     private Label costHeadingLabel;
-
     @FXML
     private Label costGarbageLabel;
+    @FXML
+    private Label costInternetLabel;
+    @FXML
+    private Label costTelephoneLabel;
 
     @FXML
     void extendContract(ActionEvent event) {
@@ -344,42 +335,34 @@ public class ContractController implements Initializable, BaseController {
         periodTable.getSelectionModel().selectedItemProperty().addListener(listener);
     }
     
+    private Field fields;
+    private void bindFields() {
+        this.fields = new Field();
+        
+        Map<String, Label> labels = new HashMap<>();
+        labels.put("costRent", costLabel);
+        labels.put("indexCostRent", indexCostLabel);
+        labels.put("costFine", fineLabel);
+        labels.put("costTaxLand", taxLandLabel);
+        labels.put("costEquipment", equipmentLabel);
+        labels.put("costCountWater", countWaterLabel);
+        labels.put("tariffWater", tariffWaterLabel);
+        labels.put("costCountElectricity", countElectricityLabel);
+        labels.put("tariffElectricity", tariffElectricityLabel);
+        labels.put("costHeading", costHeadingLabel);
+        labels.put("costGarbage", costGarbageLabel);
+        labels.put("costInternet", costInternetLabel);
+        labels.put("costTelephone", costTelephoneLabel);
+     
+        fields.setLabels(labels);
+    }
+    
     public void showPeriodDetails(Period period) {
         clearDetails();
         if (period != null) {
-            Rent rent = (Rent) period.getRentPayment();
-            Fine fine = (Fine) period.getFinePayment();
-            Services services = (Services) period.getServicesPayment();
+            bindFields();
             
-            if (isExist(rent)) {
-                setText(costLabel, rent.getCost());
-                setText(indexCostLabel, rent.getIndexCost());
-    //        statePaymentRentLabel.setText(Util.boolToString(period.getPaidRent()));
-            }
-            if (isExist(fine)) {
-                setText(fineLabel, fine.getFine());
-            }
-            if (isExist(services)) {
-                setText(countWaterLabel, services.getCountWater());
-                setText(tariffWaterLabel, services.getTariffWater());
-                setText(countElectricityLabel, services.getCountElectricity());
-                setText(tariffElectricityLabel, services.getTariffElectricity());
-                setText(costHeadingLabel, services.getCostHeading());
-                setText(costGarbageLabel, services.getCostGarbage());
-            }
-        }
-    }
-    
-    private void setText(Label label, Double value) {
-        try {
-            String text = Double.toString(value);
-            label.setText(text);
-        } catch (NullPointerException e) {
-//            System.err.println(String.format(
-//                    "%s: value for %s from db is null", 
-//                    this.getClass().getSimpleName(),
-//                    label.getId()));
-            label.setText("");
+            fields.fillLabels(period);
         }
     }
     
