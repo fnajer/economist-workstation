@@ -9,12 +9,14 @@ import economistworkstation.Database;
 import static economistworkstation.Util.Util.isExist;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Map;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.scene.control.Label;
 
 /**
  *
@@ -58,6 +60,7 @@ public abstract class Payment {
     public abstract void saveValuesOf(Field field, Period period);
     public abstract boolean fieldsIsFilled(Field field);
     public abstract void fill(Field field);
+    public abstract void setLabels(Map<String, Label> labels);
     
     public int getId() {
         return id.get();

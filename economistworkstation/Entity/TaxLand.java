@@ -8,11 +8,14 @@ package economistworkstation.Entity;
 import economistworkstation.Database;
 import static economistworkstation.Util.Util.isExist;
 import static economistworkstation.Util.Util.parseField;
+import static economistworkstation.Util.Util.setText;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Map;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.control.Label;
 
 /**
  *
@@ -126,6 +129,11 @@ public class TaxLand extends Payment {
             return prevPayment;
         
         return prevPayment;
+    }
+    
+    @Override
+    public void setLabels(Map<String, Label> labels) {
+        setText(labels.get("costTaxLand"), getTaxLand());
     }
     
     @Override

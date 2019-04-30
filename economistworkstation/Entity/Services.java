@@ -8,11 +8,14 @@ package economistworkstation.Entity;
 import economistworkstation.Database;
 import static economistworkstation.Util.Util.isExist;
 import static economistworkstation.Util.Util.parseField;
+import static economistworkstation.Util.Util.setText;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Map;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.scene.control.Label;
 
 /**
  *
@@ -262,6 +265,18 @@ public class Services extends Payment {
             return prevPayment;
         
         return prevPayment;
+    }
+    
+    @Override
+    public void setLabels(Map<String, Label> labels) {
+        setText(labels.get("costCountWater"), getCountWater());
+        setText(labels.get("tariffWater"), getTariffWater());
+        setText(labels.get("costCountElectricity"), getCountElectricity());
+        setText(labels.get("tariffElectricity"), getTariffElectricity());
+        setText(labels.get("costHeading"), getCostHeading());
+        setText(labels.get("costGarbage"), getCostGarbage());
+        setText(labels.get("costInternet"), getCostInternet());
+        setText(labels.get("costTelephone"), getCostTelephone());
     }
    
     @Override

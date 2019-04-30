@@ -5,7 +5,11 @@
  */
 package economistworkstation.Entity;
 
+import static economistworkstation.Util.Util.isExist;
 import static economistworkstation.Util.Util.setText;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.control.DatePicker;
@@ -420,6 +424,19 @@ public class Field {
         getExtraCostTaxLand().setText("Нет");
         getExtraCostServices().setText("Нет");
         getExtraCostEquipment().setText("Нет");
+    }
+    
+    private Map<String, Label> labels = new HashMap<>();
+    public void setLabels(Map labels) {
+        this.labels = labels;
+    }
+    public void fillLabels(Period period) {
+        ArrayList<Payment> payments = period.getListPayments();
+        
+        for (Payment payment : payments) {
+             
+            payment.setLabels(labels);
+        }
     }
     
     public static boolean isFilled(TextField ...tfs) {
