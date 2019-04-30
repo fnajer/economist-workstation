@@ -43,10 +43,10 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <Label text="Имя" />
-                        <Label text="Фамилия" GridPane.rowIndex="1" />
-                        <Label text="Отчество" GridPane.rowIndex="2" />
-                        <Label text="Адрес" GridPane.rowIndex="3" />
+                        <Label text="Тип здания" />
+                        <Label text="Площадь помещения" GridPane.rowIndex="1" />
+                        <Label text="Балансовая стоимость" GridPane.rowIndex="2" />
+                        <Label text="Остаточная стоимость" GridPane.rowIndex="3" />
                         <Label fx:id="typeLabel" text="Label" GridPane.columnIndex="1" />
                         <Label fx:id="squareLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Label fx:id="costBalanceLabel" text="Label" GridPane.columnIndex="1" GridPane.rowIndex="2" />

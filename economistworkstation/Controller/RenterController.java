@@ -114,9 +114,9 @@ public class RenterController implements Initializable, BaseController {
         } else {
             Alert alert = new Alert(AlertType.WARNING);
             alert.initOwner(mainApp.getPrimaryStage());
-            alert.setTitle("No Selection");
-            alert.setHeaderText("No Renter Selected");
-            alert.setContentText("Please select a renter in the table.");
+            alert.setTitle("Не выбран");
+            alert.setHeaderText("Арендатор не выбран");
+            alert.setContentText("Пожалуйста, выберите арендатора в таблице.");
     
             alert.showAndWait();
         }

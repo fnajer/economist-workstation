@@ -180,7 +180,7 @@ public class ContractController implements Initializable, BaseController {
             alert.initOwner(mainApp.getPrimaryStage());
             alert.setTitle("Не выбран");
             alert.setHeaderText("Период не выбран");
-            alert.setContentText("Пожалуйста, выберие период в таблице.");
+            alert.setContentText("Пожалуйста, выберите период в таблице.");
 
             alert.showAndWait();
         }

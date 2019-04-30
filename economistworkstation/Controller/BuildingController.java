@@ -111,9 +111,9 @@ public class BuildingController implements Initializable, BaseController  { //ex
         } else {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.initOwner(mainApp.getPrimaryStage());
-            alert.setTitle("No Selection");
-            alert.setHeaderText("No Building Selected");
-            alert.setContentText("Please select a building in the table.");
+            alert.setTitle("Не выбрано");
+            alert.setHeaderText("Здание не выбрано");
+            alert.setContentText("Пожалуйста, выберите здание в таблице.");
     
             alert.showAndWait();
         }
