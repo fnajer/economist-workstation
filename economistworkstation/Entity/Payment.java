@@ -61,6 +61,7 @@ public abstract class Payment {
     public abstract boolean fieldsIsFilled(Field field);
     public abstract void fill(Field field);
     public abstract void setLabels(Map<String, Label> labels);
+    public abstract Payment createNewPayment();
     
     public int getId() {
         return id.get();

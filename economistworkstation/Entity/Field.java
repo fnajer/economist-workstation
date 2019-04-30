@@ -434,6 +434,8 @@ public class Field {
         ArrayList<Payment> payments = period.getListPayments();
         
         for (Payment payment : payments) {
+            if (!isExist(payment))
+                payment = payment.createNewPayment();
              
             payment.setLabels(labels);
         }

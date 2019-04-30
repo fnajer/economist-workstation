@@ -137,6 +137,11 @@ public class Equipment extends Payment {
     }
     
     @Override
+    public Payment createNewPayment() {
+        return new Equipment();
+    }
+    
+    @Override
     public String toString() {
         return String.format("Платеж на аренду за оборудование. id = %d", this.getId());
     }

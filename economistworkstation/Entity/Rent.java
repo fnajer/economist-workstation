@@ -150,6 +150,11 @@ public class Rent extends Payment {
         setText(labels.get("costRent"), getCost());
         setText(labels.get("indexCostRent"), getIndexCost());
     }
+    
+    @Override
+    public Payment createNewPayment() {
+        return new Rent();
+    }
                 
     @Override
     public String toString() {

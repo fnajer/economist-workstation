@@ -137,6 +137,11 @@ public class TaxLand extends Payment {
     }
     
     @Override
+    public Payment createNewPayment() {
+        return new TaxLand();
+    }
+    
+    @Override
     public String toString() {
         return String.format("Платеж на земельный налог. id = %d", this.getId());
     }

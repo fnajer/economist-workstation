@@ -137,6 +137,11 @@ public class Fine extends Payment {
     }
     
     @Override
+    public Payment createNewPayment() {
+        return new Fine();
+    }
+    
+    @Override
     public String toString() {
         return String.format("Платеж на пени. id = %d", this.getId());
     }

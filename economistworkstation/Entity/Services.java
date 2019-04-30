@@ -278,6 +278,11 @@ public class Services extends Payment {
         setText(labels.get("costInternet"), getCostInternet());
         setText(labels.get("costTelephone"), getCostTelephone());
     }
+    
+    @Override
+    public Payment createNewPayment() {
+        return new Services();
+    }
    
     @Override
     public String toString() {
