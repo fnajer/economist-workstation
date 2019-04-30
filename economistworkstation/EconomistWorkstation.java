@@ -30,7 +30,8 @@ public class EconomistWorkstation extends Application {
 
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Economist Workstation");
-        
+        this.primaryStage.setMaximized(true);
+                
         initRootLayout();
         initMenu();
         

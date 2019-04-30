@@ -13,13 +13,13 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane stylesheets="@contract.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="economistworkstation.Controller.ContractController">
+<AnchorPane prefHeight="500.0" prefWidth="750.0" stylesheets="@contract.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="economistworkstation.Controller.ContractController">
    <children>
       <SplitPane dividerPositions="0.5" prefHeight="500.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <items>
             <AnchorPane>
                <children>
-                  <SplitPane dividerPositions="0.5" prefHeight="448.0" prefWidth="466.0" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane dividerPositions="0.5" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <items>
                         <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
                            <content>
@@ -99,7 +99,7 @@
             </AnchorPane>
             <AnchorPane>
                <children>
-                  <SplitPane dividerPositions="0.5" prefHeight="448.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <SplitPane dividerPositions="0.5" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <items>
                         <ScrollPane fitToHeight="true" fitToWidth="true" pannable="true">
                            <content>
