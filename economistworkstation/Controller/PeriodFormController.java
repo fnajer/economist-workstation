@@ -226,6 +226,9 @@ public class PeriodFormController {
                         paymentServicesField, datePaidServicesField);
         fields.bindEquipment(costEquipmentField, paymentEquipmentField, 
                         datePaidEquipmentField);
+        fields.bindExtraCost(extraCostRentLabel, extraCostFineLabel, 
+                        extraCostTaxLandLabel, extraCostServicesLabel,
+                        extraCostEquipmentLabel);
     }
     
     private ArrayList<Payment> payments;
@@ -287,7 +290,8 @@ public class PeriodFormController {
         
         Util.setCalledClass(this);
         
-      
+        initField();
+        
         numberLabel.setText(Integer.toString(period.getNumber()));
         numberRentAccLabel.setText(Integer.toString(period.getNumberRentAcc()));
         numberServicesAccLabel.setText(Integer.toString(period.getNumberServicesAcc()));
@@ -356,17 +360,9 @@ public class PeriodFormController {
     private void refreshExtraCost() {
         ExtraCost extraCost = period.getExtraCost();
         if (isExist(extraCost)) {
-            setText(extraCostRentLabel, extraCost.getCostRent());
-            setText(extraCostFineLabel, extraCost.getCostFine());
-            setText(extraCostTaxLandLabel, extraCost.getCostTaxLand());
-            setText(extraCostServicesLabel, extraCost.getCostServices());
-            setText(extraCostEquipmentLabel, extraCost.getCostEquipment());
+            fields.fillExtraCost(extraCost);
         } else {
-            extraCostRentLabel.setText("Нет");
-            extraCostFineLabel.setText("Нет");
-            extraCostTaxLandLabel.setText("Нет");
-            extraCostServicesLabel.setText("Нет");
-            extraCostEquipmentLabel.setText("Нет");
+            fields.fillExtraCostInitial();
         }
     }
 
@@ -374,23 +370,27 @@ public class PeriodFormController {
         return okClicked;
     }
     
+    private void savePaymentValues() {
+        Payment payment, paymentSrc;
+        for (int i = 0; i < payments.size(); i += 2) {
+            payment = payments.get(i);
+            paymentSrc = payments.get(i + 1);
+
+            if (payment.fieldsIsFilled(fields)) {
+                payment.saveValuesOf(fields, period);
+                payment.bindPeriod(period);
+            } else if (isExist(paymentSrc) && payment.isEmpty()) {
+                payment.prepareToDelete();
+                payment.bindPeriod(period);
+            }
+        }
+    }
+    
     @FXML
     private void handleOk() {
         if (isInputValid()) {
 
-            Payment payment, paymentSrc;
-            for (int i = 0; i < payments.size(); i += 2) {
-                payment = payments.get(i);
-                paymentSrc = payments.get(i + 1);
-                
-                if (payment.fieldsIsFilled(fields)) {
-                    payment.saveValuesOf(fields, period);
-                    payment.bindPeriod(period);
-                } else if (isExist(paymentSrc) && payment.isEmpty()) {
-                    payment.prepareToDelete();
-                    payment.bindPeriod(period);
-                }
-            }
+            savePaymentValues();
             
             setBalanceTable();
                
@@ -444,7 +444,6 @@ public class PeriodFormController {
     private boolean isPositive(TextField tf) {
         try {
             double value = Double.parseDouble(tf.getText());
-//            System.out.println(value > 0);
             return value > 0;
         } catch(NumberFormatException e) {
 //            System.out.println("false - set gray color");

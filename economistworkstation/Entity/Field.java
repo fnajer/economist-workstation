@@ -397,6 +397,16 @@ public class Field {
         setText(getDatePaidEquipment(), services.getDatePaid());
     }
     
+    public void bindExtraCost(Label extraCostRent, Label extraCostFine,
+            Label extraCostTaxLand, Label extraCostServices, 
+            Label extraCostEquipment) 
+    {
+        setExtraCostRent(extraCostRent);
+        setExtraCostFine(extraCostFine);
+        setExtraCostTaxLand(extraCostTaxLand);
+        setExtraCostServices(extraCostServices);
+        setExtraCostEquipment(extraCostEquipment);
+    }
     public void fillExtraCost(ExtraCost extraCost) {
         setText(getExtraCostRent(), extraCost.getCostRent());
         setText(getExtraCostFine(), extraCost.getCostFine());
