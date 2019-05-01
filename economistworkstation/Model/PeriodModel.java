@@ -102,7 +102,7 @@ public class PeriodModel {
             Integer idEquipment = addPayment(period.getEquipmentPayment(), id);
             if (idEquipment == null) period.setEquipmentPayment(null);
             
-            updateBalancePeriod(id, period);
+//            updateBalancePeriod(id, period);
 
             PreparedStatement ps = db.conn.prepareStatement("UPDATE PERIOD "
                     + "SET number=?, date_end=?, id_contract=? "
@@ -302,13 +302,14 @@ public class PeriodModel {
         return extraCost.getId();
     }
     
-    public static void updateBalancePeriod(int id, Period period) {
-        Integer idBalance = addBalance(period, id);
+    public static void updateBalancePeriod(Period period) {
+        Integer idBalance = addBalance(period);
         if (idBalance == null) period.setBalance(null);
     }
             
-    public static Integer addBalance(Period period, int id) {
+    public static Integer addBalance(Period period) {
         BalanceTable balance = period.getBalance();
+        int id = period.getId();
         
         if (balance == null) return null;
         

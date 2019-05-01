@@ -435,7 +435,8 @@ public class Field {
         
         for (Payment payment : payments) {
             if (!isExist(payment))
-                payment = payment.createNewPayment();
+                continue;
+//                payment = payment.createNewPayment();
              
             payment.setLabels(labels);
         }

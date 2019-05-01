@@ -73,36 +73,36 @@ public class BalanceController {
                 balanceRent = period.getRentPayment().getBalance();
             else 
                 balanceRent = new Balance();
-            setText(creditRentLabel, balanceRent.getCredit());
-            setText(debitRentLabel, balanceRent.getDebit());
+            setText(creditRentLabel, balanceRent.getCreditBefore());
+            setText(debitRentLabel, balanceRent.getDebitBefore());
             
             if (isExist(fine))
                 balanceFine = period.getFinePayment().getBalance();
             else 
                 balanceFine = new Balance();
-            setText(creditFineLabel, balanceFine.getCredit());
-            setText(debitFineLabel, balanceFine.getDebit());
+            setText(creditFineLabel, balanceFine.getCreditBefore());
+            setText(debitFineLabel, balanceFine.getDebitBefore());
 
             if (isExist(taxLand))
                 balanceTaxLand = period.getTaxLandPayment().getBalance();
             else 
                 balanceTaxLand = new Balance();
-            setText(creditTaxLandLabel, balanceTaxLand.getCredit());
-            setText(debitTaxLandLabel, balanceTaxLand.getDebit());
+            setText(creditTaxLandLabel, balanceTaxLand.getCreditBefore());
+            setText(debitTaxLandLabel, balanceTaxLand.getDebitBefore());
             
             if (isExist(services))
                 balanceServices = period.getServicesPayment().getBalance();
             else 
                 balanceServices = new Balance();
-            setText(creditServiceLabel, balanceServices.getCredit());
-            setText(debitServiceLabel, balanceServices.getDebit());
+            setText(creditServiceLabel, balanceServices.getCreditBefore());
+            setText(debitServiceLabel, balanceServices.getDebitBefore());
             
             if (isExist(equipment))
                 balanceEquipment = period.getEquipmentPayment().getBalance();
             else 
                 balanceEquipment = new Balance();
-            setText(creditEquipmentLabel, balanceEquipment.getCredit());
-            setText(debitEquipmentLabel, balanceEquipment.getDebit());
+            setText(creditEquipmentLabel, balanceEquipment.getCreditBefore());
+            setText(debitEquipmentLabel, balanceEquipment.getDebitBefore());
         } else {
             creditRentLabel.setText("Нет");
             debitRentLabel.setText("Нет");

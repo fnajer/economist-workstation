@@ -114,8 +114,8 @@ public class Rent extends Payment {
 
         setPaid(parseField(field.getPaymentRent()));
         setDatePaid(parseField(field.getDatePaidRent()));
-        if (isExist(period.getRentPayment()) && isExist(period.getRentPayment().getBalance()))
-            setBalance(period.getRentPayment().getBalance().copy());
+//        if (isExist(period.getRentPayment()) && isExist(period.getRentPayment().getBalance()))
+//            setBalance(period.getRentPayment().getBalance().copy());
     }
     
     @Override

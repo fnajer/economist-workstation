@@ -192,28 +192,28 @@ public class BalanceTable {
         
         if (isExist(rent)) {
             Balance rentBalance = rent.getBalance();
-            setCreditRent(rentBalance.getCredit());
-            setDebitRent(rentBalance.getDebit());
+            setCreditRent(rentBalance.getCreditBefore());
+            setDebitRent(rentBalance.getDebitBefore());
         }
         if (isExist(fine)) {
             Balance fineBalance = fine.getBalance();
-            setCreditFine(fineBalance.getCredit());
-            setDebitFine(fineBalance.getDebit());
+            setCreditFine(fineBalance.getCreditBefore());
+            setDebitFine(fineBalance.getDebitBefore());
         }
         if (isExist(taxLand)) {
             Balance taxLandBalance = taxLand.getBalance();
-            setCreditTaxLand(taxLandBalance.getCredit());
-            setDebitTaxLand(taxLandBalance.getDebit());
+            setCreditTaxLand(taxLandBalance.getCreditBefore());
+            setDebitTaxLand(taxLandBalance.getDebitBefore());
         }
         if (isExist(services)) {
             Balance servicesBalance = services.getBalance();
-            setCreditService(servicesBalance.getCredit());
-            setDebitService(servicesBalance.getDebit());
+            setCreditService(servicesBalance.getCreditBefore());
+            setDebitService(servicesBalance.getDebitBefore());
         }
         if (isExist(equipment)) {
             Balance equipmentBalance = equipment.getBalance();
-            setCreditEquipment(equipmentBalance.getCredit());
-            setDebitEquipment(equipmentBalance.getDebit());
+            setCreditEquipment(equipmentBalance.getCreditBefore());
+            setDebitEquipment(equipmentBalance.getDebitBefore());
         }
     }
     

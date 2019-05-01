@@ -329,13 +329,13 @@ public class PeriodFormController {
     }
 
     private void setBalanceTable() {
-        BalanceTable balanceTable = period.getBalance();
-        if (balanceFieldsIsFilled()) { 
-            period.bindTable(); //safeGetTable()
-        } else if (isExist(balanceTable) && period.balanceIsNull()) {
-            balanceTable.prepareToDelete();
-            balanceTable.bindPeriod(period);
-        }
+//        BalanceTable balanceTable = period.getBalance();
+//        if (balanceFieldsIsFilled()) { 
+//            period.bindTable(); //safeGetTable()
+//        } else if (isExist(balanceTable) && period.balanceIsNull()) {
+//            balanceTable.prepareToDelete();
+//            balanceTable.bindPeriod(period);
+//        }
     }
     
     private void setPaymentState() {
@@ -349,8 +349,8 @@ public class PeriodFormController {
     private void handleBalanceFields(Payment payment,
             Label statePaymentLbl, Label balancePaymentLbl) 
     {
-        Payment prevPayment = payment.getPrevPayment(prevPeriod);
-        payment.calculate(prevPayment);
+//        Payment prevPayment = payment.getPrevPayment(prevPeriod);
+        payment.calculate();
         
         Balance balance = payment.getBalance();
         statePaymentLbl.setText(balance.getState());
@@ -698,7 +698,7 @@ public class PeriodFormController {
     
     @FXML
     void handleBalance(ActionEvent event) {
-        showBalance(prevPeriod);
+        showBalance(period);
     }
     
     public boolean showBalance(Period period) {

@@ -144,21 +144,16 @@ public abstract class Payment {
         setBalance(null);
     }
     
-    /**
-     * @param prevPayment
-     */
-    public void calculate(Payment prevPayment) {
+    public void calculate() {
             double diff = getDiff();
-            if (!isExist(prevPayment) && fieldsIsEmpty()) {
-                setEmptyBalance();
-                return;
-            }
-                
-            Balance prevBalance = isExist(prevPayment) 
-                    ? prevPayment.getBalance()
-                    : new Balance();
-            
-            
-            getBalance().calc(prevBalance, diff);
+//            if (!isExist(prevPayment) && fieldsIsEmpty()) {
+//                setEmptyBalance();
+//                return;
+//            }
+//                
+//            Balance prevBalance = isExist(prevPayment) 
+//                    ? prevPayment.getBalance()
+//                    : new Balance();
+            getBalance().calculateValuesAfter(diff);
     }
 }
