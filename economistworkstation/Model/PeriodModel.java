@@ -27,7 +27,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javax.management.ObjectName;
         
 /**
  *
@@ -211,7 +210,7 @@ public class PeriodModel {
                     + "LEFT JOIN RENTER ON CONTRACT.ID_RENTER=RENTER.id "
                     + "LEFT JOIN BUILDING ON CONTRACT.ID_BUILDING=BUILDING.id "
                     + "WHERE date_end >= '" + month + "' AND date_end < '" + nextMonth + "' "
-                    + "ORDER BY id_contract;");
+                    + "ORDER BY id_contract");
             
             while (rs.next()) {
                 contractsData.add(new ContractData(null, createObjectPeriod(rs),
@@ -476,4 +475,5 @@ public class PeriodModel {
         
         return period;
     }
+    
 }

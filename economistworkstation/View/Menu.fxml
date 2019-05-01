@@ -22,6 +22,7 @@
           <MenuItem fx:id="contracts" mnemonicParsing="false" onAction="#showList" text="Показать список" />
             <MenuItem fx:id="accounts" mnemonicParsing="false" onAction="#updateAccounts" text="Переназначить счета" />
             <MenuItem mnemonicParsing="false" onAction="#printAcruals" text="Ведомость начисления за месяц" />
+            <MenuItem mnemonicParsing="false" onAction="#printMemorialOrder" text="Мемориальный ордер" />
         </items>
       </Menu>
       <Menu mnemonicParsing="false" text="Арендатор">

@@ -198,7 +198,8 @@ public class ExcelCreator {
     }
     
     public static void buildAcr(Workbook workbook, Consumer<ContractData> method,
-            ObservableList<ContractData> data) {
+            ObservableList<ContractData> data) 
+    {
         for (Sheet sheet : workbook) {
             ExcelCreator.sheet = sheet;
             int indexStartRow = addTemplateRows(workbook, data.size());
@@ -242,6 +243,28 @@ public class ExcelCreator {
         }
         
         System.out.println("Создан документ 'Ведомость начислений'");
+    }
+    
+    public static void printMemorialOrder() throws IOException {
+        File file = new File("C:\\Users\\fnajer\\Desktop\\workbookMem.xls");
+
+        Workbook workbook;
+        ObservableList<ContractData> fullContracts;
+        try (FileInputStream inputStream = new FileInputStream(file)) {
+            workbook = new HSSFWorkbook(inputStream);
+            
+            LocalDate data = LocalDate.parse("2019-09-01");
+            fullContracts = PeriodModel.getContractData(data);
+            
+            TagParser.typeDoc = "memorial";
+            buildAcr(workbook, TagParser::convertTags, fullContracts);
+        }
+        
+        try (OutputStream out = new FileOutputStream("C:\\Users\\fnajer\\Desktop\\workbookMemNew.xls")) {
+            workbook.write(out);
+        }
+        
+        System.out.println("Создан документ 'Меморальный ордер'");
     }
     
     private static void copyRow(Workbook workbook, Sheet worksheet, 

@@ -109,6 +109,10 @@ public class MenuController implements Initializable {
         ExcelCreator.printAcruals();
     }
 
+    @FXML
+    private void printMemorialOrder() throws IOException {
+        ExcelCreator.printMemorialOrder();
+    }
     /**
      * Закрывает приложение.
      */
