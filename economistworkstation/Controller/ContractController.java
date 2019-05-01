@@ -392,16 +392,20 @@ public class ContractController implements Initializable, BaseController {
     }
     
     private void clearDetails() {
-        costLabel.setText("");
-        indexCostLabel.setText("");
-        fineLabel.setText("");
+        costLabel.setText("Нет");
+        indexCostLabel.setText("Нет");
+        fineLabel.setText("Нет");
+        taxLandLabel.setText("Нет");
+        equipmentLabel.setText("Нет");
 
-        countWaterLabel.setText("");
-        tariffWaterLabel.setText("");
-        countElectricityLabel.setText("");
-        tariffElectricityLabel.setText("");
-        costHeadingLabel.setText("");
-        costGarbageLabel.setText("");
+        countWaterLabel.setText("Нет");
+        tariffWaterLabel.setText("Нет");
+        countElectricityLabel.setText("Нет");
+        tariffElectricityLabel.setText("Нет");
+        costHeadingLabel.setText("Нет");
+        costGarbageLabel.setText("Нет");
+        costInternetLabel.setText("Нет");
+        costTelephoneLabel.setText("Нет");
     }
     
     @FXML
