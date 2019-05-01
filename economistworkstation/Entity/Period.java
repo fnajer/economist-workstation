@@ -132,6 +132,38 @@ public class Period {
         return false;
     }
     
+    private void fillBeforeValues(Period period) {
+        Payment payment, paymentForFill;
+        ArrayList<Payment> payments = period.getListPayments();
+        ArrayList<Payment> paymentsForFill = this.getListPayments();
+        
+        for (int i = 0; i < payments.size(); i++) {
+            payment = payments.get(i);
+            paymentForFill = paymentsForFill.get(i);
+            
+            if (!paymentIsValid(payment) && paymentIsValid(paymentForFill)) {
+                paymentForFill.setBalance(null);
+            }
+            
+            if (!paymentIsValid(payment)) // можно обнулять сальдо следующих если этого платежа нет. выше сделал вроде
+                continue;
+            
+            if (!isExist(paymentForFill)) {
+                if (i == 0) paymentForFill = new Rent();
+                if (i == 1) paymentForFill = new Fine();
+                if (i == 2) paymentForFill = new TaxLand();
+                if (i == 3) paymentForFill = new Services();
+                if (i == 4) paymentForFill = new Equipment();
+            }
+            
+//                paymentForFill = paymentForFill.createNewPayment();
+            if (!isExist(paymentForFill.getBalance()))
+                paymentForFill.setBalance(new Balance());
+           
+            paymentForFill.getBalance().fillBeforeValues(payment.getBalance()); 
+        }
+    }
+    
     public void calculateBalance(Period period) {
 //        if (!isValid(nextPeriod)) return;
 //        
