@@ -21,8 +21,10 @@ import javafx.beans.property.StringProperty;
 
 public class Balance {
     private final IntegerProperty id;
-    private final ObjectProperty<Double> credit;
-    private final ObjectProperty<Double> debit;
+    private final ObjectProperty<Double> creditBefore;
+    private final ObjectProperty<Double> debitBefore;
+    private final ObjectProperty<Double> creditAfter;
+    private final ObjectProperty<Double> debitAfter;
     private final StringProperty state;
     private final StringProperty info;
     
@@ -30,10 +32,12 @@ public class Balance {
         this(null, null);
     }
     
-    public Balance(Object credit, Object debit) {
+    public Balance(Object creditBefore, Object debitBefore) {
         this.id = new SimpleIntegerProperty(0);
-        this.credit = new SimpleObjectProperty(credit);
-        this.debit = new SimpleObjectProperty(debit);
+        this.creditBefore = new SimpleObjectProperty(creditBefore);
+        this.debitBefore = new SimpleObjectProperty(debitBefore);
+        this.creditAfter = new SimpleObjectProperty(null);
+        this.debitAfter = new SimpleObjectProperty(null);
         this.state = new SimpleStringProperty();
         this.info = new SimpleStringProperty();
     }
@@ -45,18 +49,32 @@ public class Balance {
         this.id.set(id);
     }
     
-    public Double getCredit() {
-        return credit.get();
+    public Double getCreditBefore() {
+        return creditBefore.get();
     }
-    public void setCredit(Double credit) {
-        this.credit.set(credit);
+    public void setCreditBefore(Double creditBefore) {
+        this.creditBefore.set(creditBefore);
     }
     
-    public Double getDebit() {
-        return debit.get();
+    public Double getDebitBefore() {
+        return debitBefore.get();
     }
-    public void setDebit(Double debit) {
-        this.debit.set(debit);
+    public void setDebitBefore(Double debitBefore) {
+        this.debitBefore.set(debitBefore);
+    }
+    
+    public Double getCreditAfter() {
+        return creditAfter.get();
+    }
+    public void setCreditAfter(Double creditAfter) {
+        this.creditAfter.set(creditAfter);
+    }
+    
+    public Double getDebitAfter() {
+        return debitAfter.get();
+    }
+    public void setDebitAfter(Double debitAfter) {
+        this.debitAfter.set(debitAfter);
     }
     
     public String getState() {
@@ -96,40 +114,40 @@ public class Balance {
     
     public void calcWithCredit(Double credit, Double diff) {
         if (Objects.equals(credit, diff)) {
-            setCredit(null);
-            setDebit(null);
+            setCreditAfter(null);
+            setDebitAfter(null);
             saveResult("Недооплачено",
                     format("взято с кредита: %.2f, без остатка", diff));
         } else if (credit > diff) {
             credit -= diff;
-            setCredit(credit);
-            setDebit(null);
+            setCreditAfter(credit);
+            setDebitAfter(null);
             saveResult("Недооплачено",
                     format("взято с кредита: %.2f, остаток кредита: %.2f", diff, credit));
         } else { //if (credit < diff)
             diff -= credit;
-            setCredit(null);
-            setDebit(diff);
+            setCreditAfter(null);
+            setDebitAfter(diff);
             saveResult("Недооплачено",
                     format("взято с кредита %.2f, уйдет в дебет: %.2f", credit, diff));
         }
     }
     public void calcWithDebit(Double debit, Double diff) {
         if (Objects.equals(debit, diff)) {
-            setCredit(null);
-            setDebit(null);
+            setCreditAfter(null);
+            setDebitAfter(null);
             saveResult("Переоплачено",
                     format("оплачен дебет: %.2f, без остатка", debit));
         } else if (debit > diff) {
             debit -= diff;
-            setCredit(null);
-            setDebit(debit);
+            setCreditAfter(null);
+            setDebitAfter(debit);
             saveResult("Переоплачено",
                     format("оплачен дебет: %.2f, остаток дебета %.2f", diff, debit));
         } else { //if (debit < diff)
             diff -= debit;
-            setCredit(diff);
-            setDebit(null);
+            setCreditAfter(diff);
+            setDebitAfter(null);
             saveResult("Переоплачено",
                     format("оплачено дебета %.2f, уйдет в кредит: %.2f", debit, diff));
         }
@@ -137,18 +155,18 @@ public class Balance {
     
     private void calcIfZero(Double credit, Double debit) {
         if (isExist(credit)) {
-            setDebit(null);
-            setCredit(credit);
+            setDebitAfter(null);
+            setCreditAfter(credit);
             saveResult("Оплачено",
                     format("остается кредит: %.2f", credit));
         } else if (isExist(debit)) {
-            setDebit(debit);
-            setCredit(null);
+            setDebitAfter(debit);
+            setCreditAfter(null);
             saveResult("Оплачено",
                     format("остается дебет: %.2f", debit));
         } else {
-            setDebit(null);
-            setCredit(null);
+            setDebitAfter(null);
+            setCreditAfter(null);
             saveResult("Оплачено",
                     format("долгов нет"));
         }
@@ -158,13 +176,13 @@ public class Balance {
         if (isExist(credit)) {
             calcWithCredit(credit, diff);
         } else if (isExist(debit)) {
-            setDebit(diff + debit);
-            setCredit(null);
+            setDebitAfter(diff + debit);
+            setCreditAfter(null);
             saveResult("Недооплачено",
                     format("текущий дебет: %.2f + новый %.2f", debit, diff));
         } else {
-            setDebit(diff);
-            setCredit(null);
+            setDebitAfter(diff);
+            setCreditAfter(null);
             saveResult("Недооплачено",
                     format("уйдет в дебет %.2f", diff));
         }
@@ -175,21 +193,21 @@ public class Balance {
         if (isExist(debit)) {
             calcWithDebit(debit, diff);
         } else if (isExist(credit)) {
-            setDebit(null);
-            setCredit(diff + credit);
+            setDebitAfter(null);
+            setCreditAfter(diff + credit);
             saveResult("Переоплачено",
                     format("текущий кредит: %.2f + новый %.2f", credit, diff));
         } else {
-            setCredit(diff);
-            setDebit(null);
+            setCreditAfter(diff);
+            setDebitAfter(null);
             saveResult("Переоплачено",
                     format("уйдет в кредит %.2f", diff));
         }
     }
     
-    public void calc(Balance prevBalance, Double diff) {
-        Double prevCredit = prevBalance.getCredit();
-        Double prevDebit = prevBalance.getDebit();
+    public void calculateValuesAfter(Double diff) {
+        Double prevCredit = getCreditBefore();
+        Double prevDebit = getDebitBefore();
         
         if (diff == 0.0) {
             calcIfZero(prevCredit, prevDebit);
@@ -200,12 +218,23 @@ public class Balance {
         }
     }
     
-    public boolean containValues() {
-        return getCredit() != null || getDebit() != null;
+    public boolean hasBeforeValues() {
+        return getCreditBefore() != null || getDebitBefore() != null;
+    }
+    
+    public boolean hasAfterValues() {
+        return getCreditAfter() != null || getDebitAfter()!= null;
+    }
+    
+    public void fillBeforeValues(Balance balance) {
+        setCreditBefore(balance.getCreditAfter());
+        setDebitBefore(balance.getDebitAfter());
     }
     
     public Balance copy() {
-        Balance balance = new Balance(getCredit(), getDebit());
+        Balance balance = new Balance(getCreditBefore(), getDebitBefore());
+        balance.setCreditAfter(getCreditAfter());
+        balance.setDebitAfter(getDebitAfter());
         balance.setId(getId());
         return balance;
     }
