@@ -6,6 +6,7 @@
 package economistworkstation.Controller;
 
 import economistworkstation.EconomistWorkstation;
+import economistworkstation.Entity.BalanceTable;
 import economistworkstation.Entity.Building;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -20,6 +21,7 @@ import economistworkstation.Model.BuildingModel;
 import economistworkstation.Model.ContractModel;
 import economistworkstation.Model.PeriodModel;
 import economistworkstation.Model.RenterModel;
+import static economistworkstation.Util.Util.isExist;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Collections;
@@ -139,16 +141,40 @@ public class ContractController implements Initializable, BaseController {
             return null;
     }
     
+//    public void recalculateBalance(Period period) {
+//        Period prevPeriod = null;
+//        
+//        int i = periods.indexOf(period);
+//        if (i != 0) prevPeriod = periods.get(i - 1);
+//        
+//        for (; i < periods.size(); i++) {
+//            period = periods.get(i);
+//            period.calculateBalance(prevPeriod);
+//            prevPeriod = period;
+//        }
+//    }
+    
     public void recalculateBalance(Period period) {
-        Period prevPeriod = null;
+        Period nextPeriod;
         
-        int i = periods.indexOf(period);
-        if (i != 0) prevPeriod = periods.get(i - 1);
+        int length = periods.size();
+        int i = periods.indexOf(period) + 1;
         
-        for (; i < periods.size(); i++) {
-            period = periods.get(i);
-            period.calculateBalance(prevPeriod);
-            prevPeriod = period;
+        for (; i < length; i++) {
+            nextPeriod = periods.get(i);
+            
+            nextPeriod.calculateBalance(period);
+            
+            BalanceTable balanceTable = nextPeriod.getBalance();
+            if (!nextPeriod.balanceIsNull() && !isExist(balanceTable)) {
+                period.bindTable();
+            } else if (isExist(balanceTable) && nextPeriod.balanceIsNull()) {
+                balanceTable.prepareToDelete();
+                balanceTable.bindPeriod(period);
+            }
+            PeriodModel.updateBalancePeriod(nextPeriod);
+            
+            period = nextPeriod;
         }
     }
     
@@ -329,7 +355,6 @@ public class ContractController implements Initializable, BaseController {
         // Очистка дополнительной информации об адресате.
         showPeriodDetails(null);
 
-        recalculateBalance(periods.get(0));
         // Слушаем изменения выбора, и при изменении отображаем
         // дополнительную информацию об адресате.
         periodTable.getSelectionModel().selectedItemProperty().addListener(listener);
