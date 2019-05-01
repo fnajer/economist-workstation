@@ -434,6 +434,119 @@ public class TagParser {
                 return;
             }
             
+            //memorial
+            if ("<day>".equals(foundedTag)) {
+                LocalDate date = LocalDate.now();
+                String formattedString = String.format("\"%d\"", date.getDayOfMonth());
+                newValue = formattedString;
+            }
+            if ("<monthName>".equals(foundedTag)) {
+                LocalDate date = LocalDate.now();
+                int monthNum = date.getMonth().getValue();
+                String formattedString = period.getMonthName(monthNum, true);
+                newValue = formattedString;
+            }
+            if ("<year>".equals(foundedTag)) {
+                LocalDate date = LocalDate.now();
+                String formattedString = String.format("%d", date.getYear());
+                newValue = formattedString;
+            }
+            if ("<services>".equals(foundedTag)) {
+                String sumServices = Double.toString(services.sumToPay());
+                newValue = sumServices;
+                
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                double resultDouble = Double.parseDouble(resultString);
+     
+                cell.setCellValue(resultDouble);
+                return;
+            }
+            if ("<servicesPaid>".equals(foundedTag)) {
+                String servicesPaid = Double.toString(services.getPaid());
+                newValue = servicesPaid;
+                
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                double resultDouble = Double.parseDouble(resultString);
+     
+                cell.setCellValue(resultDouble);
+                return;
+            }
+            if ("<equipment>".equals(foundedTag)) {
+                String sumEquipment = Double.toString(equipment.sumToPay());
+                newValue = sumEquipment;
+                
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                double resultDouble = Double.parseDouble(resultString);
+     
+                cell.setCellValue(resultDouble);
+                return;
+            }
+            if ("<equipmentPaid>".equals(foundedTag)) {
+                String equipmentPaid = Double.toString(equipment.getPaid());
+                newValue = equipmentPaid;
+                
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                double resultDouble = Double.parseDouble(resultString);
+     
+                cell.setCellValue(resultDouble);
+                return;
+            }
+            if ("<rentPaid>".equals(foundedTag)) {
+                String rentPaid = Double.toString(rent.getPaid());
+                newValue = rentPaid;
+                
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                double resultDouble = Double.parseDouble(resultString);
+     
+                cell.setCellValue(resultDouble);
+                return;
+            }
+            if ("<finePaid>".equals(foundedTag)) {
+                String finePaid = Double.toString(fine.getPaid());
+                newValue = finePaid;
+                
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                double resultDouble = Double.parseDouble(resultString);
+     
+                cell.setCellValue(resultDouble);
+                return;
+            }
+            if ("<taxLandPaid>".equals(foundedTag)) {
+                String taxLandPaid = Double.toString(taxLand.getPaid());
+                newValue = taxLandPaid;
+                
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                double resultDouble = Double.parseDouble(resultString);
+     
+                cell.setCellValue(resultDouble);
+                return;
+            }
+            if ("<sumPeriodMem>".equals(foundedTag)) {
+                int rowIndex = cell.getRowIndex() + 1;
+                cell.setCellFormula("SUM(J" + rowIndex + ":O" + rowIndex + ")");
+                return;
+            }
+            if ("<sumPeriodMemPaid>".equals(foundedTag)) {
+                int rowIndex = cell.getRowIndex() + 1;
+                cell.setCellFormula("SUM(S" + rowIndex + ":X" + rowIndex + ")");
+                return;
+            }
+            if ("<sumRentMem>".equals(foundedTag)) {
+                int rowIndex = cell.getRowIndex();
+                cell.setCellFormula("SUM(J" + rowIndex + ":M" + rowIndex + ")");
+                return;
+            }
+            if ("<sumRentPaidMem>".equals(foundedTag)) {
+                int rowIndex = cell.getRowIndex();
+                cell.setCellFormula("SUM(S" + rowIndex + ":V" + rowIndex + ")");
+                return;
+            }
+            if ("<sumMem>".equals(foundedTag)) {
+                int rowIndex = cell.getRowIndex() + 1;
+                cell.setCellFormula("SUM(P" + rowIndex + ":Y" + rowIndex + ")");
+                return;
+            }
+            
             resultString = cellString.replaceAll(foundedTag, newValue);
             cell.setCellValue(resultString);
             cellString = resultString;
