@@ -70,8 +70,8 @@ public class Period {
         return list;
     }
     
-    public boolean isValid(Period prevPeriod) {    
-        if ((isExist(prevPeriod) && isExist(prevPeriod.getBalance()))
+    public boolean isValid(Period nextPeriod) {    
+        if ((isExist(nextPeriod.getBalance()))
                 || isExist(getBalance())) {
             if (!isExist(getBalance())) {
                 setBalance(new BalanceTable());
@@ -94,15 +94,15 @@ public class Period {
             payment = payments.get(i);
             prevPayment = prevPayments.get(i);
             
-            if (isExist(payment) && payment.fieldsIsEmpty() && isExist(prevPayment) && prevPayment.fieldsIsEmpty()
-                && !prevPayment.getBalance().containValues())
-                    continue;
-            
-            if (isExist(payment) && payment.fieldsIsEmpty() && !isExist(prevPayment))
-                    continue;
-            if (!isExist(payment) && isExist(prevPayment) && prevPayment.fieldsIsEmpty()
-                    && !prevPayment.getBalance().containValues())
-                    continue;
+//            if (isExist(payment) && payment.fieldsIsEmpty() && isExist(prevPayment) && prevPayment.fieldsIsEmpty()
+//                && !prevPayment.getBalance().containValues())
+//                    continue;
+//            
+//            if (isExist(payment) && payment.fieldsIsEmpty() && !isExist(prevPayment))
+//                    continue;
+//            if (!isExist(payment) && isExist(prevPayment) && prevPayment.fieldsIsEmpty()
+//                    && !prevPayment.getBalance().containValues())
+//                    continue;
             if (!isExist(payment) && !isExist(prevPayment))
                 continue;
             
@@ -112,46 +112,57 @@ public class Period {
         return true;
     }
     
-    public void calculateBalance(Period prevPeriod) {
-        if (!isValid(prevPeriod)) return;
-        
-        if (balanceIsEmpty(prevPeriod)) {
-            setRentPayment(null);
-            setFinePayment(null);
-            setTaxLandPayment(null);
-            setServicesPayment(null);
-            setEquipmentPayment(null);
-            setExtraCost(null);
-            setBalance(null);
-            return;
-        }
-        
-        if (!isExist(prevPeriod)) {
-            prevPeriod = new Period();
-        }
-        Payment payment, prevPayment;
+    private boolean paymentIsValid(Payment payment) {
+        return isExist(payment) && isExist(payment.getBalance());
+    }
+    
+    private boolean hasAfterValues() {
+        Payment payment;
         ArrayList<Payment> payments = this.getListPayments();
-        ArrayList<Payment> prevPayments = prevPeriod.getListPayments();
         
         for (int i = 0; i < payments.size(); i++) {
             payment = payments.get(i);
-            prevPayment = prevPayments.get(i);
             
-            if ((isExist(payment) && isExist(payment.getBalance()))
-                || (isExist(prevPayment) && isExist(prevPayment.getBalance())))
-            {
-                if (i == 0 && !isExist(payment)) {
-                    payment = new Rent();
-                    payment.setBalance(new Balance());
-                }
-                if (!isExist(payment.getBalance()))
-                        payment.setBalance(new Balance());
-               
-                payment.calculate(prevPayment);
+            if (!paymentIsValid(payment))
+                continue;
             
-                if (i == 0) {
-                    setRentPayment((Rent) payment);
-                }
+            if (payment.getBalance().hasAfterValues())
+                return true;
+        }
+        return false;
+    }
+    
+    public void calculateBalance(Period period) {
+//        if (!isValid(nextPeriod)) return;
+//        
+//        if (balanceIsEmpty(prevPeriod)) {
+//            setRentPayment(null);
+//            setFinePayment(null);
+//            setTaxLandPayment(null);
+//            setServicesPayment(null);
+//            setEquipmentPayment(null);
+//            setExtraCost(null);
+//            setBalance(null);
+//            return;
+//        }
+        if (!period.hasAfterValues())
+            return;
+        fillBeforeValues(period);
+//        if (!isExist(prevPeriod)) {
+//            prevPeriod = new Period();
+//        }
+        Payment payment;
+        ArrayList<Payment> payments = this.getListPayments();
+        
+        for (int i = 0; i < payments.size(); i++) {
+            payment = payments.get(i);
+            
+            if (paymentIsValid(payment)) {
+                payment.calculate();
+            
+//                if (i == 0) {
+//                    setRentPayment((Rent) payment);
+//                }
             }
         }
     }
@@ -165,27 +176,27 @@ public class Period {
 
         if (isExist(rent)) {
             Balance rentBalance = rent.getBalance();
-            if (rentBalance.containValues())
+            if (rentBalance.hasBeforeValues())
                 return false;
         }
         if (isExist(fine)) {
             Balance fineBalance = fine.getBalance();
-            if (fineBalance.containValues())
+            if (fineBalance.hasBeforeValues())
                 return false;
         }
         if (isExist(taxLand)) {
             Balance taxLandBalance = taxLand.getBalance();
-            if (taxLandBalance.containValues())
+            if (taxLandBalance.hasBeforeValues())
                 return false;
         }
         if (isExist(services)) {
             Balance servicesBalance = services.getBalance();
-            if (servicesBalance.containValues())
+            if (servicesBalance.hasBeforeValues())
                 return false;
         }
         if (isExist(equipment)) {
             Balance equipmentBalance = equipment.getBalance();
-            if (equipmentBalance.containValues())
+            if (equipmentBalance.hasBeforeValues())
                 return false;
         }
         return true;
