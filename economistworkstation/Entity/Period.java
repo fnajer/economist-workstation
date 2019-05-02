@@ -32,7 +32,7 @@ public class Period {
     private final ObjectProperty<Services> servicesPayment;
     private final ObjectProperty<Equipment> equipmentPayment;
     private final ObjectProperty<ExtraCost> extraCost;
-    private final ObjectProperty<BalanceTable> balance;
+    private final ObjectProperty<BalanceTable> balanceTable;
     
     public Period() {
         this(0, 0, 0, null, 0, null, null, null, null, null, null, null);
@@ -41,7 +41,7 @@ public class Period {
     public Period(int number, int numberRentAcc, int numberServicesAcc, 
             String endPeriod, int idContract, Payment rentPayment,
             Payment finePayment, Payment taxLandPayment, Payment servicesPayment,
-            Payment equipmentPayment, ExtraCost extraCost, BalanceTable balance) {
+            Payment equipmentPayment, ExtraCost extraCost, BalanceTable balanceTable) {
        this.id = new SimpleIntegerProperty(0);
        this.number = new SimpleIntegerProperty(number);
        this.numberRentAcc = new SimpleIntegerProperty(numberRentAcc);
@@ -56,7 +56,8 @@ public class Period {
        this.equipmentPayment = new SimpleObjectProperty(equipmentPayment);
        
        this.extraCost = new SimpleObjectProperty(extraCost);
-       this.balance = new SimpleObjectProperty(balance);
+       this.balanceTable = new SimpleObjectProperty(balanceTable);
+       this.nextBalanceTable = new SimpleObjectProperty(balanceTable);
     }
     
     public ArrayList<Payment> getListPayments() {
@@ -70,168 +71,17 @@ public class Period {
         return list;
     }
     
-    public boolean isValid(Period nextPeriod) {    
-        if ((isExist(nextPeriod.getBalance()))
-                || isExist(getBalance())) {
-            if (!isExist(getBalance())) {
-                setBalance(new BalanceTable());
-            }
-            return true;
-        }
-        return false;
-    }
-    
-    private boolean balanceIsEmpty(Period prevPeriod) {
-        if (!isExist(prevPeriod)) {
-            prevPeriod = new Period();
-        }
-        Payment payment, prevPayment;
-        ArrayList<Payment> payments = this.getListPayments();
-        ArrayList<Payment> prevPayments = prevPeriod.getListPayments();
-        
-        
-        for (int i = 0; i < payments.size(); i++) {
-            payment = payments.get(i);
-            prevPayment = prevPayments.get(i);
-            
-//            if (isExist(payment) && payment.fieldsIsEmpty() && isExist(prevPayment) && prevPayment.fieldsIsEmpty()
-//                && !prevPayment.getBalance().containValues())
-//                    continue;
-//            
-//            if (isExist(payment) && payment.fieldsIsEmpty() && !isExist(prevPayment))
-//                    continue;
-//            if (!isExist(payment) && isExist(prevPayment) && prevPayment.fieldsIsEmpty()
-//                    && !prevPayment.getBalance().containValues())
-//                    continue;
-            if (!isExist(payment) && !isExist(prevPayment))
-                continue;
-            
-            return false;
-        }
-        
-        return true;
-    }
-    
-    private boolean paymentIsValid(Payment payment) {
-        return isExist(payment) && isExist(payment.getBalance());
-    }
-    
-    private boolean hasAfterValues() {
-        Payment payment;
-        ArrayList<Payment> payments = this.getListPayments();
-        
-        for (int i = 0; i < payments.size(); i++) {
-            payment = payments.get(i);
-            
-            if (!paymentIsValid(payment))
-                continue;
-            
-            if (payment.getBalance().hasAfterValues())
-                return true;
-        }
-        return false;
-    }
-    
-    private void fillBeforeValues(Period period) {
-        Payment payment, paymentForFill;
-        ArrayList<Payment> payments = period.getListPayments();
-        ArrayList<Payment> paymentsForFill = this.getListPayments();
-        
-        for (int i = 0; i < payments.size(); i++) {
-            payment = payments.get(i);
-            paymentForFill = paymentsForFill.get(i);
-            
-            if (!paymentIsValid(payment) && paymentIsValid(paymentForFill)) {
-                paymentForFill.setBalance(null);
-            }
-            
-            if (!paymentIsValid(payment)) // можно обнулять сальдо следующих если этого платежа нет. выше сделал вроде
-                continue;
-            
-            if (!isExist(paymentForFill)) {
-                if (i == 0) paymentForFill = new Rent();
-                if (i == 1) paymentForFill = new Fine();
-                if (i == 2) paymentForFill = new TaxLand();
-                if (i == 3) paymentForFill = new Services();
-                if (i == 4) paymentForFill = new Equipment();
-            }
-            
-//                paymentForFill = paymentForFill.createNewPayment();
-            if (!isExist(paymentForFill.getBalance()))
-                paymentForFill.setBalance(new Balance());
-           
-            paymentForFill.getBalance().fillBeforeValues(payment.getBalance()); 
-        }
-    }
-    
     public void calculateBalance(Period period) {
-//        if (!isValid(nextPeriod)) return;
-//        
-//        if (balanceIsEmpty(prevPeriod)) {
-//            setRentPayment(null);
-//            setFinePayment(null);
-//            setTaxLandPayment(null);
-//            setServicesPayment(null);
-//            setEquipmentPayment(null);
-//            setExtraCost(null);
-//            setBalance(null);
-//            return;
-//        }
-        if (!period.hasAfterValues())
-            return;
-        fillBeforeValues(period);
-//        if (!isExist(prevPeriod)) {
-//            prevPeriod = new Period();
-//        }
         Payment payment;
         ArrayList<Payment> payments = this.getListPayments();
-        
+        BalanceTable balanceTable = getBalanceTable().copy();
         for (int i = 0; i < payments.size(); i++) {
             payment = payments.get(i);
             
-            if (paymentIsValid(payment)) {
-                payment.calculate();
-            
-//                if (i == 0) {
-//                    setRentPayment((Rent) payment);
-//                }
-            }
+            if (isExist(payment))
+                payment.calculate(getBalanceTable(), balanceTable);
         }
-    }
-    
-    public boolean balanceIsNull() {
-        Payment rent = getRentPayment();
-        Payment fine = getFinePayment();
-        Payment taxLand = getTaxLandPayment();
-        Payment services = getServicesPayment();
-        Payment equipment = getEquipmentPayment();
-
-        if (isExist(rent)) {
-            Balance rentBalance = rent.getBalance();
-            if (rentBalance.hasBeforeValues())
-                return false;
-        }
-        if (isExist(fine)) {
-            Balance fineBalance = fine.getBalance();
-            if (fineBalance.hasBeforeValues())
-                return false;
-        }
-        if (isExist(taxLand)) {
-            Balance taxLandBalance = taxLand.getBalance();
-            if (taxLandBalance.hasBeforeValues())
-                return false;
-        }
-        if (isExist(services)) {
-            Balance servicesBalance = services.getBalance();
-            if (servicesBalance.hasBeforeValues())
-                return false;
-        }
-        if (isExist(equipment)) {
-            Balance equipmentBalance = equipment.getBalance();
-            if (equipmentBalance.hasBeforeValues())
-                return false;
-        }
-        return true;
+        setNextBalanceTable(balanceTable);
     }
     
     public int getId() {
@@ -324,19 +174,20 @@ public class Period {
         this.extraCost.set(extraCost);
     }
             
-    public BalanceTable getBalance() {
-        return balance.get();
+    public BalanceTable getBalanceTable() {
+        return balanceTable.get();
     }
-    public void setBalance(BalanceTable balance) {
-        this.balance.set(balance);
+    public void setBalanceTable(BalanceTable balanceTable) {
+        this.balanceTable.set(balanceTable);
     }
     
-    public void bindTable() {
-        BalanceTable balanceTable;
-        if (getBalance() == null) {
-            balanceTable = new BalanceTable();
-            this.setBalance(balanceTable);
-        }
+    private ObjectProperty<BalanceTable> nextBalanceTable;
+    
+    public BalanceTable getNextBalanceTable() {
+        return nextBalanceTable.get();
+    }
+    public void setNextBalanceTable(BalanceTable nextBalanceTable) {
+        this.nextBalanceTable.set(nextBalanceTable);
     }
 
     public String getMonthName(int monthNum, boolean genitive) {
