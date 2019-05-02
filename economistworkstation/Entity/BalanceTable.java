@@ -6,11 +6,9 @@
 package economistworkstation.Entity;
 
 import economistworkstation.Database;
-import static economistworkstation.Util.Util.isExist;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Objects;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -181,61 +179,35 @@ public class BalanceTable {
         return ps;
     }
     
-    public void buildTable(Period period) {
-        Payment rent = period.getRentPayment();
-        Payment fine = period.getFinePayment();
-        Payment taxLand = period.getTaxLandPayment();
-        Payment services = period.getServicesPayment();
-        Payment equipment = period.getEquipmentPayment();
-        
-        if (Objects.equals(getCreditRent(), -1.0)) return;
-        
-        if (isExist(rent)) {
-            Balance rentBalance = rent.getBalance();
-            setCreditRent(rentBalance.getCreditBefore());
-            setDebitRent(rentBalance.getDebitBefore());
-        }
-        if (isExist(fine)) {
-            Balance fineBalance = fine.getBalance();
-            setCreditFine(fineBalance.getCreditBefore());
-            setDebitFine(fineBalance.getDebitBefore());
-        }
-        if (isExist(taxLand)) {
-            Balance taxLandBalance = taxLand.getBalance();
-            setCreditTaxLand(taxLandBalance.getCreditBefore());
-            setDebitTaxLand(taxLandBalance.getDebitBefore());
-        }
-        if (isExist(services)) {
-            Balance servicesBalance = services.getBalance();
-            setCreditService(servicesBalance.getCreditBefore());
-            setDebitService(servicesBalance.getDebitBefore());
-        }
-        if (isExist(equipment)) {
-            Balance equipmentBalance = equipment.getBalance();
-            setCreditEquipment(equipmentBalance.getCreditBefore());
-            setDebitEquipment(equipmentBalance.getDebitBefore());
-        }
-    }
-    
     public void prepareToDelete() {
         setCreditRent(-1.0);
     }
     
-    public void bindPeriod(Period period) {
-        period.setBalance(this);
+//    public void bindPeriod(Period period) {
+//        period.setBalance(this);
+//    }
+    
+    public boolean isEmpty() {
+        return getCreditRent() == null 
+                && getDebitRent() == null 
+                && getCreditFine() == null 
+                && getDebitFine() == null
+                && getCreditTaxLand() == null
+                && getDebitTaxLand() == null 
+                && getCreditService() == null
+                && getDebitService() == null
+                && getCreditEquipment() == null 
+                && getDebitEquipment() == null;
     }
     
-    public boolean isEmpty() { //проверять надо каждый конкретный баланс платежа в цикле, а не это все
-        return getCreditRent()== null 
-                && getDebitRent()== null 
-                && getCreditFine()== null 
-                && getDebitFine()== null
-                && getCreditTaxLand()== null
-                && getDebitTaxLand()== null 
-                && getCreditService()== null
-                && getDebitService()== null
-                && getCreditEquipment()== null 
-                && getDebitEquipment()== null;
+    public BalanceTable copy() {
+        BalanceTable balanceTable = new BalanceTable(
+                getCreditRent(), getDebitRent(),
+                getCreditFine(), getDebitFine(),
+                getCreditTaxLand(), getDebitTaxLand(),
+                getCreditService(), getDebitService(),
+                getCreditEquipment(), getDebitEquipment());
+        return balanceTable;
     }
     
     @Override
