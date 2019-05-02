@@ -8,7 +8,6 @@ package economistworkstation.Model;
 import economistworkstation.ContractData;
 import economistworkstation.Database;
 import economistworkstation.EconomistWorkstation;
-import economistworkstation.Entity.Balance;
 import economistworkstation.Entity.BalanceTable;
 import economistworkstation.Entity.ExtraCost;
 import economistworkstation.Entity.Fine;
@@ -304,16 +303,15 @@ public class PeriodModel {
     
     public static void updateBalancePeriod(Period period) {
         Integer idBalance = addBalance(period);
-        if (idBalance == null) period.setBalance(null);
+        if (idBalance == null) period.setBalanceTable(new BalanceTable());
     }
             
     public static Integer addBalance(Period period) {
-        BalanceTable balance = period.getBalance();
+        BalanceTable balance = period.getBalanceTable();
         int id = period.getId();
         
         if (balance == null) return null;
-        
-        balance.buildTable(period);
+        if (balance.isEmpty()) return null;
         
         PreparedStatement ps;
         String state;
@@ -437,16 +435,6 @@ public class PeriodModel {
                     rs.getObject("extra_cost_equipment"));
             extraCost.setId(rs.getInt("id_extra_cost"));
             return extraCost;
-        }
-        return null;
-    }
-    private static Balance createObjectBalance(Object credit, Object debit, int idBalance) throws SQLException {
-        if (idBalance != 0) {
-            Balance balance = new Balance(
-                    credit, 
-                    debit);
-            balance.setId(idBalance);
-            return balance;
         }
         return null;
     }
