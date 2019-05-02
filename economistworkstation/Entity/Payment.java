@@ -10,6 +10,7 @@ import static economistworkstation.Util.Util.isExist;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.Objects;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -26,17 +27,17 @@ public abstract class Payment {
     private final IntegerProperty id;
     private final ObjectProperty<Double> paid;
     private final StringProperty datePaid;
-    private final ObjectProperty<Balance> balance;
     
     public Payment() {
-        this(null, null, null);
+        this(null, null);
     }
     
-    public Payment(Object paid, String datePaid, Balance balance) {
+    public Payment(Object paid, String datePaid) {
         this.id = new SimpleIntegerProperty(0);
         this.paid = new SimpleObjectProperty(paid);
         this.datePaid = new SimpleStringProperty(datePaid);
-        this.balance = new SimpleObjectProperty(balance);
+        this.state = new SimpleStringProperty();
+        this.info = new SimpleStringProperty();
     }
     
     public abstract PreparedStatement getInsertStatement(Database db) throws SQLException;
@@ -46,22 +47,21 @@ public abstract class Payment {
     public abstract Double sumToPay();
     public abstract boolean isEmpty();
     public abstract Payment copy();
-    /**
-     * @param prevPeriod
-     * @return existing Payment or new Payment
-     */
-    public abstract Payment getPrevPayment(Period prevPeriod);
     public abstract void bindPeriod(Period period);
     /**
      *
      * @param field
-     * @param period
      */
-    public abstract void saveValuesOf(Field field, Period period);
+    public abstract void saveValuesOf(Field field);
     public abstract boolean fieldsIsFilled(Field field);
     public abstract void fill(Field field);
     public abstract void setLabels(Map<String, Label> labels);
     public abstract Payment createNewPayment();
+    
+    public abstract Double getCredit(BalanceTable balanceTable);
+    public abstract void setCredit(BalanceTable balanceTable, Double credit);
+    public abstract Double getDebit(BalanceTable balanceTable);
+    public abstract void setDebit(BalanceTable balanceTable, Double debit);
     
     public int getId() {
         return id.get();
@@ -82,16 +82,6 @@ public abstract class Payment {
     }
     public void setDatePaid(String datePaid) {
         this.datePaid.set(datePaid);
-    }
-    
-    public Balance getBalance() {
-        if (balance.get() == null)
-            this.balance.set(new Balance());
-
-        return balance.get();
-    }
-    public void setBalance(Balance balance) {
-        this.balance.set(balance);
     }
     
     public Double getDiff() {
@@ -123,11 +113,12 @@ public abstract class Payment {
     }
     
     private void setEmptyBalance() {
-        Balance balance = getBalance();
-        balance.setState("Нет платежа");
-        balance.setInfo("");
+        setCredit(nextBalanceTable, null);
+        setDebit(nextBalanceTable, null);
+        setState("Нет платежа");
+        setInfo("");
     }
-    
+     
     protected boolean fieldsIsEmpty() {
         try {
             Double needPay = sumToPay();
@@ -141,19 +132,170 @@ public abstract class Payment {
     
     public void prepareToDelete() {
         setPaid(-1.0);
-        setBalance(null);
     }
     
-    public void calculate() {
+    private BalanceTable balanceTable;
+    private BalanceTable nextBalanceTable;
+    public void calculate(BalanceTable balanceTable, BalanceTable nextBalanceTable) {
+             if (fieldsIsEmpty() && !isExist(balanceTable)) {
+                setEmptyBalance();
+                return;
+            }
+            if (!isExist(balanceTable))
+                balanceTable = new BalanceTable();
+            this.balanceTable = balanceTable;
+            this.nextBalanceTable = nextBalanceTable;
             double diff = getDiff();
-//            if (!isExist(prevPayment) && fieldsIsEmpty()) {
+//            if (fieldsIsEmpty()) {
 //                setEmptyBalance();
 //                return;
 //            }
-//                
-//            Balance prevBalance = isExist(prevPayment) 
-//                    ? prevPayment.getBalance()
-//                    : new Balance();
-            getBalance().calculateValuesAfter(diff);
+            calculateValuesAfter(diff);
+            this.balanceTable = null;
+            this.nextBalanceTable = null;
+    }
+    
+    private void log(String text) {
+        System.out.println(text);
+    }
+    private String format(String text) {
+        String formatString = text;
+        return formatString;
+    }
+    private String format(String text, double value) {
+        String formatString = String.format(text, value);
+        return formatString;
+    }
+    private String format(String text, double value1, double value2) {
+        String formatString = String.format(text, value1, value2);
+        return formatString;
+    }
+    private void saveResult(String state, String info) {
+        setState(state);
+        setInfo(info);
+        log(info);
+    }
+    
+    public void calcWithCredit(Double credit, Double diff) {
+        if (Objects.equals(credit, diff)) {
+            setCredit(nextBalanceTable, null);
+            setDebit(nextBalanceTable, null);
+            saveResult("Недооплачено",
+                    format("взято с кредита: %.2f, без остатка", diff));
+        } else if (credit > diff) {
+            credit -= diff;
+            setCredit(nextBalanceTable, credit);
+            setDebit(nextBalanceTable, null);
+            saveResult("Недооплачено",
+                    format("взято с кредита: %.2f, остаток кредита: %.2f", diff, credit));
+        } else { //if (credit < diff)
+            diff -= credit;
+            setCredit(nextBalanceTable, null);
+            setDebit(nextBalanceTable, diff);
+            saveResult("Недооплачено",
+                    format("взято с кредита %.2f, уйдет в дебет: %.2f", credit, diff));
+        }
+    }
+    public void calcWithDebit(Double debit, Double diff) {
+        if (Objects.equals(debit, diff)) {
+            setCredit(nextBalanceTable, null);
+            setDebit(nextBalanceTable, null);
+            saveResult("Переоплачено",
+                    format("оплачен дебет: %.2f, без остатка", debit));
+        } else if (debit > diff) {
+            debit -= diff;
+            setCredit(nextBalanceTable, null);
+            setDebit(nextBalanceTable, debit);
+            saveResult("Переоплачено",
+                    format("оплачен дебет: %.2f, остаток дебета %.2f", diff, debit));
+        } else { //if (debit < diff)
+            diff -= debit;
+            setCredit(nextBalanceTable, diff);
+            setDebit(nextBalanceTable, null);
+            saveResult("Переоплачено",
+                    format("оплачено дебета %.2f, уйдет в кредит: %.2f", debit, diff));
+        }
+    }
+    
+    private void calcIfZero(Double credit, Double debit) {
+        if (isExist(credit)) {
+            setDebit(nextBalanceTable, null);
+            setCredit(nextBalanceTable, credit);
+            saveResult("Оплачено",
+                    format("остается кредит: %.2f", credit));
+        } else if (isExist(debit)) {
+            setDebit(nextBalanceTable, debit);
+            setCredit(nextBalanceTable, null);
+            saveResult("Оплачено",
+                    format("остается дебет: %.2f", debit));
+        } else {
+            setDebit(nextBalanceTable, null);
+            setCredit(nextBalanceTable, null);
+            saveResult("Оплачено",
+                    format("долгов нет"));
+        }
+    }
+    
+    private void calcIfNotEnought(Double credit, Double debit, Double diff) {
+        if (isExist(credit)) {
+            calcWithCredit(credit, diff);
+        } else if (isExist(debit)) {
+            setDebit(nextBalanceTable, diff + debit);
+            setCredit(nextBalanceTable, null);
+            saveResult("Недооплачено",
+                    format("текущий дебет: %.2f + новый %.2f", debit, diff));
+        } else {
+            setDebit(nextBalanceTable, diff);
+            setCredit(nextBalanceTable, null);
+            saveResult("Недооплачено",
+                    format("уйдет в дебет %.2f", diff));
+        }
+    }
+    
+    private void calcIfOverpaid(Double credit, Double debit, Double diff) {
+        diff = Math.abs(diff);
+        if (isExist(debit)) {
+            calcWithDebit(debit, diff);
+        } else if (isExist(credit)) {
+            setDebit(nextBalanceTable, null);
+            setCredit(nextBalanceTable, diff + credit);
+            saveResult("Переоплачено",
+                    format("текущий кредит: %.2f + новый %.2f", credit, diff));
+        } else {
+            setCredit(nextBalanceTable, diff);
+            setDebit(nextBalanceTable, null);
+            saveResult("Переоплачено",
+                    format("уйдет в кредит %.2f", diff));
+        }
+    }
+    
+    private void calculateValuesAfter(Double diff) {
+        Double prevCredit = getCredit(balanceTable);
+        Double prevDebit = getDebit(balanceTable);
+        
+        if (diff == 0.0) {
+            calcIfZero(prevCredit, prevDebit);
+        } else if (diff > 0) {
+            calcIfNotEnought(prevCredit, prevDebit, diff);
+        } else {
+            calcIfOverpaid(prevCredit, prevDebit, diff);
+        }
+    }
+    
+    private StringProperty state;
+    private StringProperty info;
+    
+    public String getState() {
+        return state.get();
+    }
+    public void setState(String state) {
+        this.state.set(state);
+    }
+    
+    public String getInfo() {
+        return info.get();
+    }
+    public void setInfo(String info) {
+        this.info.set(info);
     }
 }
