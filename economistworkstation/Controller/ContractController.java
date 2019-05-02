@@ -133,58 +133,42 @@ public class ContractController implements Initializable, BaseController {
         }
     }
     
-    private Period getPrevPeriod() {
-        int index = periodTable.getSelectionModel().getSelectedIndex();
-        if (index > 0)
-            return periodTable.getItems().get(index - 1);
-        else
-            return null;
-    }
-    
-//    public void recalculateBalance(Period period) {
-//        Period prevPeriod = null;
-//        
-//        int i = periods.indexOf(period);
-//        if (i != 0) prevPeriod = periods.get(i - 1);
-//        
-//        for (; i < periods.size(); i++) {
-//            period = periods.get(i);
-//            period.calculateBalance(prevPeriod);
-//            prevPeriod = period;
-//        }
-//    }
-    
     public void recalculateBalance(Period period) {
         Period nextPeriod;
         
         int length = periods.size();
         int i = periods.indexOf(period) + 1;
-        
+        boolean tableIsExist = false;
         for (; i < length; i++) {
             nextPeriod = periods.get(i);
             
+            BalanceTable balanceTable = nextPeriod.getBalanceTable();
+            BalanceTable prevBalanceTable = period.getNextBalanceTable();
+            
+            if (isExist(balanceTable))
+                tableIsExist = true;
+            
+            if (!prevBalanceTable.isEmpty() && tableIsExist) { //update
+                prevBalanceTable.setId(nextPeriod.getId());
+            } else if (tableIsExist && prevBalanceTable.isEmpty()) {
+                prevBalanceTable.prepareToDelete();
+                prevBalanceTable.setId(nextPeriod.getId());
+            }
+            nextPeriod.setBalanceTable(prevBalanceTable);
+            PeriodModel.updateBalancePeriod(nextPeriod); //BalanceTable will be empty or filled. Not null.
             nextPeriod.calculateBalance(period);
             
-            BalanceTable balanceTable = nextPeriod.getBalance();
-            if (!nextPeriod.balanceIsNull() && !isExist(balanceTable)) {
-                period.bindTable();
-            } else if (isExist(balanceTable) && nextPeriod.balanceIsNull()) {
-                balanceTable.prepareToDelete();
-                balanceTable.bindPeriod(period);
-            }
-            PeriodModel.updateBalancePeriod(nextPeriod);
-            
             period = nextPeriod;
+            tableIsExist = false;
         }
     }
     
     @FXML
     void handleEditPeriod(ActionEvent event) {
         Period selectedPeriod = periodTable.getSelectionModel().getSelectedItem();
-        Period prevPeriod = getPrevPeriod();
         
         if (selectedPeriod != null) {
-            boolean okClicked = showPeriodForm(selectedPeriod, prevPeriod);
+            boolean okClicked = showPeriodForm(selectedPeriod);
             if (okClicked) {
                 PeriodModel.updatePeriod(selectedPeriod.getId(), selectedPeriod);
                 recalculateBalance(selectedPeriod);
@@ -204,7 +188,7 @@ public class ContractController implements Initializable, BaseController {
     }
  
     
-    public boolean showPeriodForm(Period period, Period prevPeriod) {
+    public boolean showPeriodForm(Period period) {
         try {
             // Загружаем fxml-файл и создаём новую сцену
             // для всплывающего диалогового окна.
@@ -223,7 +207,7 @@ public class ContractController implements Initializable, BaseController {
             // Передаём адресата в контроллер.
             PeriodFormController controller = loader.getController();
             controller.setDialogStage(dialogStage);
-            controller.setPeriod(period, contract, prevPeriod);
+            controller.setPeriod(period, contract);
             
             // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
             dialogStage.showAndWait();
