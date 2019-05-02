@@ -6,7 +6,6 @@
 package economistworkstation.Entity;
 
 import economistworkstation.Database;
-import static economistworkstation.Util.Util.isExist;
 import static economistworkstation.Util.Util.parseField;
 import static economistworkstation.Util.Util.setText;
 import java.sql.PreparedStatement;
@@ -33,14 +32,14 @@ public class Services extends Payment {
     private final ObjectProperty<Double> tariffElectricity;
     
     public Services() {
-        this(null, null, null, null, null, null, null, null, null, null, null);
+        this(null, null, null, null, null, null, null, null, null, null);
     }
     
     public Services(Object paid, String datePaid, Object countWater, 
             Object countElectricity, Object costHeading, Object costGarbage,
             Object costInternet, Object costTelephone, Object tariffWater, 
-            Object tariffElectricity, Balance balance) {
-        super(paid, datePaid, balance);
+            Object tariffElectricity) {
+        super(paid, datePaid);
         this.countWater = new SimpleObjectProperty(countWater);
         this.countElectricity = new SimpleObjectProperty(countElectricity);
         this.costHeading = new SimpleObjectProperty(costHeading);
@@ -218,13 +217,13 @@ public class Services extends Payment {
         Services services = new Services(getPaid(), getDatePaid(), 
             getCountWater(), getTariffWater(), getCountElectricity(),
             getTariffElectricity(), getCostHeading(), getCostGarbage(),
-            getCostInternet(), getCostTelephone(), getBalance().copy());
+            getCostInternet(), getCostTelephone());
         services.setId(getId());
         return services;
     }
     
     @Override
-    public void saveValuesOf(Field field, Period period) {
+    public void saveValuesOf(Field field) {
         setCountWater(parseField(field.getCountWater()));
         setTariffWater(parseField(field.getTariffWater()));
         setCountElectricity(parseField(field.getCountElectricity()));
@@ -236,8 +235,6 @@ public class Services extends Payment {
 
         setPaid(parseField(field.getPaymentServices()));
         setDatePaid(parseField(field.getDatePaidServices()));
-        if (isExist(period.getServicesPayment()) && isExist(period.getServicesPayment().getBalance()))
-            setBalance(period.getServicesPayment().getBalance().copy());
     }
     
     @Override
@@ -256,18 +253,6 @@ public class Services extends Payment {
     }
     
     @Override
-    public Payment getPrevPayment(Period prevPeriod) {
-        Payment prevPayment = null;
-        if (isExist(prevPeriod))
-            prevPayment = prevPeriod.getServicesPayment();
-        
-        if (isExist(prevPayment))
-            return prevPayment;
-        
-        return prevPayment;
-    }
-    
-    @Override
     public void setLabels(Map<String, Label> labels) {
         setText(labels.get("costCountWater"), getCountWater());
         setText(labels.get("tariffWater"), getTariffWater());
@@ -282,6 +267,23 @@ public class Services extends Payment {
     @Override
     public Payment createNewPayment() {
         return new Services();
+    }
+    
+    @Override
+    public Double getCredit(BalanceTable balanceTable) {
+        return balanceTable.getCreditService();
+    }
+    @Override
+    public void setCredit(BalanceTable balanceTable, Double credit) {
+        balanceTable.setCreditService(credit);
+    }
+    @Override
+    public Double getDebit(BalanceTable balanceTable) {
+        return balanceTable.getDebitService();
+    }
+    @Override
+    public void setDebit(BalanceTable balanceTable, Double debit) {
+        balanceTable.setDebitService(debit);
     }
    
     @Override

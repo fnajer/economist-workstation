@@ -6,7 +6,6 @@
 package economistworkstation.Entity;
 
 import economistworkstation.Database;
-import static economistworkstation.Util.Util.isExist;
 import static economistworkstation.Util.Util.parseField;
 import static economistworkstation.Util.Util.setText;
 import java.sql.PreparedStatement;
@@ -26,11 +25,11 @@ public class Fine extends Payment {
     private final ObjectProperty<Double> costFine;
     
     public Fine() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
     
-    public Fine(Object paid, String datePaid, Object costFine, Balance balance) {
-        super(paid, datePaid, balance);
+    public Fine(Object paid, String datePaid, Object costFine) {
+        super(paid, datePaid);
         this.costFine = new SimpleObjectProperty(costFine);
     }
     
@@ -88,20 +87,17 @@ public class Fine extends Payment {
     
     @Override
     public Fine copy() {
-        Fine fine = new Fine(getPaid(), getDatePaid(), getFine(),
-            getBalance().copy());
+        Fine fine = new Fine(getPaid(), getDatePaid(), getFine());
         fine.setId(getId());
         return fine;
     }
     
     @Override
-    public void saveValuesOf(Field field, Period period) {
+    public void saveValuesOf(Field field) {
         setFine(parseField(field.getCostFine()));
 
         setPaid(parseField(field.getPaymentFine()));
         setDatePaid(parseField(field.getDatePaidFine()));
-        if (isExist(period.getFinePayment()) && isExist(period.getFinePayment().getBalance()))
-            setBalance(period.getFinePayment().getBalance().copy());
     }
     
     @Override
@@ -120,18 +116,6 @@ public class Fine extends Payment {
     }
     
     @Override
-    public Payment getPrevPayment(Period prevPeriod) {
-        Payment prevPayment = null;
-        if (isExist(prevPeriod))
-            prevPayment = prevPeriod.getFinePayment();
-        
-        if (isExist(prevPayment))
-            return prevPayment;
-        
-        return prevPayment;
-    }
-    
-    @Override
     public void setLabels(Map<String, Label> labels) {
         setText(labels.get("costFine"), getFine());
     }
@@ -139,6 +123,23 @@ public class Fine extends Payment {
     @Override
     public Payment createNewPayment() {
         return new Fine();
+    }
+    
+    @Override
+    public Double getCredit(BalanceTable balanceTable) {
+        return balanceTable.getCreditFine();
+    }
+    @Override
+    public void setCredit(BalanceTable balanceTable, Double credit) {
+        balanceTable.setCreditFine(credit);
+    }
+    @Override
+    public Double getDebit(BalanceTable balanceTable) {
+        return balanceTable.getDebitFine();
+    }
+    @Override
+    public void setDebit(BalanceTable balanceTable, Double debit) {
+        balanceTable.setDebitFine(debit);
     }
     
     @Override

@@ -6,7 +6,6 @@
 package economistworkstation.Entity;
 
 import economistworkstation.Database;
-import static economistworkstation.Util.Util.isExist;
 import static economistworkstation.Util.Util.parseField;
 import static economistworkstation.Util.Util.setText;
 import java.sql.PreparedStatement;
@@ -26,11 +25,11 @@ public class Equipment extends Payment {
     private final ObjectProperty<Double> costEquipment;
     
     public Equipment() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
     
-    public Equipment(Object paid, String datePaid, Object costEquipment, Balance balance) {
-        super(paid, datePaid, balance);
+    public Equipment(Object paid, String datePaid, Object costEquipment) {
+        super(paid, datePaid);
         this.costEquipment = new SimpleObjectProperty(costEquipment);
     }
     
@@ -89,19 +88,17 @@ public class Equipment extends Payment {
     @Override
     public Equipment copy() {
         Equipment equipment = new Equipment(getPaid(), getDatePaid(), 
-            getCostEquipment(), getBalance().copy());
+            getCostEquipment());
         equipment.setId(getId());
         return equipment;
     }
     
     @Override
-    public void saveValuesOf(Field field, Period period) {
+    public void saveValuesOf(Field field) {
         setCostEquipment(parseField(field.getCostEquipment()));
 
         setPaid(parseField(field.getPaymentEquipment()));
         setDatePaid(parseField(field.getDatePaidEquipment()));
-        if (isExist(period.getEquipmentPayment()) && isExist(period.getEquipmentPayment().getBalance()))
-            setBalance(period.getEquipmentPayment().getBalance().copy());
     }
     
     @Override
@@ -118,19 +115,7 @@ public class Equipment extends Payment {
     public void fill(Field field) {
         field.fillEquipment(this);
     }
-    
-    @Override
-    public Payment getPrevPayment(Period prevPeriod) {
-        Payment prevPayment = null;
-        if (isExist(prevPeriod))
-            prevPayment = prevPeriod.getEquipmentPayment();
-        
-        if (isExist(prevPayment))
-            return prevPayment;
-        
-        return prevPayment;
-    }
-    
+
     @Override
     public void setLabels(Map<String, Label> labels) {
         setText(labels.get("costEquipment"), getCostEquipment());
@@ -139,6 +124,23 @@ public class Equipment extends Payment {
     @Override
     public Payment createNewPayment() {
         return new Equipment();
+    }
+    
+    @Override
+    public Double getCredit(BalanceTable balanceTable) {
+        return balanceTable.getCreditEquipment();
+    }
+    @Override
+    public void setCredit(BalanceTable balanceTable, Double credit) {
+        balanceTable.setCreditEquipment(credit);
+    }
+    @Override
+    public Double getDebit(BalanceTable balanceTable) {
+        return balanceTable.getDebitEquipment();
+    }
+    @Override
+    public void setDebit(BalanceTable balanceTable, Double debit) {
+        balanceTable.setDebitEquipment(debit);
     }
     
     @Override

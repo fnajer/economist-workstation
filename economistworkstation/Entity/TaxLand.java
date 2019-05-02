@@ -6,7 +6,6 @@
 package economistworkstation.Entity;
 
 import economistworkstation.Database;
-import static economistworkstation.Util.Util.isExist;
 import static economistworkstation.Util.Util.parseField;
 import static economistworkstation.Util.Util.setText;
 import java.sql.PreparedStatement;
@@ -26,11 +25,11 @@ public class TaxLand extends Payment {
     private final ObjectProperty<Double> costTaxLand;
     
     public TaxLand() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
     
-    public TaxLand(Object paid, String datePaid, Object costTaxLand, Balance balance) {
-        super(paid, datePaid, balance);
+    public TaxLand(Object paid, String datePaid, Object costTaxLand) {
+        super(paid, datePaid);
         this.costTaxLand = new SimpleObjectProperty(costTaxLand);
     }
     
@@ -88,20 +87,17 @@ public class TaxLand extends Payment {
     
     @Override
     public TaxLand copy() {
-        TaxLand taxLand = new TaxLand(getPaid(), getDatePaid(), getTaxLand(),
-            getBalance().copy());
+        TaxLand taxLand = new TaxLand(getPaid(), getDatePaid(), getTaxLand());
         taxLand.setId(getId());
         return taxLand;
     }
     
     @Override
-    public void saveValuesOf(Field field, Period period) {
+    public void saveValuesOf(Field field) {
         setTaxLand(parseField(field.getCostTaxLand()));
 
         setPaid(parseField(field.getPaymentTaxLand()));
         setDatePaid(parseField(field.getDatePaidTaxLand()));
-        if (isExist(period.getTaxLandPayment()) && isExist(period.getTaxLandPayment().getBalance()))
-            setBalance(period.getTaxLandPayment().getBalance().copy());
     }
     
     @Override
@@ -118,18 +114,6 @@ public class TaxLand extends Payment {
     public void fill(Field field) {
         field.fillTaxLand(this);
     }
-
-    @Override
-    public Payment getPrevPayment(Period prevPeriod) {
-        Payment prevPayment = null;
-        if (isExist(prevPeriod))
-            prevPayment = prevPeriod.getTaxLandPayment();
-        
-        if (isExist(prevPayment))
-            return prevPayment;
-        
-        return prevPayment;
-    }
     
     @Override
     public void setLabels(Map<String, Label> labels) {
@@ -139,6 +123,23 @@ public class TaxLand extends Payment {
     @Override
     public Payment createNewPayment() {
         return new TaxLand();
+    }
+    
+    @Override
+    public Double getCredit(BalanceTable balanceTable) {
+        return balanceTable.getCreditTaxLand();
+    }
+    @Override
+    public void setCredit(BalanceTable balanceTable, Double credit) {
+        balanceTable.setCreditTaxLand(credit);
+    }
+    @Override
+    public Double getDebit(BalanceTable balanceTable) {
+        return balanceTable.getDebitTaxLand();
+    }
+    @Override
+    public void setDebit(BalanceTable balanceTable, Double debit) {
+        balanceTable.setDebitTaxLand(debit);
     }
     
     @Override

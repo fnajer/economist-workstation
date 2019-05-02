@@ -6,7 +6,6 @@
 package economistworkstation.Entity;
 
 import economistworkstation.Database;
-import static economistworkstation.Util.Util.isExist;
 import static economistworkstation.Util.Util.parseField;
 import static economistworkstation.Util.Util.setText;
 import java.sql.PreparedStatement;
@@ -27,12 +26,11 @@ public class Rent extends Payment {
     private final ObjectProperty<Double> indexCost;
     
     public Rent() {
-        this(null, null, null, null, null);
+        this(null, null, null, null);
     }
     
-    public Rent(Object paid, String datePaid, Object cost, Object indexCost,
-            Balance balance) {
-        super(paid, datePaid, balance);
+    public Rent(Object paid, String datePaid, Object cost, Object indexCost) {
+        super(paid, datePaid);
         this.cost = new SimpleObjectProperty(cost);
         this.indexCost = new SimpleObjectProperty(indexCost);
     }
@@ -101,21 +99,18 @@ public class Rent extends Payment {
     
     @Override
     public Rent copy() {
-        Rent rent = new Rent(getPaid(), getDatePaid(), getCost(), getIndexCost(),
-            getBalance().copy());
+        Rent rent = new Rent(getPaid(), getDatePaid(), getCost(), getIndexCost());
         rent.setId(getId());
         return rent;
     }
 
     @Override
-    public void saveValuesOf(Field field, Period period) {
+    public void saveValuesOf(Field field) {
         setCost(parseField(field.getCostRent()));
         setIndexCost(parseField(field.getIndexCostRent()));
 
         setPaid(parseField(field.getPaymentRent()));
         setDatePaid(parseField(field.getDatePaidRent()));
-//        if (isExist(period.getRentPayment()) && isExist(period.getRentPayment().getBalance()))
-//            setBalance(period.getRentPayment().getBalance().copy());
     }
     
     @Override
@@ -134,18 +129,6 @@ public class Rent extends Payment {
     }
     
     @Override
-    public Payment getPrevPayment(Period prevPeriod) {
-        Payment prevPayment = null;
-        if (isExist(prevPeriod))
-            prevPayment = prevPeriod.getRentPayment();
-        
-        if (isExist(prevPayment))
-            return prevPayment;
-        
-        return prevPayment;
-    }
-    
-    @Override
     public void setLabels(Map<String, Label> labels) {
         setText(labels.get("costRent"), getCost());
         setText(labels.get("indexCostRent"), getIndexCost());
@@ -154,6 +137,23 @@ public class Rent extends Payment {
     @Override
     public Payment createNewPayment() {
         return new Rent();
+    }
+    
+    @Override
+    public Double getCredit(BalanceTable balanceTable) {
+        return balanceTable.getCreditRent();
+    }
+    @Override
+    public void setCredit(BalanceTable balanceTable, Double credit) {
+        balanceTable.setCreditRent(credit);
+    }
+    @Override
+    public Double getDebit(BalanceTable balanceTable) {
+        return balanceTable.getDebitRent();
+    }
+    @Override
+    public void setDebit(BalanceTable balanceTable, Double debit) {
+        balanceTable.setDebitRent(debit);
     }
                 
     @Override
