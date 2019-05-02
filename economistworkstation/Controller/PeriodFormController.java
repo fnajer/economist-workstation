@@ -6,7 +6,6 @@
 package economistworkstation.Controller;
 
 import economistworkstation.EconomistWorkstation;
-import economistworkstation.Entity.Balance;
 import economistworkstation.Entity.BalanceTable;
 import economistworkstation.Entity.ExtraCost;
 import economistworkstation.Entity.Contract;
@@ -21,16 +20,13 @@ import economistworkstation.Entity.TaxLand;
 import economistworkstation.Model.PeriodModel;
 import economistworkstation.Util.TagParser;
 import economistworkstation.Util.Util;
-import static economistworkstation.Util.Util.setText;
 import static economistworkstation.Util.Util.parseField;
 import static economistworkstation.Util.Util.isExist;
 import static economistworkstation.Entity.Field.isFilled;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
@@ -271,7 +267,6 @@ public class PeriodFormController {
 
     private Stage dialogStage;
     private Period period;
-    private Period prevPeriod;
     private boolean okClicked = false;
     
     public void setDialogStage(Stage dialogStage) {
@@ -284,9 +279,8 @@ public class PeriodFormController {
     private Services services = null;
     private Equipment equipment = null;
     
-    public void setPeriod(Period period, Contract contract, Period prevPeriod) {
+    public void setPeriod(Period period, Contract contract) {
         this.period = period;
-        this.prevPeriod = prevPeriod;
         
         Util.setCalledClass(this);
         
@@ -309,8 +303,10 @@ public class PeriodFormController {
         
         initCalc();
         
+        this.nextBalanceTable = new BalanceTable();
         setPaymentState();
     }
+    private BalanceTable nextBalanceTable;
     
     private void fillPayments() {
         Payment payment;
@@ -319,23 +315,9 @@ public class PeriodFormController {
             payment.fill(fields);
         }
     }
-    
-    private boolean balanceFieldsIsFilled() {
-        return isFilled(paymentRentField) || isFilled(sumExtraCostRentLabel)
-                || isFilled(paymentFineField) || isFilled(sumExtraCostFineLabel)
-                || isFilled(paymentTaxLandField) || isFilled(sumExtraCostTaxLandLabel)
-                || isFilled(paymentServicesField) || isFilled(sumServicesLabel)
-                || isFilled(paymentEquipmentField) || isFilled(sumExtraCostEquipmentLabel);
-    }
 
     private void setBalanceTable() {
-//        BalanceTable balanceTable = period.getBalance();
-//        if (balanceFieldsIsFilled()) { 
-//            period.bindTable(); //safeGetTable()
-//        } else if (isExist(balanceTable) && period.balanceIsNull()) {
-//            balanceTable.prepareToDelete();
-//            balanceTable.bindPeriod(period);
-//        }
+        period.setNextBalanceTable(nextBalanceTable);
     }
     
     private void setPaymentState() {
@@ -349,12 +331,10 @@ public class PeriodFormController {
     private void handleBalanceFields(Payment payment,
             Label statePaymentLbl, Label balancePaymentLbl) 
     {
-//        Payment prevPayment = payment.getPrevPayment(prevPeriod);
-        payment.calculate();
+        payment.calculate(period.getBalanceTable(), nextBalanceTable);
         
-        Balance balance = payment.getBalance();
-        statePaymentLbl.setText(balance.getState());
-        balancePaymentLbl.setText(balance.getInfo());
+        statePaymentLbl.setText(payment.getState());
+        balancePaymentLbl.setText(payment.getInfo());
     }
     
     private void refreshExtraCost() {
@@ -377,7 +357,7 @@ public class PeriodFormController {
             paymentSrc = payments.get(i + 1);
 
             if (payment.fieldsIsFilled(fields)) {
-                payment.saveValuesOf(fields, period);
+                payment.saveValuesOf(fields);
                 payment.bindPeriod(period);
             } else if (isExist(paymentSrc) && payment.isEmpty()) {
                 payment.prepareToDelete();
