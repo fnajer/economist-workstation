@@ -87,7 +87,8 @@ public class ExcelCreator {
     }
     
     public static void printAccountPayment(Contract contract, Period period) throws IOException {
-       
+//        Document document = new AccountDocument();
+//        document.create
         File file = new File("C:\\Users\\fnajer\\Desktop\\workbook.xls");
 
         HSSFWorkbook workbook;
@@ -197,7 +198,7 @@ public class ExcelCreator {
         return indexStartRow;
     }
     
-    public static void buildAcr(Workbook workbook, Consumer<ContractData> method,
+    public static void buildDocument(Workbook workbook, Consumer<ContractData> method,
             ObservableList<ContractData> data) 
     {
         for (Sheet sheet : workbook) {
@@ -209,8 +210,8 @@ public class ExcelCreator {
             TagParser.num = 1;
             for (Row row : sheet) {
                 if (row.getRowNum() > indexStartRow && row.getRowNum() < indexStartRow + data.size()) {
-                    i++;
-                    currentContractData = data.get(i);
+                    i++; // for change serial num of renter
+                    currentContractData = data.get(i); // to go to the next renter
                 }
                 for (Cell cell : row) {
                     CellType cellType = cell.getCellType();
@@ -235,7 +236,7 @@ public class ExcelCreator {
             fullContracts = PeriodModel.getContractData(data);
             
             TagParser.typeDoc = "acrual";
-            buildAcr(workbook, TagParser::convertTags, fullContracts);
+            buildDocument(workbook, TagParser::convertTags, fullContracts);
         }
         
         try (OutputStream out = new FileOutputStream("C:\\Users\\fnajer\\Desktop\\workbookAcrNew.xls")) {
@@ -257,7 +258,7 @@ public class ExcelCreator {
             fullContracts = PeriodModel.getContractData(data);
             
             TagParser.typeDoc = "memorial";
-            buildAcr(workbook, TagParser::convertTags, fullContracts);
+            buildDocument(workbook, TagParser::convertTags, fullContracts);
         }
         
         try (OutputStream out = new FileOutputStream("C:\\Users\\fnajer\\Desktop\\workbookMemNew.xls")) {
@@ -265,6 +266,69 @@ public class ExcelCreator {
         }
         
         System.out.println("Создан документ 'Меморальный ордер'");
+    }
+    
+    private static int addTemplateRowsAccum(Workbook workbook, int contractsSize) {
+        int indexStartRow = findRow(workbook, "<num>");
+        if (indexStartRow != -1)
+            for (int i = indexStartRow + 1; i < contractsSize + indexStartRow; i++) {
+                copyRow(workbook, sheet, indexStartRow, indexStartRow+4);
+                copyRow(workbook, sheet, indexStartRow+1, indexStartRow+5);
+                copyRow(workbook, sheet, indexStartRow+2, indexStartRow+6);
+                copyRow(workbook, sheet, indexStartRow+3, indexStartRow+7);
+//                int n = 4; // 4 - iterate count. count rows, that will be copy
+//                for (int ii = 0, j = n + indexStartRow; ii < n; ii++, j++) {
+//                    copyRow(workbook, sheet, indexStartRow + ii, j);
+//                }
+            }
+        return indexStartRow;
+    }
+    
+    public static void buildAccum(Workbook workbook, Consumer<ContractData> method,
+            ObservableList<ContractData> data) 
+    {
+        for (Sheet sheet : workbook) {
+            ExcelCreator.sheet = sheet;
+            int indexStartRow = addTemplateRowsAccum(workbook, data.size());
+            TagParser.indexStartRow = indexStartRow + 1;
+            int i = 0;
+            ContractData currentContractData = data.get(i);
+            TagParser.num = 1;
+            for (Row row : sheet) {
+                if (row.getRowNum() > indexStartRow && row.getRowNum() < indexStartRow + data.size()) {
+                    
+                }
+                for (Cell cell : row) {
+                    CellType cellType = cell.getCellType();
+                    if (cellType == STRING) {
+                        currentContractData.setCell(cell);
+                        method.accept(currentContractData);
+                    }
+                }
+            }
+        }
+    }
+    
+    public static void printAccumulationStatement() throws IOException {
+        File file = new File("C:\\Users\\fnajer\\Desktop\\workbookAccum.xls");
+
+        Workbook workbook;
+        ObservableList<ContractData> fullContracts;
+        try (FileInputStream inputStream = new FileInputStream(file)) {
+            workbook = new HSSFWorkbook(inputStream);
+            
+            LocalDate data = LocalDate.parse("2019-09-01");
+            fullContracts = PeriodModel.getContractData(data);
+            
+            TagParser.typeDoc = "accumulation";
+            buildAccum(workbook, TagParser::convertTags, fullContracts);
+        }
+        
+        try (OutputStream out = new FileOutputStream("C:\\Users\\fnajer\\Desktop\\workbookAccumNew.xls")) {
+            workbook.write(out);
+        }
+        
+        System.out.println("Создан документ 'Накопительная ведомость'");
     }
     
     private static void copyRow(Workbook workbook, Sheet worksheet, 
