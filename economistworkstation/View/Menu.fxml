@@ -23,6 +23,7 @@
             <MenuItem fx:id="accounts" mnemonicParsing="false" onAction="#updateAccounts" text="Переназначить счета" />
             <MenuItem mnemonicParsing="false" onAction="#printAcruals" text="Ведомость начисления за месяц" />
             <MenuItem mnemonicParsing="false" onAction="#printMemorialOrder" text="Мемориальный ордер" />
+            <MenuItem mnemonicParsing="false" onAction="#printAccumulationStatement" text="Накопительная ведомость" />
         </items>
       </Menu>
       <Menu mnemonicParsing="false" text="Арендатор">
