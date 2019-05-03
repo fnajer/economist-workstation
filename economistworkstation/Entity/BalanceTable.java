@@ -36,10 +36,10 @@ public class BalanceTable {
         this(null, null, null, null, null, null, null, null, null, null);
     }
     
-    public BalanceTable(Double creditRent, Double debitRent, Double creditFine, 
-            Double debitFine, Double creditTaxLand, Double debitTaxLand,
-            Double creditService, Double debitService, Double creditEquipment,
-            Double debitEquipment) {
+    public BalanceTable(Object creditRent, Object debitRent, Object creditFine, 
+            Object debitFine, Object creditTaxLand, Object debitTaxLand,
+            Object creditService, Object debitService, Object creditEquipment,
+            Object debitEquipment) {
         this.id = new SimpleIntegerProperty(0);
         this.creditRent = new SimpleObjectProperty(creditRent);
         this.debitRent = new SimpleObjectProperty(debitRent);

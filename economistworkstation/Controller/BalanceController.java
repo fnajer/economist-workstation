@@ -5,13 +5,8 @@
  */
 package economistworkstation.Controller;
 
-import economistworkstation.Entity.Balance;
-import economistworkstation.Entity.Equipment;
-import economistworkstation.Entity.Fine;
+import economistworkstation.Entity.BalanceTable;
 import economistworkstation.Entity.Period;
-import economistworkstation.Entity.Rent;
-import economistworkstation.Entity.Services;
-import economistworkstation.Entity.TaxLand;
 import economistworkstation.Util.Util;
 import static economistworkstation.Util.Util.setText;
 import static economistworkstation.Util.Util.isExist;
@@ -55,54 +50,23 @@ public class BalanceController {
     
     public void setBalance(Period period) {
         Util.setCalledClass(this);
-                
-        if (isExist(period.getBalance())) {
-            Balance balanceRent, 
-                    balanceFine, 
-                    balanceTaxLand, 
-                    balanceServices,
-                    balanceEquipment;
-            
-            Rent rent = (Rent) period.getRentPayment();
-            Fine fine = (Fine) period.getFinePayment();
-            TaxLand taxLand = (TaxLand) period.getTaxLandPayment();
-            Services services = (Services) period.getServicesPayment();
-            Equipment equipment = (Equipment) period.getEquipmentPayment();
- 
-            if (isExist(rent)) 
-                balanceRent = period.getRentPayment().getBalance();
-            else 
-                balanceRent = new Balance();
-            setText(creditRentLabel, balanceRent.getCreditBefore());
-            setText(debitRentLabel, balanceRent.getDebitBefore());
-            
-            if (isExist(fine))
-                balanceFine = period.getFinePayment().getBalance();
-            else 
-                balanceFine = new Balance();
-            setText(creditFineLabel, balanceFine.getCreditBefore());
-            setText(debitFineLabel, balanceFine.getDebitBefore());
+        
+        BalanceTable balanceTable = period.getBalanceTable();
+        if (isExist(balanceTable)) {
+            setText(creditRentLabel, balanceTable.getCreditRent());
+            setText(debitRentLabel, balanceTable.getDebitRent());
 
-            if (isExist(taxLand))
-                balanceTaxLand = period.getTaxLandPayment().getBalance();
-            else 
-                balanceTaxLand = new Balance();
-            setText(creditTaxLandLabel, balanceTaxLand.getCreditBefore());
-            setText(debitTaxLandLabel, balanceTaxLand.getDebitBefore());
-            
-            if (isExist(services))
-                balanceServices = period.getServicesPayment().getBalance();
-            else 
-                balanceServices = new Balance();
-            setText(creditServiceLabel, balanceServices.getCreditBefore());
-            setText(debitServiceLabel, balanceServices.getDebitBefore());
-            
-            if (isExist(equipment))
-                balanceEquipment = period.getEquipmentPayment().getBalance();
-            else 
-                balanceEquipment = new Balance();
-            setText(creditEquipmentLabel, balanceEquipment.getCreditBefore());
-            setText(debitEquipmentLabel, balanceEquipment.getDebitBefore());
+            setText(creditFineLabel, balanceTable.getCreditFine());
+            setText(debitFineLabel, balanceTable.getDebitFine());
+
+            setText(creditTaxLandLabel, balanceTable.getCreditTaxLand());
+            setText(debitTaxLandLabel, balanceTable.getDebitTaxLand());
+
+            setText(creditServiceLabel, balanceTable.getCreditService());
+            setText(debitServiceLabel, balanceTable.getDebitService());
+
+            setText(creditEquipmentLabel, balanceTable.getCreditEquipment());
+            setText(debitEquipmentLabel, balanceTable.getDebitEquipment());
         } else {
             creditRentLabel.setText("Нет");
             debitRentLabel.setText("Нет");
