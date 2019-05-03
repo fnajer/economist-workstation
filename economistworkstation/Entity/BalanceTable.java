@@ -6,6 +6,7 @@
 package economistworkstation.Entity;
 
 import economistworkstation.Database;
+import static economistworkstation.Util.Util.sum;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -130,6 +131,25 @@ public class BalanceTable {
         this.debitEquipment.set(debitEquipment);
     }
     
+    public Double sumDebit() {
+        return sum(
+                getDebitRent(),
+                getDebitFine(),
+                getDebitTaxLand(),
+                getDebitService(),
+                getDebitEquipment()
+        );
+    }
+    public Double sumCredit() {
+        return sum(
+                getCreditRent(),
+                getCreditFine(),
+                getCreditTaxLand(),
+                getCreditService(),
+                getCreditEquipment()
+        );
+    }
+    
     public PreparedStatement getInsertStatement(Database db) throws SQLException {
         PreparedStatement ps = db.conn.prepareStatement("INSERT INTO BALANCE "
                 + "(id_balance, credit_rent, debit_rent, credit_fine, debit_fine, "
@@ -182,10 +202,6 @@ public class BalanceTable {
     public void prepareToDelete() {
         setCreditRent(-1.0);
     }
-    
-//    public void bindPeriod(Period period) {
-//        period.setBalance(this);
-//    }
     
     public boolean isEmpty() {
         return getCreditRent() == null 
