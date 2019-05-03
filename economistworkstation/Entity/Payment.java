@@ -98,6 +98,12 @@ public abstract class Payment {
         }
     }
     
+    public Double safeGetPaid() {
+        if (getPaid() == null)
+            return 0.0;
+        else
+            return getPaid();
+    }
     protected Double safeGetSum(Double value) {
         if (value == null)
             return 0.0;

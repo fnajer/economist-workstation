@@ -6,6 +6,7 @@
 package economistworkstation.Util;
 
 import economistworkstation.ContractData;
+import economistworkstation.Entity.BalanceTable;
 import economistworkstation.Entity.Building;
 import economistworkstation.Entity.Contract;
 import economistworkstation.Entity.Equipment;
@@ -64,6 +65,9 @@ public class TagParser {
             String newValue = "<Tag not founded>";
             String foundedTag = matcher.group();
             System.out.println(foundedTag);
+            
+            BalanceTable balanceTable = period.getBalanceTable();
+            balanceTable = balanceTable == null ? new BalanceTable() : balanceTable;
             
             Rent rent = (Rent) period.getRentPayment();
             rent = rent == null ? new Rent() : rent;
@@ -462,7 +466,7 @@ public class TagParser {
                 return;
             }
             if ("<servicesPaid>".equals(foundedTag)) {
-                String servicesPaid = Double.toString(services.getPaid());
+                String servicesPaid = Double.toString(services.safeGetPaid());
                 newValue = servicesPaid;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
@@ -482,7 +486,7 @@ public class TagParser {
                 return;
             }
             if ("<equipmentPaid>".equals(foundedTag)) {
-                String equipmentPaid = Double.toString(equipment.getPaid());
+                String equipmentPaid = Double.toString(equipment.safeGetPaid());
                 newValue = equipmentPaid;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
@@ -492,7 +496,7 @@ public class TagParser {
                 return;
             }
             if ("<rentPaid>".equals(foundedTag)) {
-                String rentPaid = Double.toString(rent.getPaid());
+                String rentPaid = Double.toString(rent.safeGetPaid());
                 newValue = rentPaid;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
@@ -502,7 +506,7 @@ public class TagParser {
                 return;
             }
             if ("<finePaid>".equals(foundedTag)) {
-                String finePaid = Double.toString(fine.getPaid());
+                String finePaid = Double.toString(fine.safeGetPaid());
                 newValue = finePaid;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
@@ -512,7 +516,7 @@ public class TagParser {
                 return;
             }
             if ("<taxLandPaid>".equals(foundedTag)) {
-                String taxLandPaid = Double.toString(taxLand.getPaid());
+                String taxLandPaid = Double.toString(taxLand.safeGetPaid());
                 newValue = taxLandPaid;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
