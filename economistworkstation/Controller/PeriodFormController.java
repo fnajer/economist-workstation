@@ -22,7 +22,6 @@ import economistworkstation.Util.TagParser;
 import economistworkstation.Util.Util;
 import static economistworkstation.Util.Util.parseField;
 import static economistworkstation.Util.Util.isExist;
-import static economistworkstation.Entity.Field.isFilled;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;

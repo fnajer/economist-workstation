@@ -71,7 +71,7 @@ public class Period {
         return list;
     }
     
-    public void calculateBalance(Period period) {
+    public void calculateBalance() {
         Payment payment;
         ArrayList<Payment> payments = this.getListPayments();
         BalanceTable balanceTable = getBalanceTable().copy();

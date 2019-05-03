@@ -156,7 +156,7 @@ public class ContractController implements Initializable, BaseController {
             }
             nextPeriod.setBalanceTable(prevBalanceTable);
             PeriodModel.updateBalancePeriod(nextPeriod); //BalanceTable will be empty or filled. Not null.
-            nextPeriod.calculateBalance(period);
+            nextPeriod.calculateBalance();
             
             period = nextPeriod;
             tableIsExist = false;
