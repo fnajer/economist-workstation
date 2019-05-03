@@ -43,6 +43,16 @@ public class Util {
         Util.calledClass = calledClass;
     }
     
+    public static Double sum(Double ...values) {
+        Double sum = 0.0;
+        for (Double value : values) {
+            try {
+                sum += value;
+            } catch(NullPointerException e) {}
+        }
+        return sum; 
+    }
+    
     public static void setText(TextField tf, Double value) {
         try {
             String text = Double.toString(value);

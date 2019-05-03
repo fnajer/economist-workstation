@@ -8,6 +8,7 @@ package economistworkstation.Entity;
 import economistworkstation.Database;
 import static economistworkstation.Util.Util.parseField;
 import static economistworkstation.Util.Util.setText;
+import static economistworkstation.Util.Util.sum;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -186,16 +187,6 @@ public class Services extends Payment {
             calcCostInternet(),
             calcCostTelephone()
         );
-    }
-    
-    private Double sum(Double ...values) {
-        Double sum = 0.0;
-        for (Double value : values) {
-            try {
-                sum += value;
-            } catch(NullPointerException e) {}
-        }
-        return sum; 
     }
     
     @Override
