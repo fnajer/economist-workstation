@@ -551,6 +551,55 @@ public class TagParser {
                 return;
             }
             
+            if ("<sumDebit>".equals(foundedTag)) {
+                String sumDebit = Double.toString(balanceTable.sumDebit());
+                newValue = sumDebit;
+                
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                double resultDouble = Double.parseDouble(resultString);
+     
+                cell.setCellValue(resultDouble);
+                return;
+            }
+            if ("<sumCredit>".equals(foundedTag)) {
+                String sumCredit = Double.toString(balanceTable.sumCredit());
+                newValue = sumCredit;
+                
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                double resultDouble = Double.parseDouble(resultString);
+     
+                cell.setCellValue(resultDouble);
+                return;
+            }
+            if ("<nextDebit>".equals(foundedTag)) {
+                period.setBalanceTable(balanceTable); // table must be not null
+                period.calculateBalance();
+                BalanceTable nextBalanceTable = period.getNextBalanceTable();
+            
+                String sumCredit = Double.toString(nextBalanceTable.sumDebit());
+                newValue = sumCredit;
+                
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                double resultDouble = Double.parseDouble(resultString);
+     
+                cell.setCellValue(resultDouble);
+                return;
+            }
+            if ("<nextCredit>".equals(foundedTag)) {
+                period.setBalanceTable(balanceTable); // table must be not null
+                period.calculateBalance();
+                BalanceTable nextBalanceTable = period.getNextBalanceTable();
+                
+                String sumCredit = Double.toString(nextBalanceTable.sumCredit());
+                newValue = sumCredit;
+                
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                double resultDouble = Double.parseDouble(resultString);
+     
+                cell.setCellValue(resultDouble);
+                return;
+            }
+            
             resultString = cellString.replaceAll(foundedTag, newValue);
             cell.setCellValue(resultString);
             cellString = resultString;
