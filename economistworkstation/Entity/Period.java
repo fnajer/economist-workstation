@@ -79,7 +79,7 @@ public class Period {
             payment = payments.get(i);
             
             if (isExist(payment))
-                payment.calculate(getBalanceTable(), balanceTable);
+                payment.calcPartOfBalance(getBalanceTable(), balanceTable);
         }
         setNextBalanceTable(balanceTable);
     }

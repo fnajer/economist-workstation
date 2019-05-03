@@ -113,8 +113,6 @@ public abstract class Payment {
     }
     
     private void setEmptyBalance() {
-        setCredit(nextBalanceTable, null);
-        setDebit(nextBalanceTable, null);
         setState("Нет платежа");
         setInfo("");
     }
@@ -136,8 +134,8 @@ public abstract class Payment {
     
     private BalanceTable balanceTable;
     private BalanceTable nextBalanceTable;
-    public void calculate(BalanceTable balanceTable, BalanceTable nextBalanceTable) {
-             if (fieldsIsEmpty() && !isExist(balanceTable)) {
+    public void calcPartOfBalance(BalanceTable balanceTable, BalanceTable nextBalanceTable) {
+            if (fieldsIsEmpty() && !isExist(balanceTable)) {
                 setEmptyBalance();
                 return;
             }
@@ -146,10 +144,7 @@ public abstract class Payment {
             this.balanceTable = balanceTable;
             this.nextBalanceTable = nextBalanceTable;
             double diff = getDiff();
-//            if (fieldsIsEmpty()) {
-//                setEmptyBalance();
-//                return;
-//            }
+
             calculateValuesAfter(diff);
             this.balanceTable = null;
             this.nextBalanceTable = null;

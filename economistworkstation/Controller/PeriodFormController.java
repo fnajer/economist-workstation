@@ -331,7 +331,7 @@ public class PeriodFormController {
     private void handleBalanceFields(Payment payment,
             Label statePaymentLbl, Label balancePaymentLbl) 
     {
-        payment.calculate(period.getBalanceTable(), nextBalanceTable);
+        payment.calcPartOfBalance(period.getBalanceTable(), nextBalanceTable);
         
         statePaymentLbl.setText(payment.getState());
         balancePaymentLbl.setText(payment.getInfo());
