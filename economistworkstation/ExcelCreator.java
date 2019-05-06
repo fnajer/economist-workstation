@@ -297,6 +297,9 @@ public class ExcelCreator {
             TagParser.num = 1;
             for (Row row : sheet) {
                 if (row.getRowNum() > indexStartRow && row.getRowNum() < indexStartRow + data.size() * 5
+                        && row.getRowNum() == (indexStartRow + ((i + 1) * 5))) {
+                    i++; // for change serial num of renter
+                    currentContractData = data.get(i); // to go to the next renter
                 }
                 for (Cell cell : row) {
                     CellType cellType = cell.getCellType();
