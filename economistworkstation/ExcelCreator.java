@@ -272,10 +272,11 @@ public class ExcelCreator {
         int indexStartRow = findRow(workbook, "<num>");
         if (indexStartRow != -1)
             for (int i = indexStartRow + 1; i < contractsSize + indexStartRow; i++) {
-                copyRow(workbook, sheet, indexStartRow, indexStartRow+4);
-                copyRow(workbook, sheet, indexStartRow+1, indexStartRow+5);
-                copyRow(workbook, sheet, indexStartRow+2, indexStartRow+6);
-                copyRow(workbook, sheet, indexStartRow+3, indexStartRow+7);
+                copyRow(workbook, sheet, indexStartRow, indexStartRow+5);
+                copyRow(workbook, sheet, indexStartRow+1, indexStartRow+6);
+                copyRow(workbook, sheet, indexStartRow+2, indexStartRow+7);
+                copyRow(workbook, sheet, indexStartRow+3, indexStartRow+8);
+                copyRow(workbook, sheet, indexStartRow+4, indexStartRow+9);
 //                int n = 4; // 4 - iterate count. count rows, that will be copy
 //                for (int ii = 0, j = n + indexStartRow; ii < n; ii++, j++) {
 //                    copyRow(workbook, sheet, indexStartRow + ii, j);
@@ -295,8 +296,7 @@ public class ExcelCreator {
             ContractData currentContractData = data.get(i);
             TagParser.num = 1;
             for (Row row : sheet) {
-                if (row.getRowNum() > indexStartRow && row.getRowNum() < indexStartRow + data.size()) {
-                    
+                if (row.getRowNum() > indexStartRow && row.getRowNum() < indexStartRow + data.size() * 5
                 }
                 for (Cell cell : row) {
                     CellType cellType = cell.getCellType();
