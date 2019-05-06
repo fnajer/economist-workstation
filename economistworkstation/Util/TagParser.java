@@ -600,6 +600,81 @@ public class TagParser {
                 return;
             }
             
+            //accumulation
+            if ("<accountRentNum>".equals(foundedTag)) {
+                System.out.println(rent.isEmpty());
+                System.out.println(period.getNumberRentAcc());
+                System.out.println(rent.getPaid());
+                if (rent.isEmpty()) {
+                    cell.setCellValue("");
+                    return;
+                }
+                
+                newValue = Integer.toString(period.getNumberRentAcc());
+                 
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                int resultInt = Integer.parseInt(resultString);
+                
+                cell.setCellValue(resultInt);
+                return;
+            }
+            if ("<accountEquipmentNum>".equals(foundedTag)) {
+                if (equipment.isEmpty()) {
+                    cell.setCellValue("");
+                    return;
+                }
+                
+                newValue = Integer.toString(period.getNumberRentAcc());
+                 
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                int resultInt = Integer.parseInt(resultString);
+                
+                cell.setCellValue(resultInt);
+                return;
+            }
+            if ("<accountFineNum>".equals(foundedTag)) {
+                if (fine.isEmpty()) {
+                    cell.setCellValue("");
+                    return;
+                }
+                
+                newValue = Integer.toString(period.getNumberRentAcc());
+                 
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                int resultInt = Integer.parseInt(resultString);
+                
+                cell.setCellValue(resultInt);
+                return;
+            }
+            if ("<accountServicesNum>".equals(foundedTag)) {   
+                if (services.isEmpty()) {
+                    cell.setCellValue("");
+                    return;
+                }            
+                
+                newValue = Integer.toString(period.getNumberServicesAcc());
+                
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                int resultInt = Integer.parseInt(resultString);
+                
+                cell.setCellValue(resultInt);
+                return;
+            }
+            if ("<accountTaxLandNum>".equals(foundedTag)) {
+                if (taxLand.isEmpty()) {
+                    cell.setCellValue("");
+                    return;
+                }
+                
+                newValue = Integer.toString(period.getNumberRentAcc());
+                 
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                int resultInt = Integer.parseInt(resultString);
+                
+                cell.setCellValue(resultInt);
+                return;
+            }
+            
             resultString = cellString.replaceAll(foundedTag, newValue);
             cell.setCellValue(resultString);
             cellString = resultString;
