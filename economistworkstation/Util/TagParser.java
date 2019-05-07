@@ -815,6 +815,56 @@ public class TagParser {
                 cell.setCellValue(resultDouble);
                 return;
             }
+            if ("<datePaidRent>".equals(foundedTag)) {
+                if (!isExist(rent.getDatePaid())) {
+                    cell.setCellValue("");
+                    return;
+                }
+                LocalDate date = LocalDate.parse(rent.getDatePaid());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+                String formattedString = date.format(formatter);
+                newValue = formattedString;
+            }
+            if ("<datePaidFine>".equals(foundedTag)) {
+                if (!isExist(fine.getDatePaid())) {
+                    cell.setCellValue("");
+                    return;
+                }
+                LocalDate date = LocalDate.parse(fine.getDatePaid());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+                String formattedString = date.format(formatter);
+                newValue = formattedString;
+            }
+            if ("<datePaidTaxLand>".equals(foundedTag)) {
+                if (!isExist(taxLand.getDatePaid())) {
+                    cell.setCellValue("");
+                    return;
+                }
+                LocalDate date = LocalDate.parse(taxLand.getDatePaid());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+                String formattedString = date.format(formatter);
+                newValue = formattedString;
+            }
+            if ("<datePaidServices>".equals(foundedTag)) {
+                if (!isExist(services.getDatePaid())) {
+                    cell.setCellValue("");
+                    return;
+                }
+                LocalDate date = LocalDate.parse(services.getDatePaid());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+                String formattedString = date.format(formatter);
+                newValue = formattedString;
+            }
+            if ("<datePaidEquipment>".equals(foundedTag)) {
+                if (!isExist(equipment.getDatePaid())) {
+                    cell.setCellValue("");
+                    return;
+                }
+                LocalDate date = LocalDate.parse(equipment.getDatePaid());
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+                String formattedString = date.format(formatter);
+                newValue = formattedString;
+            }
             
             resultString = cellString.replaceAll(foundedTag, newValue);
             cell.setCellValue(resultString);
