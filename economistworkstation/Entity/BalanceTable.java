@@ -131,6 +131,13 @@ public class BalanceTable {
         this.debitEquipment.set(debitEquipment);
     }
     
+    public Double safeGet(Double value) {
+        if (value == null)
+            return 0.0;
+        else
+            return value;
+    }
+    
     public Double sumDebit() {
         return sum(
                 getDebitRent(),

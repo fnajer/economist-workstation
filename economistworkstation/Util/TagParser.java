@@ -603,9 +603,6 @@ public class TagParser {
             
             //accumulation
             if ("<accountRentNum>".equals(foundedTag)) {
-                System.out.println(rent.isEmpty());
-                System.out.println(period.getNumberRentAcc());
-                System.out.println(rent.getPaid());
                 if (rent.isEmpty()) {
                     cell.setCellValue("");
                     return;
@@ -676,11 +673,8 @@ public class TagParser {
                 return;
             }
             if ("<creditRent>".equals(foundedTag)) {
-                if (!isExist(balanceTable) || !isExist(balanceTable.getCreditRent())) {
-                    cell.setCellValue("");
-                    return;
-                }
-                String credit = Double.toString(balanceTable.getCreditRent());
+                Double safeValue = balanceTable.safeGet(balanceTable.getCreditRent());
+                String credit = Double.toString(safeValue);
                 newValue = credit;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
@@ -690,11 +684,8 @@ public class TagParser {
                 return;
             }
             if ("<debitRent>".equals(foundedTag)) {
-                if (!isExist(balanceTable) || !isExist(balanceTable.getDebitRent())) {
-                    cell.setCellValue("");
-                    return;
-                }
-                String debit = Double.toString(balanceTable.getDebitRent());
+                Double safeValue = balanceTable.safeGet(balanceTable.getDebitRent());
+                String debit = Double.toString(safeValue);
                 newValue = debit;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
@@ -704,11 +695,8 @@ public class TagParser {
                 return;
             }
             if ("<creditFine>".equals(foundedTag)) {
-                if (!isExist(balanceTable) || !isExist(balanceTable.getCreditFine())) {
-                    cell.setCellValue("");
-                    return;
-                }
-                String credit = Double.toString(balanceTable.getCreditFine());
+                Double safeValue = balanceTable.safeGet(balanceTable.getCreditFine());
+                String credit = Double.toString(safeValue);
                 newValue = credit;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
@@ -718,11 +706,8 @@ public class TagParser {
                 return;
             }
             if ("<debitFine>".equals(foundedTag)) {
-                if (!isExist(balanceTable) || !isExist(balanceTable.getDebitFine())) {
-                    cell.setCellValue("");
-                    return;
-                }
-                String debit = Double.toString(balanceTable.getDebitFine());
+                Double safeValue = balanceTable.safeGet(balanceTable.getDebitFine());
+                String debit = Double.toString(safeValue);
                 newValue = debit;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
@@ -732,11 +717,8 @@ public class TagParser {
                 return;
             }
             if ("<creditTaxLand>".equals(foundedTag)) {
-                if (!isExist(balanceTable) || !isExist(balanceTable.getCreditTaxLand())) {
-                    cell.setCellValue("");
-                    return;
-                }
-                String credit = Double.toString(balanceTable.getCreditTaxLand());
+                Double safeValue = balanceTable.safeGet(balanceTable.getCreditTaxLand());
+                String credit = Double.toString(safeValue);
                 newValue = credit;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
@@ -746,11 +728,8 @@ public class TagParser {
                 return;
             }
             if ("<debitTaxLand>".equals(foundedTag)) {
-                if (!isExist(balanceTable) || !isExist(balanceTable.getDebitTaxLand())) {
-                    cell.setCellValue("");
-                    return;
-                }
-                String debit = Double.toString(balanceTable.getDebitTaxLand());
+                Double safeValue = balanceTable.safeGet(balanceTable.getDebitTaxLand());
+                String debit = Double.toString(safeValue);
                 newValue = debit;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
@@ -760,11 +739,8 @@ public class TagParser {
                 return;
             }
             if ("<creditServices>".equals(foundedTag)) {
-                if (!isExist(balanceTable) || !isExist(balanceTable.getCreditService())) {
-                    cell.setCellValue("");
-                    return;
-                }
-                String credit = Double.toString(balanceTable.getCreditService());
+                Double safeValue = balanceTable.safeGet(balanceTable.getCreditService());
+                String credit = Double.toString(safeValue);
                 newValue = credit;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
@@ -774,11 +750,8 @@ public class TagParser {
                 return;
             }
             if ("<debitServices>".equals(foundedTag)) {
-                if (!isExist(balanceTable) || !isExist(balanceTable.getDebitService())) {
-                    cell.setCellValue("");
-                    return;
-                }
-                String debit = Double.toString(balanceTable.getDebitService());
+                Double safeValue = balanceTable.safeGet(balanceTable.getDebitService());
+                String debit = Double.toString(safeValue);
                 newValue = debit;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
@@ -788,11 +761,8 @@ public class TagParser {
                 return;
             }
             if ("<creditEquipment>".equals(foundedTag)) {
-                if (!isExist(balanceTable) || !isExist(balanceTable.getCreditEquipment())) {
-                    cell.setCellValue("");
-                    return;
-                }
-                String credit = Double.toString(balanceTable.getCreditEquipment());
+                Double safeValue = balanceTable.safeGet(balanceTable.getCreditEquipment());
+                String credit = Double.toString(safeValue);
                 newValue = credit;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
@@ -802,11 +772,8 @@ public class TagParser {
                 return;
             }
             if ("<debitEquipment>".equals(foundedTag)) {
-                if (!isExist(balanceTable) || !isExist(balanceTable.getDebitEquipment())) {
-                    cell.setCellValue("");
-                    return;
-                }
-                String debit = Double.toString(balanceTable.getDebitEquipment());
+                Double safeValue = balanceTable.safeGet(balanceTable.getDebitEquipment());
+                String debit = Double.toString(safeValue);
                 newValue = debit;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
