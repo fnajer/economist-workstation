@@ -832,6 +832,18 @@ public class TagParser {
                 String formattedString = date.format(formatter);
                 newValue = formattedString;
             }
+            if ("<debitNext>".equals(foundedTag)) {
+                int rowIndex = cell.getRowIndex() + 1;
+                String formatString = "IF(H%1$d+D%1$d-J%1$d<0,0,H%1$d+D%1$d-J%1$d)";
+                cell.setCellFormula(String.format(formatString, rowIndex));
+                return;
+            }
+            if ("<creditNext>".equals(foundedTag)) {
+                int rowIndex = cell.getRowIndex() + 1;
+                String formatString = "IF(J%1$d+E%1$d-H%1$d<0,0,J%1$d+E%1$d-H%1$d)";
+                cell.setCellFormula(String.format(formatString, rowIndex));
+                return;
+            }
             
             resultString = cellString.replaceAll(foundedTag, newValue);
             cell.setCellValue(resultString);
