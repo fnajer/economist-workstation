@@ -844,12 +844,75 @@ public class TagParser {
                 cell.setCellFormula(String.format(formatString, rowIndex));
                 return;
             }
+            if ("<totalRent>".equals(foundedTag)) {
+                int startIdx = numFirstRow;
+                int finishIdx = cell.getRowIndex() - 1; //get values before total rows
+                int columnNumber = cell.getColumnIndex();
+                String columnLetter = CellReference.convertNumToColString(columnNumber);
+                String formula = columnLetter + startIdx;
+                for (int i = startIdx + countTypePayments; i < finishIdx; i += countTypePayments) {
+                    formula += "+" + columnLetter + i;
+                }
+                cell.setCellFormula(formula);
+                return;
+            }
+            if ("<totalEquipment>".equals(foundedTag)) {
+                int startIdx = numFirstRow + 1;
+                int finishIdx = cell.getRowIndex() - 2;
+                int columnNumber = cell.getColumnIndex();
+                String columnLetter = CellReference.convertNumToColString(columnNumber);
+                String formula = columnLetter + startIdx;
+                for (int i = startIdx + countTypePayments; i < finishIdx; i += countTypePayments) {
+                    formula += "+" + columnLetter + i;
+                }
+                cell.setCellFormula(formula);
+                return;
+            }
+            if ("<totalFine>".equals(foundedTag)) {
+                int startIdx = numFirstRow + 2;
+                int finishIdx = cell.getRowIndex() - 4;
+                int columnNumber = cell.getColumnIndex();
+                String columnLetter = CellReference.convertNumToColString(columnNumber);
+                String formula = columnLetter + startIdx;
+                for (int i = startIdx + countTypePayments; i < finishIdx; i += countTypePayments) {
+                    formula += "+" + columnLetter + i;
+                }
+                cell.setCellFormula(formula);
+                return;
+            }
+            if ("<totalServices>".equals(foundedTag)) {
+                int startIdx = numFirstRow + 3;
+                int finishIdx = cell.getRowIndex() - 5;
+                int columnNumber = cell.getColumnIndex();
+                String columnLetter = CellReference.convertNumToColString(columnNumber);
+                String formula = columnLetter + startIdx;
+                for (int i = startIdx + countTypePayments; i < finishIdx; i += countTypePayments) {
+                    formula += "+" + columnLetter + i;
+                }
+                cell.setCellFormula(formula);
+                return;
+            }
+            if ("<totalTaxLand>".equals(foundedTag)) {
+                int startIdx = numFirstRow + 4;
+                int finishIdx = cell.getRowIndex() - 3;
+                int columnNumber = cell.getColumnIndex();
+                String columnLetter = CellReference.convertNumToColString(columnNumber);
+                String formula = columnLetter + startIdx;
+                for (int i = startIdx + countTypePayments; i < finishIdx; i += countTypePayments) {
+                    formula += "+" + columnLetter + i;
+                }
+                cell.setCellFormula(formula);
+                return;
+            }
             
             resultString = cellString.replaceAll(foundedTag, newValue);
             cell.setCellValue(resultString);
             cellString = resultString;
         }
     }
+    
+    private static final int countTypePayments = 5;
+    private static final int numFirstRow = 4; // 3 + 1
     
     public static ArrayList<Integer> rowsForClear = new ArrayList<Integer>();
     public static ArrayList<Integer> rowsForDelete = new ArrayList<Integer>();
