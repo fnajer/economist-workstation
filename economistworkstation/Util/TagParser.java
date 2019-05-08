@@ -904,6 +904,22 @@ public class TagParser {
                 cell.setCellFormula(formula);
                 return;
             }
+            if ("<sumTotalRent>".equals(foundedTag)) {
+                int firstPaymentCell = cell.getRowIndex() - 4;
+                int lastPaymentCell = cell.getRowIndex() - 1;
+                int columnNumber = cell.getColumnIndex();
+                String columnLetter = CellReference.convertNumToColString(columnNumber);
+                cell.setCellFormula("SUM(" + columnLetter + firstPaymentCell
+                        + ":" + columnLetter + lastPaymentCell + ")");
+                return;
+            }
+            if ("<sumOneAccum>".equals(foundedTag)) {
+                int rowIndex = cell.getRowIndex();
+                int columnNumber = cell.getColumnIndex();
+                String columnLetter = CellReference.convertNumToColString(columnNumber);
+                cell.setCellFormula("SUM(" + columnLetter + indexStartRow + ":" + columnLetter + rowIndex + ")");
+                return;
+            }
             
             resultString = cellString.replaceAll(foundedTag, newValue);
             cell.setCellValue(resultString);
