@@ -358,7 +358,7 @@ public class PeriodFormController {
             if (payment.fieldsIsFilled(fields)) {
                 payment.saveValuesOf(fields);
                 payment.bindPeriod(period);
-            } else if (isExist(paymentSrc) && payment.isEmpty()) {
+            } else if (isExist(paymentSrc) && !payment.fieldsIsFilled(fields)) {
                 payment.prepareToDelete();
                 payment.bindPeriod(period);
             }
@@ -538,47 +538,67 @@ public class PeriodFormController {
     public void addCalcListeners() {
         
         countWaterField.textProperty().addListener((observable, oldValue, newValue) -> {
+            services.setCountWater(parseField(countWaterField));
             setCost(countWaterField, tariffWaterField, costWaterLabel);
-            printSum("servicesExtra");
             setColorLabels(countWaterField);
         });
         tariffWaterField.textProperty().addListener((observable, oldValue, newValue) -> {
+            services.setTariffWater(parseField(tariffWaterField));
             setCost(countWaterField, tariffWaterField, costWaterLabel);
-            printSum("servicesExtra");
             setColorLabels(tariffWaterField);
+        });
+        costWaterLabel.textProperty().addListener((observable, oldValue, newValue) -> {
+            printSum("servicesExtra");
+            setPaymentState();
         });
         
         countElectricityField.textProperty().addListener((observable, oldValue, newValue) -> {
+            services.setCountElectricity(parseField(countElectricityField));
             setCost(countElectricityField, tariffElectricityField, costElectricityLabel);
-            printSum("servicesExtra");
             setColorLabels(countElectricityField);
         });
         tariffElectricityField.textProperty().addListener((observable, oldValue, newValue) -> {
+            services.setTariffElectricity(parseField(tariffElectricityField));
             setCost(countElectricityField, tariffElectricityField, costElectricityLabel);
-            printSum("servicesExtra");
             setColorLabels(tariffElectricityField);
+        });
+        costElectricityLabel.textProperty().addListener((observable, oldValue, newValue) -> {
+            printSum("servicesExtra");
+            setPaymentState();
         });
         
         costHeadingField.textProperty().addListener((observable, oldValue, newValue) -> {
+           services.setCostHeading(parseField(costHeadingField));
            printSum("servicesExtra");
            setColorLabels(costHeadingField);
+           setPaymentState();
         });
         
         costGarbageField.textProperty().addListener((observable, oldValue, newValue) -> {
+           services.setCostGarbage(parseField(costGarbageField));
            printSum("servicesExtra");
            setColorLabels(costGarbageField);
+           setPaymentState();
         });
         
         costInternetField.textProperty().addListener((observable, oldValue, newValue) -> {
+            services.setCostInternet(parseField(costInternetField));
             printSum("servicesExtra");
             setColorLabels(costInternetField);
+            setPaymentState();
         });
         costTelephoneField.textProperty().addListener((observable, oldValue, newValue) -> {
+            services.setCostTelephone(parseField(costTelephoneField));
             printSum("servicesExtra");
             setColorLabels(costTelephoneField);
+            setPaymentState();
         });
         extraCostServicesLabel.textProperty().addListener((observable, oldValue, newValue) -> {
             printSum("servicesExtra");
+        });
+        paymentServicesField.textProperty().addListener((observable, oldValue, newValue) -> {
+            services.setPaid(parseField(paymentServicesField));
+            setPaymentState(); 
         });
         
         costRentField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -601,8 +621,10 @@ public class PeriodFormController {
             printSum("rentExtra");
         });
         fineField.textProperty().addListener((observable, oldValue, newValue) -> {
+            fine.setFine(parseField(fineField));
             printSum("fineExtra");
             setColorLabels(fineField);
+            setPaymentState();
         });
         extraCostFineLabel.textProperty().addListener((observable, oldValue, newValue) -> {
             printSum("fineExtra");
@@ -617,21 +639,37 @@ public class PeriodFormController {
             rent.setPaid(parseField(paymentRentField));
             setPaymentState(); 
         });
+        paymentFineField.textProperty().addListener((observable, oldValue, newValue) -> {
+            fine.setPaid(parseField(paymentFineField));
+            setPaymentState(); 
+        });
         
         taxLandField.textProperty().addListener((observable, oldValue, newValue) -> {
+            taxLand.setTaxLand(parseField(taxLandField));
             printSum("taxLandExtra");
             setColorLabels(taxLandField);
+            setPaymentState();
         });
         extraCostTaxLandLabel.textProperty().addListener((observable, oldValue, newValue) -> {
             printSum("taxLandExtra");
         });
+        paymentTaxLandField.textProperty().addListener((observable, oldValue, newValue) -> {
+            taxLand.setPaid(parseField(paymentTaxLandField));
+            setPaymentState(); 
+        });
         
         costEquipmentField.textProperty().addListener((observable, oldValue, newValue) -> {
+            equipment.setCostEquipment(parseField(costEquipmentField));
             printSum("equipmentExtra");
             setColorLabels(costEquipmentField);
+            setPaymentState();
         });
         extraCostEquipmentLabel.textProperty().addListener((observable, oldValue, newValue) -> {
             printSum("equipmentExtra");
+        });
+        paymentEquipmentField.textProperty().addListener((observable, oldValue, newValue) -> {
+            equipment.setPaid(parseField(paymentEquipmentField));
+            setPaymentState(); 
         });
     }
     
