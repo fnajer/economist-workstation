@@ -91,7 +91,7 @@ public class TagParser {
             if ("<numRentAcc>".equals(foundedTag)) {
                 newValue = Integer.toString(period.getNumberRentAcc());
             }
-            if ("<numCommunalAcc>".equals(foundedTag)) {
+            if ("<numServicesAcc>".equals(foundedTag)) {
                 newValue = Integer.toString(period.getNumberServicesAcc());
             }
             if ("<subject>".equals(foundedTag)) {
@@ -101,7 +101,6 @@ public class TagParser {
                 newValue = renter.getFullName();
             }
             if ("<numContract>".equals(foundedTag)) {
-                System.out.println(contract.getId());
                 newValue = Integer.toString(period.getIdContract());
             }
             if ("<dateStartContract>".equals(foundedTag)) {
@@ -123,7 +122,7 @@ public class TagParser {
                 }
                 newValue = monthName + ' ' + Integer.toString(monthYear);
             }
-            if ("<sumRent>".equals(foundedTag)) {
+            if ("<rent>".equals(foundedTag)) {
                 String sumRent = parseProperty(rent.sumToPay(), Locale.US);
                 newValue = sumRent;
                 
@@ -164,6 +163,28 @@ public class TagParser {
             }
             if ("<taxLand>".equals(foundedTag)) {
                 String costTaxLand = parseProperty(taxLand.getTaxLand(), Locale.US);
+                newValue = costTaxLand;
+                
+                resultString = cellString.replaceAll(foundedTag, newValue);
+                double resultDouble = Double.parseDouble(resultString);
+                
+                if ("account".equals(TagParser.typeDoc)) {
+                    if (rowWillClear(resultDouble, cell))
+                        return;
+                }
+                
+                if ("acrual".equals(TagParser.typeDoc)) {
+                    if (cellWillClear(resultDouble, cell))
+                        return;
+                }
+                
+                cell.setCellValue(resultDouble);
+                
+                TagParser.sumForWords += resultDouble;
+                return;
+            }
+            if ("<equipment>".equals(foundedTag)) {
+                String costTaxLand = parseProperty(equipment.getCostEquipment(), Locale.US);
                 newValue = costTaxLand;
                 
                 resultString = cellString.replaceAll(foundedTag, newValue);
