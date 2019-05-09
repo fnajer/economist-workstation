@@ -206,7 +206,12 @@ public class TagParser {
                 return;
             }
             if ("<sumRentAcc>".equals(foundedTag)) {
-                cell.setCellFormula("SUM(D15:D17)");
+                int firstCell = cell.getRowIndex() - 3;
+                int lastCell = cell.getRowIndex();
+                int columnNumber = cell.getColumnIndex();
+                String columnLetter = CellReference.convertNumToColString(columnNumber);
+                cell.setCellFormula("SUM(" + columnLetter + firstCell
+                        + ":" + columnLetter + lastCell + ")");
                 return;
             }
             if ("<sumInWords>".equals(foundedTag)) {
@@ -214,9 +219,14 @@ public class TagParser {
                 String sumInWords = Money.digits2Text(sum);
                 newValue = sumInWords;
             }
-            //communal account
-            if ("<sumCommunalAcc>".equals(foundedTag)) {
-                cell.setCellFormula("SUM(D16:D19)");
+            //services account
+            if ("<sumServicesAcc>".equals(foundedTag)) {
+                int firstCell = cell.getRowIndex() - 5;
+                int lastCell = cell.getRowIndex();
+                int columnNumber = cell.getColumnIndex();
+                String columnLetter = CellReference.convertNumToColString(columnNumber);
+                cell.setCellFormula("SUM(" + columnLetter + firstCell
+                        + ":" + columnLetter + lastCell + ")");
                 return;
             }
             if ("<costWater>".equals(foundedTag)) {
