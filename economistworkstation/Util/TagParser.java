@@ -51,6 +51,11 @@ public class TagParser {
         return false;
     }
     
+    private static String formatDate(LocalDate date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        return date.format(formatter);
+    }
+    
     public static void convertTags (ContractData data) {
         Cell cell = data.getCell();
         Period period = data.getPeriod();
@@ -83,10 +88,7 @@ public class TagParser {
             
             //rent account
             if ("<date>".equals(foundedTag)) {
-                LocalDate date = LocalDate.now();
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-                String formattedString = date.format(formatter);
-                newValue = formattedString;
+                newValue = formatDate(LocalDate.now());
             }
             if ("<numRentAcc>".equals(foundedTag)) {
                 newValue = Integer.toString(period.getNumberRentAcc());
@@ -105,9 +107,7 @@ public class TagParser {
             }
             if ("<dateStartContract>".equals(foundedTag)) {
                 LocalDate date = LocalDate.parse(contract.getDateStart());
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-                String formattedString = date.format(formatter);
-                newValue = formattedString;
+                newValue = formatDate(date);
             }
             if ("<square>".equals(foundedTag)) {
                 newValue = getDecimalFormat(Locale.getDefault()).format(building.getSquare());
