@@ -151,7 +151,8 @@
                                     <ButtonBar buttonMinWidth="55.0" layoutX="26.0" layoutY="281.0" prefHeight="40.0" prefWidth="178.0" AnchorPane.bottomAnchor="5.0" AnchorPane.rightAnchor="5.0">
                                        <buttons>
                                           <Button mnemonicParsing="false" onAction="#handleEditPeriod" text="Edit..." />
-                                          <Button mnemonicParsing="false" onAction="#handleAccount" text="Счёт" />
+                                          <Button mnemonicParsing="false" onAction="#handleRentalInvoice" prefHeight="25.0" text="Счёт аренды" />
+                                          <Button mnemonicParsing="false" onAction="#handleServicesInvoice" text="Счёт услуг" />
                                           <Button mnemonicParsing="false" onAction="#handleCalculation" text="Расчёт" />
                                        </buttons>
                                     </ButtonBar>

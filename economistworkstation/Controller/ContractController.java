@@ -6,6 +6,7 @@
 package economistworkstation.Controller;
 
 import economistworkstation.EconomistWorkstation;
+import economistworkstation.Entity.AccountDocument;
 import economistworkstation.Entity.BalanceTable;
 import economistworkstation.Entity.Building;
 import java.net.URL;
@@ -13,10 +14,10 @@ import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 
 import economistworkstation.Entity.Contract;
+import economistworkstation.Entity.Document;
 import economistworkstation.Entity.Field;
 import economistworkstation.Entity.Period;
 import economistworkstation.Entity.Renter;
-import economistworkstation.ExcelCreator;
 import economistworkstation.Model.BuildingModel;
 import economistworkstation.Model.ContractModel;
 import economistworkstation.Model.PeriodModel;
@@ -220,15 +221,29 @@ public class ContractController implements Initializable, BaseController {
     }
     
     @FXML
-    void handleAccount(ActionEvent event) throws IOException {
+    void handleRentalInvoice(ActionEvent event) {
         Period period = periodTable.getSelectionModel().getSelectedItem();
-        ExcelCreator.printAccountPayment(contract, period);
+        Document doc = new AccountDocument(
+                "C:\\Users\\fnajer\\Desktop\\workbook1.xls",
+                "C:\\Users\\fnajer\\Desktop\\workbookNew1.xls");
+        doc.print(contract, period);
+    }
+    @FXML
+    void handleServicesInvoice(ActionEvent event) {
+        Period period = periodTable.getSelectionModel().getSelectedItem();
+        Document doc = new AccountDocument(
+                "C:\\Users\\fnajer\\Desktop\\workbook.xls",
+                "C:\\Users\\fnajer\\Desktop\\workbookNew.xls");
+        doc.print(contract, period);
     }
     
     @FXML
-    void handleCalculation(ActionEvent event) throws IOException {
+    void handleCalculation(ActionEvent event) {
         Period period = periodTable.getSelectionModel().getSelectedItem();
-        ExcelCreator.printAccountCalculation(contract, period);
+//        ExcelCreator.printAccountCalculation(contract, period);
+//        Document doc = new CalculationDocument(
+//                "C:\\Users\\fnajer\\Desktop\\workbookCalc.xls",
+//                "C:\\Users\\fnajer\\Desktop\\workbookCalcNew.xls");
     }
     
     private ObservableList<Contract> contracts;
