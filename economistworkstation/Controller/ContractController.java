@@ -6,9 +6,10 @@
 package economistworkstation.Controller;
 
 import economistworkstation.EconomistWorkstation;
-import economistworkstation.Entity.AccountDocument;
+import economistworkstation.Entity.InvoiceDocument;
 import economistworkstation.Entity.BalanceTable;
 import economistworkstation.Entity.Building;
+import economistworkstation.Entity.CalculationDocument;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
@@ -223,7 +224,7 @@ public class ContractController implements Initializable, BaseController {
     @FXML
     void handleRentalInvoice(ActionEvent event) {
         Period period = periodTable.getSelectionModel().getSelectedItem();
-        Document doc = new AccountDocument(
+        Document doc = new InvoiceDocument(
                 "C:\\Users\\fnajer\\Desktop\\workbook1.xls",
                 "C:\\Users\\fnajer\\Desktop\\workbookNew1.xls");
         doc.print(contract, period);
@@ -231,7 +232,7 @@ public class ContractController implements Initializable, BaseController {
     @FXML
     void handleServicesInvoice(ActionEvent event) {
         Period period = periodTable.getSelectionModel().getSelectedItem();
-        Document doc = new AccountDocument(
+        Document doc = new InvoiceDocument(
                 "C:\\Users\\fnajer\\Desktop\\workbook.xls",
                 "C:\\Users\\fnajer\\Desktop\\workbookNew.xls");
         doc.print(contract, period);
@@ -240,10 +241,10 @@ public class ContractController implements Initializable, BaseController {
     @FXML
     void handleCalculation(ActionEvent event) {
         Period period = periodTable.getSelectionModel().getSelectedItem();
-//        ExcelCreator.printAccountCalculation(contract, period);
-//        Document doc = new CalculationDocument(
-//                "C:\\Users\\fnajer\\Desktop\\workbookCalc.xls",
-//                "C:\\Users\\fnajer\\Desktop\\workbookCalcNew.xls");
+        Document doc = new CalculationDocument(
+                "C:\\Users\\fnajer\\Desktop\\workbookCalc.xls",
+                "C:\\Users\\fnajer\\Desktop\\workbookCalcNew.xls");
+        doc.print(contract, period);
     }
     
     private ObservableList<Contract> contracts;
