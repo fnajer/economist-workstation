@@ -84,8 +84,8 @@ public abstract class Document {
     }
     
     public void iterateCells(ContractData data) {
-        for (Sheet sheet : workbook) {
-            this.sheet = sheet;
+        for (Sheet currSheet : workbook) {
+            this.sheet = currSheet;
             for (Row row : sheet) {
                 for (Cell cell : row) {
                     CellType cellType = cell.getCellType();
@@ -95,12 +95,12 @@ public abstract class Document {
                     }
                 }
             }
+            clearRows();
+            removeRows();
         }
-        clearRows();
-        removeRows();
     }
     
-    private static Sheet sheet;
+    private Sheet sheet;
 
     private void clearRows() {
         ArrayList<Integer> rowsForClear = parser.getRowsForClear();
