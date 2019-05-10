@@ -206,9 +206,9 @@ public class Services extends Payment {
     @Override
     public Services copy() {
         Services services = new Services(getPaid(), getDatePaid(), 
-            getCountWater(), getTariffWater(), getCountElectricity(),
-            getTariffElectricity(), getCostHeading(), getCostGarbage(),
-            getCostInternet(), getCostTelephone());
+            getCountWater(), getCountElectricity(), getCostHeading(),
+            getCostGarbage(), getCostInternet(), getCostTelephone(), 
+            getTariffWater(), getTariffElectricity());
         services.setId(getId());
         return services;
     }
