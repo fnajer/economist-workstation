@@ -6,6 +6,10 @@
 package economistworkstation.Controller;
 
 import economistworkstation.EconomistWorkstation;
+import economistworkstation.Entity.AccrualDocument;
+import economistworkstation.Entity.AccumulationDocument;
+import economistworkstation.Entity.Document;
+import economistworkstation.Entity.MemorialDocument;
 import economistworkstation.ExcelCreator;
 import economistworkstation.Model.PeriodModel;
 import java.io.IOException;
@@ -105,18 +109,27 @@ public class MenuController implements Initializable {
     }
     
     @FXML
-    private void printAcruals() throws IOException {
-        ExcelCreator.printAcruals();
+    private void printAccrual() throws IOException {
+        Document doc = new AccrualDocument(
+                "C:\\Users\\fnajer\\Desktop\\workbookAcr.xls",
+                "C:\\Users\\fnajer\\Desktop\\workbookAcrNew.xls");
+        doc.print();
     }
 
     @FXML
     private void printMemorialOrder() throws IOException {
-        ExcelCreator.printMemorialOrder();
+        Document doc = new MemorialDocument(
+                "C:\\Users\\fnajer\\Desktop\\workbookMem.xls",
+                "C:\\Users\\fnajer\\Desktop\\workbookMemNew.xls");
+        doc.print();
     }
     
     @FXML
     private void printAccumulationStatement() throws IOException {
-        ExcelCreator.printAccumulationStatement();
+        Document doc = new AccumulationDocument(
+                "C:\\Users\\fnajer\\Desktop\\workbookAccum.xls",
+                "C:\\Users\\fnajer\\Desktop\\workbookAccumNew.xls");
+        doc.print();
     }
     /**
      * Закрывает приложение.
