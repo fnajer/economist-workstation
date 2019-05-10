@@ -38,14 +38,18 @@ public abstract class Parser {
     protected TaxLand taxLand;
     protected Equipment equipment;
     protected Services services;
+    
+    Parser() {
+    }
     Parser(ContractData data) {
+        useContractData(data);
+    }
+    
+    protected void useContractData(ContractData data) {
         period = data.getPeriod();
         renter = data.getRenter();
         building = data.getBuilding();
         contract = data.getContract();
-        
-//        BalanceTable balanceTable = period.getBalanceTable();
-//        balanceTable = balanceTable == null ? new BalanceTable() : balanceTable;
 
         rent = isExist(period.getRentPayment()) 
                 ? period.getRentPayment() : new Rent();
@@ -59,8 +63,8 @@ public abstract class Parser {
                 ? period.getServicesPayment() : new Services();
     }
     
-    public void convertTags(ContractData data) {
-        cell = data.getCell();
+    public void convertTags(Cell cell) {
+        this.cell = cell;
         cellString = cell.getStringCellValue();
         
         Pattern pattern = Pattern.compile("<\\w+>");
@@ -156,5 +160,58 @@ public abstract class Parser {
         return false;
     }
     
-    protected abstract String parse(String foundedTag);
+    public static boolean findTag(Cell cell, String srcPattern) {
+        String cellString = cell.getStringCellValue();
+        Pattern pattern = Pattern.compile(srcPattern);
+        Matcher matcher = pattern.matcher(cellString);
+        while(matcher.find()) {
+            return true;
+        }
+        return false;
+        
+    }
+    
+    protected String parse(String foundedTag) {
+        String newValue = "<Tag not founded>";
+  
+        if ("<square>".equals(foundedTag)) {
+            newValue = safeDecFormat(building.getSquare(), Locale.getDefault());
+        }
+        if ("<subject>".equals(foundedTag)) {
+            newValue = renter.getSubject();
+        }
+        if ("<fullName>".equals(foundedTag)) {
+            newValue = renter.getFullName();
+        }
+        if ("<numContract>".equals(foundedTag)) {
+            newValue = Integer.toString(period.getIdContract());
+        }
+        if ("<dateStartContract>".equals(foundedTag)) {
+            LocalDate date = LocalDate.parse(contract.getDateStart());
+            newValue = formatDate(date);
+        }
+        if ("<currentMonthNameAndYear>".equals(foundedTag)) {
+            LocalDate date = LocalDate.parse(period.getEndPeriod());
+            int monthNum = date.getMonth().getValue();
+            String monthName = period.getMonthName(monthNum, false);
+            int monthYear = date.getYear();
+
+            newValue = monthName + ' ' + Integer.toString(monthYear);
+        }
+        if ("<monthNameAndYear>".equals(foundedTag)) {
+            LocalDate date = LocalDate.parse(period.getEndPeriod());
+            int monthNum = date.getMonth().minus(1).getValue();
+            String monthName = period.getMonthName(monthNum, false);
+            int monthYear = date.getYear();
+            if (monthNum == 12) {
+                monthYear--;
+            }
+            newValue = monthName + ' ' + Integer.toString(monthYear);
+        }
+        if ("<user>".equals(foundedTag)) {
+            User user = new User();
+            newValue = user.getFullName();
+        }
+        return newValue;
+    }
 }
