@@ -71,7 +71,7 @@ public static String digits2Text(Double d){
         }
         if(thch.d > '0'){
             if(thch.d > '1' || (thch.d == '1' && thch.u == '0')) result.append(getDecades(thch.d));
-            else if(thch.d > '0') result.append(getTeens(thch.d));
+            else if(thch.d > '0') result.append(getTeens(thch.u));
             result.append(' ');
         }
         if(thch.u > '0' && thch.d != '1'){
