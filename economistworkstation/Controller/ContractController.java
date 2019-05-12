@@ -5,6 +5,7 @@
  */
 package economistworkstation.Controller;
 
+import economistworkstation.ContractDataParameters;
 import economistworkstation.EconomistWorkstation;
 import economistworkstation.Entity.InvoiceDocument;
 import economistworkstation.Entity.BalanceTable;
@@ -224,27 +225,36 @@ public class ContractController implements Initializable, BaseController {
     @FXML
     void handleRentalInvoice(ActionEvent event) {
         Period period = periodTable.getSelectionModel().getSelectedItem();
+        ContractDataParameters data = new ContractDataParameters();
+        data.constructDataObject(contract, period);
         Document doc = new InvoiceDocument(
+                data,
                 "C:\\Users\\fnajer\\Desktop\\workbook1.xls",
                 "C:\\Users\\fnajer\\Desktop\\workbookNew1.xls");
-        doc.print(contract, period);
+        doc.print();
     }
     @FXML
     void handleServicesInvoice(ActionEvent event) {
         Period period = periodTable.getSelectionModel().getSelectedItem();
+        ContractDataParameters data = new ContractDataParameters();
+        data.constructDataObject(contract, period);
         Document doc = new InvoiceDocument(
+                data,
                 "C:\\Users\\fnajer\\Desktop\\workbook.xls",
                 "C:\\Users\\fnajer\\Desktop\\workbookNew.xls");
-        doc.print(contract, period);
+        doc.print();
     }
     
     @FXML
     void handleCalculation(ActionEvent event) {
         Period period = periodTable.getSelectionModel().getSelectedItem();
+        ContractDataParameters data = new ContractDataParameters();
+        data.constructDataObject(contract, period);
         Document doc = new CalculationDocument(
+                data,
                 "C:\\Users\\fnajer\\Desktop\\workbookCalc.xls",
                 "C:\\Users\\fnajer\\Desktop\\workbookCalcNew.xls");
-        doc.print(contract, period);
+        doc.print();
     }
     
     private ObservableList<Contract> contracts;

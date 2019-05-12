@@ -5,12 +5,12 @@
  */
 package economistworkstation.Controller;
 
+import economistworkstation.ContractDataParameters;
 import economistworkstation.EconomistWorkstation;
 import economistworkstation.Entity.AccrualDocument;
 import economistworkstation.Entity.AccumulationDocument;
 import economistworkstation.Entity.Document;
 import economistworkstation.Entity.MemorialDocument;
-import economistworkstation.ExcelCreator;
 import economistworkstation.Model.PeriodModel;
 import java.io.IOException;
 import java.net.URL;
@@ -109,24 +109,33 @@ public class MenuController implements Initializable {
     }
     
     @FXML
-    private void printAccrual() throws IOException {
+    private void printAccrual() {
+        ContractDataParameters data = new ContractDataParameters();
+        data.constructDataList();
         Document doc = new AccrualDocument(
+                data,
                 "C:\\Users\\fnajer\\Desktop\\workbookAcr.xls",
                 "C:\\Users\\fnajer\\Desktop\\workbookAcrNew.xls");
         doc.print();
     }
 
     @FXML
-    private void printMemorialOrder() throws IOException {
+    private void printMemorialOrder() {
+        ContractDataParameters data = new ContractDataParameters();
+        data.constructDataList();
         Document doc = new MemorialDocument(
+                data,
                 "C:\\Users\\fnajer\\Desktop\\workbookMem.xls",
                 "C:\\Users\\fnajer\\Desktop\\workbookMemNew.xls");
         doc.print();
     }
-    
+
     @FXML
-    private void printAccumulationStatement() throws IOException {
+    private void printAccumulationStatement() {
+        ContractDataParameters data = new ContractDataParameters();
+        data.constructDataList();
         Document doc = new AccumulationDocument(
+                data,
                 "C:\\Users\\fnajer\\Desktop\\workbookAccum.xls",
                 "C:\\Users\\fnajer\\Desktop\\workbookAccumNew.xls");
         doc.print();
