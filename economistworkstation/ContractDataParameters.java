@@ -37,19 +37,15 @@ public class ContractDataParameters {
         this.dataList = dataList;
     }
     
-    public ContractDataParameters constructDataObject(Contract contract, Period period) {
+    public void constructDataObject(Contract contract, Period period) {
         Renter renter = RenterModel.getRenter(contract.getIdRenter());
         Building building = BuildingModel.getBuilding(contract.getIdBuilding());
-        ContractDataParameters data = new ContractDataParameters();
-        data.setDataSingle(new ContractData(null, period, 
+        setDataSingle(new ContractData(null, period, 
                             building, renter, contract));
-        return data;
     }
     
-    public ContractDataParameters constructDataList() {
+    public void constructDataList() {
         LocalDate date = LocalDate.parse("2019-09-01");
-        ContractDataParameters data = new ContractDataParameters();
-        data.setDataList(PeriodModel.getContractData(date));
-        return data;
+        setDataList(PeriodModel.getContractData(date));
     }
 }
