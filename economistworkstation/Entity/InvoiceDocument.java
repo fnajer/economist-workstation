@@ -6,6 +6,7 @@
 package economistworkstation.Entity;
 
 import economistworkstation.ContractData;
+import economistworkstation.ContractDataParameters;
 
 
 /**
@@ -13,15 +14,15 @@ import economistworkstation.ContractData;
  * @author fnajer
  */
 public class InvoiceDocument extends Document {
-    
-    public InvoiceDocument(String srcPath, String destPath) {
-        super(srcPath, destPath);
+    //paths takeway into parameters
+    public InvoiceDocument(ContractDataParameters data, String srcPath, String destPath) {
+        super(data, srcPath, destPath);
         
         setLogName("'Счет для оплаты'");
     }
     
     @Override
-    public Parser createTagParser(ContractData data) {
-        return new InvoiceTagParser(data);
+    public Parser createTagParser(ContractDataParameters data) {
+        return new InvoiceTagParser(data.getDataSingle());
     }
 }

@@ -5,7 +5,7 @@
  */
 package economistworkstation.Entity;
 
-import economistworkstation.ContractData;
+import economistworkstation.ContractDataParameters;
 
 
 /**
@@ -14,14 +14,14 @@ import economistworkstation.ContractData;
  */
 public class CalculationDocument extends Document {
     
-    public CalculationDocument(String srcPath, String destPath) {
-        super(srcPath, destPath);
+    public CalculationDocument(ContractDataParameters data, String srcPath, String destPath) {
+        super(data, srcPath, destPath);
         
         setLogName("'Расчет для оплаты'");
     }
     
     @Override
-    public Parser createTagParser(ContractData data) {
-        return new CalculationTagParser(data);
+    public Parser createTagParser(ContractDataParameters data) {
+        return new CalculationTagParser(data.getDataSingle());
     }
 }
