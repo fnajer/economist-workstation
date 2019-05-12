@@ -5,21 +5,16 @@
  */
 package economistworkstation.Entity;
 
-import economistworkstation.ContractData;
-import economistworkstation.Model.BuildingModel;
-import economistworkstation.Model.PeriodModel;
-import economistworkstation.Model.RenterModel;
+import economistworkstation.ContractDataParameters;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.collections.ObservableList;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
@@ -45,11 +40,12 @@ public abstract class Document {
     protected Parser parser;
     private String logName;
     
-    Document(String srcPath, String destPath) {
+    Document(ContractDataParameters data, String srcPath, String destPath) {
         srcFile = new File(srcPath);
         destFile = new File(destPath);
         
         prepareStream();
+        this.parser = createTagParser(data);
     }
     
     private void prepareStream() {
@@ -62,7 +58,7 @@ public abstract class Document {
             Logger.getLogger(Document.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    private void write() {
+    protected void write() {
         try {
             workbook.write(out);
             out.close();
@@ -72,39 +68,13 @@ public abstract class Document {
         }
     }
     
-    public void print(Contract contract, Period period) {
-        ContractDataParameters data = constructDataObject(contract, period);
-        this.parser = createTagParser(data);
-        
-        iterateCells();
-
-        write();
-    }
     public void print() {
-        ContractDataParameters data = constructDataObject();
-        this.parser = createTagParser(data);
-        
-        iterateCells();
+        iterateWorkbook();
 
         write();
     }
     
-    private ContractDataParameters constructDataObject(Contract contract, Period period) {
-        Renter renter = RenterModel.getRenter(contract.getIdRenter());
-        Building building = BuildingModel.getBuilding(contract.getIdBuilding());
-        ContractDataParameters data = new ContractDataParameters();
-        data.setDataSingle(new ContractData(null, period, 
-                            building, renter, contract, workbook));
-        return data;
-    }
-    private ContractDataParameters constructDataObject() {
-        LocalDate date = LocalDate.parse("2019-09-01");
-        ContractDataParameters data = new ContractDataParameters();
-        data.setDataList(PeriodModel.getContractData(date));
-        return data;
-    }
-    
-    private void iterateCells() {
+    protected void iterateWorkbook() {
         for (Sheet currSheet : workbook) {
             this.sheet = currSheet;
             for (Row row : sheet) {
@@ -164,23 +134,4 @@ public abstract class Document {
     }
     
     public abstract Parser createTagParser(ContractDataParameters data);
-    
-    protected class ContractDataParameters {
-        private ContractData dataSingle;
-        private ObservableList<ContractData> dataList;
-        
-        public ContractData getDataSingle() {
-            return dataSingle;
-        }
-        public void setDataSingle(ContractData dataSingle) {
-            this.dataSingle = dataSingle;
-        }
-        
-        public ObservableList<ContractData> getDataList() {
-            return dataList;
-        }
-        public void setDataList(ObservableList<ContractData> dataList) {
-            this.dataList = dataList;
-        }
-    }
 }
