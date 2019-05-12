@@ -6,9 +6,7 @@
 package economistworkstation.Entity;
 
 import economistworkstation.ContractData;
-import economistworkstation.Util.Money;
 import java.time.LocalDate;
-import java.util.Locale;
 
 /**
  *
@@ -24,32 +22,6 @@ public class CalculationTagParser extends Parser {
     protected String parse(String foundedTag) {
         String newValue = "<Tag not founded>";
   
-        //|same with invoice
-        if ("<monthNameAndYear>".equals(foundedTag)) {
-            LocalDate date = LocalDate.parse(period.getEndPeriod());
-            int monthNum = date.getMonth().minus(1).getValue();
-            String monthName = period.getMonthName(monthNum, false);
-            int monthYear = date.getYear();
-            if (monthNum == 12) {
-                monthYear--;
-            }
-            newValue = monthName + ' ' + Integer.toString(monthYear);
-        }
-        if ("<subject>".equals(foundedTag)) {
-            newValue = renter.getSubject();
-        }
-        if ("<fullName>".equals(foundedTag)) {
-            newValue = renter.getFullName();
-        }
-        if ("<square>".equals(foundedTag)) {
-            newValue = safeDecFormat(building.getSquare(), Locale.getDefault());
-        }
-        //same||
-        if ("<user>".equals(foundedTag)) {
-            User user = new User();
-            newValue = user.getFullName();
-        }
-        //endsame|
         if ("<rent>".equals(foundedTag)) {
             double result = getDoubleValue(rent.sumToPay());
 
@@ -133,14 +105,6 @@ public class CalculationTagParser extends Parser {
         if ("<type>".equals(foundedTag)) {
             newValue = building.getType();
         }
-        if ("<currentMonthNameAndYear>".equals(foundedTag)) {
-            LocalDate date = LocalDate.parse(period.getEndPeriod());
-            int monthNum = date.getMonth().getValue();
-            String monthName = period.getMonthName(monthNum, false);
-            int monthYear = date.getYear();
-
-            newValue = monthName + ' ' + Integer.toString(monthYear);
-        }
         if ("<month>".equals(foundedTag)) {
             LocalDate date = LocalDate.parse(period.getEndPeriod());
             int monthNum = date.getMonth().minus(1).getValue();
@@ -180,6 +144,8 @@ public class CalculationTagParser extends Parser {
             newValue = count + '*' + tariff + '=';
         }
         
+        if ("<Tag not founded>".equals(newValue))
+            newValue = super.parse(foundedTag);
         return newValue;
     }
 }

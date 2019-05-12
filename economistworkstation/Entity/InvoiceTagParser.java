@@ -26,7 +26,11 @@ public class InvoiceTagParser extends Parser {
     protected String parse(String foundedTag) {
         String newValue = "<Tag not founded>";
         
-        //common tags
+        if ("<sumInWords>".equals(foundedTag)) {
+            newValue = Money.digits2Text(sumForWords);
+        }
+        //up - common with calculation
+        
         if ("<date>".equals(foundedTag)) {
             newValue = formatDate(LocalDate.now());
         }
@@ -35,35 +39,6 @@ public class InvoiceTagParser extends Parser {
         }
         if ("<numServicesAcc>".equals(foundedTag)) {
             newValue = Integer.toString(period.getNumberServicesAcc());
-        }
-        if ("<subject>".equals(foundedTag)) {
-            newValue = renter.getSubject();
-        }
-        if ("<fullName>".equals(foundedTag)) {
-            newValue = renter.getFullName();
-        }
-        if ("<numContract>".equals(foundedTag)) {
-            newValue = Integer.toString(period.getIdContract());
-        }
-        if ("<dateStartContract>".equals(foundedTag)) {
-            LocalDate date = LocalDate.parse(contract.getDateStart());
-            newValue = formatDate(date);
-        }
-        if ("<square>".equals(foundedTag)) {
-            newValue = safeDecFormat(building.getSquare(), Locale.getDefault());
-        }
-        if ("<monthNameAndYear>".equals(foundedTag)) {
-            LocalDate date = LocalDate.parse(period.getEndPeriod());
-            int monthNum = date.getMonth().minus(1).getValue();
-            String monthName = period.getMonthName(monthNum, false);
-            int monthYear = date.getYear();
-            if (monthNum == 12) {
-                monthYear--;
-            }
-            newValue = monthName + ' ' + Integer.toString(monthYear);
-        }
-        if ("<sumInWords>".equals(foundedTag)) {
-            newValue = Money.digits2Text(sumForWords);
         }
         //rental account
         if ("<rent>".equals(foundedTag)) {
@@ -186,6 +161,9 @@ public class InvoiceTagParser extends Parser {
             sumForWords += result;
             return null;
         }
+        
+        if ("<Tag not founded>".equals(newValue))
+            newValue = super.parse(foundedTag);
         return newValue;
     }
 }
