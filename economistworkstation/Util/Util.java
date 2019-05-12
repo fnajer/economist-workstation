@@ -157,4 +157,12 @@ public class Util {
             return null;
         }
     }
+    
+    public static DecimalFormat decFormat(Locale locale) {
+        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(locale);
+        DecimalFormat df = new DecimalFormat("#.##", otherSymbols);
+        df.setRoundingMode(RoundingMode.HALF_UP);
+        
+        return df;
+    }
 }

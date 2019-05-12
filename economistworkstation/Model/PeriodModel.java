@@ -101,8 +101,6 @@ public class PeriodModel {
             Integer idEquipment = addPayment(period.getEquipmentPayment(), id);
             if (idEquipment == null) period.setEquipmentPayment(null);
             
-//            updateBalancePeriod(id, period);
-
             PreparedStatement ps = db.conn.prepareStatement("UPDATE PERIOD "
                     + "SET number=?, date_end=?, id_contract=? "
                     + "WHERE id=?");
@@ -215,7 +213,7 @@ public class PeriodModel {
                 contractsData.add(new ContractData(null, createObjectPeriod(rs),
                         BuildingModel.createObjectBuilding(rs),
                         RenterModel.createObjectRenter(rs), 
-                        ContractModel.createObjectContract(rs), null));
+                        ContractModel.createObjectContract(rs)));
             }
             
             System.out.println("Извлечение целых контрактов завершено.");

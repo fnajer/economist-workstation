@@ -18,10 +18,10 @@ import economistworkstation.Entity.Field;
 import economistworkstation.Entity.Services;
 import economistworkstation.Entity.TaxLand;
 import economistworkstation.Model.PeriodModel;
-import economistworkstation.Util.TagParser;
 import economistworkstation.Util.Util;
 import static economistworkstation.Util.Util.parseField;
 import static economistworkstation.Util.Util.isExist;
+import static economistworkstation.Util.Util.decFormat;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -487,7 +487,7 @@ public class PeriodFormController {
             
             double total = Double.parseDouble(count) * Double.parseDouble(tariff);
             if (total < 0) throw new NumberFormatException();
-            String formatTotal = TagParser.getDecimalFormat(Locale.US).format(total);
+            String formatTotal = decFormat(Locale.US).format(total);
             label.setText(formatTotal);
         } catch(NumberFormatException e) {
             label.setText("...");    
@@ -512,7 +512,7 @@ public class PeriodFormController {
                 if (value < 0) throw new NumberFormatException();
                 sum += value;
             }
-            formatSum = TagParser.getDecimalFormat(Locale.US).format(sum);
+            formatSum = decFormat(Locale.US).format(sum);
             label.setText(formatSum);
         } catch(NumberFormatException e) {
             label.setText("...");
