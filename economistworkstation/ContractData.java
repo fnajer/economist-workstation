@@ -12,7 +12,6 @@ import economistworkstation.Entity.Renter;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Workbook;
 
 /**
  *
@@ -24,21 +23,19 @@ public class ContractData {
     private final ObjectProperty building;
     private final ObjectProperty renter;
     private final ObjectProperty contract;
-    private final ObjectProperty workbook;
     
     public ContractData() {
-        this(null, null, null, null, null, null);
+        this(null, null, null, null, null);
     }
     
       
     public ContractData(Cell cell, Period period, Building building, Renter renter, 
-            Contract contract, Workbook workbook) {
+            Contract contract) {
        this.cell = new SimpleObjectProperty(cell);
        this.period = new SimpleObjectProperty(period);
        this.building = new SimpleObjectProperty(building);
        this.renter = new SimpleObjectProperty(renter);
        this.contract = new SimpleObjectProperty(contract);
-       this.workbook = new SimpleObjectProperty(workbook);
     }
 
     
@@ -81,13 +78,4 @@ public class ContractData {
     public void setContract(Contract contract) {
         this.contract.set(contract);
     }
-    
-    public Workbook getWorkbook() {
-        return (Workbook) workbook.get();
-    }
-
-    public void setWorkbook(Workbook workbook) {
-        this.workbook.set(workbook);
-    }
-    
 }
