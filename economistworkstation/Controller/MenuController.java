@@ -9,21 +9,29 @@ import economistworkstation.ContractDataParameters;
 import economistworkstation.EconomistWorkstation;
 import economistworkstation.Entity.AccrualDocument;
 import economistworkstation.Entity.AccumulationDocument;
+import economistworkstation.Entity.Building;
 import economistworkstation.Entity.Document;
 import economistworkstation.Entity.MemorialDocument;
+import economistworkstation.Model.BuildingModel;
 import economistworkstation.Model.PeriodModel;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 /**
  *
@@ -108,38 +116,53 @@ public class MenuController implements Initializable {
         contracts.fire();
     }
     
+    
     @FXML
-    private void printAccrual() {
-        ContractDataParameters data = new ContractDataParameters();
-        data.constructDataList();
-        Document doc = new AccrualDocument(
-                data,
-                "C:\\Users\\fnajer\\Desktop\\workbookAcr.xls",
-                "C:\\Users\\fnajer\\Desktop\\workbookAcrNew.xls");
-        doc.print();
+    private void handleShowStatement() {
+        boolean okClicked = showStatementForm();
+        if (okClicked) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.initOwner(mainApp.getPrimaryStage());
+            alert.setTitle("Успех");
+            alert.setHeaderText("Создание ведомости");
+            alert.setContentText("Ведомость создана успешно.");
+
+            alert.showAndWait();
+        }
+
+    }
+    
+    public boolean showStatementForm() {
+        try {
+            // Загружаем fxml-файл и создаём новую сцену
+            // для всплывающего диалогового окна.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(EconomistWorkstation.class.getResource("View/StatementForm.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            
+            // Создаём диалоговое окно Stage.
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Управление ведомостями");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(mainApp.getPrimaryStage());
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+            
+            // Передаём адресата в контроллер.
+            StatementFormController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setStatement();
+            
+            // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
+            dialogStage.showAndWait();
+            
+            return controller.isOkClicked();
+        } catch (IOException ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
 
-    @FXML
-    private void printMemorialOrder() {
-        ContractDataParameters data = new ContractDataParameters();
-        data.constructDataList();
-        Document doc = new MemorialDocument(
-                data,
-                "C:\\Users\\fnajer\\Desktop\\workbookMem.xls",
-                "C:\\Users\\fnajer\\Desktop\\workbookMemNew.xls");
-        doc.print();
-    }
-
-    @FXML
-    private void printAccumulationStatement() {
-        ContractDataParameters data = new ContractDataParameters();
-        data.constructDataList();
-        Document doc = new AccumulationDocument(
-                data,
-                "C:\\Users\\fnajer\\Desktop\\workbookAccum.xls",
-                "C:\\Users\\fnajer\\Desktop\\workbookAccumNew.xls");
-        doc.print();
-    }
     /**
      * Закрывает приложение.
      */

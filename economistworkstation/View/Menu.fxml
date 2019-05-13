@@ -21,9 +21,6 @@
         <items>
           <MenuItem fx:id="contracts" mnemonicParsing="false" onAction="#showList" text="Показать список" />
             <MenuItem fx:id="accounts" mnemonicParsing="false" onAction="#updateAccounts" text="Переназначить счета" />
-            <MenuItem mnemonicParsing="false" onAction="#printAccrual" text="Ведомость начисления за месяц" />
-            <MenuItem mnemonicParsing="false" onAction="#printMemorialOrder" text="Мемориальный ордер" />
-            <MenuItem mnemonicParsing="false" onAction="#printAccumulationStatement" text="Накопительная ведомость" />
         </items>
       </Menu>
       <Menu mnemonicParsing="false" text="Арендатор">
@@ -35,6 +32,11 @@
          <items>
             <MenuItem fx:id="buildings" mnemonicParsing="false" onAction="#showList" text="Показать список" />
          </items>
+      </Menu>
+      <Menu mnemonicParsing="false" text="Ведомость">
+        <items>
+          <MenuItem mnemonicParsing="false" onAction="#handleShowStatement" text="Открыть" />
+        </items>
       </Menu>
       <Menu mnemonicParsing="false" text="Помощь">
          <items>
