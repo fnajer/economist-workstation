@@ -6,17 +6,22 @@
 package economistworkstation.Util;
 
 import economistworkstation.ContractDataParameters;
+import java.nio.file.Paths;
 
 /**
  *
  * @author fnajer
  */
 public abstract class Statement {
+    protected String path;
+            
     public Statement() {
         
     }
     
-
+    protected String getPatternsPath(String fileName) {
+        return Paths.get("src/config/patterns").resolve(fileName).toString();
+    }
     
     public abstract void print(ContractDataParameters data);
 }

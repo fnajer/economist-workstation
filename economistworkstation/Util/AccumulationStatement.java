@@ -16,13 +16,15 @@ import economistworkstation.Entity.Document;
 public class AccumulationStatement extends Statement {
     public AccumulationStatement() {
         super();
+        
+        path = getPatternsPath("accumulationStatement.xls");
     }
     
     @Override
     public void print(ContractDataParameters data) {
         Document doc = new AccumulationDocument(
                 data,
-                "C:\\Users\\fnajer\\Desktop\\workbookAccum.xls",
+                path,
                 data.getSavePath());
         doc.print();
     }

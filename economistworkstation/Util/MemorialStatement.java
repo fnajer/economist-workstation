@@ -16,13 +16,15 @@ import economistworkstation.Entity.MemorialDocument;
 public class MemorialStatement extends Statement {
     public MemorialStatement() {
         super();
+        
+        path = getPatternsPath("memorialOrder.xls");
     }
     
     @Override
     public void print(ContractDataParameters data) {
         Document doc = new MemorialDocument(
                 data,
-                "C:\\Users\\fnajer\\Desktop\\workbookMem.xls",
+                path,
                 data.getSavePath());
         doc.print();
     }

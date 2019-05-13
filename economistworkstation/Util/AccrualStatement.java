@@ -15,14 +15,16 @@ import economistworkstation.Entity.Document;
  */
 public class AccrualStatement extends Statement {
     public AccrualStatement() {
+        super();
         
+        path = getPatternsPath("accrualStatement.xls");
     }
     
     @Override
     public void print(ContractDataParameters data) {
         Document doc = new AccrualDocument(
                 data,
-                "C:\\Users\\fnajer\\Desktop\\workbookAcr.xls",
+                path,
                 data.getSavePath());
         doc.print();
     }
