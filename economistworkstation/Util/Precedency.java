@@ -6,43 +6,29 @@
 package economistworkstation.Util;
 
 import java.util.prefs.Preferences;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 
 /**
  *
  * @author fnajer
  */
 public class Precedency {
-    private final Preferences savePrefs;
-    private final Preferences loadPrefs;
+    private final Preferences prefs;
     
-    private String path;
     public Precedency() {
-        savePrefs = Preferences.userRoot().node("economist-save"); 
-        loadPrefs = Preferences.userRoot().node("economist-load");
+        prefs = Preferences.userRoot().node("economist-workstation"); 
     }
-    
-    public ObservableList<Statement> getStatements() {
-        ObservableList<Statement> items = FXCollections.observableArrayList();
-        items.addAll(
-                new AccrualStatement(), 
-                new MemorialStatement(), 
-                new AccumulationStatement());
-        return items;
-    }
-    
+
     public String getSaveDirectory() {
-        return savePrefs.get("saveDirectory", "C:");
+        return prefs.get("saveDirectory", "C:");
     }
     public void setSaveDirectory(String path) {
-        savePrefs.put("saveDirectory", path);
+        prefs.put("saveDirectory", path);
     }
     
-    public String getSavePath() {
-        return path;
+    public String getLoadDirectory() {
+        return prefs.get("loadDirectory", "C:");
     }
-    public void setSavePath(String path) {
-        this.path = path;
+    public void setLoadDirectory(String path) {
+        prefs.put("loadDirectory", path);
     }
 }

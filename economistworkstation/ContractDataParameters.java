@@ -22,8 +22,6 @@ import javafx.collections.ObservableList;
 public class ContractDataParameters {
     private ContractData dataSingle;
     private ObservableList<ContractData> dataList;
-    
-    private String savePath;
 
     public ContractData getDataSingle() {
         return dataSingle;
@@ -46,16 +44,7 @@ public class ContractDataParameters {
                             building, renter, contract));
     }
     
-    public void constructDataList(LocalDate date, String savePath) {
-//        LocalDate date = LocalDate.parse("2019-09-01");
-        this.savePath = savePath;
+    public void constructDataList(LocalDate date) {
         setDataList(PeriodModel.getContractData(date));
-    }
-    
-    public String getSavePath() {
-        return savePath;
-    }
-    public void setSavePath(String savePath) {
-        this.savePath = savePath;
     }
 }
