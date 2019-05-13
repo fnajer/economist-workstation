@@ -6,31 +6,31 @@
 package economistworkstation.Util;
 
 import economistworkstation.ContractDataParameters;
-import economistworkstation.Entity.AccumulationDocument;
 import economistworkstation.Entity.Document;
+import economistworkstation.Entity.InvoiceDocument;
 
 /**
  *
  * @author fnajer
  */
-public class AccumulationStatement extends Statement {
-    public AccumulationStatement() {
+public class RentalPattern extends Pattern {
+    public RentalPattern() {
         super();
         
-        path = getPatternsPath("accumulationStatement.xls");
+        setPatternPath("rentalAccount.xls");
     }
     
     @Override
     public void print(ContractDataParameters data) {
-        Document doc = new AccumulationDocument(
+        Document doc = new InvoiceDocument(
                 data,
-                path,
-                data.getSavePath());
+                getPatternPath(),
+                getPathToSave());
         doc.print();
     }
     
     @Override
     public String toString() {
-        return String.format("Накопительная ведомость");
+        return String.format("Счет аренды");
     }
 }

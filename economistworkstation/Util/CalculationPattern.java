@@ -6,31 +6,31 @@
 package economistworkstation.Util;
 
 import economistworkstation.ContractDataParameters;
-import economistworkstation.Entity.AccrualDocument;
+import economistworkstation.Entity.CalculationDocument;
 import economistworkstation.Entity.Document;
 
 /**
  *
  * @author fnajer
  */
-public class AccrualStatement extends Statement {
-    public AccrualStatement() {
+public class CalculationPattern extends Pattern {
+    public CalculationPattern() {
         super();
         
-        path = getPatternsPath("accrualStatement.xls");
+        setPatternPath("calculationPayments.xls");
     }
     
     @Override
     public void print(ContractDataParameters data) {
-        Document doc = new AccrualDocument(
+        Document doc = new CalculationDocument(
                 data,
-                path,
-                data.getSavePath());
+                getPatternPath(),
+                getPathToSave());
         doc.print();
     }
     
     @Override
     public String toString() {
-        return String.format("Ведомость начисления");
+        return String.format("Расчет платежей");
     }
 }

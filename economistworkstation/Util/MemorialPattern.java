@@ -13,19 +13,19 @@ import economistworkstation.Entity.MemorialDocument;
  *
  * @author fnajer
  */
-public class MemorialStatement extends Statement {
-    public MemorialStatement() {
+public class MemorialPattern extends Pattern {
+    public MemorialPattern() {
         super();
         
-        path = getPatternsPath("memorialOrder.xls");
+        setPatternPath("memorialOrder.xls");
     }
     
     @Override
     public void print(ContractDataParameters data) {
         Document doc = new MemorialDocument(
                 data,
-                path,
-                data.getSavePath());
+                getPatternPath(),
+                getPathToSave());
         doc.print();
     }
     
