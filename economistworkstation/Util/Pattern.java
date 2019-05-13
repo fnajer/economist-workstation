@@ -55,7 +55,14 @@ public abstract class Pattern {
         items.addAll(getStatements());
         return items;
     }
-
+    
+    public void replacePattern(String pathFile) {
+        try {
+            Files.copy(Paths.get(pathFile), Paths.get(patternPath), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException ex) {
+            Logger.getLogger(Pattern.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     public String getPathToSave() {
         return pathToSave;
