@@ -31,6 +31,31 @@ public abstract class Pattern {
         return Paths.get(patternDirPath).resolve(fileName).toString();
     }
     
+    public static ObservableList<Pattern> getStatements() {
+        ObservableList<Pattern> items = FXCollections.observableArrayList();
+        items.addAll(
+                new AccrualPattern(), 
+                new MemorialPattern(), 
+                new AccumulationPattern());
+        return items;
+    }
+    
+    public static ObservableList<Pattern> getAccounts() {
+        ObservableList<Pattern> items = FXCollections.observableArrayList();
+        items.addAll(
+                new RentalPattern(),
+                new ServicePattern(),
+                new CalculationPattern());
+        return items;
+    }
+    
+    public static ObservableList<Pattern> getPatterns() {
+        ObservableList<Pattern> items = FXCollections.observableArrayList();
+        items.addAll(getAccounts());
+        items.addAll(getStatements());
+        return items;
+    }
+
     
     public String getPathToSave() {
         return pathToSave;
