@@ -5,14 +5,7 @@
  */
 package economistworkstation.Controller;
 
-import economistworkstation.ContractDataParameters;
 import economistworkstation.EconomistWorkstation;
-import economistworkstation.Entity.AccrualDocument;
-import economistworkstation.Entity.AccumulationDocument;
-import economistworkstation.Entity.Building;
-import economistworkstation.Entity.Document;
-import economistworkstation.Entity.MemorialDocument;
-import economistworkstation.Model.BuildingModel;
 import economistworkstation.Model.PeriodModel;
 import java.io.IOException;
 import java.net.URL;
@@ -152,6 +145,52 @@ public class MenuController implements Initializable {
             StatementFormController controller = loader.getController();
             controller.setDialogStage(dialogStage);
             controller.setStatement();
+            
+            // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
+            dialogStage.showAndWait();
+            
+            return controller.isOkClicked();
+        } catch (IOException ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+    
+    @FXML
+    private void handleLoadPattern() {
+        boolean okClicked = showPatternForm();
+        if (okClicked) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.initOwner(mainApp.getPrimaryStage());
+            alert.setTitle("Успех");
+            alert.setHeaderText("Замена шаблона");
+            alert.setContentText("Замена шаблона произведена успешно.");
+
+            alert.showAndWait();
+        }
+
+    }
+    
+    public boolean showPatternForm() {
+        try {
+            // Загружаем fxml-файл и создаём новую сцену
+            // для всплывающего диалогового окна.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(EconomistWorkstation.class.getResource("View/PatternForm.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            
+            // Создаём диалоговое окно Stage.
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Загрузка шаблонов");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(mainApp.getPrimaryStage());
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+            
+            // Передаём адресата в контроллер.
+            PatternFormController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setPattern();
             
             // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
             dialogStage.showAndWait();
