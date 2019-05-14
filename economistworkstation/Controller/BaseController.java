@@ -29,4 +29,22 @@ public abstract class BaseController implements Initializable {
     protected void setMainApp(EconomistWorkstation mainApp) {
         this.mainApp = mainApp;
     }
+    
+    protected AnchorPane loadFXML(String path, FXMLLoader loader) throws IOException {
+        // Загружаем fxml-файл и создаём новую сцену
+        // для всплывающего диалогового окна.
+        loader.setLocation(EconomistWorkstation.class.getResource(path));
+        return (AnchorPane) loader.load();
+    }
+    
+    protected Stage createDialog(String title, Parent container) throws IOException {
+        // Создаём диалоговое окно Stage.
+        Stage dialogStage = new Stage();
+        dialogStage.setTitle(title);
+        dialogStage.initModality(Modality.WINDOW_MODAL);
+        dialogStage.initOwner(mainApp.getPrimaryStage());
+        Scene scene = new Scene(container);
+        dialogStage.setScene(scene);
+        return dialogStage;
+    }
 }

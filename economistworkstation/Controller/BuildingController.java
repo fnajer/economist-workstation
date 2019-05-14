@@ -5,7 +5,6 @@
  */
 package economistworkstation.Controller;
 
-import economistworkstation.EconomistWorkstation;
 import economistworkstation.Entity.Building;
 import economistworkstation.Model.BuildingModel;
 import java.io.IOException;
@@ -16,14 +15,12 @@ import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 
@@ -144,19 +141,10 @@ public class BuildingController extends BaseController {
     
     public boolean showBuildingForm(Building building) {
         try {
-            // Загружаем fxml-файл и создаём новую сцену
-            // для всплывающего диалогового окна.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(EconomistWorkstation.class.getResource("View/Building/BuildingForm.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
+            AnchorPane container = loadFXML("View/Building/BuildingForm.fxml", loader);
             
-            // Создаём диалоговое окно Stage.
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Редактировать здание");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(mainApp.getPrimaryStage());
-            Scene scene = new Scene(page);
-            dialogStage.setScene(scene);
+            Stage dialogStage = createDialog("Редактировать здание", container);
             
             // Передаём адресата в контроллер.
             BuildingFormController controller = loader.getController();

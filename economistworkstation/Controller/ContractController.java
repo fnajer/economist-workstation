@@ -5,12 +5,10 @@
  */
 package economistworkstation.Controller;
 
-import economistworkstation.EconomistWorkstation;
 import economistworkstation.Entity.BalanceTable;
 import economistworkstation.Entity.Building;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.fxml.Initializable;
 
 import economistworkstation.Entity.Contract;
 import economistworkstation.Entity.Field;
@@ -34,7 +32,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -42,7 +39,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 /**
  *
@@ -236,19 +232,10 @@ public class ContractController extends BaseController {
     
     public boolean showInvoiceForm(Period period) {
         try {
-            // Загружаем fxml-файл и создаём новую сцену
-            // для всплывающего диалогового окна.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(EconomistWorkstation.class.getResource("View/InvoiceForm.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
+            AnchorPane container = loadFXML("View/InvoiceForm.fxml", loader);
             
-            // Создаём диалоговое окно Stage.
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Управление счетами");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(mainApp.getPrimaryStage());
-            Scene scene = new Scene(page);
-            dialogStage.setScene(scene);
+            Stage dialogStage = createDialog("Управление счетами", container);
             
             // Передаём адресата в контроллер.
             InvoiceFormController controller = loader.getController();
@@ -482,19 +469,10 @@ public class ContractController extends BaseController {
     
     public boolean showContractForm(Contract contract) {
         try {
-            // Загружаем fxml-файл и создаём новую сцену
-            // для всплывающего диалогового окна.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(EconomistWorkstation.class.getResource("View/Contract/ContractForm.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
+            AnchorPane container = loadFXML("View/Contract/ContractForm.fxml", loader);
             
-            // Создаём диалоговое окно Stage.
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Редактировать контракт");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(mainApp.getPrimaryStage());
-            Scene scene = new Scene(page);
-            dialogStage.setScene(scene);
+            Stage dialogStage = createDialog("Редактировать контракт", container);
             
             // Передаём адресата в контроллер.
             ContractFormController controller = loader.getController();

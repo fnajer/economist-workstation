@@ -155,19 +155,10 @@ public class RenterController extends BaseController {
     
     public boolean showRenterForm(Renter renter) {
         try {
-            // Загружаем fxml-файл и создаём новую сцену
-            // для всплывающего диалогового окна.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(EconomistWorkstation.class.getResource("View/Renter/RenterForm.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
+            AnchorPane container = loadFXML("View/Renter/RenterForm.fxml", loader);
             
-            // Создаём диалоговое окно Stage.
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Edit Renter");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(mainApp.getPrimaryStage());
-            Scene scene = new Scene(page);
-            dialogStage.setScene(scene);
+            Stage dialogStage = createDialog("Редактировать арендатора", container);
             
             // Передаём адресата в контроллер.
             RenterFormController controller = loader.getController();
