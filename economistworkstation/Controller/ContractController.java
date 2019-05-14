@@ -5,18 +5,14 @@
  */
 package economistworkstation.Controller;
 
-import economistworkstation.ContractDataParameters;
 import economistworkstation.EconomistWorkstation;
-import economistworkstation.Entity.InvoiceDocument;
 import economistworkstation.Entity.BalanceTable;
 import economistworkstation.Entity.Building;
-import economistworkstation.Entity.CalculationDocument;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 
 import economistworkstation.Entity.Contract;
-import economistworkstation.Entity.Document;
 import economistworkstation.Entity.Field;
 import economistworkstation.Entity.Period;
 import economistworkstation.Entity.Renter;
@@ -177,7 +173,6 @@ public class ContractController implements Initializable, BaseController {
                 recalculateBalance(selectedPeriod);
                 showPeriodDetails(selectedPeriod);
             }
-
         } else {
             // Ничего не выбрано.
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -190,7 +185,6 @@ public class ContractController implements Initializable, BaseController {
         }
     }
  
-    
     public boolean showPeriodForm(Period period) {
         try {
             // Загружаем fxml-файл и создаём новую сцену
@@ -223,38 +217,61 @@ public class ContractController implements Initializable, BaseController {
     }
     
     @FXML
-    void handleRentalInvoice(ActionEvent event) {
-        Period period = periodTable.getSelectionModel().getSelectedItem();
-        ContractDataParameters data = new ContractDataParameters();
-        data.constructDataObject(contract, period);
-        Document doc = new InvoiceDocument(
-                data,
-                "C:\\Users\\fnajer\\Desktop\\workbook1.xls",
-                "C:\\Users\\fnajer\\Desktop\\workbookNew1.xls");
-        doc.print();
-    }
-    @FXML
-    void handleServicesInvoice(ActionEvent event) {
-        Period period = periodTable.getSelectionModel().getSelectedItem();
-        ContractDataParameters data = new ContractDataParameters();
-        data.constructDataObject(contract, period);
-        Document doc = new InvoiceDocument(
-                data,
-                "C:\\Users\\fnajer\\Desktop\\workbook.xls",
-                "C:\\Users\\fnajer\\Desktop\\workbookNew.xls");
-        doc.print();
+    private void handlePrintInvoice() {
+        Period selectedPeriod = periodTable.getSelectionModel().getSelectedItem();
+        
+        if (selectedPeriod != null) {
+            boolean okClicked = showInvoiceForm(selectedPeriod);
+            if (okClicked) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.initOwner(mainApp.getPrimaryStage());
+                alert.setTitle("Успех");
+                alert.setHeaderText("Создание счета");
+                alert.setContentText("Счет создан успешно.");
+
+                alert.showAndWait();
+            }
+        } else {
+            // Ничего не выбрано.
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.initOwner(mainApp.getPrimaryStage());
+            alert.setTitle("Не выбран");
+            alert.setHeaderText("Период не выбран");
+            alert.setContentText("Пожалуйста, выберите период в таблице.");
+
+            alert.showAndWait();
+        }
     }
     
-    @FXML
-    void handleCalculation(ActionEvent event) {
-        Period period = periodTable.getSelectionModel().getSelectedItem();
-        ContractDataParameters data = new ContractDataParameters();
-        data.constructDataObject(contract, period);
-        Document doc = new CalculationDocument(
-                data,
-                "C:\\Users\\fnajer\\Desktop\\workbookCalc.xls",
-                "C:\\Users\\fnajer\\Desktop\\workbookCalcNew.xls");
-        doc.print();
+    public boolean showInvoiceForm(Period period) {
+        try {
+            // Загружаем fxml-файл и создаём новую сцену
+            // для всплывающего диалогового окна.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(EconomistWorkstation.class.getResource("View/InvoiceForm.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            
+            // Создаём диалоговое окно Stage.
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Управление счетами");
+            dialogStage.initModality(Modality.WINDOW_MODAL);
+            dialogStage.initOwner(mainApp.getPrimaryStage());
+            Scene scene = new Scene(page);
+            dialogStage.setScene(scene);
+            
+            // Передаём адресата в контроллер.
+            InvoiceFormController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setInvoice(contract, period);
+            
+            // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
+            dialogStage.showAndWait();
+            
+            return controller.isOkClicked();
+        } catch (IOException ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
     
     private ObservableList<Contract> contracts;
