@@ -16,7 +16,6 @@ import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -28,16 +27,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 
-interface BaseController {
-    void setMainApp(EconomistWorkstation mainApp);
-}
-
 /**
  * FXML Controller class
  *
  * @author fnajer
  */
-public class BuildingController implements Initializable, BaseController  { //extends BaseController
+public class BuildingController extends BaseController {
     
     @FXML
     private TableView<Building> buildingTable;
@@ -56,12 +51,6 @@ public class BuildingController implements Initializable, BaseController  { //ex
     private Label costResidueLabel;
    
     private ObservableList<Building> buildings;
-    private EconomistWorkstation mainApp;
-    
-    @Override
-    public void setMainApp(EconomistWorkstation mainApp) {
-        this.mainApp = mainApp;
-    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -142,14 +131,12 @@ public class BuildingController implements Initializable, BaseController  { //ex
                 BuildingModel.updateBuilding(selectedBuilding.getId(), selectedBuilding);
                 showDetails(selectedBuilding);
             }
-
         } else {
-            // Ничего не выбрано.
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.initOwner(mainApp.getPrimaryStage());
-            alert.setTitle("No Selection");
-            alert.setHeaderText("No Person Selected");
-            alert.setContentText("Please select a person in the table.");
+            alert.setTitle("Не выбрано");
+            alert.setHeaderText("Здание не выбрано");
+            alert.setContentText("Пожалуйста, выберите здание в таблице.");
 
             alert.showAndWait();
         }
@@ -165,7 +152,7 @@ public class BuildingController implements Initializable, BaseController  { //ex
             
             // Создаём диалоговое окно Stage.
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("Edit Person");
+            dialogStage.setTitle("Редактировать здание");
             dialogStage.initModality(Modality.WINDOW_MODAL);
             dialogStage.initOwner(mainApp.getPrimaryStage());
             Scene scene = new Scene(page);

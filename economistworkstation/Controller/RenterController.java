@@ -13,7 +13,6 @@ import economistworkstation.Model.RenterModel;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -32,7 +31,7 @@ import javafx.stage.Stage;
  * @author fnajer
  */
 
-public class RenterController implements Initializable, BaseController {
+public class RenterController extends BaseController {
     @FXML
     private TableView<Renter> renterTable;
     @FXML
@@ -54,12 +53,6 @@ public class RenterController implements Initializable, BaseController {
     private Label subjectLabel;
    
     private ObservableList<Renter> renters;
-    private EconomistWorkstation mainApp;
-    
-    @Override
-    public void setMainApp(EconomistWorkstation mainApp) {
-        this.mainApp = mainApp;
-    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

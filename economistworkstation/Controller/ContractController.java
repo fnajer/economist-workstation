@@ -48,7 +48,7 @@ import javafx.stage.Stage;
  *
  * @author fnajer
  */
-public class ContractController implements Initializable, BaseController {
+public class ContractController extends BaseController {
     
     @FXML
     private TableView<Contract> contractTable;
@@ -187,19 +187,10 @@ public class ContractController implements Initializable, BaseController {
  
     public boolean showPeriodForm(Period period) {
         try {
-            // Загружаем fxml-файл и создаём новую сцену
-            // для всплывающего диалогового окна.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(EconomistWorkstation.class.getResource("View/Period/PeriodForm.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
+            AnchorPane container = loadFXML("View/Period/PeriodForm.fxml", loader);
             
-            // Создаём диалоговое окно Stage.
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Редактировать период");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(mainApp.getPrimaryStage());
-            Scene scene = new Scene(page);
-            dialogStage.setScene(scene);
+            Stage dialogStage = createDialog("Редактировать период", container);
             
             // Передаём адресата в контроллер.
             PeriodFormController controller = loader.getController();
@@ -276,13 +267,7 @@ public class ContractController implements Initializable, BaseController {
     
     private ObservableList<Contract> contracts;
     private ObservableList<Period> periods;
-    private EconomistWorkstation mainApp;
     
-    @Override
-    public void setMainApp(EconomistWorkstation mainApp) {
-        this.mainApp = mainApp;
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
        
