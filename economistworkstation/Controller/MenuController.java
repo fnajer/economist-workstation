@@ -15,12 +15,9 @@ import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -30,7 +27,7 @@ import javafx.stage.Stage;
  *
  * @author fnajer
  */
-public class MenuController implements Initializable {
+public class MenuController extends BaseController {
     // Ссылка на главное приложение
     private BorderPane rootLayout;
 
@@ -43,17 +40,8 @@ public class MenuController implements Initializable {
         this.rootLayout = rootLayout;
     }
     
-    private EconomistWorkstation mainApp;
-    
-    public void setMainApp(EconomistWorkstation mainApp) {
-        this.mainApp = mainApp;
-    }
-    
-    
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        //staticRoot = root;
-    }
+    public void initialize(URL url, ResourceBundle rb) {}
     
     @FXML
     private BorderPane root;
@@ -88,12 +76,10 @@ public class MenuController implements Initializable {
     
     @FXML
     private void handleAbout() {
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("AddressApp");
-        alert.setHeaderText("About");
-        alert.setContentText("Author: Alexey\nWebsite: http://vk.com");
-
-        alert.showAndWait();
+        showAlertSuccess("Успех", 
+                    "О программе",
+                    "Некоммерческий учебный продукт, разрабатываемый"
+                            + "в ходе дипломной работы.\nАвтор: Ткаченко А.");
     }
     /**
      * Открывает диалоговое окно about.
@@ -101,11 +87,9 @@ public class MenuController implements Initializable {
     @FXML
     private void updateAccounts() {
         PeriodModel.updateAccountNumbers();
-        Alert alert = new Alert(AlertType.INFORMATION);
-        alert.setTitle("Информация");
-        alert.setHeaderText("Обновление номеров счетов");
-        alert.setContentText("Переназначение номеров завершено.");
-        alert.showAndWait();
+        showAlertSuccess("Успех", 
+                    "Обновление номеров счетов",
+                    "Переназначение номеров завершено.");
         contracts.fire();
     }
     
@@ -113,13 +97,9 @@ public class MenuController implements Initializable {
     private void handleShowStatement() {
         boolean okClicked = showStatementForm();
         if (okClicked) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.initOwner(mainApp.getPrimaryStage());
-            alert.setTitle("Успех");
-            alert.setHeaderText("Создание ведомости");
-            alert.setContentText("Ведомость создана успешно.");
-
-            alert.showAndWait();
+            showAlertSuccess("Успех", 
+                    "Создание ведомости",
+                    "Ведомость создана успешно.");
         }
 
     }
@@ -159,15 +139,10 @@ public class MenuController implements Initializable {
     private void handleLoadPattern() {
         boolean okClicked = showPatternForm();
         if (okClicked) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.initOwner(mainApp.getPrimaryStage());
-            alert.setTitle("Успех");
-            alert.setHeaderText("Замена шаблона");
-            alert.setContentText("Замена шаблона произведена успешно.");
-
-            alert.showAndWait();
+            showAlertSuccess("Успех", 
+                    "Замена шаблона",
+                    "Произведена замена шаблона.");
         }
-
     }
     
     public boolean showPatternForm() {

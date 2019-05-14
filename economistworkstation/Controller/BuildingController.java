@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -30,7 +29,6 @@ import javafx.stage.Stage;
  * @author fnajer
  */
 public class BuildingController extends BaseController {
-    
     @FXML
     private TableView<Building> buildingTable;
     @FXML
@@ -95,13 +93,9 @@ public class BuildingController extends BaseController {
             buildingTable.getItems().remove(building);
             BuildingModel.deleteBuilding(id);
         } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner(mainApp.getPrimaryStage());
-            alert.setTitle("Не выбрано");
-            alert.setHeaderText("Здание не выбрано");
-            alert.setContentText("Пожалуйста, выберите здание в таблице.");
-    
-            alert.showAndWait();
+            showAlertWarning("Не выбран", 
+                    "Здание не выбрано",
+                    "Пожалуйста, выберите здание в таблице.");
         }
     }
     
@@ -129,13 +123,9 @@ public class BuildingController extends BaseController {
                 showDetails(selectedBuilding);
             }
         } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner(mainApp.getPrimaryStage());
-            alert.setTitle("Не выбрано");
-            alert.setHeaderText("Здание не выбрано");
-            alert.setContentText("Пожалуйста, выберите здание в таблице.");
-
-            alert.showAndWait();
+            showAlertWarning("Не выбран", 
+                    "Здание не выбрано",
+                    "Пожалуйста, выберите здание в таблице.");
         }
     }
     

@@ -27,7 +27,7 @@ public abstract class BaseController implements Initializable {
     public abstract void initialize(URL location, ResourceBundle bundle);
     
     protected EconomistWorkstation mainApp;
-    protected void setMainApp(EconomistWorkstation mainApp) {
+    public void setMainApp(EconomistWorkstation mainApp) {
         this.mainApp = mainApp;
     }
     
@@ -51,6 +51,15 @@ public abstract class BaseController implements Initializable {
     
     protected void showAlertWarning(String title, String header, String content) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.initOwner(mainApp.getPrimaryStage());
+        alert.setTitle(title);
+        alert.setHeaderText(header);
+        alert.setContentText(content);
+
+        alert.showAndWait();
+    }
+    protected void showAlertSuccess(String title, String header, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.initOwner(mainApp.getPrimaryStage());
         alert.setTitle(title);
         alert.setHeaderText(header);
