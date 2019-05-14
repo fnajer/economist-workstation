@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 public abstract class BaseFormController extends BaseController {
     protected abstract boolean isInputValid();
     protected abstract void handleOk();
-    protected abstract void setEntity(ContractData data);
+    protected abstract void setData(ContractData data);
     
     private boolean okClicked = false;
     protected Stage dialogStage;

@@ -5,6 +5,7 @@
  */
 package economistworkstation.Controller;
 
+import economistworkstation.ContractData;
 import economistworkstation.Entity.Building;
 import economistworkstation.Model.BuildingModel;
 import java.io.IOException;
@@ -66,7 +67,6 @@ public class BuildingController extends BaseController {
         buildingTable.getSelectionModel().selectedItemProperty().addListener(
             (observable, oldValue, newValue) -> showDetails(newValue));
     }
-    
     
     public void showDetails(Building building) {
         if (building != null) {
@@ -137,9 +137,10 @@ public class BuildingController extends BaseController {
             Stage dialogStage = createDialog("Редактировать здание", container);
             
             // Передаём адресата в контроллер.
-            BuildingFormController controller = loader.getController();
+            BaseFormController controller = loader.getController();
             controller.setDialogStage(dialogStage);
-            controller.setBuilding(building);
+            ContractData data = new ContractData(null, null, building, null, null);
+            controller.setData(data);
             
             // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
             dialogStage.showAndWait();

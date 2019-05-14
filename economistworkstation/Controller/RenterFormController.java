@@ -5,20 +5,23 @@
  */
 package economistworkstation.Controller;
 
+import economistworkstation.ContractData;
 import economistworkstation.Entity.Renter;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
 
 /**
  *
  * @author fnajer
  */
-public class RenterFormController {
-  
+public class RenterFormController extends BaseFormController {
+    @Override
+    public void initialize(URL location, ResourceBundle bundle) {}
     @FXML
     private TextField firstNameField;
     @FXML
@@ -32,16 +35,11 @@ public class RenterFormController {
     @FXML
     private TextField subjectField;
     
-    private Stage dialogStage;
     private Renter renter;
-    private boolean okClicked = false;
     
-    public void setDialogStage(Stage dialogStage) {
-        this.dialogStage = dialogStage;
-    }
-    
-    public void setRenter(Renter renter) {
-        this.renter = renter;
+    @Override
+    public void setData(ContractData data) {
+        this.renter = data.getRenter();
 
         firstNameField.setText(renter.getFirstName());
         lastNameField.setText(renter.getLastName());
@@ -50,13 +48,10 @@ public class RenterFormController {
         birthdayField.setText(renter.getBirthday());
         subjectField.setText(renter.getSubject());
     }
-    
-    public boolean isOkClicked() {
-        return okClicked;
-    }
-    
+
     @FXML
-    private void handleOk() {
+    @Override
+    protected void handleOk() {
         if (isInputValid()) {
             renter.setFirstName(firstNameField.getText());
             renter.setLastName(lastNameField.getText());
@@ -65,17 +60,12 @@ public class RenterFormController {
             renter.setBirthday(birthdayField.getText());
             renter.setSubject(subjectField.getText());
 
-            okClicked = true;
-            dialogStage.close();
+            closeForm();
         }
     }
     
-    @FXML
-    private void handleCancel() {
-        dialogStage.close();
-    }
-    
-    private boolean isInputValid() {
+    @Override
+    protected boolean isInputValid() {
         String errorMessage = "";
 
         if (firstNameField.getText() == null || firstNameField.getText().length() == 0) {

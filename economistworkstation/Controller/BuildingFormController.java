@@ -5,19 +5,22 @@
  */
 package economistworkstation.Controller;
 
+import economistworkstation.ContractData;
 import economistworkstation.Entity.Building;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
 /**
  * FXML Controller class
  *
  * @author fnajer
  */
-public class BuildingFormController {  
-    
+public class BuildingFormController extends BaseFormController {
+    @Override
+    public void initialize(URL location, ResourceBundle bundle) {}
     @FXML
     private TextField typeField;
     @FXML
@@ -27,46 +30,33 @@ public class BuildingFormController {
     @FXML
     private TextField costResidueField;
     
-    private Stage dialogStage;
     private Building building;
-    private boolean okClicked = false;
     
-    public void setDialogStage(Stage dialogStage) {
-        this.dialogStage = dialogStage;
-    }
-    
-    public void setBuilding(Building building) {
-        this.building = building;
+    @Override
+    protected void setData(ContractData data) {
+        this.building = data.getBuilding();
 
-        typeField.setText(building.getType());
-        squareField.setText(Double.toString(building.getSquare()));
-        costBalanceField.setText(Double.toString(building.getCostBalance()));
-        costResidueField.setText(Double.toString(building.getCostResidue()));
-    }
-    
-    public boolean isOkClicked() {
-        return okClicked;
+        typeField.setText(this.building.getType());
+        squareField.setText(Double.toString(this.building.getSquare()));
+        costBalanceField.setText(Double.toString(this.building.getCostBalance()));
+        costResidueField.setText(Double.toString(this.building.getCostResidue()));
     }
     
     @FXML
-    private void handleOk() {
+    @Override
+    protected void handleOk() {
         if (isInputValid()) {
             building.setType(typeField.getText());
             building.setSquare(Double.parseDouble(squareField.getText()));
             building.setCostBalance(Double.parseDouble(costBalanceField.getText()));
             building.setCostResidue(Double.parseDouble(costResidueField.getText()));
 
-            okClicked = true;
-            dialogStage.close();
+            closeForm();
         }
     }
     
-    @FXML
-    private void handleCancel() {
-        dialogStage.close();
-    }
-    
-    private boolean isInputValid() {
+    @Override
+    protected boolean isInputValid() {
         String errorMessage = "";
 
         if (typeField.getText() == null || typeField.getText().length() == 0) {

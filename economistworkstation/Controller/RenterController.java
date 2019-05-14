@@ -5,6 +5,7 @@
  */
 package economistworkstation.Controller;
 
+import economistworkstation.ContractData;
 import economistworkstation.Entity.Renter;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
@@ -147,9 +148,10 @@ public class RenterController extends BaseController {
             Stage dialogStage = createDialog("Редактировать арендатора", container);
             
             // Передаём адресата в контроллер.
-            RenterFormController controller = loader.getController();
+            BaseFormController controller = loader.getController();
             controller.setDialogStage(dialogStage);
-            controller.setRenter(renter);
+            ContractData data = new ContractData(null, null, null, renter, null);
+            controller.setData(data);
             
             // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
             dialogStage.showAndWait();

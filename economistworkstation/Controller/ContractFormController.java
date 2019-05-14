@@ -5,6 +5,7 @@
  */
 package economistworkstation.Controller;
 
+import economistworkstation.ContractData;
 import economistworkstation.Entity.Building;
 import economistworkstation.Model.BuildingModel;
 import economistworkstation.Model.RenterModel;
@@ -12,10 +13,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
-import javafx.stage.Stage;
 import economistworkstation.Entity.Contract;
 import economistworkstation.Entity.Renter;
+import java.net.URL;
 import java.time.LocalDate;
+import java.util.ResourceBundle;
 import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
 
@@ -24,8 +26,9 @@ import javafx.scene.control.DatePicker;
  *
  * @author fnajer
  */
-public class ContractFormController {
-
+public class ContractFormController extends BaseFormController {
+    @Override
+    public void initialize(URL location, ResourceBundle bundle) {}
     @FXML
     private ComboBox<Renter> rentersListField;
     @FXML
@@ -35,26 +38,21 @@ public class ContractFormController {
     @FXML
     private DatePicker dateEndField;
     
-    private Stage dialogStage;
     private Contract contract;
-    private boolean okClicked = false;
     
-    public void setDialogStage(Stage dialogStage) {
-        this.dialogStage = dialogStage;
-    }
-    
-    public void setContract(Contract contract, Renter renter, Building building) {
-        this.contract = contract;
+    @Override
+    public void setData(ContractData data) {
+        this.contract = data.getContract();
         
         ObservableList renters = RenterModel.getRenters();
         ObservableList<Renter> rentersCollection = FXCollections.observableArrayList(renters);
         rentersListField.setItems(rentersCollection);
-        rentersListField.setValue(renter);
+        rentersListField.setValue(data.getRenter());
 
         ObservableList buildings = BuildingModel.getBuildings();
         ObservableList<Building> buildingsCollection = FXCollections.observableArrayList(buildings);
         buildingsListField.setItems(buildingsCollection);
-        buildingsListField.setValue(building);
+        buildingsListField.setValue(data.getBuilding());
 
         if (contract.getDateStart() != null) {
             dateStartField.setValue(LocalDate.parse(contract.getDateStart()));
@@ -65,12 +63,9 @@ public class ContractFormController {
         }  
     }
     
-    public boolean isOkClicked() {
-        return okClicked;
-    }
-    
     @FXML
-    private void handleOk() {
+    @Override
+    protected void handleOk() {
         if (isInputValid()) {
             Renter renter = rentersListField.getSelectionModel().getSelectedItem();
             Building building = buildingsListField.getSelectionModel().getSelectedItem();
@@ -81,17 +76,12 @@ public class ContractFormController {
             contract.setDateStart(dateStartField.getValue().toString());
             contract.setDateEnd(dateEndField.getValue().toString());
             
-            okClicked = true;
-            dialogStage.close();
+            closeForm();
         }
     }
     
-    @FXML
-    private void handleCancel() {
-        dialogStage.close();
-    }
-    
-    private boolean isInputValid() {
+    @Override
+    protected boolean isInputValid() {
         String errorMessage = "";
 
 //        if (firstNameField.getText() == null || firstNameField.getText().length() == 0) {

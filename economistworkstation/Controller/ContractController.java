@@ -5,6 +5,7 @@
  */
 package economistworkstation.Controller;
 
+import economistworkstation.ContractData;
 import economistworkstation.Entity.BalanceTable;
 import economistworkstation.Entity.Building;
 import java.net.URL;
@@ -447,9 +448,10 @@ public class ContractController extends BaseController {
             Stage dialogStage = createDialog("Редактировать контракт", container);
             
             // Передаём адресата в контроллер.
-            ContractFormController controller = loader.getController();
+            BaseFormController controller = loader.getController();
             controller.setDialogStage(dialogStage);
-            controller.setContract(contract, renter, building);
+            ContractData data = new ContractData(null, null, building, renter, contract);
+            controller.setData(data);
             
             // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
             dialogStage.showAndWait();
