@@ -32,7 +32,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
@@ -118,13 +117,9 @@ public class ContractController extends BaseController {
         
             showDetails(contract);
         } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner(mainApp.getPrimaryStage());
-            alert.setTitle("Не выбрано");
-            alert.setHeaderText("Значение для продления не выбрано");
-            alert.setContentText("Пожалуйста, введите количество месяцев для продления аренды.");
-    
-            alert.showAndWait();
+            showAlertWarning("Не выбран", 
+                    "Значение для продления не выбрано",
+                    "Пожалуйста, введите количество месяцев для продления аренды.");
         }
     }
     
@@ -170,14 +165,9 @@ public class ContractController extends BaseController {
                 showPeriodDetails(selectedPeriod);
             }
         } else {
-            // Ничего не выбрано.
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner(mainApp.getPrimaryStage());
-            alert.setTitle("Не выбран");
-            alert.setHeaderText("Период не выбран");
-            alert.setContentText("Пожалуйста, выберите период в таблице.");
-
-            alert.showAndWait();
+            showAlertWarning("Не выбран", 
+                    "Период не выбран",
+                    "Пожалуйста, выберите период в таблице.");
         }
     }
  
@@ -210,23 +200,14 @@ public class ContractController extends BaseController {
         if (selectedPeriod != null) {
             boolean okClicked = showInvoiceForm(selectedPeriod);
             if (okClicked) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.initOwner(mainApp.getPrimaryStage());
-                alert.setTitle("Успех");
-                alert.setHeaderText("Создание счета");
-                alert.setContentText("Счет создан успешно.");
-
-                alert.showAndWait();
+                showAlertSuccess("Успех", 
+                    "Создание счета",
+                    "Счет создан успешно.");
             }
         } else {
-            // Ничего не выбрано.
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner(mainApp.getPrimaryStage());
-            alert.setTitle("Не выбран");
-            alert.setHeaderText("Период не выбран");
-            alert.setContentText("Пожалуйста, выберите период в таблице.");
-
-            alert.showAndWait();
+            showAlertWarning("Не выбран", 
+                    "Период не выбран",
+                    "Пожалуйста, выберите период в таблице.");
         }
     }
     
@@ -416,13 +397,9 @@ public class ContractController extends BaseController {
             contractTable.getItems().remove(contract);
 
         } else {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner(mainApp.getPrimaryStage());
-            alert.setTitle("Не выбран");
-            alert.setHeaderText("Контракт не выбран");
-            alert.setContentText("Пожалуйста, выберите контракт в таблице.");
-    
-            alert.showAndWait();
+            showAlertWarning("Не выбран", 
+                    "Контракт не выбран",
+                    "Пожалуйста, выберите контракт в таблице.");
         }
     }
     
@@ -456,14 +433,9 @@ public class ContractController extends BaseController {
             }
 
         } else {
-            // Ничего не выбрано.
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.initOwner(mainApp.getPrimaryStage());
-            alert.setTitle("Не выбран");
-            alert.setHeaderText("Контракт не выбран");
-            alert.setContentText("Пожалуйста, выберите контракт в таблице.");
-
-            alert.showAndWait();
+            showAlertWarning("Не выбран", 
+                    "Контракт не выбран",
+                    "Пожалуйста, выберите контракт в таблице.");
         }
     }
     

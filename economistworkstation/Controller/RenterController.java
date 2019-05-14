@@ -5,7 +5,6 @@
  */
 package economistworkstation.Controller;
 
-import economistworkstation.EconomistWorkstation;
 import economistworkstation.Entity.Renter;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
@@ -17,13 +16,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -105,13 +100,9 @@ public class RenterController extends BaseController {
             renterTable.getItems().remove(renter);
             RenterModel.deleteRenter(id);
         } else {
-            Alert alert = new Alert(AlertType.WARNING);
-            alert.initOwner(mainApp.getPrimaryStage());
-            alert.setTitle("Не выбран");
-            alert.setHeaderText("Арендатор не выбран");
-            alert.setContentText("Пожалуйста, выберите арендатора в таблице.");
-    
-            alert.showAndWait();
+            showAlertWarning("Не выбран", 
+                    "Арендатор не выбран",
+                    "Пожалуйста, выберите арендатора в таблице.");
         }
     }
     
@@ -142,14 +133,9 @@ public class RenterController extends BaseController {
                 showDetails(selectedRenter);
             }
         } else {
-            // Ничего не выбрано.
-            Alert alert = new Alert(AlertType.WARNING);
-            alert.initOwner(mainApp.getPrimaryStage());
-            alert.setTitle("No Selection");
-            alert.setHeaderText("No Renter Selected");
-            alert.setContentText("Please select a renter in the table.");
-
-            alert.showAndWait();
+            showAlertWarning("Не выбран", 
+                    "Арендатор не выбран",
+                    "Пожалуйста, выберите арендатора в таблице.");
         }
     }
     
