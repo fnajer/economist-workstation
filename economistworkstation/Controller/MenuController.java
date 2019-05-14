@@ -109,7 +109,6 @@ public class MenuController implements Initializable {
         contracts.fire();
     }
     
-    
     @FXML
     private void handleShowStatement() {
         boolean okClicked = showStatementForm();

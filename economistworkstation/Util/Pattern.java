@@ -40,7 +40,7 @@ public abstract class Pattern {
         return items;
     }
     
-    public static ObservableList<Pattern> getAccounts() {
+    public static ObservableList<Pattern> getInvoices() {
         ObservableList<Pattern> items = FXCollections.observableArrayList();
         items.addAll(
                 new RentalPattern(),
@@ -51,7 +51,7 @@ public abstract class Pattern {
     
     public static ObservableList<Pattern> getPatterns() {
         ObservableList<Pattern> items = FXCollections.observableArrayList();
-        items.addAll(getAccounts());
+        items.addAll(getInvoices());
         items.addAll(getStatements());
         return items;
     }
