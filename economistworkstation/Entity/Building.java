@@ -6,9 +6,7 @@
 package economistworkstation.Entity;
 
 import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -16,8 +14,7 @@ import javafx.beans.property.StringProperty;
  *
  * @author fnajer
  */
-public class Building {
-    private final IntegerProperty id;
+public class Building extends Entity {
     private final StringProperty type;
     private final DoubleProperty square;
     private final DoubleProperty costBalance;
@@ -28,19 +25,11 @@ public class Building {
     }
   
     public Building(String type, double square, double costBalance, double costResidue) {
-       this.id = new SimpleIntegerProperty(0);
+       super();
        this.type = new SimpleStringProperty(type);
        this.square = new SimpleDoubleProperty(square);
        this.costBalance = new SimpleDoubleProperty(costBalance);
        this.costResidue = new SimpleDoubleProperty(costResidue);
-    }
-    
-    public int getId() {
-        return id.get();
-    }
-
-    public void setId(int id) {
-        this.id.set(id);
     }
     
     public String getType() {

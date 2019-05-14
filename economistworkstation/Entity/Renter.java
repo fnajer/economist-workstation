@@ -5,8 +5,6 @@
  */
 package economistworkstation.Entity;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -14,8 +12,7 @@ import javafx.beans.property.StringProperty;
  *
  * @author fnajer
  */
-public class Renter {
-    private final IntegerProperty id;
+public class Renter extends Entity {
     private final StringProperty firstName;
     private final StringProperty lastName;
     private final StringProperty patronymic;
@@ -27,22 +24,15 @@ public class Renter {
         this("egeg", "egeg", "egeg", "egeg", "egeg", "egeg");
     }
     
-    public Renter(String firstName, String lastName, String patronymic, String address, String birthday, String subject) {
-       this.id = new SimpleIntegerProperty(0);
+    public Renter(String firstName, String lastName, String patronymic, 
+            String address, String birthday, String subject) {
+       super();
        this.firstName = new SimpleStringProperty(firstName);
        this.lastName = new SimpleStringProperty(lastName);
        this.patronymic = new SimpleStringProperty(patronymic); 
        this.address = new SimpleStringProperty(address); 
        this.birthday = new SimpleStringProperty(birthday); 
        this.subject = new SimpleStringProperty(subject);  
-    }
-    
-    public int getId() {
-        return id.get();
-    }
-
-    public void setId(int id) {
-        this.id.set(id);
     }
     
     public String getFirstName() {
