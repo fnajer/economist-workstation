@@ -26,6 +26,9 @@
                               <AnchorPane>
                                  <children>
                                     <TableView fx:id="contractTable" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                      <placeholder>
+                                        <Label text="Добавьте первый контракт" />
+                                      </placeholder>
                                       <columns>
                                         <TableColumn fx:id="numberContractColumn" prefWidth="75.0" text="№ договора" />
                                         <TableColumn fx:id="idRenterColumn" prefWidth="82.0" text="ФИО" />
@@ -106,6 +109,9 @@
                               <AnchorPane>
                                  <children>
                                     <TableView fx:id="periodTable" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                       <placeholder>
+                                            <Label text="Выберите контракт" />
+                                       </placeholder>
                                        <columns>
                                           <TableColumn fx:id="numberPeriodColumn" prefWidth="75.0" text="№ периода" />
                                           <TableColumn fx:id="datePeriodColumn" prefWidth="82.0" text="Дата" />
