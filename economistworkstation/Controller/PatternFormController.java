@@ -84,12 +84,6 @@ public class PatternFormController extends BaseFormController {
             errorMessage += "Укажите новый шаблонный файл!\n"; 
         }
 
-        if (errorMessage.length() == 0) {
-            return true;
-        } else {
-            showAlertError("Некорректные данные", 
-                    "Заполните поля корректно",
-                    errorMessage);
-            return false;
-    }}
+        return errorNotExist(errorMessage);
+    }
 }

@@ -104,13 +104,7 @@ public class ExtraCostFormController extends BaseFormController {
 //            errorMessage += "Введите субьъекта аренды! Например, физ. лицо или ЧП.\n";
 //        }
 
-        if (errorMessage.length() == 0) {
-            return true;
-        } else {
-            showAlertError("Некорректные данные", 
-                    "Заполните поля корректно",
-                    errorMessage);
-            return false;
-    }}
+        return errorNotExist(errorMessage);
+    }
 } 
 

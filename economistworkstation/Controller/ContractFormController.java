@@ -103,12 +103,6 @@ public class ContractFormController extends BaseFormController {
 //            errorMessage += "Введите физ. лицо!\n";
 //        }
 
-        if (errorMessage.length() == 0) {
-            return true;
-        } else {
-            showAlertError("Некорректные данные", 
-                    "Заполните поля корректно",
-                    errorMessage);
-            return false;
-    }}
+        return errorNotExist(errorMessage);
+    }
 }

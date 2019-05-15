@@ -29,4 +29,15 @@ public abstract class BaseFormController extends BaseController {
         okClicked = true;
         dialogStage.close();
     }
+    
+    protected boolean errorNotExist(String errorMessage) {
+        if (errorMessage.length() == 0) {
+            return true;
+        } else {
+            showAlertError("Некорректные данные", 
+                    "Заполните поля корректно",
+                    errorMessage);
+            return false;
+        }
+    }
 }

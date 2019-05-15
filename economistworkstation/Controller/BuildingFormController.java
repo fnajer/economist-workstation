@@ -10,7 +10,6 @@ import economistworkstation.Entity.Building;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 
 /**
@@ -72,12 +71,6 @@ public class BuildingFormController extends BaseFormController {
             errorMessage += "Введите остаточную стоимость!\n"; 
         }
 
-        if (errorMessage.length() == 0) {
-            return true;
-        } else {
-            showAlertError("Некорректные данные", 
-                    "Заполните поля корректно",
-                    errorMessage);
-            return false;
-    }}
+        return errorNotExist(errorMessage);
+    }
 }

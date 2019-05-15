@@ -100,13 +100,6 @@ public class StatementFormController extends BaseFormController {
             errorMessage += "Укажите путь для сохранения файла!\n"; 
         }
 
-        if (errorMessage.length() == 0) {
-            return true;
-        } else {
-            showAlertError("Некорректные данные", 
-                    "Заполните поля корректно",
-                    errorMessage);
-            return false;
-    }}
-    
+        return errorNotExist(errorMessage);
+    }
 }
