@@ -44,7 +44,7 @@
          </children>
       </GridPane>
       <Label layoutX="10.0" layoutY="14.0" prefHeight="35.0" prefWidth="401.0" styleClass="label-header" text="Добавить стоимость на счет платежа" AnchorPane.topAnchor="5.0" />
-      <Label layoutX="25.0" layoutY="32.0" text="Примечание: в виде дополнительной строки" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="35.0" />
+      <Label layoutX="25.0" layoutY="32.0" text="Примечание: на печати в виде дополнительной строки" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="35.0" />
    </children>
    <styleClass>
       <String fx:value="background" />
