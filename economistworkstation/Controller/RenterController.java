@@ -10,17 +10,11 @@ import economistworkstation.Entity.Renter;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
 import economistworkstation.Model.RenterModel;
-import java.io.IOException;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 
 /**
  *
@@ -110,7 +104,7 @@ public class RenterController extends BaseController {
     @FXML
     private void handleNewRenter() {
         Renter tempRenter = new Renter();
-        boolean okClicked = showRenterForm(tempRenter);
+        boolean okClicked = openRenterForm(tempRenter);
         if (okClicked) {
             int id = RenterModel.addRenter(tempRenter);
             tempRenter.setId(id);
@@ -128,7 +122,7 @@ public class RenterController extends BaseController {
         Renter selectedRenter = renterTable.getSelectionModel().getSelectedItem();
         
         if (selectedRenter != null) {
-            boolean okClicked = showRenterForm(selectedRenter);
+            boolean okClicked = openRenterForm(selectedRenter);
             if (okClicked) {
                 RenterModel.updateRenter(selectedRenter.getId(), selectedRenter);
                 showDetails(selectedRenter);
@@ -140,26 +134,11 @@ public class RenterController extends BaseController {
         }
     }
     
-    public boolean showRenterForm(Renter renter) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            AnchorPane container = loadFXML("View/Renter/RenterForm.fxml", loader);
-            
-            Stage dialogStage = createDialog("Редактировать арендатора", container);
-            
-            // Передаём адресата в контроллер.
-            BaseFormController controller = loader.getController();
-            controller.setDialogStage(dialogStage);
-            ContractData data = new ContractData(null, null, null, renter, null);
-            controller.setData(data);
-            
-            // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
-            dialogStage.showAndWait();
-            
-            return controller.isOkClicked();
-        } catch (IOException ex) {
-            Logger.getLogger(RenterController.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
+    private boolean openRenterForm(Renter renter) {
+        ContractData data = new ContractData(null, null, null, renter, null);
+        
+        return showForm(data, 
+                "Редактировать арендатора", 
+                "View/Renter/RenterForm.fxml");
     }
 }

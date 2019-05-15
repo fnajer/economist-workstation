@@ -20,26 +20,20 @@ import economistworkstation.Model.ContractModel;
 import economistworkstation.Model.PeriodModel;
 import economistworkstation.Model.RenterModel;
 import static economistworkstation.Util.Util.isExist;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.control.Label;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 /**
  *
  * @author fnajer
@@ -155,11 +149,11 @@ public class ContractController extends BaseController {
     }
     
     @FXML
-    void handleEditPeriod(ActionEvent event) {
+    private void handleEditPeriod(ActionEvent event) {
         Period selectedPeriod = periodTable.getSelectionModel().getSelectedItem();
         
         if (selectedPeriod != null) {
-            boolean okClicked = showPeriodForm(selectedPeriod);
+            boolean okClicked = openPeriodForm(selectedPeriod);
             if (okClicked) {
                 PeriodModel.updatePeriod(selectedPeriod.getId(), selectedPeriod);
                 recalculateBalance(selectedPeriod);
@@ -172,26 +166,12 @@ public class ContractController extends BaseController {
         }
     }
  
-    public boolean showPeriodForm(Period period) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            AnchorPane container = loadFXML("View/Period/PeriodForm.fxml", loader);
-            
-            Stage dialogStage = createDialog("Редактировать период", container);
-            
-            // Передаём адресата в контроллер.
-            PeriodFormController controller = loader.getController();
-            controller.setDialogStage(dialogStage);
-            controller.setPeriod(period, contract);
-            
-            // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
-            dialogStage.showAndWait();
-            
-            return controller.isOkClicked();
-        } catch (IOException ex) {
-            Logger.getLogger(ContractController.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
+    private boolean openPeriodForm(Period period) {
+        ContractData data = new ContractData(null, period, null, null, contract);
+        
+        return showForm(data, 
+                "Редактировать период", 
+                "View/Period/PeriodForm.fxml");
     }
     
     @FXML
@@ -199,7 +179,7 @@ public class ContractController extends BaseController {
         Period selectedPeriod = periodTable.getSelectionModel().getSelectedItem();
         
         if (selectedPeriod != null) {
-            boolean okClicked = showInvoiceForm(selectedPeriod);
+            boolean okClicked = openInvoiceForm(selectedPeriod);
             if (okClicked) {
                 showAlertSuccess("Успех", 
                     "Создание счета",
@@ -212,26 +192,12 @@ public class ContractController extends BaseController {
         }
     }
     
-    public boolean showInvoiceForm(Period period) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            AnchorPane container = loadFXML("View/InvoiceForm.fxml", loader);
-            
-            Stage dialogStage = createDialog("Управление счетами", container);
-            
-            // Передаём адресата в контроллер.
-            InvoiceFormController controller = loader.getController();
-            controller.setDialogStage(dialogStage);
-            controller.setInvoice(contract, period);
-            
-            // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
-            dialogStage.showAndWait();
-            
-            return controller.isOkClicked();
-        } catch (IOException ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
+    private boolean openInvoiceForm(Period period) {
+        ContractData data = new ContractData(null, period, null, null, contract);
+        
+        return showForm(data, 
+                "Управление счетами", 
+                "View/InvoiceForm.fxml");
     }
     
     private ObservableList<Contract> contracts;
@@ -409,7 +375,7 @@ public class ContractController extends BaseController {
         Contract tempContract = new Contract();
         renter = null;
         building = null;
-        boolean okClicked = showContractForm(tempContract);
+        boolean okClicked = openContractForm(tempContract);
         if (okClicked) {
             int id = ContractModel.addContract(tempContract);
             tempContract.setId(id);
@@ -427,7 +393,7 @@ public class ContractController extends BaseController {
     private void handleEditContract() {
         Contract selectedContract = contractTable.getSelectionModel().getSelectedItem();
         if (selectedContract != null) {
-            boolean okClicked = showContractForm(selectedContract);
+            boolean okClicked = openContractForm(selectedContract);
             if (okClicked) {
                 ContractModel.updateContract(selectedContract.getId(), selectedContract, false);
                 showDetails(selectedContract);
@@ -440,26 +406,11 @@ public class ContractController extends BaseController {
         }
     }
     
-    public boolean showContractForm(Contract contract) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            AnchorPane container = loadFXML("View/Contract/ContractForm.fxml", loader);
-            
-            Stage dialogStage = createDialog("Редактировать контракт", container);
-            
-            // Передаём адресата в контроллер.
-            BaseFormController controller = loader.getController();
-            controller.setDialogStage(dialogStage);
-            ContractData data = new ContractData(null, null, building, renter, contract);
-            controller.setData(data);
-            
-            // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
-            dialogStage.showAndWait();
-            
-            return controller.isOkClicked();
-        } catch (IOException ex) {
-            Logger.getLogger(ContractController.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
+    private boolean openContractForm(Contract contract) {
+        ContractData data = new ContractData(null, null, building, renter, contract);
+        
+        return showForm(data, 
+                "Редактировать контракт", 
+                "View/Contract/ContractForm.fxml");
     }
 }

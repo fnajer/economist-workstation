@@ -5,10 +5,13 @@
  */
 package economistworkstation.Controller;
 
+import economistworkstation.ContractData;
 import economistworkstation.EconomistWorkstation;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -29,6 +32,28 @@ public abstract class BaseController implements Initializable {
     protected EconomistWorkstation mainApp;
     public void setMainApp(EconomistWorkstation mainApp) {
         this.mainApp = mainApp;
+    }
+    
+    protected boolean showForm(ContractData data, String dialogName, String path) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            AnchorPane container = loadFXML(path, loader);
+            
+            Stage dialogStage = createDialog(dialogName, container);
+            
+            // Передаём адресата в контроллер.
+            BaseFormController controller = loader.getController();
+            controller.setDialogStage(dialogStage);
+            controller.setData(data);
+            
+            // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
+            dialogStage.showAndWait();
+            
+            return controller.isOkClicked();
+        } catch (IOException ex) {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
     }
     
     protected AnchorPane loadFXML(String path, FXMLLoader loader) throws IOException {

@@ -8,20 +8,14 @@ package economistworkstation.Controller;
 import economistworkstation.ContractData;
 import economistworkstation.Entity.Building;
 import economistworkstation.Model.BuildingModel;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 
 
 /**
@@ -102,7 +96,7 @@ public class BuildingController extends BaseController {
     @FXML
     private void handleNewBuilding() {
         Building tempBuilding = new Building();
-        boolean okClicked = showBuildingForm(tempBuilding);
+        boolean okClicked = openBuildingForm(tempBuilding);
         if (okClicked) {
             BuildingModel.addBuilding(tempBuilding);
             buildings.add(tempBuilding);
@@ -117,7 +111,7 @@ public class BuildingController extends BaseController {
     private void handleEditBuilding() {
         Building selectedBuilding = buildingTable.getSelectionModel().getSelectedItem();
         if (selectedBuilding != null) {
-            boolean okClicked = showBuildingForm(selectedBuilding);
+            boolean okClicked = openBuildingForm(selectedBuilding);
             if (okClicked) {
                 BuildingModel.updateBuilding(selectedBuilding.getId(), selectedBuilding);
                 showDetails(selectedBuilding);
@@ -129,26 +123,11 @@ public class BuildingController extends BaseController {
         }
     }
     
-    public boolean showBuildingForm(Building building) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            AnchorPane container = loadFXML("View/Building/BuildingForm.fxml", loader);
-            
-            Stage dialogStage = createDialog("Редактировать здание", container);
-            
-            // Передаём адресата в контроллер.
-            BaseFormController controller = loader.getController();
-            controller.setDialogStage(dialogStage);
-            ContractData data = new ContractData(null, null, building, null, null);
-            controller.setData(data);
-            
-            // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
-            dialogStage.showAndWait();
-            
-            return controller.isOkClicked();
-        } catch (IOException ex) {
-            Logger.getLogger(BuildingController.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
+    private boolean openBuildingForm(Building building) {
+        ContractData data = new ContractData(null, null, building, null, null);
+        
+        return showForm(data, 
+                "Редактировать здание", 
+                "View/Building/BuildingForm.fxml");
     }
 }

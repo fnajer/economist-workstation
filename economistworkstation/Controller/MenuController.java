@@ -5,23 +5,18 @@
  */
 package economistworkstation.Controller;
 
+import economistworkstation.ContractData;
 import economistworkstation.EconomistWorkstation;
 import economistworkstation.Model.PeriodModel;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.control.MenuItem;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 /**
  *
@@ -76,14 +71,12 @@ public class MenuController extends BaseController {
     
     @FXML
     private void handleAbout() {
-        showAlertSuccess("Успех", 
+        showAlertSuccess("Информация", 
                     "О программе",
-                    "Некоммерческий учебный продукт, разрабатываемый"
+                    "Некоммерческий учебный продукт, разрабатываемый "
                             + "в ходе дипломной работы.\nАвтор: Ткаченко А.");
     }
-    /**
-     * Открывает диалоговое окно about.
-     */
+    
     @FXML
     private void updateAccounts() {
         PeriodModel.updateAccountNumbers();
@@ -95,7 +88,7 @@ public class MenuController extends BaseController {
     
     @FXML
     private void handleShowStatement() {
-        boolean okClicked = showStatementForm();
+        boolean okClicked = openStatementForm();
         if (okClicked) {
             showAlertSuccess("Успех", 
                     "Создание ведомости",
@@ -104,40 +97,17 @@ public class MenuController extends BaseController {
 
     }
     
-    public boolean showStatementForm() {
-        try {
-            // Загружаем fxml-файл и создаём новую сцену
-            // для всплывающего диалогового окна.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(EconomistWorkstation.class.getResource("View/StatementForm.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
-            
-            // Создаём диалоговое окно Stage.
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Управление ведомостями");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(mainApp.getPrimaryStage());
-            Scene scene = new Scene(page);
-            dialogStage.setScene(scene);
-            
-            // Передаём адресата в контроллер.
-            StatementFormController controller = loader.getController();
-            controller.setDialogStage(dialogStage);
-            controller.setStatement();
-            
-            // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
-            dialogStage.showAndWait();
-            
-            return controller.isOkClicked();
-        } catch (IOException ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
+    private boolean openStatementForm() {
+        ContractData data = null;
+        
+        return showForm(data, 
+                "Управление ведомостями", 
+                "View/StatementForm.fxml");
     }
     
     @FXML
     private void handleLoadPattern() {
-        boolean okClicked = showPatternForm();
+        boolean okClicked = openPatternForm();
         if (okClicked) {
             showAlertSuccess("Успех", 
                     "Замена шаблона",
@@ -145,35 +115,12 @@ public class MenuController extends BaseController {
         }
     }
     
-    public boolean showPatternForm() {
-        try {
-            // Загружаем fxml-файл и создаём новую сцену
-            // для всплывающего диалогового окна.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(EconomistWorkstation.class.getResource("View/PatternForm.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
-            
-            // Создаём диалоговое окно Stage.
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Загрузка шаблонов");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(mainApp.getPrimaryStage());
-            Scene scene = new Scene(page);
-            dialogStage.setScene(scene);
-            
-            // Передаём адресата в контроллер.
-            PatternFormController controller = loader.getController();
-            controller.setDialogStage(dialogStage);
-            controller.setPattern();
-            
-            // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
-            dialogStage.showAndWait();
-            
-            return controller.isOkClicked();
-        } catch (IOException ex) {
-            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
+    private boolean openPatternForm() {
+        ContractData data = null;
+        
+        return showForm(data, 
+                "Загрузка шаблонов", 
+                "View/PatternForm.fxml");
     }
 
     /**
