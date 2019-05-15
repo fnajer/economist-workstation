@@ -95,15 +95,9 @@ public class InvoiceFormController extends BaseFormController {
         if (errorMessage.length() == 0) {
             return true;
         } else {
-            // Показываем сообщение об ошибке.
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.initOwner(dialogStage);
-            alert.setTitle("Некорректные данные");
-            alert.setHeaderText("Заполните поля корректно");
-            alert.setContentText(errorMessage);
-            
-            alert.showAndWait();
-            
+            showAlertError("Некорректные данные", 
+                    "Заполните поля корректно",
+                    errorMessage);
             return false;
     }}
 }

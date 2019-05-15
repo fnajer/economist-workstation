@@ -17,6 +17,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
@@ -76,8 +77,9 @@ public abstract class BaseController implements Initializable {
         return newDialogStage;
     }
     
-    protected void showAlertWarning(String title, String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.WARNING);
+    private void showAlert(String title, String header, String content, 
+            AlertType type) {
+        Alert alert = new Alert(type);
         alert.initOwner(dialogStage);
         alert.setTitle(title);
         alert.setHeaderText(header);
@@ -85,13 +87,13 @@ public abstract class BaseController implements Initializable {
 
         alert.showAndWait();
     }
+    protected void showAlertWarning(String title, String header, String content) {
+        showAlert(title, header, content, AlertType.WARNING);
+    }
     protected void showAlertSuccess(String title, String header, String content) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.initOwner(dialogStage);
-        alert.setTitle(title);
-        alert.setHeaderText(header);
-        alert.setContentText(content);
-
-        alert.showAndWait();
+        showAlert(title, header, content, AlertType.INFORMATION);
+    }
+    protected void showAlertError(String title, String header, String content) {
+        showAlert(title, header, content, AlertType.ERROR);
     }
 }
