@@ -12,9 +12,6 @@ import economistworkstation.Util.Precedency;
 import economistworkstation.Util.Pattern;
 import static economistworkstation.Util.Util.isExist;
 import java.io.File;
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 
 /**
@@ -23,8 +20,6 @@ import javafx.stage.FileChooser;
  * @author fnajer
  */
 public class PatternFormController extends BaseFormController {
-    @Override
-    public void initialize(URL location, ResourceBundle bundle) {}
     @FXML
     private ComboBox<Pattern> patternsListField;
     

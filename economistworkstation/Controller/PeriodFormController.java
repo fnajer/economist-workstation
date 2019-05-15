@@ -21,13 +21,11 @@ import economistworkstation.Util.Util;
 import static economistworkstation.Util.Util.parseField;
 import static economistworkstation.Util.Util.isExist;
 import static economistworkstation.Util.Util.decFormat;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
 import javafx.scene.control.DatePicker;
@@ -35,7 +33,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.paint.Color;
-import java.util.ResourceBundle;
 
 /**
  * FXML Controller class
@@ -43,8 +40,6 @@ import java.util.ResourceBundle;
  * @author fnajer
  */
 public class PeriodFormController extends BaseFormController {
-    @Override
-    public void initialize(URL location, ResourceBundle bundle) {}
     @FXML
     private Label numberLabel;
     @FXML

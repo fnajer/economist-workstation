@@ -7,11 +7,7 @@ package economistworkstation.Controller;
 
 import economistworkstation.ContractData;
 import economistworkstation.Entity.Renter;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
 
 
@@ -20,8 +16,6 @@ import javafx.scene.control.TextField;
  * @author fnajer
  */
 public class RenterFormController extends BaseFormController {
-    @Override
-    public void initialize(URL location, ResourceBundle bundle) {}
     @FXML
     private TextField firstNameField;
     @FXML

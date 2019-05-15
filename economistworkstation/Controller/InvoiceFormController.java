@@ -13,10 +13,7 @@ import economistworkstation.Util.Precedency;
 import economistworkstation.Util.Pattern;
 import static economistworkstation.Util.Util.isExist;
 import java.io.File;
-import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 /**
  * FXML Controller class
@@ -24,8 +21,6 @@ import java.util.ResourceBundle;
  * @author fnajer
  */
 public class InvoiceFormController extends BaseFormController {
-    @Override
-    public void initialize(URL location, ResourceBundle bundle) {}
     @FXML
     private ComboBox<Pattern> invoicesListField;
     

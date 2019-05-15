@@ -8,12 +8,9 @@ package economistworkstation.Controller;
 import economistworkstation.ContractData;
 import economistworkstation.EconomistWorkstation;
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -27,10 +24,7 @@ import javafx.stage.Stage;
  *
  * @author fnajer
  */
-public abstract class BaseController implements Initializable {
-    @Override
-    public abstract void initialize(URL location, ResourceBundle bundle);
-    
+public abstract class BaseController {
     protected Stage dialogStage;
     public void setDialogStage(Stage dialogStage) {
         this.dialogStage = dialogStage;

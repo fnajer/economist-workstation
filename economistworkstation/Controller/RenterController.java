@@ -13,6 +13,7 @@ import economistworkstation.Model.RenterModel;
 import javafx.fxml.FXML;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
@@ -21,7 +22,7 @@ import javafx.scene.control.TableView;
  * @author fnajer
  */
 
-public class RenterController extends BaseController {
+public class RenterController extends BaseController implements Initializable {
     @FXML
     private TableView<Renter> renterTable;
     @FXML

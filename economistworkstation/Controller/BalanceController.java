@@ -10,8 +10,6 @@ import economistworkstation.Entity.BalanceTable;
 import economistworkstation.Util.Util;
 import static economistworkstation.Util.Util.setText;
 import static economistworkstation.Util.Util.isExist;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
@@ -21,8 +19,6 @@ import javafx.scene.control.Label;
  * @author fnajer
  */
 public class BalanceController extends BaseFormController {
-    @Override
-    public void initialize(URL location, ResourceBundle bundle) {}
     @FXML
     private Label creditRentLabel;
     @FXML

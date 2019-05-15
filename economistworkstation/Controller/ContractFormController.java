@@ -27,8 +27,6 @@ import javafx.scene.control.DatePicker;
  * @author fnajer
  */
 public class ContractFormController extends BaseFormController {
-    @Override
-    public void initialize(URL location, ResourceBundle bundle) {}
     @FXML
     private ComboBox<Renter> rentersListField;
     @FXML

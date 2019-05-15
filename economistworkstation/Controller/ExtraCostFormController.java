@@ -14,19 +14,13 @@ import static economistworkstation.Util.Util.parseField;
 import static economistworkstation.Util.Util.isExist;
 import static economistworkstation.Entity.Field.isFilled;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
-import java.net.URL;
-import java.util.ResourceBundle;
 
 /**
  *
  * @author fnajer
  */
 public class ExtraCostFormController extends BaseFormController {
-    @Override
-    public void initialize(URL location, ResourceBundle bundle) {}
     @FXML
     private TextField extraCostRentField;
     @FXML

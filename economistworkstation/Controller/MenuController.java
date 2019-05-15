@@ -9,8 +9,6 @@ import economistworkstation.ContractData;
 import economistworkstation.EconomistWorkstation;
 import economistworkstation.Model.PeriodModel;
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -34,9 +32,6 @@ public class MenuController extends BaseController {
     public void setRoot(BorderPane rootLayout) {
         this.rootLayout = rootLayout;
     }
-    
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {}
     
     @FXML
     private BorderPane root;

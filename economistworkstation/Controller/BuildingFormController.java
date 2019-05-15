@@ -7,8 +7,6 @@ package economistworkstation.Controller;
 
 import economistworkstation.ContractData;
 import economistworkstation.Entity.Building;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 
@@ -18,8 +16,6 @@ import javafx.scene.control.TextField;
  * @author fnajer
  */
 public class BuildingFormController extends BaseFormController {
-    @Override
-    public void initialize(URL location, ResourceBundle bundle) {}
     @FXML
     private TextField typeField;
     @FXML
@@ -58,16 +54,16 @@ public class BuildingFormController extends BaseFormController {
     protected boolean isInputValid() {
         String errorMessage = "";
 
-        if (typeField.getText() == null || typeField.getText().length() == 0) {
+        if (fieldIsEmpty(typeField)) {
             errorMessage += "Введите тип!\n"; 
         }
-        if (squareField.getText() == null || squareField.getText().length() == 0) {
+        if (fieldIsEmpty(squareField)) {
             errorMessage += "Введите площадь!\n"; 
         }
-        if (costBalanceField.getText() == null || costBalanceField.getText().length() == 0) {
+        if (fieldIsEmpty(costBalanceField)) {
             errorMessage += "Введите балансовую стоимость!\n"; 
         }
-        if (costResidueField.getText() == null || costResidueField.getText().length() == 0) {
+        if (fieldIsEmpty(costResidueField)) {
             errorMessage += "Введите остаточную стоимость!\n"; 
         }
 
