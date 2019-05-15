@@ -29,9 +29,9 @@ public abstract class BaseController implements Initializable {
     @Override
     public abstract void initialize(URL location, ResourceBundle bundle);
     
-    protected EconomistWorkstation mainApp;
-    public void setMainApp(EconomistWorkstation mainApp) {
-        this.mainApp = mainApp;
+    protected Stage dialogStage;
+    public void setDialogStage(Stage dialogStage) {
+        this.dialogStage = dialogStage;
     }
     
     protected boolean showForm(ContractData data, String dialogName, String path) {
@@ -39,15 +39,15 @@ public abstract class BaseController implements Initializable {
             FXMLLoader loader = new FXMLLoader();
             AnchorPane container = loadFXML(path, loader);
             
-            Stage dialogStage = createDialog(dialogName, container);
+            Stage newDialogStage = createDialog(dialogName, container);
             
             // Передаём адресата в контроллер.
             BaseFormController controller = loader.getController();
-            controller.setDialogStage(dialogStage);
+            controller.setDialogStage(newDialogStage);
             controller.setData(data);
             
             // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
-            dialogStage.showAndWait();
+            newDialogStage.showAndWait();
             
             return controller.isOkClicked();
         } catch (IOException ex) {
@@ -65,18 +65,18 @@ public abstract class BaseController implements Initializable {
     
     protected Stage createDialog(String title, Parent container) throws IOException {
         // Создаём диалоговое окно Stage.
-        Stage dialogStage = new Stage();
-        dialogStage.setTitle(title);
-        dialogStage.initModality(Modality.WINDOW_MODAL);
-        dialogStage.initOwner(mainApp.getPrimaryStage());
+        Stage newDialogStage = new Stage();
+        newDialogStage.setTitle(title);
+        newDialogStage.initModality(Modality.WINDOW_MODAL);
+        newDialogStage.initOwner(dialogStage);
         Scene scene = new Scene(container);
-        dialogStage.setScene(scene);
-        return dialogStage;
+        newDialogStage.setScene(scene);
+        return newDialogStage;
     }
     
     protected void showAlertWarning(String title, String header, String content) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
-        alert.initOwner(mainApp.getPrimaryStage());
+        alert.initOwner(dialogStage);
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(content);
@@ -85,7 +85,7 @@ public abstract class BaseController implements Initializable {
     }
     protected void showAlertSuccess(String title, String header, String content) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.initOwner(mainApp.getPrimaryStage());
+        alert.initOwner(dialogStage);
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(content);

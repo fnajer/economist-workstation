@@ -7,7 +7,6 @@ package economistworkstation.Controller;
 
 import economistworkstation.ContractData;
 import javafx.fxml.FXML;
-import javafx.stage.Stage;
 
 /**
  *
@@ -19,10 +18,6 @@ public abstract class BaseFormController extends BaseController {
     protected abstract void setData(ContractData data);
     
     private boolean okClicked = false;
-    protected Stage dialogStage;
-    public void setDialogStage(Stage dialogStage) {
-        this.dialogStage = dialogStage;
-    }
     public boolean isOkClicked() {
         return okClicked;
     }

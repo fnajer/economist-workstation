@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.MenuBar;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 
@@ -31,7 +32,8 @@ public class EconomistWorkstation extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Economist Workstation");
         this.primaryStage.setMaximized(true);
-                
+
+        
         initRootLayout();
         initMenu();
         
@@ -59,7 +61,7 @@ public class EconomistWorkstation extends Application {
         
         MenuController controller = loaderMenu.getController();
         controller.setRoot(rootLayout);
-        controller.setMainApp(this);
+        controller.setDialogStage(primaryStage);
     }
     
     public void showMainPage() throws IOException {

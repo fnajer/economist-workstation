@@ -58,7 +58,7 @@ public class MenuController extends BaseController {
         rootLayout.setCenter(container);
         
         BaseController controller = loader.getController();
-        controller.setMainApp(mainApp);
+        controller.setDialogStage(dialogStage);
     }
     
     private String getPathName(MenuItem src) {
