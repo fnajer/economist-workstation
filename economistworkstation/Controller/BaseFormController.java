@@ -6,7 +6,12 @@
 package economistworkstation.Controller;
 
 import economistworkstation.ContractData;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import javafx.fxml.FXML;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
 
 /**
  *
@@ -28,6 +33,29 @@ public abstract class BaseFormController extends BaseController {
     protected void closeForm() {
         okClicked = true;
         dialogStage.close();
+    }
+    
+    protected boolean fieldIsEmpty(TextField tf) {
+        return tf.getText() == null || tf.getText().length() == 0;
+    }
+    protected boolean fieldIsEmpty(DatePicker dp) {
+        String text = dp.getEditor().getText();
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            LocalDate.parse(text, formatter);
+            return false;
+        } catch(DateTimeParseException e) {
+            System.out.println("Date with error.");
+            return true;
+        }
+    }
+    protected boolean costIsInvalid(TextField tf) {
+        try {
+            Double.parseDouble(tf.getText());
+            return false;
+        } catch(NumberFormatException e) {
+            return true;
+        }
     }
     
     protected boolean errorNotExist(String errorMessage) {
