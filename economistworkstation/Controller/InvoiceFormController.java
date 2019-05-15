@@ -5,50 +5,38 @@
  */
 package economistworkstation.Controller;
 
+import economistworkstation.ContractData;
 import economistworkstation.ContractDataParameters;
-import economistworkstation.Entity.Contract;
-import economistworkstation.Entity.Period;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
-import javafx.stage.Stage;
 import economistworkstation.Util.Precedency;
 import economistworkstation.Util.Pattern;
 import static economistworkstation.Util.Util.isExist;
 import java.io.File;
 import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * FXML Controller class
  *
  * @author fnajer
  */
-public class InvoiceFormController {
-
+public class InvoiceFormController extends BaseFormController {
+    @Override
+    public void initialize(URL location, ResourceBundle bundle) {}
     @FXML
     private ComboBox<Pattern> invoicesListField;
     
-    private Stage dialogStage;
-    private Contract contract;
-    private Period period;
+    private ContractData data;
     private File newFile;
-    private boolean okClicked = false;
     private Precedency userPrefs;
     
-    public void setDialogStage(Stage dialogStage) {
-        this.dialogStage = dialogStage;
-    }
-    
-    public void setInvoice(Contract contract, Period period) {  
-        this.contract = contract;
-        this.period = period;
-        
+    @Override
+    public void setData(ContractData data) {
         userPrefs = new Precedency();
         invoicesListField.setItems(Pattern.getInvoices());
-    }
-    
-    public boolean isOkClicked() {
-        return okClicked;
     }
     
     @FXML
@@ -77,27 +65,23 @@ public class InvoiceFormController {
     }
     
     @FXML
-    private void handleOk() {
+    @Override
+    protected void handleOk() {
         if (isInputValid()) {
             Pattern pattern = invoicesListField.getSelectionModel().getSelectedItem();
             pattern.setPathToSave(newFile.getAbsolutePath());
             
-            ContractDataParameters data = new ContractDataParameters();
-            data.constructDataObject(contract, period);
+            ContractDataParameters dataParams = new ContractDataParameters();
+            dataParams.constructDataObject(data.getContract(), data.getPeriod());
             
-            pattern.print(data);
+            pattern.print(dataParams);
 
-            okClicked = true;
-            dialogStage.close();
+            closeForm();
         }
     }
     
-    @FXML
-    private void handleCancel() {
-        dialogStage.close();
-    }
-    
-    private boolean isInputValid() {
+    @Override
+    protected boolean isInputValid() {
         String errorMessage = "";
         Pattern invoice = invoicesListField.getSelectionModel().getSelectedItem();
         
