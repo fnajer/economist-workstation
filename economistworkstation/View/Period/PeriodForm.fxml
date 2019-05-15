@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Accordion?>
 <?import javafx.scene.control.Button?>
@@ -16,11 +17,11 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefWidth="618.0" styleClass="background" stylesheets="@../theme.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="economistworkstation.Controller.PeriodFormController">
+<AnchorPane prefWidth="618.0" stylesheets="@../theme.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="economistworkstation.Controller.PeriodFormController">
    <children>
       <ScrollPane fitToWidth="true" styleClass="background" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <content>
-            <AnchorPane styleClass="background">
+            <AnchorPane prefHeight="662.0" prefWidth="616.0">
                <children>
                   <HBox layoutX="292.0" layoutY="52.0" prefHeight="21.0" prefWidth="436.0" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="37.0">
                      <children>
@@ -469,6 +470,10 @@
                     </buttons>
                   </ButtonBar>
                </children>
+               <styleClass>
+                  <String fx:value="background" />
+                  <String fx:value="window-border" />
+               </styleClass>
             </AnchorPane>
          </content>
       </ScrollPane>
