@@ -28,7 +28,7 @@
                                     <TableView fx:id="contractTable" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                       <columns>
                                         <TableColumn fx:id="numberContractColumn" prefWidth="75.0" text="№ договора" />
-                                        <TableColumn fx:id="idRenterColumn" prefWidth="82.0" text="ФИО арендатора" />
+                                        <TableColumn fx:id="idRenterColumn" prefWidth="82.0" text="ФИО" />
                                       </columns>
                                        <columnResizePolicy>
                                           <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
