@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.Label?>
@@ -8,7 +9,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<AnchorPane styleClass="background" stylesheets="@../theme.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="economistworkstation.Controller.BalanceController">
+<AnchorPane stylesheets="@../theme.css" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="economistworkstation.Controller.BalanceController">
    <children>
       <ButtonBar layoutX="186.0" layoutY="206.0" prefWidth="200.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="170.0" AnchorPane.rightAnchor="10.0">
         <buttons>
@@ -54,4 +55,8 @@
       </GridPane>
       <Label layoutX="10.0" layoutY="14.0" prefHeight="35.0" prefWidth="546.0" styleClass="label-header" text="Сальдо на текущий период (за все предыдущие)" AnchorPane.topAnchor="5.0" />
    </children>
+   <styleClass>
+      <String fx:value="window-border" />
+      <String fx:value="background" />
+   </styleClass>
 </AnchorPane>
