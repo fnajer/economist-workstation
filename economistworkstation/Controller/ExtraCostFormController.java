@@ -5,6 +5,7 @@
  */
 package economistworkstation.Controller;
 
+import economistworkstation.ContractData;
 import economistworkstation.Entity.ExtraCost;
 import economistworkstation.Entity.Period;
 import economistworkstation.Util.Util;
@@ -16,14 +17,16 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
-
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  *
  * @author fnajer
  */
-public class ExtraCostFormController {
+public class ExtraCostFormController extends BaseFormController {
+    @Override
+    public void initialize(URL location, ResourceBundle bundle) {}
     @FXML
     private TextField extraCostRentField;
     @FXML
@@ -35,18 +38,11 @@ public class ExtraCostFormController {
     @FXML
     private TextField extraCostEquipmentField;
 
-    private Stage dialogStage;
-    private ExtraCost extraCost;
-    private Period period;
-    private boolean okClicked = false;
+    private ContractData data;
     
-    public void setDialogStage(Stage dialogStage) {
-        this.dialogStage = dialogStage;
-    }
-    
-    public void setExtraCost(ExtraCost extraCost, Period period) {
-        this.extraCost = extraCost;
-        this.period = period;
+    @Override
+    protected void setData(ContractData data) {
+        ExtraCost extraCost = data.getPeriod().getExtraCost();
 
         Util.setCalledClass(this);
                 
@@ -59,12 +55,11 @@ public class ExtraCostFormController {
         }
     }
     
-    public boolean isOkClicked() {
-        return okClicked;
-    }
-    
     @FXML
-    private void handleOk() {
+    @Override
+    protected void handleOk() {
+        Period period = data.getPeriod();
+        ExtraCost extraCost = period.getExtraCost();
         if (isInputValid()) {
             if (isFilled(extraCostRentField, extraCostFineField, extraCostTaxLandField,
                     extraCostServicesField, extraCostEquipmentField)) {
@@ -82,17 +77,12 @@ public class ExtraCostFormController {
                 period.setExtraCost(extraCostForDelete);
             }
 
-            okClicked = true;
-            dialogStage.close();
+            closeForm();
         }
     }
     
-    @FXML
-    private void handleCancel() {
-        dialogStage.close();
-    }
-    
-    private boolean isInputValid() {
+    @Override
+    protected boolean isInputValid() {
         String errorMessage = "";
 
 //        if (firstNameField.getText() == null || firstNameField.getText().length() == 0) {

@@ -5,10 +5,9 @@
  */
 package economistworkstation.Controller;
 
-import economistworkstation.EconomistWorkstation;
+import economistworkstation.ContractData;
 import economistworkstation.Entity.BalanceTable;
 import economistworkstation.Entity.ExtraCost;
-import economistworkstation.Entity.Contract;
 import economistworkstation.Entity.Fine;
 import economistworkstation.Entity.Payment;
 import economistworkstation.Entity.Period;
@@ -22,16 +21,12 @@ import economistworkstation.Util.Util;
 import static economistworkstation.Util.Util.parseField;
 import static economistworkstation.Util.Util.isExist;
 import static economistworkstation.Util.Util.decFormat;
-import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Control;
@@ -39,17 +34,17 @@ import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
+import java.util.ResourceBundle;
 
 /**
  * FXML Controller class
  *
  * @author fnajer
  */
-public class PeriodFormController {
+public class PeriodFormController extends BaseFormController {
+    @Override
+    public void initialize(URL location, ResourceBundle bundle) {}
     @FXML
     private Label numberLabel;
     @FXML
@@ -264,13 +259,7 @@ public class PeriodFormController {
         payments.add(equipmentSrc);
     }
 
-    private Stage dialogStage;
     private Period period;
-    private boolean okClicked = false;
-    
-    public void setDialogStage(Stage dialogStage) {
-        this.dialogStage = dialogStage;
-    }
     
     private Rent rent = null;
     private Fine fine = null;
@@ -278,8 +267,9 @@ public class PeriodFormController {
     private Services services = null;
     private Equipment equipment = null;
     
-    public void setPeriod(Period period, Contract contract) {
-        this.period = period;
+    @Override
+    public void setData(ContractData data) {
+        this.period = data.getPeriod();
         
         Util.setCalledClass(this);
         
@@ -288,7 +278,7 @@ public class PeriodFormController {
         numberLabel.setText(Integer.toString(period.getNumber()));
         numberRentAccLabel.setText(Integer.toString(period.getNumberRentAcc()));
         numberServicesAccLabel.setText(Integer.toString(period.getNumberServicesAcc()));
-        startPeriodLabel.setText(period.getStartPeriod(contract.getDateStart()));
+        startPeriodLabel.setText(period.getStartPeriod(data.getContract().getDateStart()));
         endPeriodLabel.setText(period.getEndPeriod());
         
         copyPayments();
@@ -344,10 +334,6 @@ public class PeriodFormController {
             fields.fillExtraCostInitial();
         }
     }
-
-    public boolean isOkClicked() {
-        return okClicked;
-    }
     
     private void savePaymentValues() {
         Payment payment, paymentSrc;
@@ -366,24 +352,20 @@ public class PeriodFormController {
     }
     
     @FXML
-    private void handleOk() {
+    @Override
+    protected void handleOk() {
         if (isInputValid()) {
 
             savePaymentValues();
             
             setBalanceTable();
                
-            okClicked = true;
-            dialogStage.close();
+            closeForm();
         }
     }
     
-    @FXML
-    private void handleCancel() {
-        dialogStage.close();
-    }
-    
-    private boolean isInputValid() {
+    @Override
+    protected boolean isInputValid() {
         String errorMessage = "";
 
 //        if (firstNameField.getText() == null || firstNameField.getText().length() == 0) {
@@ -674,78 +656,32 @@ public class PeriodFormController {
     }
     
     @FXML
-    void handleExtraCost(ActionEvent event) {
-        boolean okClicked = showExtraCostForm(period);
+    private void handleExtraCost(ActionEvent event) {
+        boolean okClicked = openExtraCostForm(period);
         if (okClicked) {
             PeriodModel.updateExtraCostPeriod(period.getId(), period);
             refreshExtraCost();
         }
     }
     
-    public boolean showExtraCostForm(Period period) {
-        try {
-            // Загружаем fxml-файл и создаём новую сцену
-            // для всплывающего диалогового окна.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(EconomistWorkstation.class.getResource("View/Period/ExtraCostForm.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
-            
-            // Создаём диалоговое окно Stage.
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Добавить дополнительную стоимость");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(this.dialogStage);
-            Scene scene = new Scene(page);
-            dialogStage.setScene(scene);
-            
-            // Передаём адресата в контроллер.
-            ExtraCostFormController controller = loader.getController();
-            controller.setDialogStage(dialogStage);
-            controller.setExtraCost(period.getExtraCost(), period);
-            
-            // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
-            dialogStage.showAndWait();
-            
-            return controller.isOkClicked();
-        } catch (IOException ex) {
-            Logger.getLogger(PeriodFormController.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
+    private boolean openExtraCostForm(Period period) {
+        ContractData data = new ContractData(null, period, null, null, null);
+        
+        return showForm(data, 
+                "Добавить дополнительную стоимость", 
+                "View/Period/ExtraCostForm.fxml");
     }
     
     @FXML
-    void handleBalance(ActionEvent event) {
+    private void handleBalance(ActionEvent event) {
         showBalance(period);
     }
     
-    public boolean showBalance(Period period) {
-        try {
-            // Загружаем fxml-файл и создаём новую сцену
-            // для всплывающего диалогового окна.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(EconomistWorkstation.class.getResource("View/Period/Balance.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
-            
-            // Создаём диалоговое окно Stage.
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Просмотр сальдо");
-            dialogStage.initModality(Modality.WINDOW_MODAL);
-            dialogStage.initOwner(this.dialogStage);
-            Scene scene = new Scene(page);
-            dialogStage.setScene(scene);
-            
-            // Передаём адресата в контроллер.
-            BalanceController controller = loader.getController();
-            controller.setDialogStage(dialogStage);
-            controller.setBalance(period);
-            
-            // Отображаем диалоговое окно и ждём, пока пользователь его не закроет
-            dialogStage.showAndWait();
-            
-            return controller.isOkClicked();
-        } catch (IOException ex) {
-            Logger.getLogger(PeriodFormController.class.getName()).log(Level.SEVERE, null, ex);
-            return false;
-        }
+    private boolean showBalance(Period period) {
+        ContractData data = new ContractData(null, period, null, null, null);
+        
+        return showForm(data, 
+                "Просмотр сальдо", 
+                "View/Period/Balance.fxml");
     }
 }

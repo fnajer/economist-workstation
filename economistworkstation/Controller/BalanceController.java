@@ -5,21 +5,24 @@
  */
 package economistworkstation.Controller;
 
+import economistworkstation.ContractData;
 import economistworkstation.Entity.BalanceTable;
-import economistworkstation.Entity.Period;
 import economistworkstation.Util.Util;
 import static economistworkstation.Util.Util.setText;
 import static economistworkstation.Util.Util.isExist;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.stage.Stage;
 
 
 /**
  *
  * @author fnajer
  */
-public class BalanceController {
+public class BalanceController extends BaseFormController {
+    @Override
+    public void initialize(URL location, ResourceBundle bundle) {}
     @FXML
     private Label creditRentLabel;
     @FXML
@@ -40,18 +43,12 @@ public class BalanceController {
     private Label creditEquipmentLabel;
     @FXML
     private Label debitEquipmentLabel;
-
-    private Stage dialogStage;
-    private final boolean okClicked = false;
     
-    public void setDialogStage(Stage dialogStage) {
-        this.dialogStage = dialogStage;
-    }
-    
-    public void setBalance(Period period) {
+    @Override
+    protected void setData(ContractData data) {
         Util.setCalledClass(this);
         
-        BalanceTable balanceTable = period.getBalanceTable();
+        BalanceTable balanceTable = data.getPeriod().getBalanceTable();
         if (isExist(balanceTable)) {
             setText(creditRentLabel, balanceTable.getCreditRent());
             setText(debitRentLabel, balanceTable.getDebitRent());
@@ -80,14 +77,14 @@ public class BalanceController {
             debitEquipmentLabel.setText("Нет");
         }
     }
-    
-    public boolean isOkClicked() {
-        return okClicked;
+
+    @Override
+    protected boolean isInputValid() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
-    
-    @FXML
-    private void handleCancel() {
-        dialogStage.close();
+    @Override
+    protected void handleOk() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 } 
 
