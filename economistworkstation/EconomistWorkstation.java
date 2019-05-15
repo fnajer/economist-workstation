@@ -32,7 +32,7 @@ public class EconomistWorkstation extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("Economist Workstation");
         this.primaryStage.setMaximized(true);
-
+        this.primaryStage.getIcons().add(new Image("file:resources/images/icon.png"));
         
         initRootLayout();
         initMenu();

@@ -17,6 +17,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -67,6 +68,7 @@ public abstract class BaseController implements Initializable {
         // Создаём диалоговое окно Stage.
         Stage newDialogStage = new Stage();
         newDialogStage.setTitle(title);
+        newDialogStage.getIcons().add(new Image("file:resources/images/icon.png"));
         newDialogStage.initModality(Modality.WINDOW_MODAL);
         newDialogStage.initOwner(dialogStage);
         Scene scene = new Scene(container);
