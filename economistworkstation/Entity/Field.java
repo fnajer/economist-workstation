@@ -7,6 +7,9 @@ package economistworkstation.Entity;
 
 import static economistworkstation.Util.Util.isExist;
 import static economistworkstation.Util.Util.setText;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -295,6 +298,28 @@ public class Field {
         this.extraCostEquipment.set(extraCostEquipment);
     }
     
+    private boolean costIsInvalid(TextField tf) {
+        if (tf.getText().length() == 0) return false;
+        try {
+            Double.parseDouble(tf.getText());
+            return false;
+        } catch(NumberFormatException e) {
+            return true;
+        }
+    }
+    protected boolean dateIsInvalid(DatePicker dp) {
+        String text = dp.getEditor().getText();
+        if (text.length() == 0) return false;
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            LocalDate.parse(text, formatter);
+            return false;
+        } catch(DateTimeParseException e) {
+            System.out.println("Date with error.");
+            return true;
+        }
+    }
+    
     public void bindRent(TextField costRentField, TextField indexCostRentField,
         TextField paymentRentField, DatePicker datePaidRentField) 
     {
@@ -302,6 +327,20 @@ public class Field {
         setIndexCostRent(indexCostRentField);
         setPaymentRent(paymentRentField);
         setDatePaidRent(datePaidRentField);
+    }
+    public String checkRentFields() {
+        String errorMessage = "";
+        
+        if (costIsInvalid(getCostRent())) 
+            errorMessage += "Ошибка в стоимости аренды!\n";
+        if (costIsInvalid(getIndexCostRent())) 
+            errorMessage += "Ошибка в индексе аренды!\n";
+        if (costIsInvalid(getPaymentRent())) 
+            errorMessage += "Ошибка в поле оплаты аренды!\n";
+        if (dateIsInvalid(getDatePaidRent())) 
+            errorMessage += "Ошибка в дате оплаты аренды!\n";
+        
+        return errorMessage;
     }
     public boolean rentIsFilled() {
         return isFilled(getCostRent(), 
@@ -322,6 +361,18 @@ public class Field {
         setPaymentFine(paymentFineField);
         setDatePaidFine(datePaidFineField);
     }
+    public String checkFineFields() {
+        String errorMessage = "";
+        
+        if (costIsInvalid(getCostFine())) 
+            errorMessage += "Ошибка в стоимости пени!\n";
+        if (costIsInvalid(getPaymentFine())) 
+            errorMessage += "Ошибка в поле оплаты пени!\n";
+        if (dateIsInvalid(getDatePaidFine())) 
+            errorMessage += "Ошибка в дате оплаты пени!\n";
+        
+        return errorMessage;
+    }
     public boolean fineIsFilled() {
         return isFilled(getCostFine(),
                 getPaymentFine());
@@ -339,6 +390,18 @@ public class Field {
         setPaymentTaxLand(paymentTaxLandField);
         setDatePaidTaxLand(datePaidTaxLandField);
     }
+    public String checkTaxLandFields() {
+        String errorMessage = "";
+        
+        if (costIsInvalid(getCostTaxLand())) 
+            errorMessage += "Ошибка в стоимости земельного налога!\n";
+        if (costIsInvalid(getPaymentTaxLand())) 
+            errorMessage += "Ошибка в поле оплаты земельного налога!\n";
+        if (dateIsInvalid(getDatePaidTaxLand())) 
+            errorMessage += "Ошибка в дате оплаты земельного налога!\n";
+        
+        return errorMessage;
+    }
     public boolean taxLandIsFilled() {
         return isFilled(getCostTaxLand(),
                 getPaymentTaxLand());
@@ -355,6 +418,18 @@ public class Field {
         setCostEquipment(costEquipmentField);
         setPaymentEquipment(paymentEquipmentField);
         setDatePaidEquipment(datePaidEquipmentField);
+    }
+    public String checkEquipmentFields() {
+        String errorMessage = "";
+        
+        if (costIsInvalid(getCostEquipment())) 
+            errorMessage += "Ошибка в стоимости аренды оборудования!\n";
+        if (costIsInvalid(getPaymentEquipment())) 
+            errorMessage += "Ошибка в поле оплаты аренды оборудования!\n";
+        if (dateIsInvalid(getDatePaidEquipment())) 
+            errorMessage += "Ошибка в дате оплаты аренды оборудования!\n";
+        
+        return errorMessage;
     }
     public boolean equipmentIsFilled() {
         return isFilled(getCostEquipment(),
@@ -382,6 +457,32 @@ public class Field {
         setTariffElectricity(tariffElectricityField);
         setPaymentServices(paymentServicesField);
         setDatePaidServices(datePaidServicesField);
+    }
+    public String checkServicesFields() {
+        String errorMessage = "";
+        
+        if (costIsInvalid(getCountWater())) 
+            errorMessage += "Ошибка в объеме воды!\n";
+        if (costIsInvalid(getTariffWater())) 
+            errorMessage += "Ошибка в тарифе на воду!\n";
+        if (costIsInvalid(getCountElectricity())) 
+            errorMessage += "Ошибка в количестве электроэнергии!\n";
+        if (costIsInvalid(getTariffElectricity())) 
+            errorMessage += "Ошибка в тарифе на эелектричество!\n";
+        if (costIsInvalid(getCostHeading())) 
+            errorMessage += "Ошибка в стоимости отопления!\n";
+        if (costIsInvalid(getCostGarbage())) 
+            errorMessage += "Ошибка в стоимости вывоза мусора!\n";
+        if (costIsInvalid(getCostInternet())) 
+            errorMessage += "Ошибка в стоимости интернета!\n";
+        if (costIsInvalid(getCostTelephone()))
+            errorMessage += "Ошибка в стоимости телефонной связи!\n";
+        if (costIsInvalid(getPaymentServices())) 
+            errorMessage += "Ошибка в поле оплаты коммунальных услуг!\n";
+        if (dateIsInvalid(getDatePaidServices())) 
+            errorMessage += "Ошибка в дате оплаты коммунальных услуг!\n";
+        
+        return errorMessage;
     }
     public boolean servicesIsFilled() {
         return isFilled(getCostEquipment(), getCountElectricity(), getCostHeading(),
