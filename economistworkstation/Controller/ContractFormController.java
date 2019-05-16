@@ -18,6 +18,7 @@ import economistworkstation.Entity.Renter;
 import static economistworkstation.Util.Util.isExist;
 import java.time.LocalDate;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextField;
 
 /**
  * FXML Controller class
@@ -25,6 +26,8 @@ import javafx.scene.control.DatePicker;
  * @author fnajer
  */
 public class ContractFormController extends BaseFormController {
+    @FXML
+    private TextField numContractField;
     @FXML
     private ComboBox<Renter> rentersListField;
     @FXML
@@ -39,6 +42,8 @@ public class ContractFormController extends BaseFormController {
     @Override
     public void setData(ContractData data) {
         this.contract = data.getContract();
+        
+        numContractField.setText(contract.getNum());
         
         ObservableList renters = RenterModel.getRenters();
         ObservableList<Renter> rentersCollection = FXCollections.observableArrayList(renters);
@@ -66,6 +71,8 @@ public class ContractFormController extends BaseFormController {
             Renter renter = rentersListField.getSelectionModel().getSelectedItem();
             Building building = buildingsListField.getSelectionModel().getSelectedItem();
            
+            contract.setNum(numContractField.getText());
+            
             contract.setIdRenter(renter.getId());
             contract.setIdBuilding(building.getId());
 
@@ -82,6 +89,9 @@ public class ContractFormController extends BaseFormController {
         
         Renter renter = rentersListField.getSelectionModel().getSelectedItem();
         Building building = buildingsListField.getSelectionModel().getSelectedItem();
+        if (fieldIsEmpty(numContractField)) {
+            errorMessage += "Введите номер договора!\n"; 
+        }
         if (!isExist(renter)) {
             errorMessage += "Выберите арендатора!\n"; 
         }

@@ -32,13 +32,14 @@ public class ContractModel {
         int idContract = -1;
         
         try {
-            System.out.println("Добавлено: " + contract.getDateStart());
-            PreparedStatement ps = db.conn.prepareStatement("insert into CONTRACT values(NULL,?, ?, ?, ?)",
+            System.out.println("Добавлено: " + contract.getNum());
+            PreparedStatement ps = db.conn.prepareStatement("insert into CONTRACT values(NULL,?, ?, ?, ?, ?)",
                     Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, contract.getDateStart());
-            ps.setString(2, contract.getDateEnd());
-            ps.setInt(3, contract.getIdRenter());
-            ps.setInt(4, contract.getIdBuilding());
+            ps.setString(1, contract.getNum());
+            ps.setString(2, contract.getDateStart());
+            ps.setString(3, contract.getDateEnd());
+            ps.setInt(4, contract.getIdRenter());
+            ps.setInt(5, contract.getIdBuilding());
             
             ps.executeUpdate();
             
@@ -65,13 +66,14 @@ public class ContractModel {
         try {
             
             PreparedStatement ps = db.conn.prepareStatement("UPDATE CONTRACT\n" +
-                            "SET date_start=?, date_expire=?, id_renter=?, id_building=?\n" +
+                            "SET num=?, date_start=?, date_expire=?, id_renter=?, id_building=?\n" +
                             "WHERE id=?;");
-            ps.setString(1, contract.getDateStart());
-            ps.setString(2, contract.getDateEnd());
-            ps.setInt(3, contract.getIdRenter());
-            ps.setInt(4, contract.getIdBuilding());
-            ps.setInt(5, id);
+            ps.setString(1, contract.getNum());
+            ps.setString(2, contract.getDateStart());
+            ps.setString(3, contract.getDateEnd());
+            ps.setInt(4, contract.getIdRenter());
+            ps.setInt(5, contract.getIdBuilding());
+            ps.setInt(6, id);
             
             ps.executeUpdate();
             System.out.println("Изменено: " + contract.getId());
@@ -126,17 +128,17 @@ public class ContractModel {
     }
     
     public static ObservableList<Contract> getContracts() {
-        ObservableList contracts = FXCollections.observableArrayList();
+        ObservableList<Contract> contracts = FXCollections.observableArrayList();
         try {
             ResultSet rs = db.stmt.executeQuery("SELECT * FROM CONTRACT "
-                    + "LEFT JOIN RENTER ON CONTRACT.id_renter=RENTER.id");
+                    + "LEFT JOIN RENTER ON CONTRACT.id_renter=RENTER.id "
+                    + "");
             
             while (rs.next()) {
                 contracts.add(createObjectContract(rs));
             }
             
             System.out.println("Извлечение договоров завершено.");
-            
         } catch (SQLException ex) {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -162,9 +164,12 @@ public class ContractModel {
     }
     
     public static Contract createObjectContract(ResultSet rs) throws SQLException {
-        Contract contract = new Contract(rs.getString("date_start"), rs.getString("date_expire"), rs.getInt("id_renter"), 
-        rs.getInt("id_building"));
-        contract.setId(rs.getInt("id"));
+        Contract contract = new Contract(rs.getString("num"),
+                rs.getString("date_start"), 
+                rs.getString("date_expire"), 
+                rs.getInt("id_renter"), 
+                rs.getInt("id_building"));
+                contract.setId(rs.getInt("id"));
         
         String checkString = rs.getString("subject");
         if (checkString != null) {

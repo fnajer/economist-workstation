@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
@@ -21,23 +22,26 @@
       <GridPane AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" maxWidth="179.0" minWidth="10.0" prefWidth="135.0" />
-          <ColumnConstraints hgrow="SOMETIMES" maxWidth="269.0" minWidth="10.0" prefWidth="241.0" />
+          <ColumnConstraints fillWidth="false" hgrow="SOMETIMES" maxWidth="269.0" minWidth="10.0" prefWidth="241.0" />
         </columnConstraints>
         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
             <RowConstraints minHeight="10.0" prefHeight="35.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Label text="Выберите арендатора" />
-            <Label text="Выберите здание" GridPane.rowIndex="1" />
-            <Label text="Дата начала аренды" GridPane.rowIndex="2" />
-            <Label text="Дата окончания аренды" GridPane.rowIndex="3" />
-            <ComboBox fx:id="rentersListField" prefWidth="150.0" promptText="выбрать" GridPane.columnIndex="1" />
-            <ComboBox fx:id="buildingsListField" prefWidth="150.0" promptText="выбрать" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <DatePicker fx:id="dateStartField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <DatePicker fx:id="dateEndField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label text="Выберите арендатора" GridPane.rowIndex="1" />
+            <Label text="Выберите здание" GridPane.rowIndex="2" />
+            <Label text="Дата начала аренды" GridPane.rowIndex="3" />
+            <Label text="Дата окончания аренды" GridPane.rowIndex="4" />
+            <ComboBox fx:id="rentersListField" prefWidth="150.0" promptText="выбрать" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <ComboBox fx:id="buildingsListField" prefWidth="150.0" promptText="выбрать" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <DatePicker fx:id="dateStartField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <DatePicker fx:id="dateEndField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+            <Label text="Номер договора" />
+            <TextField fx:id="numContractField" prefHeight="31.0" prefWidth="150.0" promptText="напр. 0059" GridPane.columnIndex="1" />
          </children>
       </GridPane>
    </children>

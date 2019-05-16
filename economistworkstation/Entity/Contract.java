@@ -15,6 +15,7 @@ import javafx.beans.property.StringProperty;
  * @author fnajer
  */
 public class Contract extends Entity {
+    private final StringProperty num;
     private final StringProperty dateStart;
     private final StringProperty dateEnd;
     private final IntegerProperty idRenter;
@@ -22,16 +23,29 @@ public class Contract extends Entity {
     private Renter renter;
     
     public Contract() {
-        this(null, null, 0, 0);
+        this(null, null, null, 0, 0);
     }
     
-    public Contract(String dateStart, String dateEnd, int idRenter, int idBuilding) {
+    public Contract(String num, String dateStart, String dateEnd, int idRenter, int idBuilding) {
        super();
+       this.num = new SimpleStringProperty(num); 
        this.dateStart = new SimpleStringProperty(dateStart);
        this.dateEnd = new SimpleStringProperty(dateEnd);
        this.idRenter = new SimpleIntegerProperty(idRenter); 
        this.idBuilding = new SimpleIntegerProperty(idBuilding);
        this.renter = null;
+    }
+    
+    public String getNum() {
+        return num.get();
+    }
+
+    public void setNum(String num) {
+        this.num.set(num);
+    }
+    
+    public StringProperty numProperty() {
+        return num;
     }
 
     public String getDateStart() {
