@@ -89,9 +89,7 @@ public class MenuController extends BaseController {
                     "Создание ведомости",
                     "Ведомость создана успешно.");
         }
-
     }
-    
     private boolean openStatementForm() {
         ContractData data = null;
         
@@ -109,7 +107,6 @@ public class MenuController extends BaseController {
                     "Произведена замена шаблона.");
         }
     }
-    
     private boolean openPatternForm() {
         ContractData data = null;
         
@@ -118,6 +115,23 @@ public class MenuController extends BaseController {
                 "View/PatternForm.fxml");
     }
 
+    @FXML
+    private void handleAutoFill() {
+        boolean okClicked = openAutoFillForm();
+        if (okClicked) {
+            showAlertSuccess("Успех", 
+                    "Автоматическое заполнение",
+                    "Авто-заполнение завершено.");
+        }
+    }
+    private boolean openAutoFillForm() {
+        ContractData data = null;
+        
+        return showForm(data, 
+                "Авто-заполнение", 
+                "View/AutoFillForm.fxml");
+    }
+    
     /**
      * Закрывает приложение.
      */

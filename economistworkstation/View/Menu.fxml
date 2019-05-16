@@ -15,6 +15,7 @@
       <Menu mnemonicParsing="false" text="Редактирование">
          <items>
             <MenuItem mnemonicParsing="false" text="Delete" />
+            <MenuItem mnemonicParsing="false" onAction="#handleAutoFill" text="Авто-заполнение" />
          </items>
       </Menu>
       <Menu mnemonicParsing="false" text="Договор">
