@@ -15,10 +15,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import economistworkstation.Entity.Contract;
 import economistworkstation.Entity.Renter;
-import java.net.URL;
+import static economistworkstation.Util.Util.isExist;
 import java.time.LocalDate;
-import java.util.ResourceBundle;
-import javafx.scene.control.Alert;
 import javafx.scene.control.DatePicker;
 
 /**
@@ -81,26 +79,22 @@ public class ContractFormController extends BaseFormController {
     @Override
     protected boolean isInputValid() {
         String errorMessage = "";
-
-//        if (firstNameField.getText() == null || firstNameField.getText().length() == 0) {
-//            errorMessage += "Введите имя!\n"; 
-//        }
-//        if (lastNameField.getText() == null || lastNameField.getText().length() == 0) {
-//            errorMessage += "Введите фамилию!\n"; 
-//        }
-//        if (patronymicField.getText() == null || patronymicField.getText().length() == 0) {
-//            errorMessage += "Введите отчество!\n"; 
-//        }
-//        if (addressField.getText() == null || addressField.getText().length() == 0) {
-//            errorMessage += "Введите адрес!\n"; 
-//        }
-//        if (birthdayField.getText() == null || birthdayField.getText().length() == 0) {
-//            errorMessage += "Неверная дата рождения!\n"; 
-//        }
-//        if (personField.getText() == null || personField.getText().length() == 0) {
-//            errorMessage += "Введите физ. лицо!\n";
-//        }
-
+        
+        Renter renter = rentersListField.getSelectionModel().getSelectedItem();
+        Building building = buildingsListField.getSelectionModel().getSelectedItem();
+        if (!isExist(renter)) {
+            errorMessage += "Выберите арендатора!\n"; 
+        }
+        if (!isExist(building)) {
+            errorMessage += "Выберите здание!\n"; 
+        }
+        if (fieldIsEmpty(dateStartField)) {
+            errorMessage += "Отсутствует дата заключения контракта!\n"; 
+        }
+        if (fieldIsEmpty(dateEndField)) {
+            errorMessage += "Отсутствует дата истечения срока контракта!\n"; 
+        }
+        
         return errorNotExist(errorMessage);
     }
 }

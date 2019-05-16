@@ -36,6 +36,7 @@ public class ExtraCostFormController extends BaseFormController {
     
     @Override
     protected void setData(ContractData data) {
+        this.data = data;
         ExtraCost extraCost = data.getPeriod().getExtraCost();
 
         Util.setCalledClass(this);
@@ -79,26 +80,34 @@ public class ExtraCostFormController extends BaseFormController {
     protected boolean isInputValid() {
         String errorMessage = "";
 
-//        if (firstNameField.getText() == null || firstNameField.getText().length() == 0) {
-//            errorMessage += "Введите имя!\n"; 
-//        }
-//        if (lastNameField.getText() == null || lastNameField.getText().length() == 0) {
-//            errorMessage += "Введите фамилию!\n"; 
-//        }
-//        if (patronymicField.getText() == null || patronymicField.getText().length() == 0) {
-//            errorMessage += "Введите отчество!\n"; 
-//        }
-//        if (addressField.getText() == null || addressField.getText().length() == 0) {
-//            errorMessage += "Введите адрес!\n"; 
-//        }
-//        if (birthdayField.getText() == null || birthdayField.getText().length() == 0) {
-//            errorMessage += "Неверная дата рождения!\n"; 
-//        }
-//        if (subjectField.getText() == null || subjectField.getText().length() == 0) {
-//            errorMessage += "Введите субьъекта аренды! Например, физ. лицо или ЧП.\n";
-//        }
+        if (costIsInvalid(extraCostRentField)) {
+            errorMessage += "Поле аренды задано неверно!\n"; 
+        }
+        if (costIsInvalid(extraCostFineField)) {
+            errorMessage += "Поле пени задано неверно!\n"; 
+        }
+        if (costIsInvalid(extraCostTaxLandField)) {
+            errorMessage += "Поле земельного налога задано неверно!\n"; 
+        }
+        if (costIsInvalid(extraCostServicesField)) {
+            errorMessage += "Поле коммунальных услуг задано неверно!\n"; 
+        }
+        if (costIsInvalid(extraCostEquipmentField)) {
+            errorMessage += "Поле аренды оборудования задано неверно!\n"; 
+        }
 
         return errorNotExist(errorMessage);
+    }
+    
+    @Override
+    protected boolean costIsInvalid(TextField tf) {
+        if (fieldIsEmpty(tf)) return false;
+        try {
+            Double.parseDouble(tf.getText());
+            return false;
+        } catch(NumberFormatException e) {
+            return true;
+        }
     }
 } 
 

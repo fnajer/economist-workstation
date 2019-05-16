@@ -363,24 +363,14 @@ public class PeriodFormController extends BaseFormController {
     protected boolean isInputValid() {
         String errorMessage = "";
 
-//        if (firstNameField.getText() == null || firstNameField.getText().length() == 0) {
-//            errorMessage += "Введите имя!\n"; 
-//        }
-//        if (lastNameField.getText() == null || lastNameField.getText().length() == 0) {
-//            errorMessage += "Введите фамилию!\n"; 
-//        }
-//        if (patronymicField.getText() == null || patronymicField.getText().length() == 0) {
-//            errorMessage += "Введите отчество!\n"; 
-//        }
-//        if (addressField.getText() == null || addressField.getText().length() == 0) {
-//            errorMessage += "Введите адрес!\n"; 
-//        }
-//        if (birthdayField.getText() == null || birthdayField.getText().length() == 0) {
-//            errorMessage += "Неверная дата рождения!\n"; 
-//        }
-//        if (personField.getText() == null || personField.getText().length() == 0) {
-//            errorMessage += "Введите физ. лицо!\n";
-//        }
+        Payment payment;
+        for (int i = 0; i < payments.size(); i += 2) {
+            payment = payments.get(i);
+
+            if (payment.fieldsIsFilled(fields)) {
+                errorMessage += payment.checkFields(fields);
+            }
+        }
 
         return errorNotExist(errorMessage);
     }

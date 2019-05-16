@@ -57,13 +57,13 @@ public class BuildingFormController extends BaseFormController {
         if (fieldIsEmpty(typeField)) {
             errorMessage += "Введите тип!\n"; 
         }
-        if (fieldIsEmpty(squareField)) {
+        if (costIsInvalid(squareField)) {
             errorMessage += "Введите площадь!\n"; 
         }
-        if (fieldIsEmpty(costBalanceField)) {
+        if (costIsInvalid(costBalanceField)) {
             errorMessage += "Введите балансовую стоимость!\n"; 
         }
-        if (fieldIsEmpty(costResidueField)) {
+        if (costIsInvalid(costResidueField)) {
             errorMessage += "Введите остаточную стоимость!\n"; 
         }
 

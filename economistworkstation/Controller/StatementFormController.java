@@ -31,7 +31,6 @@ public class StatementFormController extends BaseFormController {
     private File newFile;
     private Precedency userPrefs;
     
-    
     @Override
     public void setData(ContractData data) {  
         userPrefs = new Precedency();
@@ -88,7 +87,7 @@ public class StatementFormController extends BaseFormController {
         if (!isExist(statement)) {
             errorMessage += "Выберите ведомость!\n"; 
         }
-        if (!isExist(dateStartField.getValue())) {
+        if (fieldIsEmpty(dateStartField)) {
             errorMessage += "Поставьте дату!\n"; 
         }
         if (!isExist(newFile)) {

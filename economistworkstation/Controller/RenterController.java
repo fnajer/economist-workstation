@@ -47,7 +47,6 @@ public class RenterController extends BaseController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       
         renters = RenterModel.getRenters();
         renterTable.setItems(renters);
 
@@ -65,9 +64,7 @@ public class RenterController extends BaseController implements Initializable {
             (observable, oldValue, newValue) -> showDetails(newValue));
     }
     
-    
     public void showDetails(Renter renter) {
-        
         if (renter != null) {
             firstNameLabel.setText(renter.getFirstName());
             lastNameLabel.setText(renter.getLastName());
