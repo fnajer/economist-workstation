@@ -351,7 +351,7 @@ public class PeriodModel {
             Payment rent = new Rent(rs.getObject("paid_rent"), 
                     rs.getString("date_paid_rent"),
                     rs.getObject("cost"), 
-                    rs.getObject("index_cost"));
+                    rs.getObject("index_inflation"));
             rent.setId(rs.getInt("id_rent"));
             return rent;
         }

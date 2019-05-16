@@ -52,7 +52,7 @@ public class Rent extends Payment {
     @Override
     public PreparedStatement getInsertStatement(Database db) throws SQLException {
         PreparedStatement ps = db.conn.prepareStatement("INSERT INTO RENT "
-                + "(id_rent, paid_rent, date_paid_rent, cost, index_cost) "
+                + "(id_rent, paid_rent, date_paid_rent, cost, index_inflation) "
                 + "VALUES(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
         ps.setInt(1, getId());
         ps.setObject(2, getPaid());
@@ -65,7 +65,7 @@ public class Rent extends Payment {
     @Override
     public PreparedStatement getUpdateStatement(Database db) throws SQLException {
         PreparedStatement ps = db.conn.prepareStatement("UPDATE RENT "
-                + "SET paid_rent=?, date_paid_rent=?, cost=?, index_cost=? "
+                + "SET paid_rent=?, date_paid_rent=?, cost=?, index_inflation=? "
                 + "WHERE id_rent=?", Statement.RETURN_GENERATED_KEYS);
         ps.setObject(1, getPaid());
         ps.setString(2, getDatePaid());
@@ -118,6 +118,10 @@ public class Rent extends Payment {
         period.setRentPayment(this);
     }
     
+    @Override
+    public String checkFields(Field field) {
+        return field.checkRentFields();
+    }
     @Override
     public boolean fieldsIsFilled(Field fields) {
         return fields.rentIsFilled();
