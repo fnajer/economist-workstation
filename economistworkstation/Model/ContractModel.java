@@ -132,7 +132,7 @@ public class ContractModel {
         try {
             ResultSet rs = db.stmt.executeQuery("SELECT * FROM CONTRACT "
                     + "LEFT JOIN RENTER ON CONTRACT.id_renter=RENTER.id "
-                    + "");
+                    + "ORDER BY contract.id");
             
             while (rs.next()) {
                 contracts.add(createObjectContract(rs));
