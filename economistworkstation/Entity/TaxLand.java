@@ -106,6 +106,10 @@ public class TaxLand extends Payment {
     }
     
     @Override
+    public String checkFields(Field field) {
+        return field.checkTaxLandFields();
+    }
+    @Override
     public boolean fieldsIsFilled(Field fields) {
         return fields.taxLandIsFilled();
     }

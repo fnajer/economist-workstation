@@ -106,6 +106,10 @@ public class Fine extends Payment {
     }
     
     @Override
+    public String checkFields(Field field) {
+        return field.checkFineFields();
+    }
+    @Override
     public boolean fieldsIsFilled(Field fields) {
         return fields.fineIsFilled();
     }

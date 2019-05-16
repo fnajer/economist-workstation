@@ -107,6 +107,10 @@ public class Equipment extends Payment {
     }
     
     @Override
+    public String checkFields(Field field) {
+        return field.checkEquipmentFields();
+    }
+    @Override
     public boolean fieldsIsFilled(Field fields) {
         return fields.equipmentIsFilled();
     }

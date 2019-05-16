@@ -51,7 +51,9 @@ public abstract class Payment {
     /**
      *
      * @param field
+     * @return 
      */
+    public abstract String checkFields(Field field);
     public abstract void saveValuesOf(Field field);
     public abstract boolean fieldsIsFilled(Field field);
     public abstract void fill(Field field);
