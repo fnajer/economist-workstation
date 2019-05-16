@@ -22,6 +22,7 @@ import economistworkstation.Model.RenterModel;
 import static economistworkstation.Util.Util.isExist;
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.beans.value.ChangeListener;
@@ -206,11 +207,10 @@ public class ContractController extends BaseController implements Initializable 
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-       
         contracts = ContractModel.getContracts();
         contractTable.setItems(contracts);
         
-        numberContractColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
+        numberContractColumn.setCellValueFactory(new PropertyValueFactory<>("num"));
         idRenterColumn.setCellValueFactory(new PropertyValueFactory<>("renter"));
         
         // Очистка дополнительной информации об адресате.
@@ -220,8 +220,7 @@ public class ContractController extends BaseController implements Initializable 
         // дополнительную информацию об адресате.
         contractTable.getSelectionModel().selectedItemProperty().addListener(
             (observable, oldValue, newValue) -> showDetails(newValue));
-     
-        
+
         contractTable.setRowFactory((tableView) -> createRow());
     }
     
@@ -390,13 +389,22 @@ public class ContractController extends BaseController implements Initializable 
      * Вызывается, когда пользователь кликает по кнопка Edit...
      * Открывает диалоговое окно для изменения выбранного адресата.
      */
+    private String dateStart;
+    private String dateEnd;
+    private boolean dateNotChange(Contract contract) {
+        return dateStart.equals(contract.getDateStart())
+                && dateEnd.equals(contract.getDateEnd());
+    }
     @FXML
     private void handleEditContract() {
         Contract selectedContract = contractTable.getSelectionModel().getSelectedItem();
         if (selectedContract != null) {
+            dateStart = selectedContract.getDateStart();
+            dateEnd = selectedContract.getDateEnd();
             boolean okClicked = openContractForm(selectedContract);
             if (okClicked) {
-                ContractModel.updateContract(selectedContract.getId(), selectedContract, false);
+                ContractModel.updateContract(selectedContract.getId(), selectedContract, 
+                        dateNotChange(selectedContract));
                 showDetails(selectedContract);
             }
 
