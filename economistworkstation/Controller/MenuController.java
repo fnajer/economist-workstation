@@ -41,9 +41,12 @@ public class MenuController extends BaseController {
     private MenuItem buildings;
     @FXML
     private MenuItem contracts;
+    
+    private MenuItem currentOpenPage;
      
     @FXML
     void showList(ActionEvent event) throws IOException {
+        currentOpenPage = (MenuItem) event.getSource();
         String pathName = getPathName((MenuItem) event.getSource());
         
         FXMLLoader loader = new FXMLLoader();
@@ -122,6 +125,8 @@ public class MenuController extends BaseController {
             showAlertSuccess("Успех", 
                     "Автоматическое заполнение",
                     "Авто-заполнение завершено.");
+            if (currentOpenPage == contracts)
+                currentOpenPage.fire();
         }
     }
     private boolean openAutoFillForm() {
