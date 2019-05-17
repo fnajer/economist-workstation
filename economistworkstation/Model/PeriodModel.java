@@ -6,6 +6,7 @@
 package economistworkstation.Model;
 
 import economistworkstation.ContractData;
+import economistworkstation.Controller.ContractController;
 import economistworkstation.Database;
 import economistworkstation.EconomistWorkstation;
 import economistworkstation.Entity.BalanceTable;
@@ -22,6 +23,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import static java.time.temporal.TemporalAdjusters.firstDayOfYear;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
@@ -452,5 +454,54 @@ public class PeriodModel {
         
         return period;
     }
-    
+
+    public static void autoFill(Double value, String typeField, String typeTable,
+            LocalDate dateStart, LocalDate dateEnd, int idBuilding, String idName) {
+        try {
+            // necessary to enter the months exactly, from 1 to 1
+            // work only with created payments
+            ResultSet rs = db.stmt.executeQuery(
+                    "SELECT * FROM PERIOD "
+                    + "LEFT JOIN RENT ON PERIOD.id=RENT.id_rent "
+                    + "LEFT JOIN FINE ON PERIOD.id=FINE.id_fine "
+                    + "LEFT JOIN TAXLAND ON PERIOD.id=TAXLAND.id_tax_land "
+                    + "LEFT JOIN EQUIPMENT ON PERIOD.id=EQUIPMENT.id_equipment "
+                    + "LEFT JOIN SERVICES ON PERIOD.id=SERVICES.id_services "
+                    + "LEFT JOIN EXTRACOST ON PERIOD.id=EXTRACOST.id_extra_cost "
+                    + "LEFT JOIN BALANCE ON PERIOD.id=BALANCE.id_balance "
+                            
+                    + "LEFT JOIN CONTRACT ON CONTRACT.id=PERIOD.id_contract "
+                    + "LEFT JOIN BUILDING ON BUILDING.id=CONTRACT.id_building "
+                    + "WHERE date_end > '" + dateStart + "' "
+                    + "AND date_end <= '"+ dateEnd + "' "
+                    + (idBuilding == -1 ? "" : "AND BUILDING.id=" + idBuilding));
+
+            ArrayList<Period> array = new ArrayList();
+            while (rs.next()) {
+                array.add(createObjectPeriod(rs));
+            }
+            
+            for (Period period : array) {
+                setPayment(period.getId(), typeField, typeTable, idName, value);
+                ObservableList<Period> periods = getPeriodsById(
+                        period.getId(), period.getNumber(), period.getIdContract());
+
+                ContractController controller = new ContractController();
+                controller.setPeriods(periods);
+                Period updatedPeriod = periods.get(0);
+                BalanceTable nextBalanceTable = new BalanceTable();
+                for (Payment payment : updatedPeriod.getListPayments()) {
+                    if (payment == null) continue;
+                    payment.calcPartOfBalance(updatedPeriod.getBalanceTable(), nextBalanceTable);
+                }
+                updatedPeriod.setNextBalanceTable(nextBalanceTable);
+                
+                controller.recalculateBalance(updatedPeriod);
+            }
+            
+            System.out.println("Завершено авто-заполнение: " + typeField);
+        } catch (SQLException ex) {
+            Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
