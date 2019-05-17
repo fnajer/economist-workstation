@@ -9,6 +9,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
 
 /**
  *
@@ -70,6 +71,16 @@ public class Building extends Entity {
 
     public void setCostResidue(Double costResidue) {
         this.costResidue.set(costResidue);
+    }
+    
+    public Double getSumSquare(ObservableList<Building> buildings) {
+        Double sumSquare = 0.0;
+        for (Building building : buildings) {
+            try {
+                sumSquare += building.getSquare();
+            } catch (NullPointerException e) {}
+        }
+        return sumSquare;
     }
     
     @Override
