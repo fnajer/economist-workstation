@@ -68,6 +68,8 @@ SET index_cost= 0;
 ALTER TABLE MONTH 
 ALTER COLUMN INDEX_COST double NOT NULL;
 
+UPDATE CONTRACT SET NUM ='545' WHERE ID=52;
+
 SELECT * FROM MONTH 
 LEFT JOIN CONTRACT ON MONTH.ID_CONTRACT=CONTRACT.id 
 LEFT JOIN RENTER ON CONTRACT.ID_RENTER=RENTER.id
@@ -170,3 +172,34 @@ DROP CONSTRAINT ID_FINE
 
 select distinct constraint_name from information_schema.constraints 
 where table_name='PERIOD'  and column_list='ID_RENT'
+
+update RENT  
+set RENT.index_inflation = 10
+where exists
+(select * from RENT 
+LEFT JOIN PERIOD ON PERIOD.id=RENT.id_rent
+WHERE date_end > '01-01-19' AND date_end <= '01-02-19')
+
+select * from rent left join period on period.id=rent.id_rent LEFT JOIN CONTRACT ON CONTRACT.id=PERIOD.id_contract LEFT JOIN BUILDING ON BUILDING.id=CONTRACT.id_building
+
+update RENT  
+set RENT.index_inflation = 12
+where exists
+(select * from RENT 
+LEFT JOIN PERIOD ON PERIOD.id=RENT.id_rent
+LEFT JOIN CONTRACT ON CONTRACT.id=PERIOD.id_contract 
+LEFT JOIN BUILDING ON BUILDING.id=CONTRACT.id_building
+WHERE date_end > '2019-09-01' AND date_end <= '2019-10-01'
+AND BUILDING.id = 2)
+
+PreparedStatement ps = db.conn.prepareStatement("UPDATE " + typeTable
++ " SET " + typeField + "=? "
++ "WHERE EXISTS "
++ "(SELECT date_end FROM RENT "
++ "LEFT JOIN PERIOD ON PERIOD.id=RENT.id_rent "
++ "LEFT JOIN CONTRACT ON CONTRACT.id=PERIOD.id_contract "
++ "LEFT JOIN BUILDING ON BUILDING.id=CONTRACT.id_building "
++ "WHERE date_end > '" + dateStart + "' "
++ "AND date_end <= '"+ dateEnd + "' "
++ (idBuilding == -1 ? "" : "AND BUILDING.id=" + idBuilding) + ")",
+Statement.RETURN_GENERATED_KEYS);
