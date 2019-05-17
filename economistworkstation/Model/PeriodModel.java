@@ -504,4 +504,20 @@ public class PeriodModel {
             Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public static void setPayment(int idPayment, String typeField, String typeTable,
+            String idName, Double value) { 
+        try {
+            PreparedStatement ps = db.conn.prepareStatement("UPDATE " + typeTable
+                    + " SET " + typeField + "=? "
+                    + "WHERE " + idName + "=?");
+            
+            ps.setObject(1, value);
+            ps.setInt(2, idPayment);
+            
+            ps.executeUpdate();
+        } catch (SQLException ex) {
+            Logger.getLogger(PeriodModel.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
