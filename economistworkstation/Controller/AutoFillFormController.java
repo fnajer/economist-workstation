@@ -66,6 +66,31 @@ public class AutoFillFormController extends BaseFormController {
                 Field.tariffElectricity);
     }
     
+    enum Field {
+        indexInflation {
+            public String getDbValue() { return "index_inflation"; }
+            public String getTableName() { return "RENT"; }
+            public String getIdName() { return "id_rent"; }
+            public String toString() { return "Индекс инфляции"; }
+        },
+        tariffWater {
+            public String getDbValue() { return "tariff_water"; }
+            public String getTableName() { return "SERVICES"; }
+            public String getIdName() { return "id_services"; }
+            public String toString() { return "Тариф на воду"; }
+        },
+        tariffElectricity {
+            public String getDbValue() { return "tariff_electricity"; }
+            public String getTableName() { return "SERVICES"; }
+            public String getIdName() { return "id_services"; }
+            public String toString() { return "Тариф на электроэнергию"; }
+        };
+        public abstract String getDbValue();
+        public abstract String getTableName();
+        public abstract String getIdName();
+        public abstract String toString();
+    }
+    
     @FXML
     @Override
     protected void handleOk() {
