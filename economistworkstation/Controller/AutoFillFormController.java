@@ -40,7 +40,14 @@ public class AutoFillFormController extends BaseFormController {
 
     private File newFile;
     private Precedency userPrefs;
-
+    
+    private Building createAllBuildingType(ObservableList<Building> buildings) {
+        Building allBuildingsType = new Building();
+        allBuildingsType.setId(-1);
+        allBuildingsType.setType("Все здания");
+        allBuildingsType.setSquare(allBuildingsType.getSumSquare(buildings));
+        return allBuildingsType;
+    }
     
     @Override
     public void setData(ContractData data) {  
