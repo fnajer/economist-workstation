@@ -6,75 +6,73 @@
 package economistworkstation.Controller;
 
 import economistworkstation.ContractData;
-import economistworkstation.ContractDataParameters;
+import economistworkstation.Entity.Building;
+import economistworkstation.Model.BuildingModel;
+import economistworkstation.Model.PeriodModel;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import economistworkstation.Util.Precedency;
-import economistworkstation.Util.Pattern;
 import static economistworkstation.Util.Util.isExist;
+import static economistworkstation.Util.Util.parseField;
 import java.io.File;
 import java.time.LocalDate;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.DatePicker;
-import javafx.stage.FileChooser;
+import javafx.scene.control.TextField;
 
 /**
  * FXML Controller class
  *
  * @author fnajer
  */
-public class StatementFormController extends BaseFormController {
-    @FXML
-    private ComboBox<Pattern> statementsListField;
+public class AutoFillFormController extends BaseFormController {
     @FXML
     private DatePicker dateStartField;
-    
+    @FXML
+    private DatePicker dateEndField;
+    @FXML
+    private ComboBox<Building> buildingsListField;
+    @FXML
+    private ComboBox<Field> fieldsListField;
+    @FXML
+    private TextField valueField;
+
     private File newFile;
     private Precedency userPrefs;
+
     
     @Override
     public void setData(ContractData data) {  
-        userPrefs = new Precedency();
-        statementsListField.setItems(Pattern.getStatements());
+        ObservableList<Building> buildings = BuildingModel.getBuildings();
+        Building allBuildingType = createAllBuildingType(buildings);
+        buildings.add(0, allBuildingType);
+        
+        buildingsListField.setItems(buildings);
+        fieldsListField.setItems(getFields());
     }
     
     @FXML
-    private void handleOpenPath() {
-        FileChooser fileChooser = new FileChooser();
-        String currentPath = userPrefs.getSaveDirectory();
-
-        fileChooser.setInitialDirectory(new File(currentPath));
-	fileChooser.setTitle("Сохранение");
-        
-        FileChooser.ExtensionFilter xlsFilter = new FileChooser.ExtensionFilter(
-                "XLS file", "*.xls");
-        FileChooser.ExtensionFilter xlsxFilter = new FileChooser.ExtensionFilter(
-                "XLSX file", "*.xlsx");
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
-                "All files", "*");
-        fileChooser.getExtensionFilters().addAll(xlsFilter, xlsxFilter, extFilter);
-
-        File file = fileChooser.showSaveDialog(dialogStage);
-       
-        if (isExist(file)) {
-            newFile = file;
-            
-            userPrefs.setSaveDirectory(newFile.getParent());
-	}
+    private ObservableList<Field> getFields() {
+        return FXCollections.observableArrayList(
+                Field.indexInflation, Field.tariffWater,
+                Field.tariffElectricity);
     }
     
     @FXML
     @Override
     protected void handleOk() {
         if (isInputValid()) {
-            Pattern pattern = statementsListField.getSelectionModel().getSelectedItem();
-            pattern.setPathToSave(newFile.getAbsolutePath());
-            LocalDate date = dateStartField.getValue();
+            Building building = buildingsListField.getSelectionModel().getSelectedItem();
+            Field field = fieldsListField.getSelectionModel().getSelectedItem();
+            LocalDate dateStart = dateStartField.getValue();
+            LocalDate dateEnd = dateEndField.getValue();
             
-            ContractDataParameters dataParams = new ContractDataParameters();
-            dataParams.constructDataList(date);
+            PeriodModel.autoFill(parseField(valueField), 
+                    field.getDbValue(), field.getTableName(),
+                    dateStart, dateEnd, building.getId(),
+                    field.getIdName());
             
-            pattern.print(dataParams);
-
             closeForm();
         }
     }
@@ -82,16 +80,23 @@ public class StatementFormController extends BaseFormController {
     @Override
     protected boolean isInputValid() {
         String errorMessage = "";
-        Pattern statement = statementsListField.getSelectionModel().getSelectedItem();
+        Building building = buildingsListField.getSelectionModel().getSelectedItem();
+        Field field = fieldsListField.getSelectionModel().getSelectedItem();
         
-        if (!isExist(statement)) {
-            errorMessage += "Выберите ведомость!\n"; 
+        if (!isExist(building)) {
+            errorMessage += "Выберите здание!\n"; 
+        }
+        if (!isExist(field)) {
+            errorMessage += "Выберите поле для авто-заполнения!\n"; 
         }
         if (fieldIsEmpty(dateStartField)) {
-            errorMessage += "Поставьте дату!\n"; 
+            errorMessage += "Поставьте начальную дату выборки месяцев!\n"; 
         }
-        if (!isExist(newFile)) {
-            errorMessage += "Укажите путь для сохранения файла!\n"; 
+        if (fieldIsEmpty(dateEndField)) {
+            errorMessage += "Поставьте конечную дату выборки месяцев!\n"; 
+        }
+        if (costIsInvalid(valueField)) {
+            errorMessage += "Указанное значение для авто-заполнения должно быть числом!\n"; 
         }
 
         return errorNotExist(errorMessage);
