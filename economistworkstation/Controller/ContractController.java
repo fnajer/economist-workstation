@@ -22,7 +22,6 @@ import economistworkstation.Model.RenterModel;
 import static economistworkstation.Util.Util.isExist;
 import java.time.LocalDate;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.beans.value.ChangeListener;
@@ -204,6 +203,9 @@ public class ContractController extends BaseController implements Initializable 
     
     private ObservableList<Contract> contracts;
     private ObservableList<Period> periods;
+    public void setPeriods(ObservableList<Period> periods) {
+        this.periods = periods;
+    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
