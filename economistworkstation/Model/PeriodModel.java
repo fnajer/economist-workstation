@@ -505,6 +505,32 @@ public class PeriodModel {
         }
     }
     
+    public static ObservableList<Period> getPeriodsById(int id, int number, int idContract) {
+        ObservableList periods = FXCollections.observableArrayList();
+        try {
+            ResultSet rs = db.stmt.executeQuery("SELECT * FROM PERIOD "
+                    + "LEFT JOIN RENT ON PERIOD.id=RENT.id_rent "
+                    + "LEFT JOIN FINE ON PERIOD.id=FINE.id_fine "
+                    + "LEFT JOIN TAXLAND ON PERIOD.id=TAXLAND.id_tax_land "
+                    + "LEFT JOIN EQUIPMENT ON PERIOD.id=EQUIPMENT.id_equipment "
+                    + "LEFT JOIN SERVICES ON PERIOD.id=SERVICES.id_services "
+                    + "LEFT JOIN EXTRACOST ON PERIOD.id=EXTRACOST.id_extra_cost "
+                    + "LEFT JOIN BALANCE ON PERIOD.id=BALANCE.id_balance "
+                    + "WHERE id_contract="
+                    + idContract + " AND number >=" + number + " ORDER BY number");
+
+            while (rs.next()) {
+                periods.add(createObjectPeriod(rs));
+            }
+
+            System.out.println("Извлечение периодов завершено.");
+
+        } catch (SQLException ex) {
+            Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return periods;
+    }
+    
     public static void setPayment(int idPayment, String typeField, String typeTable,
             String idName, Double value) { 
         try {
