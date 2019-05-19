@@ -137,6 +137,23 @@ public class MenuController extends BaseController {
                 "View/AutoFillForm.fxml");
     }
     
+    @FXML
+    private void handleShowConsolidated() {
+        boolean okClicked = openConsolidatedForm();
+        if (okClicked) {
+            showAlertSuccess("Успех", 
+                    "Создание сводной ведомости",
+                    "Сводная ведомость создана успешно.");
+        }
+    }
+    private boolean openConsolidatedForm() {
+        ContractData data = null;
+        
+        return showForm(data, 
+                "Управление сводной ведомостью", 
+                "View/ConsolidatedForm.fxml");
+    }
+    
     /**
      * Закрывает приложение.
      */

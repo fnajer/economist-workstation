@@ -38,6 +38,7 @@
         <items>
           <MenuItem mnemonicParsing="false" onAction="#handleShowStatement" text="Открыть" />
             <MenuItem mnemonicParsing="false" onAction="#handleLoadPattern" text="Загрузить" />
+            <MenuItem mnemonicParsing="false" onAction="#handleShowConsolidated" text="Сводная ведомость" />
         </items>
       </Menu>
       <Menu mnemonicParsing="false" text="Помощь">
