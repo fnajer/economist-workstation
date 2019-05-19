@@ -31,6 +31,10 @@ public abstract class Pattern {
         return Paths.get(patternDirPath).resolve(fileName).toString();
     }
     
+    public static Pattern getConsolidatedStatement() {
+        return new ConsolidatedPattern();
+    }
+    
     public static ObservableList<Pattern> getStatements() {
         ObservableList<Pattern> items = FXCollections.observableArrayList();
         items.addAll(
