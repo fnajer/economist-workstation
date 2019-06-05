@@ -225,6 +225,40 @@ public class PeriodModel {
         }
         return contractsData;
     }
+    public static ObservableList<ContractData> getContractData(LocalDate dateStart, LocalDate dateEnd) {
+        ObservableList contractsData = FXCollections.observableArrayList();
+        
+        try {
+            ResultSet rs = db.stmt.executeQuery("select CONTRACT.id, CONTRACT.date_start, num, PERIOD.date_end,"
+             + "group_concat(cost) as cost, group_concat(index_inflation) as index_cost, SUM(fine) as fine, SUM(fine) as fine, SUM(tax_land) as tax_land, SUM(cost_equipment) as cost_equipment, "
+             + "SUM(cost_meter_heading) as cost_meter_heading, SUM(cost_meter_garbage) as cost_meter_garbage, SUM(cost_internet) as cost_internet, SUM(cost_telephone) as cost_telephone, "
+             + "group_concat(count_water) as count_water, group_concat(tariff_water) as tariff_water, group_concat(count_electricity) as count_electricity, group_concat(tariff_electricity) as tariff_electricity,"
+             + "SUM(paid_rent) as paid_rent, SUM(paid_fine) as paid_fine, SUM(paid_tax_land) as paid_tax_land, SUM(paid_equipment) as paid_equipment, SUM(paid_services) as paid_services "
+             + "from CONTRACT "
+             + "LEFT JOIN PERIOD ON PERIOD.id_contract=CONTRACT.id "
+             + "LEFT JOIN RENT ON PERIOD.ID=RENT.id_rent "
+             + "LEFT JOIN FINE ON PERIOD.id=FINE.id_fine "
+             + "LEFT JOIN TAXLAND ON PERIOD.id=TAXLAND.id_tax_land "
+             + "LEFT JOIN EQUIPMENT ON PERIOD.id=EQUIPMENT.id_equipment "
+             + "LEFT JOIN SERVICES ON PERIOD.id=SERVICES.id_services "
+             + "WHERE date_end > '" + dateStart + "' AND date_end <= '" + dateEnd + "' "
+             + "GROUP BY CONTRACT.id, PERIOD.id "
+             + "ORDER BY id_contract");
+            
+            while (rs.next()) {
+                contractsData.add(new ContractData(null, createObjectPeriod(rs),
+                        BuildingModel.createObjectBuilding(rs),
+                        RenterModel.createObjectRenter(rs), 
+                        ContractModel.createObjectContract(rs)));
+            }
+            
+            System.out.println("Извлечение целых контрактов завершено.");
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(EconomistWorkstation.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return contractsData;
+    }
     
     public static void updateAccountNumbers() {
         try {
@@ -441,6 +475,23 @@ public class PeriodModel {
         Period period = new Period(rs.getInt("number"), 
                     rs.getInt("number_rent_acc"),
                     rs.getInt("number_services_acc"),
+                    rs.getString("date_end"),  
+                    rs.getInt("id_contract"),
+                    createObjectRent(rs),
+                    createObjectFine(rs),
+                    createObjectTaxLand(rs),
+                    createObjectServices(rs),
+                    createObjectEquipment(rs),
+                    createObjectExtraCost(rs),
+                    createObjectBalanceTable(rs));
+        period.setId(rs.getInt("id"));
+        
+        return period;
+    }
+    private static Period createPartObjectPeriod(ResultSet rs) throws SQLException {
+        Period period = new Period(0, 
+                    0,
+                    0,
                     rs.getString("date_end"),  
                     rs.getInt("id_contract"),
                     createObjectRent(rs),
