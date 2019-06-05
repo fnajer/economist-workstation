@@ -36,8 +36,6 @@ public class EconomistWorkstation extends Application {
         
         initRootLayout();
         initMenu();
-        
-       // showMainPage();
     }
     
     public void initRootLayout() throws IOException {

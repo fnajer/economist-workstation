@@ -168,7 +168,6 @@ public abstract class Parser {
             return true;
         }
         return false;
-        
     }
     
     protected String parse(String foundedTag) {

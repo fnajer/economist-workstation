@@ -10,6 +10,7 @@ import economistworkstation.Entity.Building;
 import economistworkstation.Model.BuildingModel;
 import java.net.URL;
 import java.util.ResourceBundle;
+
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
