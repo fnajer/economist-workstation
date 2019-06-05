@@ -203,3 +203,31 @@ PreparedStatement ps = db.conn.prepareStatement("UPDATE " + typeTable
 + "AND date_end <= '"+ dateEnd + "' "
 + (idBuilding == -1 ? "" : "AND BUILDING.id=" + idBuilding) + ")",
 Statement.RETURN_GENERATED_KEYS);
+
+select * from period
+LEFT JOIN CONTRACT ON PERIOD.id_contract=CONTRACT.id
+LEFT JOIN RENT ON PERIOD.ID=RENT.id_rent
+WHERE date_end > '2019-09-01' AND date_end <= '2019-11-01'
+
+select CONTRACT.id, SUM(cost) from CONTRACT
+LEFT JOIN PERIOD ON PERIOD.id_contract=CONTRACT.id
+LEFT JOIN RENT ON PERIOD.ID=RENT.id_rent
+WHERE date_end > '2019-09-01' AND date_end <= '2019-11-01'
+GROUP BY CONTRACT.id
+
+
+select CONTRACT.id, CONTRACT.date_start, num, PERIOD.date_end,
+group_concat(cost) as cost, group_concat(index_inflation) as index_cost, SUM(fine) as fine, SUM(fine) as fine, SUM(tax_land) as tax_land, SUM(cost_equipment) as cost_equipment, 
+SUM(cost_meter_heading) as cost_meter_heading, SUM(cost_meter_garbage) as cost_meter_garbage, SUM(cost_internet) as cost_internet, SUM(cost_telephone) as cost_telephone, 
+group_concat(count_water) as count_water, group_concat(tariff_water) as tariff_water, group_concat(count_electricity) as count_electricity, group_concat(tariff_electricity) as tariff_electricity,
+SUM(paid_rent) as paid_rent, SUM(paid_fine) as paid_fine, SUM(paid_tax_land) as paid_tax_land, SUM(paid_equipment) as paid_equipment, SUM(paid_services) as paid_services
+from CONTRACT
+LEFT JOIN PERIOD ON PERIOD.id_contract=CONTRACT.id
+LEFT JOIN RENT ON PERIOD.ID=RENT.id_rent
+LEFT JOIN FINE ON PERIOD.id=FINE.id_fine
+LEFT JOIN TAXLAND ON PERIOD.id=TAXLAND.id_tax_land
+LEFT JOIN EQUIPMENT ON PERIOD.id=EQUIPMENT.id_equipment
+LEFT JOIN SERVICES ON PERIOD.id=SERVICES.id_services
+WHERE date_end > '2019-09-01' AND date_end <= '2019-11-01'
+GROUP BY CONTRACT.id, PERIOD.id
+ORDER BY id_contract
