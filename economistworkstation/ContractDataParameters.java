@@ -47,4 +47,8 @@ public class ContractDataParameters {
     public void constructDataList(LocalDate date) {
         setDataList(PeriodModel.getContractData(date));
     }
+    
+    public void constructDataList(LocalDate dateStart, LocalDate dateEnd) {
+        setDataList(PeriodModel.getContractData(dateStart, dateEnd));
+    }
 }
